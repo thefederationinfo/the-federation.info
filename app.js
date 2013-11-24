@@ -1,28 +1,33 @@
 var express = require('express'),
     mysql = require('mysql'),
     https = require('https'),
+    util = require('util'),
+    expressValidator = require('express-validator'),
     config = require('./config.js');
 var app = express();
 
-app.use(express.bodyParser());
+app.set('title', 'Diaspora* Hub');
+app.use(expressValidator([]));
 
 app.get('/', function(req, res) {
     res.type('text/plain');
     res.send('diaspora* hub at your service');
 });
 
-app.post('/register', function(req, res) {
+app.get('/register/:podhost', function(req, res) {
     console.log(req.ip);
     
-    if (! req.body.hasOwnProperty('podhost')) {
-        res.statusCode = 400;
-        return res.send('Error 400: Post syntax incorrect.');
+    req.assert('podhost', 'Invalid pod url').isUrl().len(1, 100);
+    var errors = req.validationErrors();
+    if (errors) {
+        res.send('There have been validation errors: ' + util.inspect(errors), 400);
+        return;
     }
 
     var options = {
-        host: req.body.podhost,
+        host: req.params.podhost,
         port: 443,
-        path: '/statistics',
+        path: '/statistics.json',
         method: 'GET'
     };
     var request = https.request(options, function(res) {

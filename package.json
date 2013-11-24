@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "mysql": "2.0.0-alpha8",
-    "express": "3.2.4"
+    "express": "3.2.4",
+    "express-validator": "1.0.0"
   }
 }
