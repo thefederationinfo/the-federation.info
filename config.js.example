@@ -1,6 +1,6 @@
 var config = {};
 
-config.mysql = {
+config.db = {
     host: "localhost",
     user: "user",
     password: "password",

@@ -1,9 +1,8 @@
 var express = require('express'),
-    mysql = require('mysql'),
     https = require('https'),
     util = require('util'),
     expressValidator = require('express-validator'),
-    config = require('./config.js');
+    db = require('./database');
 var app = express();
 
 app.set('title', 'Diaspora* Hub');
@@ -34,8 +33,30 @@ app.get('/register/:podhost', function(req, res) {
         console.log('STATUS: ' + res.statusCode);
         console.log('HEADERS: ' + JSON.stringify(res.headers));
         res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-           console.log('BODY: ' + chunk);
+        res.on('data', function (data) {
+            console.log('BODY: ' + data);
+            try {
+                data = JSON.parse(data);
+                if (typeof data.version !== 'undefined') {
+                    db.Pod.exists({ host: req.params.podhost }, function (err, exists) {
+                        if (! exists) {
+                            db.Pod.create({
+                                name: data.name,
+                                host: req.params.podhost,
+                                version: data.version,
+                                registrations_open: data.registrations_open,
+                            }, function (err, items) {
+                                if (err)
+                                    console.log("Database error when inserting pod: "+err);
+                            });
+                        }
+                    });
+                } else {
+                    throw err;
+                }
+            } catch (err) {
+                console.log('not a valid statistics json');
+            }
         });
     });
     request.end();

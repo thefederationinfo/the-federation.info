@@ -7,8 +7,9 @@
     "url": "https://github.com/jaywink/diaspora-hub"
   },
   "dependencies": {
-    "mysql": "2.0.0-alpha8",
+    "mysql": "2.0.0-alpha9",
     "express": "3.2.4",
-    "express-validator": "1.0.0"
+    "express-validator": "1.0.0",
+    "orm": "2.1.3"
   }
 }
