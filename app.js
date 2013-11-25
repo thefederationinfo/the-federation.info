@@ -42,7 +42,7 @@ function callPod(podhost) {
                                 if (err)
                                     console.log("Database error when inserting pod: "+err);
                                 else
-                                    items[0].logStats(data);
+                                    items.logStats(data);
                             });
                         } else {
                             // Check for changes
