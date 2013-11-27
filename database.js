@@ -45,7 +45,7 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
         total_users: { type: "number" },
         active_users: { type: "number" },
         local_posts: { type: "number" },
-    })
+    });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });
     
     models.Pod.sync(function (err) {

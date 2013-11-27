@@ -1,0 +1,65 @@
+head
+    include ../vendor/css/graph.css
+    include ../vendor/css/detail.css
+    include ../vendor/css/legend.css
+    include ../vendor/css/lines.css
+
+    include ../vendor/js/d3.min.js
+    include ../vendor/js/rickshaw.min.js
+
+#chart_container
+    #chart
+    #legend_container
+        #smoother
+        #legend
+    #slider
+
+!= '<script> var data = '+JSON.stringify(data)+'; </script>'
+
+script.
+    
+    var total_users = [];
+    console.log(data.total_users.length);
+    for (var i=0; i<data.total_users.length; i++) {
+        console.log(i);
+        total_users.push({
+            color: "blue",
+            data: data.total_users[i].data,
+            name: data.total_users[i].name,
+        });
+    }
+    console.log(total_users);
+    var graph = new Rickshaw.Graph( {
+        element: document.getElementById("chart"),
+        width: 960,
+        height: 500,
+        renderer: 'line',
+        series: total_users,
+    } );
+
+    graph.render();
+
+    var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+        graph: graph
+    } );
+
+    var legend = new Rickshaw.Graph.Legend( {
+        graph: graph,
+        element: document.getElementById('legend')
+
+    } );
+
+    var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+        graph: graph,
+        legend: legend
+    } );
+
+    var xaxes = new Rickshaw.Graph.Axis.X( {
+        graph: graph
+    } );
+    xaxes.render();
+    
+    var yaxes = new Rickshaw.Graph.Axis.Y( {
+        graph: graph
+    } );
+    yaxes.render();

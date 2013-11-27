@@ -6,12 +6,35 @@ var express = require('express'),
     db = require('./database');
 var app = express();
 
+app.engine('jade', require('jade').renderFile);
 app.set('title', 'Diaspora* Hub');
 app.use(expressValidator([]));
 
 app.get('/', function(req, res) {
-    res.type('text/plain');
-    res.send('diaspora* hub at your service');
+    var data = db.Pod.all(function(err, pods) {
+        console.log(pods);
+        var data = {
+            total_users: [],
+            active_users: [],
+            local_posts: [],
+        };
+        for (var p=0; p<pods.length; p++) {
+            data.total_users.push({ name: pods[p].name, data: [] });
+            data.active_users.push({ name: pods[p].name, data: [] });
+            data.local_posts.push({ name: pods[p].name, data: [] });
+            var pp = p;
+            pods[p].getStats(function(err, stats) {
+                for (var i=0; i<stats.length; i++) {
+                    data.total_users[pp].data.push({ x: i, y: stats[i].total_users });
+                    data.active_users[pp].data.push({ x: i, y: stats[i].active_users });
+                    data.local_posts[pp].data.push({ x: i, y: stats[i].local_posts });
+                }
+                res.render('index.jade', { data: data });
+            });
+            
+        }
+        
+    });
 });
 
 function callPod(podhost) {
