@@ -11,29 +11,33 @@ app.set('title', 'Diaspora* Hub');
 app.use(expressValidator([]));
 
 app.get('/', function(req, res) {
-    var data = db.Pod.all(function(err, pods) {
-        console.log(pods);
-        var data = {
-            total_users: [],
-            active_users: [],
-            local_posts: [],
-        };
+    var data = db.Pod.allForList(function(pods) {
+        res.render('index.jade', { data: pods });
+    },
+    function(err, data) {
+    });
+});
+
+app.get('/stats/:item', function(req, res) {
+    db.Pod.all(function (err, pods) {
+        var json = [];
         for (var p=0; p<pods.length; p++) {
-            data.total_users.push({ name: pods[p].name, data: [] });
-            data.active_users.push({ name: pods[p].name, data: [] });
-            data.local_posts.push({ name: pods[p].name, data: [] });
+            var data = { name: pods[p].name,
+                data: [ ],
+                // following tip from http://stackoverflow.com/a/1152508/1489738
+                color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+            };
             var pp = p;
             pods[p].getStats(function(err, stats) {
                 for (var i=0; i<stats.length; i++) {
-                    data.total_users[pp].data.push({ x: i, y: stats[i].total_users });
-                    data.active_users[pp].data.push({ x: i, y: stats[i].active_users });
-                    data.local_posts[pp].data.push({ x: i, y: stats[i].local_posts });
+                    data.data.push({ x: parseInt(stats[i].date.getTime()/1000), y: stats[i][req.params.item] });
                 }
-                res.render('index.jade', { data: data });
+                json.push(data);
+                if (pp === pods.length-1) {
+                    res.json(json);
+                }
             });
-            
         }
-        
     });
 });
 

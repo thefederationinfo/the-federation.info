@@ -1,0 +1,61 @@
+#chart_selector
+    input(type="button", data-item="total_users", value="Total users", style="margin-right: 10px;")
+    input(type="button", data-item="active_users", value="Active users last 6 months", style="margin-right: 10px;")
+    input(type="button", data-item="local_posts", value="Local posts (without reshares)", style="margin-right: 10px;")
+
+script.
+    var chart = null;
+    $(function() {
+        $('#chart_selector input').click(function (ev) {
+            ev.preventDefault();
+            $('#chart').html('').css('height', '400px');
+            $('#legend_container #legend').html('');
+            chart = drawChart($(ev.currentTarget).data('item'));
+            $('#chart-item').html($(ev.currentTarget).data('item'));
+            return false;
+        });
+    });
+
+h3#chart-item
+
+#chart_container
+    #chart
+    #legend_container
+        #smoother
+        #legend
+    
+script.
+    function drawChart(dataItem) {
+        return new Rickshaw.Graph.Ajax({
+            element: document.querySelector('#chart'),
+            dataURL: '/stats/'+dataItem,
+            width: 960,
+            height: 400,
+            renderer: 'line',
+            onData: function(d) {
+                return d;
+            },
+            onComplete: function(transport) {
+                var graph = transport.graph;
+                var detail = new Rickshaw.Graph.HoverDetail({ 
+                    graph: graph
+                });
+                var legend = new Rickshaw.Graph.Legend({
+                    graph: graph,
+                    element: document.getElementById('legend')
+                });
+                var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                    graph: graph,
+                    legend: legend
+                });
+                var xAxis = new Rickshaw.Graph.Axis.Time({
+                    graph: graph
+                });
+                xAxis.render();
+                var yAxis = new Rickshaw.Graph.Axis.Y({
+                    graph: graph
+                });
+                yAxis.render();
+            },
+        });
+    }

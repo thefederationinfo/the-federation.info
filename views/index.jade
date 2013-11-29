@@ -3,63 +3,50 @@ head
     include ../vendor/css/detail.css
     include ../vendor/css/legend.css
     include ../vendor/css/lines.css
+    include ../vendor/css/footable.core.min.css
+    include ../vendor/css/footable.standalone.min.css
+    include ../vendor/css/hubinfo.min.css
 
-    include ../vendor/js/d3.min.js
+    script(src='http://d3js.org/d3.v3.min.js')
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
     include ../vendor/js/rickshaw.min.js
+    include ../vendor/js/footable.min.js
+    include ../vendor/js/hubinfo.min.js
 
-#chart_container
-    #chart
-    #legend_container
-        #smoother
-        #legend
-    #slider
+h1 diaspora* statistics hub
 
-!= '<script> var data = '+JSON.stringify(data)+'; </script>'
+h2 list of pods
+p Only pods who support the statistics feature are here, check back to see list grow. Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>.
+
+include podlist.jade
+    
+h2 here be graphs
+include charts.jade
+
+div(style="clear: both")
+
+h2 what hub?
+p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project podlist resource that would automatically pull in data from opt-in pods. The data here is only related to generic statistics, is opt-in and <a href="https://github.com/diaspora/diaspora/pull/4602">is currently waiting</a> for code cleanup and a pull to the diaspora* code. Once that happens, hopefully this list will show more pods. The idea is to generate some feel towards how many of us diasporians there really are.
+p Since placing this hub under the project didn't really gain much excitement, I decided to just do it anyway. The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress and a bit ugly :)
+
+h3 under the hood
+p Full stack JavaScript power:
+ul
+    li <a href="http://nodejs.org/">Node.js</a> with <a href="http://expressjs.com">Express</a>, <a href="https://github.com/ctavan/express-validator">Express-validator</a>, <a href="http://dresende.github.io/node-orm2/">Object Relational Mapping</a> (database), <a href="https://npmjs.org/package/node-schedule">Node-schedule</a> and <a href="http://jade-lang.com">Jade</a> (templating)
+    li The graphs are powered by the awesome <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a> library which is in turn powered by <a href="http://d3js.org/">D3</a>
+    li The podlist is responsified with <a href="http://fooplugins.com/plugins/footable-jquery/">Footable</a>
+    
+p
+    #hubinfo(style="width:400px;")
+    br
+    #ohlohinfo
+        script(src="http://www.ohloh.net/p/711145/widgets/project_basic_stats.js")
 
 script.
-    
-    var total_users = [];
-    console.log(data.total_users.length);
-    for (var i=0; i<data.total_users.length; i++) {
-        console.log(i);
-        total_users.push({
-            color: "blue",
-            data: data.total_users[i].data,
-            name: data.total_users[i].name,
+    $(function() {
+        $('.footable').footable();
+        $("#hubinfo").hubInfo({ 
+            user: "jaywink",
+            repo: "diaspora-hub"
         });
-    }
-    console.log(total_users);
-    var graph = new Rickshaw.Graph( {
-        element: document.getElementById("chart"),
-        width: 960,
-        height: 500,
-        renderer: 'line',
-        series: total_users,
-    } );
-
-    graph.render();
-
-    var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-        graph: graph
-    } );
-
-    var legend = new Rickshaw.Graph.Legend( {
-        graph: graph,
-        element: document.getElementById('legend')
-
-    } );
-
-    var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
-        graph: graph,
-        legend: legend
-    } );
-
-    var xaxes = new Rickshaw.Graph.Axis.X( {
-        graph: graph
-    } );
-    xaxes.render();
-    
-    var yaxes = new Rickshaw.Graph.Axis.Y( {
-        graph: graph
-    } );
-    yaxes.render();
+    });

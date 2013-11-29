@@ -1,0 +1,18 @@
+table.footable(data-filter="#filter")
+    thead
+        tr
+            th(data-class="expand") Name
+            th(data-sort-initial="descending") Version
+            th Active users
+            th(data-hide="phone", data-type="numeric") Total users
+            th(data-hide="phone", data-type="numeric") Posts
+            th Country
+        - for (var i=0; i<data.length; i++)
+            tr
+                td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
+                td= data[i].version
+                td 0
+                td 0
+                td 0
+                td FI
+                

@@ -40,6 +40,15 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
             },
         }
     });
+    models.Pod.allForList = function (callback) {
+        db.driver.execQuery(
+            "SELECT p.name, p.host, p.version, p.registrations_open FROM pods p",
+            [],
+            function (err, data) {
+                callback(data);
+            }
+        );
+    };
     models.Stat = db.define('stats', {
         date: { type: "date", time: false },
         total_users: { type: "number" },
