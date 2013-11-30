@@ -49,6 +49,16 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
             }
         );
     };
+    models.Pod.allPodStats = function (item, callback) {
+        db.driver.execQuery(
+            "SELECT p.name, s.pod_id, unix_timestamp(s.date) as timestamp, s."+item+" as item FROM pods p, stats s where p.id = s.pod_id order by s.date",
+            [],
+            function (err, data) {
+                if (err) console.log(err);
+                callback(data);
+            }
+        );
+    };
     models.Stat = db.define('stats', {
         date: { type: "date", time: false },
         total_users: { type: "number" },

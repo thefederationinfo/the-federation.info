@@ -19,25 +19,24 @@ app.get('/', function(req, res) {
 });
 
 app.get('/stats/:item', function(req, res) {
-    db.Pod.all(function (err, pods) {
+    db.Pod.allPodStats(req.params.item, function(stats) {
         var json = [];
-        for (var p=0; p<pods.length; p++) {
-            var data = { name: pods[p].name,
-                data: [ ],
-                // following tip from http://stackoverflow.com/a/1152508/1489738
-                color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
-            };
-            var pp = p;
-            pods[p].getStats(function(err, stats) {
-                for (var i=0; i<stats.length; i++) {
-                    data.data.push({ x: parseInt(stats[i].date.getTime()/1000), y: stats[i][req.params.item] });
-                }
-                json.push(data);
-                if (pp === pods.length-1) {
-                    res.json(json);
-                }
-            });
+        var podids = {};
+        for (var i=0; i<stats.length; i++) {
+            if (typeof podids[stats[i].pod_id] === 'undefined') {
+                json.push({
+                    name: stats[i].name,
+                    data: [ ],
+                    // following tip from http://stackoverflow.com/a/1152508/1489738
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+                });
+                podids[stats[i].pod_id] = json.length-1;
+            }
+            json[podids[stats[i].pod_id]].data.push({ x: stats[i].timestamp, y: stats[i].item });
         }
+        res.json(json);
+    }, function (err, result) {
+        if (err) console.log(err);
     });
 });
 
