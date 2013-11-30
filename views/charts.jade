@@ -37,8 +37,11 @@ script.
             },
             onComplete: function(transport) {
                 var graph = transport.graph;
-                var detail = new Rickshaw.Graph.HoverDetail({ 
-                    graph: graph
+                var detail = new Rickshaw.Graph.HoverDetail({
+                    graph: graph,
+                    xFormatter: function(x) {
+                        return new Date((x+21600)*1000).toDateString();
+                    },
                 });
                 var legend = new Rickshaw.Graph.Legend({
                     graph: graph,
