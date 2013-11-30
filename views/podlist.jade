@@ -7,6 +7,7 @@ table.footable(data-filter="#filter")
             th(data-hide="phone", data-type="numeric") Total users
             th(data-hide="phone", data-type="numeric") Posts
             th Country
+    tbody
         - for (var i=0; i<data.length; i++)
             tr
                 td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
