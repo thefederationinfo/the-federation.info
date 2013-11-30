@@ -42,9 +42,13 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     });
     models.Pod.allForList = function (callback) {
         db.driver.execQuery(
-            "SELECT p.name, p.host, p.version, p.registrations_open FROM pods p",
+            "SELECT p.name, p.host, p.version, p.registrations_open,\
+                (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
+                (select active_users from stats where pod_id = p.id order by id desc limit 1) as active_users,\
+                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts FROM pods p",
             [],
             function (err, data) {
+                if (err) console.log(err);
                 callback(data);
             }
         );

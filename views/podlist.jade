@@ -3,17 +3,17 @@ table.footable(data-filter="#filter")
         tr
             th(data-class="expand") Name
             th(data-sort-initial="descending") Version
+            th Open signups
             th Active users
             th(data-hide="phone", data-type="numeric") Total users
             th(data-hide="phone", data-type="numeric") Posts
-            th Country
     tbody
         - for (var i=0; i<data.length; i++)
             tr
                 td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
-                td= data[i].version
-                td 0
-                td 0
-                td 0
-                td FI
+                td= (data[i].version.indexOf('head') === 0) ? '.develop' : data[i].version
+                td= (data[i].registrations_open) ? 'Yes' : 'No'
+                td= data[i].active_users
+                td= data[i].total_users
+                td= data[i].local_posts
                 
