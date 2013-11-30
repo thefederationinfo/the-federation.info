@@ -9,6 +9,7 @@ var app = express();
 app.engine('jade', require('jade').renderFile);
 app.set('title', 'Diaspora* Hub');
 app.use(expressValidator([]));
+app.use(express.static(__dirname + '/static'));
 
 app.get('/', function(req, res) {
     var data = db.Pod.allForList(function(pods) {
