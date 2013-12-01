@@ -1,4 +1,6 @@
 head
+    title diaspora* statistics hub
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     include ../vendor/css/graph.css
     include ../vendor/css/detail.css
     include ../vendor/css/legend.css
@@ -6,6 +8,8 @@ head
     include ../vendor/css/footable.core.min.css
     include ../vendor/css/footable.standalone.min.css
     include ../vendor/css/hubinfo.min.css
+    link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css')
 
     script(src='http://d3js.org/d3.v3.min.js')
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
@@ -13,41 +17,49 @@ head
     include ../vendor/js/footable.min.js
     include ../vendor/js/footable.sort.js
     include ../vendor/js/hubinfo.min.js
+    script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
 
-h1 diaspora* statistics hub
+body(style="background-color: rgb(238, 238, 238);")
+    div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
+        h1 diaspora* statistics hub
 
-h2 list of pods
-p Only pods who support the statistics feature are here, check back to see list grow. Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>.
+        h2 list of pods
+        p Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>. This podlist will grow as the statistics feature becomes part of Diaspora.
 
-include podlist.jade
-    
-h2 here be graphs
-include charts.jade
+        include podlist.jade
+            
+        h2 here be graphs
+        include charts.jade
 
-div(style="clear: both")
+        div(style="clear: both")
 
-h2 what hub?
-p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project podlist resource that would automatically pull in data from opt-in pods. The data here is only related to generic statistics, is opt-in and <a href="https://github.com/diaspora/diaspora/pull/4602">is currently waiting</a> for code cleanup and a pull to the diaspora* code. Once that happens, hopefully this list will show more pods. The idea is to generate some feel towards how many of us diasporians there really are.
-p Since placing this hub under the project didn't really gain much excitement, I decided to just do it anyway. The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress and a bit ugly :)
+        h2 what hub?
+        p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project podlist resource that would automatically pull in data from opt-in pods. The user and post count data here is opt-in and <a href="https://github.com/diaspora/diaspora/pull/4602">is currently waiting</a> for code cleanup and a pull to the diaspora* code. The idea is to generate some feel towards how many of us diasporians there really are.
+        p Since placing this hub under the project didn't really gain much excitement, I decided to just do it anyway. The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress and a bit ugly :)
 
-h3 under the hood
-p Full stack JavaScript power:
-ul
-    li <a href="http://nodejs.org/">Node.js</a> with <a href="http://expressjs.com">Express</a>, <a href="https://github.com/ctavan/express-validator">Express-validator</a>, <a href="http://dresende.github.io/node-orm2/">Object Relational Mapping</a> (database), <a href="https://npmjs.org/package/node-schedule">Node-schedule</a> and <a href="http://jade-lang.com">Jade</a> (templating)
-    li The graphs are powered by the awesome <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a> library which is in turn powered by <a href="http://d3js.org/">D3</a>
-    li The podlist is responsified with <a href="http://fooplugins.com/plugins/footable-jquery/">Footable</a>
-    
-p
-    #hubinfo(style="width:400px;")
-    br
-    #ohlohinfo
-        script(src="http://www.ohloh.net/p/711145/widgets/project_basic_stats.js")
+        h3 how do I get my pod listed?
+        p Currently it is best to wait for the merge (follow <a href="https://iliketoast.net/u/jaywink">me</a> for news on that). Once the code is in develop branch, it can be safely merged in as single commits for those not wanting to wait until a release. I will be also adding to the list pods without statistics in the future, though of course any counts for those pods will be missing. 
 
-script.
-    $(function() {
-        $('.footable').footable();
-        $("#hubinfo").hubInfo({ 
-            user: "jaywink",
-            repo: "diaspora-hub"
-        });
-    });
+        h3 under the hood
+        p Full stack JavaScript power:
+        ul
+            li <a href="http://nodejs.org/">Node.js</a> with <a href="http://expressjs.com">Express</a>, <a href="https://github.com/ctavan/express-validator">Express-validator</a>, <a href="http://dresende.github.io/node-orm2/">Object Relational Mapping</a> (database), <a href="https://npmjs.org/package/node-schedule">Node-schedule</a> and <a href="http://jade-lang.com">Jade</a> (templating)
+            li The graphs are powered by the awesome <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a> library which is in turn powered by <a href="http://d3js.org/">D3</a>
+            li The podlist table is powered by <a href="http://fooplugins.com/plugins/footable-jquery/">Footable</a>
+            
+        p
+            #hubinfo(style="width:400px;")
+            br
+            #ohlohinfo
+                script(src="http://www.ohloh.net/p/711145/widgets/project_basic_stats.js")
+
+        script.
+            $(function() {
+                $('.footable').footable();
+                $("#hubinfo").hubInfo({ 
+                    user: "jaywink",
+                    repo: "diaspora-hub"
+                });
+            });
+
+        p.text-center built with <3 by <a href="https://iliketoast.net/u/jaywink">jason robinson</a>
