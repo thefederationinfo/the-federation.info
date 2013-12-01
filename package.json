@@ -2,7 +2,7 @@
   "author": "Jason Robinson",
   "name": "diaspora-hub",
   "description": "Statistics hub for diaspora*",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "repository": {
     "url": "https://github.com/jaywink/diaspora-hub"
   },
