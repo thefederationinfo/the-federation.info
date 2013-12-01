@@ -25,16 +25,18 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                 var today = new Date();
                 models.Stat.find({ pod_id: this.id, date: new Date(today.getFullYear(), today.getMonth(), today.getDate()) }, function(err, stats) {
                     if (! stats.length) {
-                        models.Stat.create({
-                            date: new Date(),
-                            total_users: parseInt(data.total_users),
-                            active_users: parseInt(data.active_six_month_users),
-                            local_posts: parseInt(data.local_posts),
-                            pod_id: podId,
-                        }, function (err, items) {
-                            if (err)
-                                console.log("Database error when inserting stat: "+err);
-                        });
+                        if (! isNaN(data.total_users) || ! isNaN(data.active_six_month_users) || isNaN(data.local_posts)) {
+                            models.Stat.create({
+                                date: new Date(),
+                                total_users: (isNaN(data.total_users)) ? 0 : data.total_users,
+                                active_users: (isNaN(data.active_six_month_users)) ? 0 : data.active_six_month_users,
+                                local_posts: (isNaN(data.local_posts)) ? 0 : data.local_posts,
+                                pod_id: podId,
+                            }, function (err, items) {
+                                if (err)
+                                    console.log("Database error when inserting stat: "+err);
+                            });
+                        }
                     }
                 });
             },

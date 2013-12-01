@@ -13,7 +13,7 @@ table.footable(data-filter="#filter")
                 td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
                 td= (data[i].version.indexOf('head') === 0) ? '.develop' : data[i].version
                 td= (data[i].registrations_open) ? 'Yes' : 'No'
-                td= data[i].active_users
-                td= data[i].total_users
-                td= data[i].local_posts
+                td= (data[i].active_users) ? data[i].active_users : '-'
+                td= (data[i].total_users) ? data[i].total_users : '-'
+                td= (data[i].local_posts) ? data[i].local_posts : '-'
                 
