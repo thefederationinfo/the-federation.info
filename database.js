@@ -1,6 +1,8 @@
 var orm = require('orm'),
     util = require('util'),
     config = require('./config'),
+    fs = require('fs'),
+    events = require('events'),
     models = {};
 
 orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+"/"+config.db.database+'?pool=true', function (err, db) {
@@ -8,7 +10,71 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
         console.log("Something is wrong with the db connection", err);
         return;
     }
+    // set up models on event
+    models.once('migration-done', setUpModels);
+    
+    // check for migrations before setting up models
+    models.Migration = db.define('migrations', {
+        number: { type: "number" },
+        name: { type: "text" },
+        timestamp: { type: "date" }
+    });
+    models.Migration.find({}, function (error, result) {
+        var migratefiles = fs.readdirSync('migrations/').sort();
+        console.log(migratefiles);
+        var migrations = [];
+        for (var i=0; i<migratefiles.length; i++) {
+            if (! migratefiles[i].indexOf('.sql')) {
+                continue;
+            }
+            var migration = {
+                number: parseInt(migratefiles[i].split('-')[0]),
+                name: migratefiles[i].split('-')[1],
+                filename: migratefiles[i],
+            }
+            for (var j=0; j<result.length; j++) {
+                if (data.number == migration.number) {
+                    // done already
+                    continue;
+                }
+            }
+            migrations.push(migration);
+        }
+        
+        for (var i=0; i<migrations.length; i++) {
+            // do migration
+            var sql = fs.readFileSync(migrations[i].filename).split('\n');
+            for (var j=0; j<sql.length; j++) {
+                
+            }
+        }
+    });
 
+});
+
+function doMigration(migrations) {
+    if (! migrations.length) {
+        models.trigger('migration-done');
+    } else {
+        var current = migrations.shift()
+        var sqls = fs.readFileSync(current.filename).split('\n');
+        
+        
+    }
+}
+
+function runMigrationSql(sqls) {
+    if (! sqls.length) {
+        return;
+    } else {
+        var current = sqls.shift();
+        
+    }
+    return;
+}
+
+function setUpModels() {
+    // set up models
     models.Pod = db.define('pods', {
         name: { type: "text", size: 300 },
         // due to this bug (https://github.com/dresende/node-orm2/issues/326) host not set unique yet..
@@ -82,6 +148,6 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     models.Stat.sync(function (err) {
         if (err) console.log(err);
     });
-});
+}    
 
 module.exports = models;
