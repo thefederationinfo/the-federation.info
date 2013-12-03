@@ -25,11 +25,12 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                 var today = new Date();
                 models.Stat.find({ pod_id: this.id, date: new Date(today.getFullYear(), today.getMonth(), today.getDate()) }, function(err, stats) {
                     if (! stats.length) {
-                        if (! isNaN(data.total_users) || ! isNaN(data.active_six_month_users) || isNaN(data.local_posts)) {
+                        if (! isNaN(data.total_users) || ! isNaN(data.active_users_halfyear) || ! isNaN(data.active_users_monthly) || isNaN(data.local_posts)) {
                             models.Stat.create({
                                 date: new Date(),
                                 total_users: (isNaN(data.total_users)) ? 0 : data.total_users,
-                                active_users: (isNaN(data.active_six_month_users)) ? 0 : data.active_six_month_users,
+                                active_users_halfyear: (isNaN(data.active_users_halfyear)) ? 0 : data.active_users_halfyear,
+                                active_users_monthly: (isNaN(data.active_users_monthly)) ? 0 : data.active_users_monthly,
                                 local_posts: (isNaN(data.local_posts)) ? 0 : data.local_posts,
                                 pod_id: podId,
                             }, function (err, items) {
@@ -46,7 +47,8 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
         db.driver.execQuery(
             "SELECT p.name, p.host, p.version, p.registrations_open,\
                 (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
-                (select active_users from stats where pod_id = p.id order by id desc limit 1) as active_users,\
+                (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
+                (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
                 (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts FROM pods p",
             [],
             function (err, data) {
@@ -68,7 +70,8 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     models.Stat = db.define('stats', {
         date: { type: "date", time: false },
         total_users: { type: "number" },
-        active_users: { type: "number" },
+        active_users_halfyear: { type: "number" },
+        active_users_monthly: { type: "number" },
         local_posts: { type: "number" },
     });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });

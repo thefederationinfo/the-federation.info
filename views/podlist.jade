@@ -4,7 +4,8 @@ table.footable.table(data-filter="#filter")
             th(data-class="expand") Name
             th(data-sort-initial="descending") Version
             th Open signups
-            th Active users
+            th(data-type="numeric") Active users 6 months
+            th(data-hide="phone", data-type="numeric") Active users 1 month
             th(data-hide="phone", data-type="numeric") Total users
             th(data-hide="phone", data-type="numeric") Posts
     tbody
@@ -13,7 +14,8 @@ table.footable.table(data-filter="#filter")
                 td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
                 td= (data[i].version.indexOf('head') === 0) ? '.develop' : data[i].version
                 td= (data[i].registrations_open) ? 'Yes' : 'No'
-                td= (data[i].active_users) ? data[i].active_users : '-'
+                td= (data[i].active_users_halfyear) ? data[i].active_users_halfyear : '-'
+                td= (data[i].active_users_monthly) ? data[i].active_users_monthly : '-'
                 td= (data[i].total_users) ? data[i].total_users : '-'
                 td= (data[i].local_posts) ? data[i].local_posts : '-'
                 
