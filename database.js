@@ -3,7 +3,7 @@ var orm = require('orm'),
     config = require('./config'),
     models = {};
 
-orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+"/"+config.db.database, function (err, db) {
+orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+"/"+config.db.database+'?pool=true', function (err, db) {
     if (err) {
         console.log("Something is wrong with the db connection", err);
         return;
