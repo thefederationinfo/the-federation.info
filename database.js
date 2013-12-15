@@ -18,7 +18,7 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     }, {
         methods: {
             needsUpdate: function (name, version, registrations_open) {
-                return (this.name === name && this.version === version && this.registrations_open === registrations_open);
+                return (this.name !== name || this.version !== version || this.registrations_open !== registrations_open);
             },
             logStats: function (data) {
                 var podId = this.id;
