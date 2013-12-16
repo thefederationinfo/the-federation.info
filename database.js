@@ -1,14 +1,137 @@
 var orm = require('orm'),
     util = require('util'),
     config = require('./config'),
-    models = {};
+    fs = require('fs'),
+    events = require('events'),
+    mysql = require('mysql'),
+    models = {},
+    eventEmitter = new events.EventEmitter();
 
 orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+"/"+config.db.database+'?pool=true', function (err, db) {
     if (err) {
         console.log("Something is wrong with the db connection", err);
         return;
     }
+    
+    // check for migrations before setting up models
+    models.Migration = db.define('migrations', {
+        number: { type: "number" },
+        name: { type: "text" },
+        timestamp: { type: "date" }
+    });
+    models.Migration.sync(function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+    });
+    // listen to migrations done and launch models setup when we get that
+    eventEmitter.on('migrations-done', setUpModels);
+    // get migrations
+    models.Migration.find({}, function (error, result) {
+        var migratefiles = fs.readdirSync('migrations/').sort();
+        console.log(migratefiles);
+        var migrations = [];
+        if (migratefiles.length) {
+            // separate non-orm mysql connection for flexibility
+            var dbconfig = config.db;
+            dbconfig.multipleStatements = true;
+            var migrdb = mysql.createConnection(dbconfig);
+            migrdb.connect(function (err) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+            });
+            var migrations = [];
+            migrdb.beginTransaction(function (err) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+                // collect migrations
+                for (var i=0; i<migratefiles.length; i++) {
+                    if (! migratefiles[i].indexOf('.sql')) {
+                        continue;
+                    }
+                    var migration = {
+                        number: parseInt(migratefiles[i].split('-')[0]),
+                        name: migratefiles[i].split('-')[1],
+                        filename: 'migrations/'+migratefiles[i],
+                    }
+                    if (result) {
+                        var done = false;
+                        for (var j=0; j<result.length; j++) {
+                            if (result[j].number == migration.number) {
+                                // done already
+                                done = true;
+                                break;
+                            }
+                        }
+                        if (done) {
+                            continue;
+                        }
+                    }
+                    var sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
+                    migration.sql = sql;
+                    migrations.push(migration);
+                }
+                // launch migrations if found
+                if (migrations.length) {
+                    doMigration(migrations, migrdb, db);
+                } else {
+                    eventEmitter.emit('migrations-done', db);
+                    migrdb.end();
+                }
+            });
+        } else {
+            eventEmitter.emit('migrations-done', db);
+        }
+    });
+});
 
+function doMigration(migrations, migrdb, db) {
+    var migration = migrations.shift();
+    console.log('processing: '+migration.name);
+    migrdb.query(migration.sql, function(err, rows, fields) {
+        if (err) {
+            // migration failed
+            console.log("Error: " + err.message);
+            migrdb.rollback(function() {
+                throw err;
+            });
+        } else {
+            migrdb.commit(function(err) {
+                if (err) { 
+                    migrdb.rollback(function() {
+                        throw err;
+                    });
+                }
+                console.log('success!');
+                models.Migration.create({
+                    number: migration.number,
+                    name: migration.name,
+                    timestamp: new Date()
+                }, function (err, items) {
+                    if (err)
+                        console.log("Database error when inserting migration: "+err);
+                });
+                if (migrations.length) {
+                    // do next
+                    doMigration(migrations, migrdb, db);
+                } else {
+                    // no more, set up models
+                    console.log('** Migrations done, launching app.. **');
+                    eventEmitter.emit('migrations-done', db);
+                    migrdb.end();
+                }
+            });
+        }
+    });    
+}
+
+function setUpModels(db) {
+    // set up models
     models.Pod = db.define('pods', {
         name: { type: "text", size: 300 },
         // due to this bug (https://github.com/dresende/node-orm2/issues/326) host not set unique yet..
@@ -82,6 +205,6 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     models.Stat.sync(function (err) {
         if (err) console.log(err);
     });
-});
+}    
 
 module.exports = models;
