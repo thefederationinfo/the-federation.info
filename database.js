@@ -30,7 +30,6 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     // get migrations
     models.Migration.find({}, function (error, result) {
         var migratefiles = fs.readdirSync('migrations/').sort();
-        console.log(migratefiles);
         var migrations = [];
         if (migratefiles.length) {
             // separate non-orm mysql connection for flexibility
@@ -51,7 +50,7 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                 }
                 // collect migrations
                 for (var i=0; i<migratefiles.length; i++) {
-                    if (! migratefiles[i].indexOf('.sql')) {
+                    if (migratefiles[i].indexOf('.sql') < 0) {
                         continue;
                     }
                     var migration = {
@@ -138,6 +137,7 @@ function setUpModels(db) {
         host: { type: "text", size: 100 },
         version: { type: "text", size: 30 },
         registrations_open: { type: "boolean" },
+        failures: { type: "number" },
     }, {
         methods: {
             needsUpdate: function (name, version, registrations_open) {
@@ -164,6 +164,12 @@ function setUpModels(db) {
                     }
                 });
             },
+            logFailure: function() {
+                this.failures += 1;
+                this.save(function (err) {
+                    if (err) console.log(err);
+                });
+            },
         }
     });
     models.Pod.allForList = function (callback) {
@@ -172,7 +178,8 @@ function setUpModels(db) {
                 (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
                 (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
                 (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
-                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts FROM pods p",
+                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts FROM pods p\
+                    where failures < 3",
             [],
             function (err, data) {
                 if (err) console.log(err);
@@ -182,7 +189,7 @@ function setUpModels(db) {
     };
     models.Pod.allPodStats = function (item, callback) {
         db.driver.execQuery(
-            "SELECT p.name, s.pod_id, unix_timestamp(s.date) as timestamp, s."+item+" as item FROM pods p, stats s where p.id = s.pod_id order by s.date",
+            "SELECT p.name, s.pod_id, unix_timestamp(s.date) as timestamp, s."+item+" as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
             [],
             function (err, data) {
                 if (err) console.log(err);
