@@ -19,6 +19,12 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
         name: { type: "text" },
         timestamp: { type: "date" }
     });
+    models.Migration.sync(function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+    });
     // listen to migrations done and launch models setup when we get that
     eventEmitter.on('migrations-done', setUpModels);
     // get migrations
@@ -54,11 +60,16 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                         filename: 'migrations/'+migratefiles[i],
                     }
                     if (result) {
+                        var done = false;
                         for (var j=0; j<result.length; j++) {
-                            if (data.number == migration.number) {
+                            if (result[j].number == migration.number) {
                                 // done already
-                                continue;
+                                done = true;
+                                break;
                             }
+                        }
+                        if (done) {
+                            continue;
                         }
                     }
                     var sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
@@ -97,6 +108,14 @@ function doMigration(migrations, migrdb, db) {
                     });
                 }
                 console.log('success!');
+                models.Migration.create({
+                    number: migration.number,
+                    name: migration.name,
+                    timestamp: new Date()
+                }, function (err, items) {
+                    if (err)
+                        console.log("Database error when inserting migration: "+err);
+                });
                 if (migrations.length) {
                     // do next
                     doMigration(migrations, migrdb, db);
