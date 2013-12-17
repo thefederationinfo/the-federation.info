@@ -12,7 +12,7 @@ table.footable.table(data-filter="#filter")
         - for (var i=0; i<data.length; i++)
             tr
                 td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
-                td= (data[i].version.indexOf('head') === 0) ? '.develop' : data[i].version
+                td= (data[i].version.indexOf('head') === 0) ? '.develop' : (data[i].version.indexOf('-') > -1) ? data[i].version.split('-')[0] : data[i].version
                 td= (data[i].registrations_open) ? 'Yes' : 'No'
                 td= (data[i].active_users_halfyear) ? data[i].active_users_halfyear : '-'
                 td= (data[i].active_users_monthly) ? data[i].active_users_monthly : '-'
