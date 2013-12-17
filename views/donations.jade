@@ -1,0 +1,20 @@
+.donations(style='margin-top:10px') 
+    .gittip(style='display:inline; float:left;')
+        script(data-gittip-username='jaywink',src='//gttp.co/v1.js').
+
+    .blockchain-btn(style='font-size:16px;margin:0 auto;width:300px;display:inline; float:left; margin-left: 25px;',data-address='1LcZfCq2AwoVobLqB3gdtFNV6Qh3tBESaU',data-shared="false")
+        .blockchain.stage-begin(style='cursor:pointer;')
+            img(src='https://blockchain.info//Resources/buttons/donate_64.png')
+        .blockchain.stage-loading(style='text-align:center')
+            img(src='https://blockchain.info//Resources/loading-large.gif')
+        .blockchain.stage-ready
+            p(align='center') Please Donate To Bitcoin Address: <b>[[address]]</b>
+        .blockchain.stage-paid Donation of <b>[[value]] BTC</b> Received. Thank You.
+        .blockchain.stage-error
+            font(color='red') [[error]]
+            
+    .clear(style='clear:both')
+        
+    .flattr(style='margin-top:10px; margin-left:3px;')
+        script(id='fbhu7q1').
+            (function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=jaywink&button=compact&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fbhu7q1');

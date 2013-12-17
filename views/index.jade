@@ -22,6 +22,7 @@ head
     include ../vendor/js/footable.sort.js
     include ../vendor/js/hubinfo.min.js
     script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
+    script(src='https://blockchain.info//Resources/wallet/pay-now-button.js')
 
 body(style="background-color: rgb(238, 238, 238);")
     div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
@@ -58,6 +59,10 @@ body(style="background-color: rgb(238, 238, 238);")
             li The podlist table is powered by <a href="http://fooplugins.com/plugins/footable-jquery/">Footable</a>
             li The general theme is <a href="http://getbootstrap.com/">Twitter Bootstrap</a>
             
+        h3 show some love
+        include donations.jade
+        
+        h3 code stats
         p
             #hubinfo(style="width:400px;")
             br
