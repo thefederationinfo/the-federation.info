@@ -3,7 +3,8 @@ var express = require('express'),
     util = require('util'),
     expressValidator = require('express-validator'),
     scheduler = require('node-schedule'),
-    db = require('./database');
+    db = require('./database'),
+    dns = require('dns');
 var app = express();
 
 app.engine('jade', require('jade').renderFile);
@@ -63,36 +64,53 @@ function callPod(podhost) {
                 data = JSON.parse(data);
                 if (typeof data.version !== 'undefined') {
                     db.Pod.exists({ host: podhost }, function (err, exists) {
-                        if (! exists) {
-                            // Insert
-                            db.Pod.create({
-                                name: data.name,
-                                host: podhost,
-                                version: data.version,
-                                registrations_open: data.registrations_open,
-                                failures: 0,
-                            }, function (err, items) {
-                                if (err)
-                                    console.log("Database error when inserting pod: "+err);
-                                else
-                                    items.logStats(data);
-                            });
-                        } else {
-                            // Check for changes
-                            db.Pod.find({ host: podhost }, function(err, pods) {
-                                pod = pods[0];
-                                if (pod.failures > 0 || pod.needsUpdate(data.name, data.version, data.registrations_open)) {
-                                    pod.name = data.name;
-                                    pod.version = data.version;
-                                    pod.registrations_open = data.registrations_open;
-                                    pod.failures = 0;   // reset counter
-                                    pod.save(function(err) {
-                                        if (err) console.log(err);
-                                    });
-                                };
-                                pod.logStats(data);
-                            });
-                        }
+                        dns.resolve4(podhost, function (err, addresses) {
+                            if (err) {
+                                console.log(err);
+                                ip4 = null;
+                            } else {
+                                console.log(addresses);
+                                ip4 = addresses[0];
+                            }
+                            if (! exists) {
+                                // Insert
+                                db.Pod.create({
+                                    name: data.name,
+                                    host: podhost,
+                                    version: data.version,
+                                    registrations_open: data.registrations_open,
+                                    failures: 0,
+                                    ip4: ip4,
+                                }, function (err, items) {
+                                    if (err) {
+                                        console.log("Database error when inserting pod: "+err);
+                                    } else {
+                                        items.getCountry();
+                                        items.logStats(data);
+                                    }
+                                });
+                            } else {
+                                // Check for changes
+                                db.Pod.find({ host: podhost }, function(err, pods) {
+                                    pod = pods[0];
+                                    if (pod.failures > 0 || pod.needsUpdate(data.name, data.version, data.registrations_open, ip4)) {
+                                        pod.name = data.name;
+                                        pod.version = data.version;
+                                        pod.registrations_open = data.registrations_open;
+                                        pod.failures = 0;   // reset counter
+                                        pod.ip4 = ip4;
+                                        pod.save(function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                            } else {
+                                                pod.getCountry();
+                                            }
+                                        });
+                                    };
+                                    pod.logStats(data);
+                                });
+                            }
+                        });
                     });
                 } else {
                     throw err;

@@ -4,10 +4,11 @@ table.footable.table(data-filter="#filter")
             th(data-class="expand") Name
             th Version
             th Open signups
-            th(data-type="numeric") Active users 6 months
+            th(data-hide="phone", data-type="numeric") Active users 6 months
             th(data-type="numeric", data-sort-initial="descending") Active users 1 month
             th(data-hide="phone", data-type="numeric") Total users
             th(data-hide="phone", data-type="numeric") Posts
+            th(data-hide="phone") Country
     tbody
         - for (var i=0; i<data.length; i++)
             tr
@@ -18,4 +19,5 @@ table.footable.table(data-filter="#filter")
                 td= (data[i].active_users_monthly) ? data[i].active_users_monthly : '-'
                 td= (data[i].total_users) ? data[i].total_users : '-'
                 td= (data[i].local_posts) ? data[i].local_posts : '-'
+                td!= (data[i].country) ? '<a href="http://countrycode.org/'+data[i].country+'" target="_blanc"><img src="flags/'+data[i].country.toLowerCase()+'.png"></a>' : '&nbsp;'
                 

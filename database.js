@@ -4,6 +4,7 @@ var orm = require('orm'),
     fs = require('fs'),
     events = require('events'),
     mysql = require('mysql'),
+    geoip = require('geoip-lite'),
     models = {},
     eventEmitter = new events.EventEmitter();
 
@@ -138,10 +139,12 @@ function setUpModels(db) {
         version: { type: "text", size: 30 },
         registrations_open: { type: "boolean" },
         failures: { type: "number" },
+        ip4: { type: "text", size: 15 },
+        country: { type: "text", size: 10 },
     }, {
         methods: {
-            needsUpdate: function (name, version, registrations_open) {
-                return (this.name !== name || this.version !== version || this.registrations_open !== registrations_open);
+            needsUpdate: function (name, version, registrations_open, ip4) {
+                return (this.name !== name || this.version !== version || this.registrations_open !== registrations_open || this.ip4 !== ip4);
             },
             logStats: function (data) {
                 var podId = this.id;
@@ -170,11 +173,22 @@ function setUpModels(db) {
                     if (err) console.log(err);
                 });
             },
+            getCountry: function() {
+                if (this.ip4) {
+                    geo = geoip.lookup(ip4);
+                    if (typeof geo.country !== 'undefined' && geo.country) {
+                        this.country = geo.country;
+                        this.save(function (err) {
+                            if (err) console.log(err);
+                        });
+                    }
+                }
+            },
         }
     });
     models.Pod.allForList = function (callback) {
         db.driver.execQuery(
-            "SELECT p.name, p.host, p.version, p.registrations_open,\
+            "SELECT p.name, p.host, p.version, p.registrations_open, p.country,\
                 (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
                 (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
                 (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
