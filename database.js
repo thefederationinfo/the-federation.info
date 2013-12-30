@@ -175,7 +175,7 @@ function setUpModels(db) {
             },
             getCountry: function() {
                 if (this.ip4) {
-                    geo = geoip.lookup(ip4);
+                    geo = geoip.lookup(this.ip4);
                     if (typeof geo.country !== 'undefined' && geo.country) {
                         this.country = geo.country;
                         this.save(function (err) {
