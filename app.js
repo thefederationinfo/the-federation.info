@@ -55,6 +55,8 @@ function callPod(podhost) {
         path: '/statistics.json',
         method: 'GET'
     };
+    console.log('');
+    console.log('*** Calling for update: '+podhost)
     var request = https.request(options, function(res) {
         console.log('STATUS: ' + res.statusCode);
         console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -69,7 +71,6 @@ function callPod(podhost) {
                                 console.log(err);
                                 ip4 = null;
                             } else {
-                                console.log(addresses);
                                 ip4 = addresses[0];
                             }
                             if (! exists) {
@@ -92,8 +93,18 @@ function callPod(podhost) {
                             } else {
                                 // Check for changes
                                 db.Pod.find({ host: podhost }, function(err, pods) {
+                                    console.log('-- New data:');
+                                    console.log(data);
+                                    console.log(ip4);
                                     pod = pods[0];
+                                    console.log('-- Old data:')
+                                    console.log(pod.failures);
+                                    console.log(pod.name);
+                                    console.log(pod.version);
+                                    console.log(pod.registrations_open);
+                                    console.log(pod.ip4);
                                     if (pod.failures > 0 || pod.needsUpdate(data.name, data.version, data.registrations_open, ip4)) {
+                                        console.log('pod '+podhost+' update');
                                         pod.name = data.name;
                                         pod.version = data.version;
                                         pod.registrations_open = data.registrations_open;
@@ -106,7 +117,9 @@ function callPod(podhost) {
                                                 pod.getCountry();
                                             }
                                         });
-                                    };
+                                    } else {
+                                        console.log('pod '+podhost+' no update');
+                                    }
                                     pod.logStats(data);
                                 });
                             }
@@ -116,7 +129,7 @@ function callPod(podhost) {
                     throw err;
                 }
             } catch (err) {
-                console.log('not a valid statistics json');
+                console.log('host '+podhost+' not a valid statistics json');
                 // if this pod is known, log a failure
                 db.Pod.exists({ host: podhost }, function (err, exists) {
                     if (exists) {
@@ -147,7 +160,7 @@ app.get('/register/:podhost', function(req, res) {
     callPod(req.params.podhost);
     
     res.type('text/plain');
-    res.send('register received');
+    res.send('register received, if this is a valid pod with suitable code, it will be visible at http://pods.jasonrobinson.me in a few seconds..');
 });
 
 // Scheduling
@@ -156,7 +169,8 @@ var updater = scheduler.scheduleJob('7 0 * * *', function() {
     
     db.Pod.find({}, function(err, pods) {
         for (var i=0; i<pods.length; i++) {
-            callPod(pods[i].host);
+            var podhost = pods[i].host;
+            setTimeout(callPod, Math.floor(Math.random() * 10000) +1, podhost);
         }
     });
 });
