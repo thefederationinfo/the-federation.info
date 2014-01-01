@@ -219,12 +219,73 @@ function setUpModels(db) {
         local_posts: { type: "number" },
     });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });
+    models.GlobalStat = db.define('global_stats', {
+        date: { type: "date", time: false },
+        total_users: { type: "number" },
+        active_users_halfyear: { type: "number" },
+        active_users_monthly: { type: "number" },
+        local_posts: { type: "number" },
+        new_users: { type: "number" },
+        new_posts: { type: "number" },
+    });
     
     models.Pod.sync(function (err) {
         if (err) console.log(err);
     });
     models.Stat.sync(function (err) {
         if (err) console.log(err);
+    });
+    models.GlobalStat.sync(function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            // make sure all dates have a global stat record
+            db.driver.execQuery(
+            "SELECT distinct date FROM stats order by date",
+            [],
+            function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    for (var i=0; i<data.length; i++) {
+                        var date = data[i].date;
+                        models.GlobalStat.exists({ date: date }, function (err, exists) {
+                            if (! exists) {
+                                // collect
+                                models.Stat.aggregate({ date: date }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts) {
+                                    var data = {
+                                        date: date,
+                                        total_users: total_users,
+                                        active_users_monthly: active_users_monthly,
+                                        active_users_halfyear: active_users_halfyear,
+                                        local_posts: local_posts
+                                    }
+                                    var prevDate = new Date(date);
+                                    prevDate.setDate(prevDate.getDate()-1);
+                                    models.Stat.exists({ date: prevDate.toISOString() }, function (err, exists) {
+                                        if (exists) {
+                                            models.Stat.aggregate({ date: prevDate.toISOString() }).sum("total_users").sum("local_posts").get(function (err, total_users, local_posts) {
+                                                data.new_users = data.total_users - total_users;
+                                                data.new_posts = data.local_posts - local_posts;
+                                                models.GlobalStat.create(data, function (err, items) {
+                                                    if (err) console.log("Database error when global stat: "+err);
+                                                });
+                                            });
+                                        } else {
+                                            data.new_users = 0;
+                                            data.new_posts = 0;
+                                            models.GlobalStat.create(data, function (err, items) {
+                                                if (err) console.log("Database error when global stat: "+err);
+                                            });
+                                        }
+                                    })
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        }
     });
 }    
 
