@@ -142,9 +142,16 @@ function doMigration(migrations, migrdb, db) {
             }
         });
     } else if (migration.type == 'py') {
-        var python  = spawn('python', [ migration.filename ], { 'cwd': 'migrations/' });
+        var python  = spawn('python', [ migration.filename ]);
+        python.stdout.on('data', function (data) {
+            console.log('stdout: ' + data);
+        });
+        python.stderr.on('data', function (data) {
+            console.log('stderr: ' + data);
+        });
         python.on('close', function (code) {
-            if (! code) {
+            console.log(code);
+            if (code != '0') {
                 // migration failed
                 console.log("Non-zero exit code from Python: "+code);
                 throw err;
@@ -277,56 +284,7 @@ function setUpModels(db) {
         if (err) console.log(err);
     });
     models.GlobalStat.sync(function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            // make sure all dates have a global stat record
-            db.driver.execQuery(
-            "SELECT distinct date FROM stats order by date",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    for (var i=0; i<data.length; i++) {
-                        var date = data[i].date;
-                        models.GlobalStat.exists({ date: date }, function (err, exists) {
-                            if (! exists) {
-                                // collect
-                                models.Stat.aggregate({ date: date }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts) {
-                                    var data = {
-                                        date: date,
-                                        total_users: total_users,
-                                        active_users_monthly: active_users_monthly,
-                                        active_users_halfyear: active_users_halfyear,
-                                        local_posts: local_posts
-                                    }
-                                    var prevDate = new Date(date);
-                                    prevDate.setDate(prevDate.getDate()-1);
-                                    models.Stat.exists({ date: prevDate.toISOString() }, function (err, exists) {
-                                        if (exists) {
-                                            models.Stat.aggregate({ date: prevDate.toISOString() }).sum("total_users").sum("local_posts").get(function (err, total_users, local_posts) {
-                                                data.new_users = data.total_users - total_users;
-                                                data.new_posts = data.local_posts - local_posts;
-                                                models.GlobalStat.create(data, function (err, items) {
-                                                    if (err) console.log("Database error when global stat: "+err);
-                                                });
-                                            });
-                                        } else {
-                                            data.new_users = 0;
-                                            data.new_posts = 0;
-                                            models.GlobalStat.create(data, function (err, items) {
-                                                if (err) console.log("Database error when global stat: "+err);
-                                            });
-                                        }
-                                    })
-                                });
-                            }
-                        });
-                    }
-                }
-            });
-        }
+        if (err) console.log(err);   
     });
 }    
 
