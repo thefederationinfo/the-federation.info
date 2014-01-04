@@ -245,7 +245,17 @@ function setUpModels(db) {
             [],
             function (err, data) {
                 if (err) console.log(err);
-                callback(data);
+                var result = { pods: data };
+                db.driver.execQuery(
+                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts \
+                        from global_stats order by id desc limit 1",
+                    [],
+                    function (err, totals) {
+                        if (err) console.log(err);
+                        result.totals = totals[0];
+                        callback(result);
+                    }
+                );
             }
         );
     };
