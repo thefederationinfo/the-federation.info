@@ -5,6 +5,7 @@ var orm = require('orm'),
     events = require('events'),
     mysql = require('mysql'),
     geoip = require('geoip-lite'),
+    spawn = require('child_process').spawn,
     models = {},
     eventEmitter = new events.EventEmitter();
 
@@ -51,13 +52,22 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                 }
                 // collect migrations
                 for (var i=0; i<migratefiles.length; i++) {
-                    if (migratefiles[i].indexOf('.sql') < 0) {
+                    if (migratefiles[i].indexOf('.sql') > -1) {
+                        var migration = {
+                            number: parseInt(migratefiles[i].split('-')[0]),
+                            name: migratefiles[i].split('-')[1],
+                            filename: 'migrations/'+migratefiles[i],
+                            type: "sql"
+                        }
+                    } else if (migratefiles[i].indexOf('.py') > -1) {
+                        var migration = {
+                            number: parseInt(migratefiles[i].split('-')[0]),
+                            name: migratefiles[i].split('-')[1],
+                            filename: 'migrations/'+migratefiles[i],
+                            type: "py"
+                        }
+                    } else {
                         continue;
-                    }
-                    var migration = {
-                        number: parseInt(migratefiles[i].split('-')[0]),
-                        name: migratefiles[i].split('-')[1],
-                        filename: 'migrations/'+migratefiles[i],
                     }
                     if (result) {
                         var done = false;
@@ -72,8 +82,10 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                             continue;
                         }
                     }
-                    var sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
-                    migration.sql = sql;
+                    if (migration.type == 'sql') {
+                        var sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
+                        migration.sql = sql;
+                    }
                     migrations.push(migration);
                 }
                 // launch migrations if found
@@ -93,41 +105,77 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
 function doMigration(migrations, migrdb, db) {
     var migration = migrations.shift();
     console.log('processing: '+migration.name);
-    migrdb.query(migration.sql, function(err, rows, fields) {
-        if (err) {
-            // migration failed
-            console.log("Error: " + err.message);
-            migrdb.rollback(function() {
-                throw err;
-            });
-        } else {
-            migrdb.commit(function(err) {
-                if (err) { 
-                    migrdb.rollback(function() {
-                        throw err;
-                    });
-                }
-                console.log('success!');
-                models.Migration.create({
-                    number: migration.number,
-                    name: migration.name,
-                    timestamp: new Date()
-                }, function (err, items) {
-                    if (err)
-                        console.log("Database error when inserting migration: "+err);
+    if (migration.type == 'sql') {
+        migrdb.query(migration.sql, function(err, rows, fields) {
+            if (err) {
+                // migration failed
+                console.log("Error: " + err.message);
+                migrdb.rollback(function() {
+                    throw err;
                 });
-                if (migrations.length) {
-                    // do next
-                    doMigration(migrations, migrdb, db);
-                } else {
-                    // no more, set up models
-                    console.log('** Migrations done, launching app.. **');
-                    eventEmitter.emit('migrations-done', db);
-                    migrdb.end();
-                }
+            } else {
+                migrdb.commit(function(err) {
+                    if (err) { 
+                        migrdb.rollback(function() {
+                            throw err;
+                        });
+                    }
+                    console.log('success!');
+                    models.Migration.create({
+                        number: migration.number,
+                        name: migration.name,
+                        timestamp: new Date()
+                    }, function (err, items) {
+                        if (err)
+                            console.log("Database error when inserting migration: "+err);
+                    });
+                    if (migrations.length) {
+                        // do next
+                        doMigration(migrations, migrdb, db);
+                    } else {
+                        // no more, set up models
+                        console.log('** Migrations done, launching app.. **');
+                        eventEmitter.emit('migrations-done', db);
+                        migrdb.end();
+                    }
+                });
+            }
+        });
+    } else if (migration.type == 'py') {
+        var python  = spawn('python', [ migration.filename ]);
+        python.stdout.on('data', function (data) {
+            console.log('stdout: ' + data);
+        });
+        python.stderr.on('data', function (data) {
+            console.log('stderr: ' + data);
+        });
+        python.on('close', function (code) {
+            console.log(code);
+            if (code != '0') {
+                // migration failed
+                console.log("Non-zero exit code from Python: "+code);
+                throw err;
+            }
+            console.log('success!');
+            models.Migration.create({
+                number: migration.number,
+                name: migration.name,
+                timestamp: new Date()
+            }, function (err, items) {
+                if (err)
+                    console.log("Database error when inserting migration: "+err);
             });
-        }
-    });    
+            if (migrations.length) {
+                // do next
+                doMigration(migrations, migrdb, db);
+            } else {
+                // no more, set up models
+                console.log('** Migrations done, launching app.. **');
+                eventEmitter.emit('migrations-done', db);
+                migrdb.end();
+            }
+        });
+    }
 }
 
 function setUpModels(db) {
@@ -197,7 +245,17 @@ function setUpModels(db) {
             [],
             function (err, data) {
                 if (err) console.log(err);
-                callback(data);
+                var result = { pods: data };
+                db.driver.execQuery(
+                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts \
+                        from global_stats order by id desc limit 1",
+                    [],
+                    function (err, totals) {
+                        if (err) console.log(err);
+                        result.totals = totals[0];
+                        callback(result);
+                    }
+                );
             }
         );
     };
@@ -219,12 +277,57 @@ function setUpModels(db) {
         local_posts: { type: "number" },
     });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });
+    models.GlobalStat = db.define('global_stats', {
+        date: { type: "date", time: false },
+        total_users: { type: "number" },
+        active_users_halfyear: { type: "number" },
+        active_users_monthly: { type: "number" },
+        local_posts: { type: "number" },
+        new_users: { type: "number" },
+        new_posts: { type: "number" },
+    });
+    models.GlobalStat.logStats = function () {
+        var d = new Date();
+        var curDate = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); 
+        models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts) {
+            var data = {
+                date: new Date(),
+                total_users: total_users,
+                active_users_monthly: active_users_monthly,
+                active_users_halfyear: active_users_halfyear,
+                local_posts: local_posts
+            }
+            var d = new Date();
+            d.setDate(d.getDate()-1);
+            var prevDate = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); 
+            models.Stat.exists({ date: prevDate }, function (err, exists) {
+                if (exists) {
+                    models.Stat.aggregate({ date: prevDate }).sum("total_users").sum("local_posts").get(function (err, total_users, local_posts) {
+                        data.new_users = data.total_users - total_users;
+                        data.new_posts = data.local_posts - local_posts;
+                        models.GlobalStat.create(data, function (err, items) {
+                            if (err) console.log("Database error when global stat: "+err);
+                        });
+                    });
+                } else {
+                    data.new_users = 0;
+                    data.new_posts = 0;
+                    models.GlobalStat.create(data, function (err, items) {
+                        if (err) console.log("Database error when global stat: "+err);
+                    });
+                }
+            })
+        });
+    };
     
     models.Pod.sync(function (err) {
         if (err) console.log(err);
     });
     models.Stat.sync(function (err) {
         if (err) console.log(err);
+    });
+    models.GlobalStat.sync(function (err) {
+        if (err) console.log(err);   
     });
 }    
 

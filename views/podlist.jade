@@ -1,6 +1,13 @@
 table.footable.table(data-filter="#filter")
     thead
         tr
+            th(colspan="3", style="text-align:right") Totals during last check
+            th= data.totals.active_users_halfyear
+            th= data.totals.active_users_monthly
+            th= data.totals.total_users
+            th= data.totals.local_posts
+            th &nbsp;
+        tr
             th(data-class="expand") Name
             th Version
             th Open signups
@@ -10,14 +17,14 @@ table.footable.table(data-filter="#filter")
             th(data-hide="phone", data-type="numeric") Posts
             th(data-hide="phone") Country
     tbody
-        - for (var i=0; i<data.length; i++)
+        - for (var i=0; i<data.pods.length; i++)
             tr
-                td!= '<a href="https://'+data[i].host+'">'+data[i].name+'</a>'
-                td= (data[i].version.indexOf('head') === 0) ? '.develop' : (data[i].version.indexOf('-') > -1) ? data[i].version.split('-')[0] : data[i].version
-                td= (data[i].registrations_open) ? 'Yes' : 'No'
-                td= (data[i].active_users_halfyear) ? data[i].active_users_halfyear : '-'
-                td= (data[i].active_users_monthly) ? data[i].active_users_monthly : '-'
-                td= (data[i].total_users) ? data[i].total_users : '-'
-                td= (data[i].local_posts) ? data[i].local_posts : '-'
-                td!= (data[i].country) ? '<a href="http://countrycode.org/'+data[i].country+'" target="_blanc"><img src="flags/'+data[i].country.toLowerCase()+'.png"></a>' : '&nbsp;'
-                
+                td!= '<a href="https://'+data.pods[i].host+'">'+data.pods[i].name+'</a>'
+                td= (data.pods[i].version.indexOf('head') === 0) ? '.develop' : (data.pods[i].version.indexOf('-') > -1) ? data.pods[i].version.split('-')[0] : data.pods[i].version
+                td= (data.pods[i].registrations_open) ? 'Yes' : 'No'
+                td= (data.pods[i].active_users_halfyear) ? data.pods[i].active_users_halfyear : '-'
+                td= (data.pods[i].active_users_monthly) ? data.pods[i].active_users_monthly : '-'
+                td= (data.pods[i].total_users) ? data.pods[i].total_users : '-'
+                td= (data.pods[i].local_posts) ? data.pods[i].local_posts : '-'
+                td!= (data.pods[i].country) ? '<a href="http://countrycode.org/'+data.pods[i].country+'" target="_blanc"><img src="flags/'+data.pods[i].country.toLowerCase()+'.png"></a>' : '&nbsp;'
+            

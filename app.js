@@ -172,6 +172,7 @@ var updater = scheduler.scheduleJob('7 0 * * *', function() {
             var podhost = pods[i].host;
             setTimeout(callPod, Math.floor(Math.random() * 10000) +1, podhost);
         }
+        setTimeout(db.GlobalStat.logStats, 45000);
     });
 });
 
