@@ -286,6 +286,39 @@ function setUpModels(db) {
         new_users: { type: "number" },
         new_posts: { type: "number" },
     });
+    models.GlobalStat.logStats = function () {
+        var d = new Date();
+        var curDate = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); 
+        models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts) {
+            var data = {
+                date: new Date(),
+                total_users: total_users,
+                active_users_monthly: active_users_monthly,
+                active_users_halfyear: active_users_halfyear,
+                local_posts: local_posts
+            }
+            var d = new Date();
+            d.setDate(d.getDate()-1);
+            var prevDate = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); 
+            models.Stat.exists({ date: prevDate }, function (err, exists) {
+                if (exists) {
+                    models.Stat.aggregate({ date: prevDate }).sum("total_users").sum("local_posts").get(function (err, total_users, local_posts) {
+                        data.new_users = data.total_users - total_users;
+                        data.new_posts = data.local_posts - local_posts;
+                        models.GlobalStat.create(data, function (err, items) {
+                            if (err) console.log("Database error when global stat: "+err);
+                        });
+                    });
+                } else {
+                    data.new_users = 0;
+                    data.new_posts = 0;
+                    models.GlobalStat.create(data, function (err, items) {
+                        if (err) console.log("Database error when global stat: "+err);
+                    });
+                }
+            })
+        });
+    };
     
     models.Pod.sync(function (err) {
         if (err) console.log(err);
