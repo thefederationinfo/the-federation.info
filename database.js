@@ -5,6 +5,7 @@ var orm = require('orm'),
     events = require('events'),
     mysql = require('mysql'),
     geoip = require('geoip-lite'),
+    spawn = require('child_process').spawn,
     models = {},
     eventEmitter = new events.EventEmitter();
 
@@ -51,13 +52,22 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                 }
                 // collect migrations
                 for (var i=0; i<migratefiles.length; i++) {
-                    if (migratefiles[i].indexOf('.sql') < 0) {
+                    if (migratefiles[i].indexOf('.sql') > -1) {
+                        var migration = {
+                            number: parseInt(migratefiles[i].split('-')[0]),
+                            name: migratefiles[i].split('-')[1],
+                            filename: 'migrations/'+migratefiles[i],
+                            type: "sql"
+                        }
+                    } else if (migratefiles[i].indexOf('.py') > -1) {
+                        var migration = {
+                            number: parseInt(migratefiles[i].split('-')[0]),
+                            name: migratefiles[i].split('-')[1],
+                            filename: 'migrations/'+migratefiles[i],
+                            type: "py"
+                        }
+                    } else {
                         continue;
-                    }
-                    var migration = {
-                        number: parseInt(migratefiles[i].split('-')[0]),
-                        name: migratefiles[i].split('-')[1],
-                        filename: 'migrations/'+migratefiles[i],
                     }
                     if (result) {
                         var done = false;
@@ -72,8 +82,10 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                             continue;
                         }
                     }
-                    var sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
-                    migration.sql = sql;
+                    if (migration.type == 'sql') {
+                        var sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
+                        migration.sql = sql;
+                    }
                     migrations.push(migration);
                 }
                 // launch migrations if found
@@ -93,41 +105,70 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
 function doMigration(migrations, migrdb, db) {
     var migration = migrations.shift();
     console.log('processing: '+migration.name);
-    migrdb.query(migration.sql, function(err, rows, fields) {
-        if (err) {
-            // migration failed
-            console.log("Error: " + err.message);
-            migrdb.rollback(function() {
-                throw err;
-            });
-        } else {
-            migrdb.commit(function(err) {
-                if (err) { 
-                    migrdb.rollback(function() {
-                        throw err;
-                    });
-                }
-                console.log('success!');
-                models.Migration.create({
-                    number: migration.number,
-                    name: migration.name,
-                    timestamp: new Date()
-                }, function (err, items) {
-                    if (err)
-                        console.log("Database error when inserting migration: "+err);
+    if (migration.type == 'sql') {
+        migrdb.query(migration.sql, function(err, rows, fields) {
+            if (err) {
+                // migration failed
+                console.log("Error: " + err.message);
+                migrdb.rollback(function() {
+                    throw err;
                 });
-                if (migrations.length) {
-                    // do next
-                    doMigration(migrations, migrdb, db);
-                } else {
-                    // no more, set up models
-                    console.log('** Migrations done, launching app.. **');
-                    eventEmitter.emit('migrations-done', db);
-                    migrdb.end();
-                }
+            } else {
+                migrdb.commit(function(err) {
+                    if (err) { 
+                        migrdb.rollback(function() {
+                            throw err;
+                        });
+                    }
+                    console.log('success!');
+                    models.Migration.create({
+                        number: migration.number,
+                        name: migration.name,
+                        timestamp: new Date()
+                    }, function (err, items) {
+                        if (err)
+                            console.log("Database error when inserting migration: "+err);
+                    });
+                    if (migrations.length) {
+                        // do next
+                        doMigration(migrations, migrdb, db);
+                    } else {
+                        // no more, set up models
+                        console.log('** Migrations done, launching app.. **');
+                        eventEmitter.emit('migrations-done', db);
+                        migrdb.end();
+                    }
+                });
+            }
+        });
+    } else if (migration.type == 'py') {
+        var python  = spawn('python', [ migration.filename ], { 'cwd': 'migrations/' });
+        python.on('close', function (code) {
+            if (! code) {
+                // migration failed
+                console.log("Non-zero exit code from Python: "+code);
+                throw err;
+            }
+            console.log('success!');
+            models.Migration.create({
+                number: migration.number,
+                name: migration.name,
+                timestamp: new Date()
+            }, function (err, items) {
+                if (err)
+                    console.log("Database error when inserting migration: "+err);
             });
-        }
-    });    
+            if (migrations.length) {
+                // do next
+                doMigration(migrations, migrdb, db);
+            } else {
+                // no more, set up models
+                console.log('** Migrations done, launching app.. **');
+                eventEmitter.emit('migrations-done', db);
+                migrdb.end();
+            }
+        });
+    }
 }
 
 function setUpModels(db) {
