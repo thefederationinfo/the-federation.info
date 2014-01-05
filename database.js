@@ -319,6 +319,16 @@ function setUpModels(db) {
             })
         });
     };
+    models.GlobalStat.getStats = function (callback) {
+        db.driver.execQuery(
+            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly FROM global_stats order by date",
+            [],
+            function (err, data) {
+                if (err) console.log(err);
+                callback(data);
+            }
+        );
+    };
     
     models.Pod.sync(function (err) {
         if (err) console.log(err);

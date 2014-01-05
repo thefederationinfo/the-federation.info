@@ -26,28 +26,47 @@ head
 
 body(style="background-color: rgb(238, 238, 238);")
     div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
-        h1 diaspora* statistics hub
+        h1
+            a(href="http://pods.jasonrobinson.me", style="color:inherit")
+                img(src="/images/diaspora.png")
+                | diaspora* statistics hub
+
+        h2 network statistics
+        p Total counts from monitored pods from the last check.
+        
+        include globalstats.jade
+        
+        p
+            em.small Disclaimer: Until the statistics feature is in the stable version of diaspora*, these counts reflect only a fraction of the network.
+            
+        h3 network history
+        include networkcharts.jade
 
         h2 list of pods
-        p Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>. This podlist will grow as the statistics feature becomes part of Diaspora.
+        p Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>. This pod list will grow as the statistics feature becomes part of diaspora*.
 
         include podlist.jade
         
         p
-            em.small Disclaimer: This podlist is in no way an official list of Diaspora pods. Also currently it does not contain even a fraction of the pods in the Diaspora network. Due to the distributed way diaspora works, it is not possible to even make a list of all pods.
+            em.small Disclaimer: This pod list is in no way an official list of diaspora* pods. Also currently it does not contain even a fraction of the pods in the diaspora* network. Due to the distributed way diaspora* works, it is not possible to even make a list of all pods.
             
-        h2 here be graphs
+        h3 pod graphs
         include charts.jade
 
         div(style="clear: both")
+        
+        h2 what diaspora*?
+        p Diaspora* is an awesome decentralized open source social network full of really cool people. Instead of being owned and controlled by a single corporation, all the pods (servers) in the diaspora* network are totally independent and controlled usually by single individuals. The project, which is run by a community of volunteers, builds the software which is free to use by anyone. You can easily run a pod yourself too, or if you don't want to, check out some of the open pods listed here and go create an account!
+        p
+            a(href="https://diasporafoundation.org") Find out more about diaspora* from the official project pages.
 
         h2 what hub?
-        p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project podlist resource that would automatically pull in data from opt-in pods. The user and post count data here is opt-in for podmins and needs to be activated in pod settings. The idea is to generate some feel towards how many of us diasporians there really are.
+        p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project pod list resource that would automatically pull in data from opt-in pods. The user and post count data here is opt-in for podmins and needs to be activated in pod settings. The idea is to generate some feel towards how many of us diasporians there really are.
         p The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress.
 
         h3 how do I get my pod listed?
         p The statistics code has been <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f">merged</a> to develop branch, so if your pod runs that, you can just deploy the latest development code and then go to <code>https://&lt;yourpod.tld&gt;/statistics.json</code> to verify it works. If you want to report user and post counts, edit the <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f#diff-72093d13f77e805ad8de330c99e6c73eR195">relevant configuration</a> and restart your diaspora pod.
-        p For registering your pod with this hub, go to <code>http://pods.jasonrobinson.me/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24h (some minutes past midnight EET).
+        p For registering your pod with this hub, go to <code>http://pods.jasonrobinson.me/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
         
         p For pods on stable releases you can either wait for a release (recommended) or merge in <a href="https://github.com/jaywink/diaspora/commit/2c83d0e846c709647d7308cc478ebc33c90d8a80">this commit</a>.
         

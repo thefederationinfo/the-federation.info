@@ -1,0 +1,41 @@
+
+#networkchart_container
+    #networkchart
+    #legend_container(style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 0; position: static;")
+        #smoother
+        #networklegend
+    
+script.
+    $(function() {
+        var networkchart = new Rickshaw.Graph.Ajax({
+            element: document.querySelector('#networkchart'),
+            dataURL: '/stats/global',
+            width: $(window).width()-60,
+            height: 500,
+            renderer: 'multi',
+            onData: function(d) {
+                return d;
+            },
+            onComplete: function(transport) {
+                var graph = transport.graph;
+                var detail = new Rickshaw.Graph.HoverDetail({
+                    graph: graph,
+                    xFormatter: function(x) {
+                        return new Date((x+21600)*1000).toDateString();
+                    },
+                });
+                var legend = new Rickshaw.Graph.Legend({
+                    graph: graph,
+                    element: document.getElementById('networklegend')
+                });
+                var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                    graph: graph,
+                    legend: legend
+                });
+                var xAxis = new Rickshaw.Graph.Axis.Time({
+                    graph: graph
+                });
+                xAxis.render();
+            }
+        });
+    });

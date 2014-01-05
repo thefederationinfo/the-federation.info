@@ -43,6 +43,42 @@ app.get('/stats/:item', function(req, res) {
         }, function (err, result) {
             if (err) console.log(err);
         });
+    } else if (req.params.item == 'global') {
+        db.GlobalStat.getStats(function (stats) {
+            var json = [ 
+                { 
+                    name: "Total users",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'stack'
+                },
+                { 
+                    name: "Total posts",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'line'
+                },
+                { 
+                    name: "Active users 6 months",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'stack'
+                },
+                { 
+                    name: "Active users 1 month",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'stack'
+                }
+            ];
+            for (var i=0; i<stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: (stats[i].total_users) ? stats[i].total_users : 0 });
+                json[1].data.push({ x: stats[i].timestamp, y: (stats[i].local_posts) ? stats[i].local_posts : 0 });
+                json[2].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_halfyear) ? stats[i].active_users_halfyear : 0 });
+                json[3].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_monthly) ? stats[i].active_users_monthly : 0 });
+            }
+            res.json(json);
+        });
     } else {
         res.json('[]');
     }

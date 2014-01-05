@@ -9,7 +9,7 @@ script.
     $(function() {
         $('#chart_selector input').click(function (ev) {
             ev.preventDefault();
-            $('#chart').html('').css('height', '400px');
+            $('#chart').html('').css('height', '500px');
             $('#legend_container #legend').html('');
             chart = drawChart($(ev.currentTarget).data('item'));
             $('#chart-item').html($(ev.currentTarget).data('item'));
@@ -21,7 +21,7 @@ h3#chart-item
 
 #chart_container
     #chart
-    #legend_container
+    #legend_container(style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 0; position: static;")
         #smoother
         #legend
     
@@ -30,8 +30,8 @@ script.
         return new Rickshaw.Graph.Ajax({
             element: document.querySelector('#chart'),
             dataURL: '/stats/'+dataItem,
-            width: 960,
-            height: 400,
+            width: $(window).width()-60,
+            height: 500,
             renderer: 'line',
             onData: function(d) {
                 return d;

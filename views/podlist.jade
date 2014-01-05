@@ -1,20 +1,13 @@
-table.footable.table(data-filter="#filter")
+table.footable.table#podlist(data-filter="#filter")
     thead
-        tr
-            th(colspan="3", style="text-align:right") Totals during last check
-            th= data.totals.active_users_halfyear
-            th= data.totals.active_users_monthly
-            th= data.totals.total_users
-            th= data.totals.local_posts
-            th &nbsp;
         tr
             th(data-class="expand") Name
             th Version
             th Open signups
-            th(data-hide="phone", data-type="numeric") Active users 6 months
-            th(data-type="numeric", data-sort-initial="descending") Active users 1 month
-            th(data-hide="phone", data-type="numeric") Total users
-            th(data-hide="phone", data-type="numeric") Posts
+            th(data-hide="phone") Active users 6 months
+            th(data-sort-initial="descending") Active users 1 month
+            th(data-hide="phone") Total users
+            th(data-hide="phone") Posts
             th(data-hide="phone") Country
     tbody
         - for (var i=0; i<data.pods.length; i++)
