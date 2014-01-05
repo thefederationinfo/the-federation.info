@@ -8,7 +8,6 @@ var express = require('express'),
 var app = express();
 
 app.engine('jade', require('jade').renderFile);
-app.set('title', 'Diaspora* Hub');
 app.use(expressValidator([]));
 app.use(express.static(__dirname + '/static'));
 
@@ -47,6 +46,18 @@ app.get('/stats/:item', function(req, res) {
         db.GlobalStat.getStats(function (stats) {
             var json = [ 
                 { 
+                    name: "Active users 1 month",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'stack'
+                },
+                { 
+                    name: "Active users 6 months",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'stack'
+                },
+                { 
                     name: "Total users",
                     data: [],
                     color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
@@ -57,25 +68,13 @@ app.get('/stats/:item', function(req, res) {
                     data: [],
                     color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
                     renderer: 'line'
-                },
-                { 
-                    name: "Active users 6 months",
-                    data: [],
-                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
-                    renderer: 'stack'
-                },
-                { 
-                    name: "Active users 1 month",
-                    data: [],
-                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
-                    renderer: 'stack'
                 }
             ];
             for (var i=0; i<stats.length; i++) {
-                json[0].data.push({ x: stats[i].timestamp, y: (stats[i].total_users) ? stats[i].total_users : 0 });
-                json[1].data.push({ x: stats[i].timestamp, y: (stats[i].local_posts) ? stats[i].local_posts : 0 });
-                json[2].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_halfyear) ? stats[i].active_users_halfyear : 0 });
-                json[3].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_monthly) ? stats[i].active_users_monthly : 0 });
+                json[2].data.push({ x: stats[i].timestamp, y: (stats[i].total_users) ? stats[i].total_users : 0 });
+                json[3].data.push({ x: stats[i].timestamp, y: (stats[i].local_posts) ? stats[i].local_posts : 0 });
+                json[1].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_halfyear) ? stats[i].active_users_halfyear : 0 });
+                json[0].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_monthly) ? stats[i].active_users_monthly : 0 });
             }
             res.json(json);
         });

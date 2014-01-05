@@ -4,10 +4,10 @@ table.footable.table#podlist(data-filter="#filter")
             th(data-class="expand") Name
             th Version
             th Open signups
-            th(data-hide="phone") Active users 6 months
-            th(data-sort-initial="descending") Active users 1 month
-            th(data-hide="phone") Total users
-            th(data-hide="phone") Posts
+            th(data-hide="phone", data-type="numeric") Active users 6 months
+            th(data-sort-initial="descending", data-type="numeric") Active users 1 month
+            th(data-hide="phone", data-type="numeric") Total users
+            th(data-hide="phone", data-type="numeric") Posts
             th(data-hide="phone") Country
     tbody
         - for (var i=0; i<data.pods.length; i++)

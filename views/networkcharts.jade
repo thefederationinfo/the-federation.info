@@ -1,4 +1,9 @@
 
+style.
+    .rickshaw_graph .detail .x_label { display: none }
+    .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
+    .rickshaw_graph .detail .date { color: #a0a0a0 }
+
 #networkchart_container
     #networkchart
     #legend_container(style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 0; position: static;")
@@ -13,16 +18,18 @@ script.
             width: $(window).width()-60,
             height: 500,
             renderer: 'multi',
-            onData: function(d) {
-                return d;
-            },
             onComplete: function(transport) {
                 var graph = transport.graph;
                 var detail = new Rickshaw.Graph.HoverDetail({
                     graph: graph,
                     xFormatter: function(x) {
-                        return new Date((x+21600)*1000).toDateString();
+                        return new Date((x+7200)*1000).toDateString();
                     },
+                    formatter: function(series, x, y) {
+                        var date = '<span class="date">' + new Date((x+7200) * 1000).toDateString() + '</span>';
+                        var content = series.name + ": " + parseInt(y) + '<br>' + date;
+                        return content;
+                    }
                 });
                 var legend = new Rickshaw.Graph.Legend({
                     graph: graph,

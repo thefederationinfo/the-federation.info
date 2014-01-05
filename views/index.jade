@@ -5,24 +5,21 @@ head
     meta(property='og:url', content='http://pods.jasonrobinson.me/')
     meta(property='og:description', content='Podlist and statistics for the diaspora* social network.')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    include ../vendor/css/graph.css
-    include ../vendor/css/detail.css
-    include ../vendor/css/legend.css
-    include ../vendor/css/lines.css
     include ../vendor/css/footable.core.min.css
     include ../vendor/css/footable.standalone.min.css
     include ../vendor/css/hubinfo.min.css
     link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
     link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css')
-
-    script(src='http://d3js.org/d3.v3.min.js')
+    include ../vendor/css/rickshaw.min.css
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+    script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
+    script(src='http://d3js.org/d3.v3.min.js')
     include ../vendor/js/rickshaw.min.js
     include ../vendor/js/footable.min.js
     include ../vendor/js/footable.sort.js
     include ../vendor/js/hubinfo.min.js
-    script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
-    script(src='https://blockchain.info//Resources/wallet/pay-now-button.js')
+    script(src='https://blockchain.info/Resources/wallet/pay-now-button.js')
+    link(rel='icon', type='image/x-icon', href='/favicon.ico')
 
 body(style="background-color: rgb(238, 238, 238);")
     div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
