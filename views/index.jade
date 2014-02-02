@@ -33,19 +33,22 @@ body(style="background-color: rgb(238, 238, 238);")
         
         include globalstats.jade
         
+        p(style='color:red') Note! There is a bug in the statistics feature in diaspora* at the moment. This bug causes the active users counts to be less than they should be. Read more <a href="https://github.com/diaspora/diaspora/issues/4734">here</a>.
+        
         p
-            em.small Disclaimer: Until the statistics feature is in the stable version of diaspora*, these counts reflect only a fraction of the network.
+            em.small Disclaimer: These counts reflect only a part of the network due to the opt-in nature of the statistics.
             
         h3 network history
         include networkcharts.jade
 
         h2 list of pods
-        p Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>. This pod list will grow as the statistics feature becomes part of diaspora*.
 
         include podlist.jade
         
+        p Find more pods at <a href="http://podupti.me">podupti.me</a> and <a href="http://diapod.net/active">diapod.net</a>.
+        
         p
-            em.small Disclaimer: This pod list is in no way an official list of diaspora* pods. Also currently it does not contain even a fraction of the pods in the diaspora* network. Due to the distributed way diaspora* works, it is not possible to even make a list of all pods.
+            em.small Disclaimer: This pod list is in no way an official list of diaspora* pods. Also it does not contain all of the pods in the diaspora* network. Due to the distributed way diaspora* works, it is not possible to even make a list of all pods.
             
         h3 pod graphs
         include charts.jade
@@ -62,10 +65,8 @@ body(style="background-color: rgb(238, 238, 238);")
         p The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress.
 
         h3 how do I get my pod listed?
-        p The statistics code has been <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f">merged</a> to develop branch, so if your pod runs that, you can just deploy the latest development code and then go to <code>https://&lt;yourpod.tld&gt;/statistics.json</code> to verify it works. If you want to report user and post counts, edit the <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f#diff-72093d13f77e805ad8de330c99e6c73eR195">relevant configuration</a> and restart your diaspora pod.
+        p If your pod runs 0.3.0.0 or newer, you already have the code! Go to <code>https://&lt;yourpod.tld&gt;/statistics.json</code> to verify it works. It is suggested to also activate the counts, which is done by editing the <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f#diff-72093d13f77e805ad8de330c99e6c73eR195">relevant configuration</a> and restarting your diaspora* pod.
         p For registering your pod with this hub, go to <code>http://pods.jasonrobinson.me/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
-        
-        p For pods on stable releases you can either wait for a release (recommended) or merge in <a href="https://github.com/jaywink/diaspora/commit/2c83d0e846c709647d7308cc478ebc33c90d8a80">this commit</a>.
         
         h3 under the hood
         p Full stack JavaScript power:
