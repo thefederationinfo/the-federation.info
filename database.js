@@ -220,6 +220,26 @@ function setUpModels(db) {
                 this.save(function (err) {
                     if (err) console.log(err);
                 });
+                if (this.failures < 3) {
+                    // copy last stats too
+                    var d = new Date();
+                    d.setDate(d.getDate()-1);
+                    models.Stat.find({ pod_id: this.id, date: new Date(d.getFullYear(), d.getMonth(), d.getDate()) }, function(err, stats) {
+                        if (stats.length) {
+                            models.Stat.create({
+                                date: new Date(),
+                                total_users: stats[0].total_users,
+                                active_users_halfyear: stats[0].active_users_halfyear,
+                                active_users_monthly: stats[0].active_users_monthly,
+                                local_posts: stats[0].local_posts,
+                                pod_id: stats[0].pod_id
+                            }, function (err, items) {
+                                if (err)
+                                    console.log("Database error when copying previous stat: "+err);
+                            });
+                        }
+                    });
+                }
             },
             getCountry: function() {
                 if (this.ip4) {
