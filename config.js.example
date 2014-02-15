@@ -7,4 +7,8 @@ config.db = {
     database: "database"
 };
 
+config.scheduler = {
+    cron: '7 0 * * *'
+}
+
 module.exports = config;

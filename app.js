@@ -4,7 +4,8 @@ var express = require('express'),
     expressValidator = require('express-validator'),
     scheduler = require('node-schedule'),
     db = require('./database'),
-    dns = require('dns');
+    dns = require('dns'),
+    config = require('./config');
 var app = express();
 
 app.engine('jade', require('jade').renderFile);
@@ -199,7 +200,7 @@ app.get('/register/:podhost', function(req, res) {
 });
 
 // Scheduling
-var updater = scheduler.scheduleJob('7 0 * * *', function() {
+var updater = scheduler.scheduleJob(config.scheduler.cron, function() {
     console.log('Calling pods for an update..');
     
     db.Pod.find({}, function(err, pods) {
