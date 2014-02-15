@@ -244,7 +244,7 @@ function setUpModels(db) {
             getCountry: function() {
                 if (this.ip4) {
                     geo = geoip.lookup(this.ip4);
-                    if (typeof geo.country !== 'undefined' && geo.country) {
+                    if (geo && typeof geo.country !== 'undefined' && geo.country) {
                         this.country = geo.country;
                         this.save(function (err) {
                             if (err) console.log(err);
