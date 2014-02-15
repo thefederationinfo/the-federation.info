@@ -33,6 +33,12 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
     models.Migration.find({}, function (error, result) {
         var migratefiles = fs.readdirSync('migrations/').sort();
         var migrations = [];
+        if (! result.length) {
+            // no migration history -- initial run, just fake all migrations
+            var fakemigrations = true;
+        } else {
+            var fakemigrations = false;
+        }
         if (migratefiles.length) {
             // separate non-orm mysql connection for flexibility
             var dbconfig = config.db;
@@ -57,14 +63,16 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
                             number: parseInt(migratefiles[i].split('-')[0]),
                             name: migratefiles[i].split('-')[1],
                             filename: 'migrations/'+migratefiles[i],
-                            type: "sql"
+                            type: "sql",
+                            fakemigrations: fakemigrations
                         }
                     } else if (migratefiles[i].indexOf('.py') > -1) {
                         var migration = {
                             number: parseInt(migratefiles[i].split('-')[0]),
                             name: migratefiles[i].split('-')[1],
                             filename: 'migrations/'+migratefiles[i],
-                            type: "py"
+                            type: "py",
+                            fakemigrations: fakemigrations
                         }
                     } else {
                         continue;
@@ -105,7 +113,26 @@ orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+
 function doMigration(migrations, migrdb, db) {
     var migration = migrations.shift();
     console.log('processing: '+migration.name);
-    if (migration.type == 'sql') {
+    if (migration.fakemigrations) {
+        console.log('faked migration!');
+        models.Migration.create({
+            number: migration.number,
+            name: migration.name,
+            timestamp: new Date()
+        }, function (err, items) {
+            if (err)
+                console.log("Database error when inserting migration: "+err);
+        });
+        if (migrations.length) {
+            // do next
+            doMigration(migrations, migrdb, db);
+        } else {
+            // no more, set up models
+            console.log('** Migrations done, launching app.. **');
+            eventEmitter.emit('migrations-done', db);
+            migrdb.end();
+        }
+    } else if (migration.type == 'sql') {
         migrdb.query(migration.sql, function(err, rows, fields) {
             if (err) {
                 // migration failed
