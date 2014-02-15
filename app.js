@@ -89,7 +89,9 @@ function callPod(podhost) {
         host: podhost,
         port: 443,
         path: '/statistics.json',
-        method: 'GET'
+        method: 'GET',
+        agent: false,
+        rejectUnauthorized: false
     };
     console.log('');
     console.log('*** Calling for update: '+podhost)
