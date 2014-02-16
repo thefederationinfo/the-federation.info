@@ -1,6 +1,7 @@
 table.footable.table#podlist(data-filter="#filter")
     thead
         tr
+            th
             th(data-class="expand") Name
             th Version
             th Open signups
@@ -15,7 +16,12 @@ table.footable.table#podlist(data-filter="#filter")
                 - var podname = data.pods[i].host
             - else
                 - var podname = data.pods[i].name
+            - if (parseInt(data.pods[i].version) > 1)
+                - var network = 'friendica'
+            - else
+                - var network = 'diaspora'
             tr
+                td!= '<img src="images/'+network+'-16.png">' 
                 td!= '<a href="https://'+data.pods[i].host+'">'+podname+'</a>'
                 td= (data.pods[i].version.indexOf('head') === 0) ? '.develop' : (data.pods[i].version.indexOf('-') > -1) ? data.pods[i].version.split('-')[0] : data.pods[i].version
                 td= (data.pods[i].registrations_open) ? 'Yes' : 'No'
