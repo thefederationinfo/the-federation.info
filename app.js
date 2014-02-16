@@ -202,7 +202,7 @@ app.get('/register/:podhost', function(req, res) {
 });
 
 // Scheduling
-var updater = scheduler.scheduleJob(config.scheduler.cron, function() {
+var updater = scheduler.scheduleJob(config.scheduler, function() {
     console.log('Calling pods for an update..');
     
     db.Pod.find({}, function(err, pods) {
