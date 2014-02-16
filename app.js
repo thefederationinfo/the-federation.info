@@ -29,7 +29,7 @@ app.get('/stats/:item', function(req, res) {
                 if (stats[i].item) {
                     if (typeof podids[stats[i].pod_id] === 'undefined') {
                         json.push({
-                            name: stats[i].name,
+                            name: (stats[i].name.toLowerCase() == 'diaspora*') ? stats[i].host : stats[i].name,
                             data: [ ],
                             // following tip from http://stackoverflow.com/a/1152508/1489738
                             color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)

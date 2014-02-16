@@ -12,7 +12,7 @@ table.footable.table#podlist(data-filter="#filter")
     tbody
         - for (var i=0; i<data.pods.length; i++)
             tr
-                td!= '<a href="https://'+data.pods[i].host+'">'+data.pods[i].name+'</a>'
+                td!= '<a href="https://'+data.pods[i].host+'">'+ (data.pods[i].name.toLowerCase() == 'diaspora*') ? data.pods[i].host : data.pods[i].name+'</a>'
                 td= (data.pods[i].version.indexOf('head') === 0) ? '.develop' : (data.pods[i].version.indexOf('-') > -1) ? data.pods[i].version.split('-')[0] : data.pods[i].version
                 td= (data.pods[i].registrations_open) ? 'Yes' : 'No'
                 td= (data.pods[i].active_users_halfyear) ? data.pods[i].active_users_halfyear : '-'
