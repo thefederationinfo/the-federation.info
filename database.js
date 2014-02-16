@@ -299,7 +299,16 @@ function setUpModels(db) {
                     [],
                     function (err, totals) {
                         if (err) console.log(err);
-                        result.totals = totals[0];
+                        if (totals.length) {
+                            result.totals = totals[0];
+                        } else {
+                            result.totals = {
+                                total_users: 0,
+                                active_users_monthly: 0,
+                                active_users_halfyear: 0,
+                                local_posts: 0
+                            }
+                        }
                         callback(result);
                     }
                 );
@@ -368,7 +377,7 @@ function setUpModels(db) {
     };
     models.GlobalStat.getStats = function (callback) {
         db.driver.execQuery(
-            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly FROM global_stats order by date",
+            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly FROM global_stats where date >= '2014-01-23' order by date",
             [],
             function (err, data) {
                 if (err) console.log(err);
