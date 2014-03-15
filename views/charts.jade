@@ -19,9 +19,19 @@ script.
 
 h3#chart-item
 
+style.
+    #legend li {
+        display: table;
+        float: left;
+    }
+    
+    .rickshaw_legend .line {
+        clear: none;
+    }
+
 #chart_container
     #chart
-    #legend_container(style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 0; position: static;")
+    #legend_container(style="margin-top: 20px;")
         #smoother
         #legend
     
