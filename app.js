@@ -12,6 +12,17 @@ app.engine('jade', require('jade').renderFile);
 app.use(expressValidator([]));
 app.use(express.static(__dirname + '/static'));
 
+function logKnownPodFailure(podhost) {
+    // if this pod is known, log a failure
+    db.Pod.exists({ host: podhost }, function (err, exists) {
+        if (exists) {
+            db.Pod.find({ host: podhost }, function(err, pods) {
+                pods[0].logFailure();
+            });
+        }
+    });
+}
+
 app.get('/', function(req, res) {
     var data = db.Pod.allForList(function(pods) {
         res.render('index.jade', { data: pods });
@@ -168,20 +179,14 @@ function callPod(podhost) {
                 }
             } catch (err) {
                 console.log('host '+podhost+' not a valid statistics json');
-                // if this pod is known, log a failure
-                db.Pod.exists({ host: podhost }, function (err, exists) {
-                    if (exists) {
-                        db.Pod.find({ host: podhost }, function(err, pods) {
-                            pods[0].logFailure();
-                        });
-                    }
-                });
+                logKnownPodFailure(podhost);
             }
         });
     });
     request.end();
     request.on('error', function(e) {
         console.error(e);
+        logKnownPodFailure(podhost);
     });
 }
 
