@@ -58,22 +58,10 @@ app.get('/stats/:item', function(req, res) {
         db.GlobalStat.getStats(function (stats) {
             var json = [ 
                 { 
-                    name: "Active users 1 month",
-                    data: [],
-                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
-                    renderer: 'stack'
-                },
-                { 
-                    name: "Active users 6 months",
-                    data: [],
-                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
-                    renderer: 'stack'
-                },
-                { 
                     name: "Total users",
                     data: [],
                     color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
-                    renderer: 'stack'
+                    renderer: 'line'
                 },
                 { 
                     name: "Total posts",
@@ -83,10 +71,38 @@ app.get('/stats/:item', function(req, res) {
                 }
             ];
             for (var i=0; i<stats.length; i++) {
-                json[2].data.push({ x: stats[i].timestamp, y: (stats[i].total_users) ? stats[i].total_users : 0 });
-                json[3].data.push({ x: stats[i].timestamp, y: (stats[i].local_posts) ? stats[i].local_posts : 0 });
-                json[1].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_halfyear) ? stats[i].active_users_halfyear : 0 });
+                json[0].data.push({ x: stats[i].timestamp, y: (stats[i].total_users) ? stats[i].total_users : 0 });
+                json[1].data.push({ x: stats[i].timestamp, y: (stats[i].local_posts) ? stats[i].local_posts : 0 });
+            }
+            res.json(json);
+        });
+    } else if (req.params.item == 'global_active_month') {
+        db.GlobalStat.getStats(function (stats) {
+            var json = [ 
+                { 
+                    name: "Active users 1 month",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'line'
+                }
+            ];
+            for (var i=0; i<stats.length; i++) {
                 json[0].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_monthly) ? stats[i].active_users_monthly : 0 });
+            }
+            res.json(json);
+        });
+    } else if (req.params.item == 'global_active_halfyear') {
+        db.GlobalStat.getStats(function (stats) {
+            var json = [ 
+                { 
+                    name: "Active users 6 months",
+                    data: [],
+                    color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+                    renderer: 'line'
+                }
+            ];
+            for (var i=0; i<stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: (stats[i].active_users_halfyear) ? stats[i].active_users_halfyear : 0 });
             }
             res.json(json);
         });

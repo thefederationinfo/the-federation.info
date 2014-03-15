@@ -4,11 +4,9 @@ style.
     .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
     .rickshaw_graph .detail .date { color: #a0a0a0 }
 
+h4 total users and posts
 #networkchart_container
     #networkchart
-    #legend_container(style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 0; position: static;")
-        #smoother
-        #networklegend
     
 script.
     $(function() {
@@ -16,8 +14,8 @@ script.
             element: document.querySelector('#networkchart'),
             dataURL: '/stats/global',
             width: $(window).width()-60,
-            height: 500,
-            renderer: 'multi',
+            height: 300,
+            renderer: 'line',
             onComplete: function(transport) {
                 var graph = transport.graph;
                 var detail = new Rickshaw.Graph.HoverDetail({
@@ -30,10 +28,6 @@ script.
                         var content = series.name + ": " + parseInt(y) + '<br>' + date;
                         return content;
                     }
-                });
-                var legend = new Rickshaw.Graph.Legend({
-                    graph: graph,
-                    element: document.getElementById('networklegend')
                 });
                 var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
                     graph: graph,
