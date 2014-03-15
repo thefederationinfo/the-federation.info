@@ -4,17 +4,17 @@ style.
     .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
     .rickshaw_graph .detail .date { color: #a0a0a0 }
 
-h4 total users and posts
-#networkchart_container
-    #networkchart
+#networkuserschart_container(style="display: inline-block;")
+    h4 total users
+    #networkuserschart
     
 script.
     $(function() {
         var networkchart = new Rickshaw.Graph.Ajax({
-            element: document.querySelector('#networkchart'),
-            dataURL: '/stats/global',
-            width: $(window).width()-60,
-            height: 300,
+            element: document.querySelector('#networkuserschart'),
+            dataURL: '/stats/global_users',
+            width: ($(window).width()/2)-60,
+            height: 200,
             renderer: 'line',
             onComplete: function(transport) {
                 var graph = transport.graph;
@@ -40,3 +40,41 @@ script.
             }
         });
     });
+    
+#networkpostschart_container(style="display: inline-block; margin-left:60px")
+    h4 total posts
+    #networkpostschart
+    
+script.
+    $(function() {
+        var networkchart = new Rickshaw.Graph.Ajax({
+            element: document.querySelector('#networkpostschart'),
+            dataURL: '/stats/global_posts',
+            width: ($(window).width()/2)-60,
+            height: 200,
+            renderer: 'line',
+            onComplete: function(transport) {
+                var graph = transport.graph;
+                var detail = new Rickshaw.Graph.HoverDetail({
+                    graph: graph,
+                    xFormatter: function(x) {
+                        return new Date((x+7200)*1000).toDateString();
+                    },
+                    formatter: function(series, x, y) {
+                        var date = '<span class="date">' + new Date((x+7200) * 1000).toDateString() + '</span>';
+                        var content = series.name + ": " + parseInt(y) + '<br>' + date;
+                        return content;
+                    }
+                });
+                var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                    graph: graph,
+                    legend: legend
+                });
+                var xAxis = new Rickshaw.Graph.Axis.Time({
+                    graph: graph
+                });
+                xAxis.render();
+            }
+        });
+    });
+

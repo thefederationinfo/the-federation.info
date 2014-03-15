@@ -9,7 +9,7 @@ script.
             dataURL: '/stats/global_active_month',
             width: ($(window).width()/2)-60,
             renderer: 'line',
-            height: 300,
+            height: 200,
             onComplete: function(transport) {
                 var graph = transport.graph;
                 var detail = new Rickshaw.Graph.HoverDetail({
@@ -46,7 +46,7 @@ script.
             dataURL: '/stats/global_active_halfyear',
             width: ($(window).width()/2)-60,
             renderer: 'line',
-            height: 300,
+            height: 200,
             onComplete: function(transport) {
                 var graph = transport.graph;
                 var detail = new Rickshaw.Graph.HoverDetail({
