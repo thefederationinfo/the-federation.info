@@ -17,6 +17,10 @@ app.get('/', function(req, res) {
     routes.root(req, res, db);
 });
 
+app.get('/pods.json', function(req, res) {
+    routes.pods(req, res, db);
+});
+
 app.get('/stats/:item', function(req, res) {
     routes.item(req, res, db);
 });

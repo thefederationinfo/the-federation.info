@@ -8,6 +8,17 @@ routes.root = function(req, res, db) {
     });
 }
 
+routes.pods = function(req, res, db) {
+    var data = db.Pod.allForList(
+        function(pods) {
+            res.json(pods);
+        },
+        function(err, result) {
+            if (err) console.log(err);
+        }
+    );
+}
+
 routes.item = function(req, res, db) {
     if (['total_users', 'active_users_halfyear', 'active_users_monthly', 'local_posts'].indexOf(req.params.item) > -1) {
         db.Pod.allPodStats(req.params.item, function(stats) {
