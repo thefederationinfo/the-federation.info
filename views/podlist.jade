@@ -9,25 +9,25 @@ table.footable.table#podlist(data-filter="#filter")
             th(data-sort-initial="descending", data-type="numeric") Active users 1 month
             th(data-hide="phone", data-type="numeric") Total users
             th(data-hide="phone", data-type="numeric") Posts
+            th(data-hide="phone") Services
             th(data-hide="phone") Country
     tbody
         - for (var i=0; i<data.pods.length; i++)
-            - if (data.pods[i].name.toLowerCase() == 'diaspora*')
-                - var podname = data.pods[i].host
+            - var pod = data.pods[i]
+            - var pod_meta = utils.get_pod_network_and_version(pod.network, pod.version)
+            - if (pod.name.toLowerCase() == 'diaspora*')
+                - var podname = pod.host
             - else
-                - var podname = data.pods[i].name
-            - if (parseInt(data.pods[i].version) > 1)
-                - var network = 'friendica'
-            - else
-                - var network = 'diaspora'
+                - var podname = pod.name
             tr
-                td!= '<img src="images/'+network+'-16.png">' 
-                td!= '<a href="https://'+data.pods[i].host+'">'+podname+'</a>'
-                td= (data.pods[i].version.indexOf('head') === 0) ? '.develop' : (data.pods[i].version.indexOf('-') > -1) ? data.pods[i].version.split('-')[0] : data.pods[i].version
-                td= (data.pods[i].registrations_open) ? 'Yes' : 'No'
-                td= (data.pods[i].active_users_halfyear) ? data.pods[i].active_users_halfyear : '-'
-                td= (data.pods[i].active_users_monthly) ? data.pods[i].active_users_monthly : '-'
-                td= (data.pods[i].total_users) ? data.pods[i].total_users : '-'
-                td= (data.pods[i].local_posts) ? data.pods[i].local_posts : '-'
-                td!= (data.pods[i].country) ? '<a href="http://countrycode.org/'+data.pods[i].country+'" target="_blanc"><img src="flags/'+data.pods[i].country.toLowerCase()+'.png"></a>' : '&nbsp;'
+                td!= '<img alt="'+pod_meta[0]+'" title="'+pod_meta[0]+'" src="images/'+pod_meta[0]+'-16.png">' 
+                td!= '<a href="https://'+pod.host+'">'+podname+'</a>'
+                td= pod_meta[1]
+                td= (pod.registrations_open) ? 'Yes' : 'No'
+                td= (pod.active_users_halfyear) ? pod.active_users_halfyear : '-'
+                td= (pod.active_users_monthly) ? pod.active_users_monthly : '-'
+                td= (pod.total_users) ? pod.total_users : '-'
+                td= (pod.local_posts) ? pod.local_posts : '-'
+                td= utils.services_string(pod)
+                td!= (pod.country) ? '<a href="http://countrycode.org/'+pod.country+'" target="_blanc"><img src="flags/'+pod.country.toLowerCase()+'.png"></a>' : '&nbsp;'
             

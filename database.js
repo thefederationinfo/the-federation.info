@@ -7,7 +7,8 @@ var orm = require('orm'),
     geoip = require('geoip-lite'),
     spawn = require('child_process').spawn,
     models = {},
-    eventEmitter = new events.EventEmitter();
+    eventEmitter = new events.EventEmitter(),
+    utils = require('./utils');
 
 orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+"/"+config.db.database+'?pool=true', function (err, db) {
     if (err) {
@@ -216,10 +217,35 @@ function setUpModels(db) {
         failures: { type: "number" },
         ip4: { type: "text", size: 15 },
         country: { type: "text", size: 10 },
+        network: { type: "text", size: 80 },
+        service_facebook: { type: "number" },
+        service_twitter: { type: "number" },
+        service_tumblr: { type: "number" },
+        service_wordpress: { type: "number" },
     }, {
         methods: {
-            needsUpdate: function (name, version, registrations_open, ip4) {
-                return (this.name !== name || this.version !== version || this.registrations_open !== registrations_open || this.ip4 !== ip4);
+            needsUpdate: function (data) {
+                var checkKeys = [
+                    "name", "version", "registrations_open", "ip4", "network", "service_facebook", "service_twitter",
+                    "service_wordpress", "service_tumblr"
+                ];
+                var that = this;
+                try {
+                    checkKeys.forEach(function(key) {
+                        utils.logger('db', 'Pod.needsUpdate', 'DEBUG', that.host+': comparing '+key+' (old <-> new): '+that[key]+' <-> '+data[key]);
+                        if (typeof data[key] === 'undefined') {
+                            if (key.indexOf("service") > -1)
+                                data[key] = 0;
+                            if (key == 'network')
+                                data[key] = 'unknown';
+                        }
+                        if (that[key] != data[key])
+                            throw new Exception();
+                    });
+                } catch (updateNeeded) {
+                    return true;
+                }
+                return false;
             },
             logStats: function (data) {
                 var podId = this.id;
@@ -273,9 +299,12 @@ function setUpModels(db) {
                     geo = geoip.lookup(this.ip4);
                     if (geo && typeof geo.country !== 'undefined' && geo.country) {
                         this.country = geo.country;
+                        utils.logger('db', 'Pod.getCountry', 'INFO', this.host+': Country: '+geo.country);
                         this.save(function (err) {
-                            if (err) console.log(err);
+                            if (err) utils.logger('db', 'Pod.getCountry', 'ERROR', this.host+': Trying to save pod country: '+err);
                         });
+                    } else {
+                        utils.logger('db', 'Pod.getCountry', 'DEBUG', this.host+': Nothing found? '+geo);
                     }
                 }
             },
@@ -283,7 +312,8 @@ function setUpModels(db) {
     });
     models.Pod.allForList = function (callback) {
         db.driver.execQuery(
-            "SELECT p.name, p.host, p.version, p.registrations_open, p.country,\
+            "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
+                p.service_facebook, p.service_twitter, p.service_tumblr, p.service_wordpress,\
                 (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
                 (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
                 (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\

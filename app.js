@@ -6,10 +6,12 @@ var express = require('express'),
     db = require('./database'),
     dns = require('dns'),
     config = require('./config'),
-    routes = require('./routes');
+    routes = require('./routes'),
+    utils = require('./utils');
 var app = express();
 
 app.engine('jade', require('jade').renderFile);
+app.locals.utils = utils;  // expose utils to jade
 app.use(expressValidator([]));
 app.use(express.static(__dirname + '/static'));
 
@@ -52,11 +54,10 @@ function callPod(podhost) {
         agent: false,
         rejectUnauthorized: false
     };
-    console.log('');
-    console.log('*** Calling for update: '+podhost)
+    utils.logger('app', 'callPod', 'INFO', podhost+': Calling for update');
     var request = https.request(options, function(res) {
-        console.log('STATUS: ' + res.statusCode);
-        console.log('HEADERS: ' + JSON.stringify(res.headers));
+        utils.logger('app', 'callPod', 'DEBUG', podhost+': STATUS: ' + res.statusCode);
+        utils.logger('app', 'callPod', 'DEBUG', podhost+': HEADERS: ' + JSON.stringify(res.headers));
         res.setEncoding('utf8');
         res.on('data', function (data) {
             try {
@@ -65,10 +66,10 @@ function callPod(podhost) {
                     db.Pod.exists({ host: podhost }, function (err, exists) {
                         dns.resolve4(podhost, function (err, addresses) {
                             if (err) {
-                                console.log(err);
-                                ip4 = null;
+                                utils.logger('app', 'callPod', 'ERROR', podhost+': '+err);
+                                data.ip4 = null;
                             } else {
-                                ip4 = addresses[0];
+                                data.ip4 = addresses[0];
                             }
                             if (! exists) {
                                 // Insert
@@ -78,10 +79,15 @@ function callPod(podhost) {
                                     version: data.version,
                                     registrations_open: data.registrations_open,
                                     failures: 0,
-                                    ip4: ip4,
+                                    ip4: data.ip4,
+                                    network: (data.network) ? data.network : 'unknown',
+                                    service_facebook: (data.facebook) ? 1 : 0,
+                                    service_twitter: (data.twitter) ? 1 : 0,
+                                    service_tumblr: (data.tumblr) ? 1 : 0,
+                                    service_wordpress: (data.wordpress) ? 1 : 0
                                 }, function (err, items) {
                                     if (err) {
-                                        console.log("Database error when inserting pod: "+err);
+                                        utils.logger('app', 'callPod', 'ERROR', podhost+': Database error when inserting pod: '+err);
                                     } else {
                                         items.getCountry();
                                         items.logStats(data);
@@ -90,32 +96,28 @@ function callPod(podhost) {
                             } else {
                                 // Check for changes
                                 db.Pod.find({ host: podhost }, function(err, pods) {
-                                    console.log('-- New data:');
-                                    console.log(data);
-                                    console.log(ip4);
                                     pod = pods[0];
-                                    console.log('-- Old data:')
-                                    console.log(pod.failures);
-                                    console.log(pod.name);
-                                    console.log(pod.version);
-                                    console.log(pod.registrations_open);
-                                    console.log(pod.ip4);
-                                    if (pod.failures > 0 || pod.needsUpdate(data.name, data.version, data.registrations_open, ip4)) {
-                                        console.log('pod '+podhost+' update');
+                                    if (pod.failures > 0 || pod.needsUpdate(data)) {
+                                        utils.logger('app', 'callPod', 'INFO', podhost+': UPDATING');
                                         pod.name = data.name;
                                         pod.version = data.version;
                                         pod.registrations_open = data.registrations_open;
                                         pod.failures = 0;   // reset counter
-                                        pod.ip4 = ip4;
+                                        pod.ip4 = data.ip4;
+                                        pod.network = (data.network) ? data.network : 'unknown';
+                                        pod.service_facebook = (data.facebook) ? 1 : 0;
+                                        pod.service_twitter = (data.twitter) ? 1 : 0;
+                                        pod.service_tumblr = (data.tumblr) ? 1 : 0;
+                                        pod.service_wordpress = (data.wordpress) ? 1 : 0;
                                         pod.save(function(err) {
                                             if (err) {
-                                                console.log(err);
+                                                utils.logger('app', 'callPod', 'ERROR', podhost+': Trying to save pod update: '+err);
                                             } else {
                                                 pod.getCountry();
                                             }
                                         });
                                     } else {
-                                        console.log('pod '+podhost+' no update');
+                                        utils.logger('app', 'callPod', 'INFO', podhost+': no updates');
                                     }
                                     pod.logStats(data);
                                 });
@@ -126,6 +128,7 @@ function callPod(podhost) {
                     throw err;
                 }
             } catch (err) {
+                utils.logger('app', 'callPod', 'ERROR', podhost+': not a valid statistics json');
                 console.log('host '+podhost+' not a valid statistics json');
                 logKnownPodFailure(podhost);
             }
@@ -133,15 +136,14 @@ function callPod(podhost) {
     });
     request.end();
     request.on('error', function(e) {
-        console.error(e);
+        utils.logger('app', 'callPod', 'ERROR', podhost+': '+e);
         logKnownPodFailure(podhost);
     });
 }
 
-// Scheduling
-var updater = scheduler.scheduleJob(config.scheduler, function() {
+// Call all pods
+var callAllPods = function() {
     console.log('Calling pods for an update..');
-    
     db.Pod.find({}, function(err, pods) {
         for (var i=0; i<pods.length; i++) {
             var podhost = pods[i].host;
@@ -149,7 +151,13 @@ var updater = scheduler.scheduleJob(config.scheduler, function() {
         }
         setTimeout(db.GlobalStat.logStats, 45000);
     });
-});
+}
+
+// Scheduling
+var updater = scheduler.scheduleJob(config.scheduler, callAllPods);
 
 app.listen(4730);
-console.log('Diaspora-Hub listening on http://127.0.0.1:4730...');
+console.log('Diaspora-Hub listening on http://127.0.0.1:4730...\nCalling all pods in 20s...');
+
+// always do a full call to all pods on app init
+setTimeout(callAllPods, 20000);
