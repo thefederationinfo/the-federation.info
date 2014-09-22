@@ -20,7 +20,7 @@ table.footable.table#podlist(data-filter="#filter")
             - else
                 - var podname = pod.name
             tr
-                td!= '<img alt="'+pod_meta[0]+'" title="'+pod_meta[0]+'" src="images/'+pod_meta[0]+'-16.png">' 
+                td!= '<img title="'+pod_meta[0]+'" src="images/'+pod_meta[0]+'-16.png">' 
                 td!= '<a href="https://'+pod.host+'">'+podname+'</a>'
                 td= pod_meta[1]
                 td= (pod.registrations_open) ? 'Yes' : 'No'

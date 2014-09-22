@@ -28,8 +28,8 @@ utils.get_pod_network_and_version = function(network, version) {
                     // pyaspora, maybe
                     return ["pyaspora", version];
                 else {
-                    // fallback
-                    return ["unknown", version];
+                    // fallback, assume diaspora..
+                    return ["diaspora", version];
                 }
         }
     } catch (e) {
