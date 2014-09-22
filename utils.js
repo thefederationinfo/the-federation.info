@@ -10,6 +10,7 @@ utils.get_pod_network_and_version = function(network, version) {
         switch (network.toLowerCase()) {
             case "friendica":
                 return ["friendica", version];
+            case "red matrix":
             case "redmatrix":
                 return ["redmatrix", version];
             // pyaspora has no network id atm, fall to default
@@ -52,7 +53,10 @@ utils.services_string = function(pod) {
         if (pod["service_"+services[i]] == 1)
             enabled.push(service_keys[i]);
     }
-    return enabled.join(',');
+    if (enabled.length)
+        return enabled.join(',');
+    else
+        return " ";
 }
 
 module.exports = utils;
