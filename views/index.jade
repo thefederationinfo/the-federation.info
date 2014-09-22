@@ -41,6 +41,18 @@ body(style="background-color: rgb(238, 238, 238);")
         include activecharts.jade
 
         h2 list of pods
+        
+        p When choosing a pod make sure to consider not only network location (<em>Country</em>) and pod version, but also what cross posting services it offers (if you wan't to cross post to other social networks).
+        
+        p Notes about the <em>Services</em> column.
+            ul
+                li There is a bug currently that causes the services to be listed as not enabled for any pods that have configuration set as environment variables. This is why the services column is mostly empty at the moment.
+                li Keys:
+                    ul
+                        li fb = facebook
+                        li tw = twitter
+                        li tu = tumblr
+                        li wp = wordpress
 
         include podlist.jade
         
