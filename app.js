@@ -149,7 +149,7 @@ var callAllPods = function() {
             var podhost = pods[i].host;
             setTimeout(callPod, Math.floor(Math.random() * 10000) +1, podhost);
         }
-        setTimeout(db.GlobalStat.logStats, 45000);
+        setTimeout(db.GlobalStat.logStats, 300000);
     });
 }
 
