@@ -9,6 +9,13 @@ var orm = require('orm'),
     models = {},
     eventEmitter = new events.EventEmitter(),
     utils = require('./utils');
+    
+var services = [
+    "facebook",
+    "twitter",
+    "tumblr",
+    "wordpress"
+];
 
 orm.connect("mysql://"+config.db.user+":"+config.db.password+"@"+config.db.host+"/"+config.db.database+'?pool=true', function (err, db) {
     if (err) {
@@ -232,14 +239,16 @@ function setUpModels(db) {
                 var that = this;
                 try {
                     checkKeys.forEach(function(key) {
-                        utils.logger('db', 'Pod.needsUpdate', 'DEBUG', that.host+': comparing '+key+' (old <-> new): '+that[key]+' <-> '+data[key]);
-                        if (typeof data[key] === 'undefined') {
-                            if (key.indexOf("service") > -1)
-                                data[key] = 0;
+                        // TODO: fix ugly 'services_' replacing by moving
+                        // services to their own table
+                        if (typeof data[key.replace("service_", "")] === 'undefined') {
+                            if (services.indexOf(key.replace("service_", "")) > -1)
+                                data[key.replace("service_", "")] = 0;
                             if (key == 'network')
                                 data[key] = 'unknown';
                         }
-                        if (that[key] != data[key])
+                        utils.logger('db', 'Pod.needsUpdate', 'DEBUG', that.host+': comparing '+key+' (old <-> new): '+that[key]+' <-> '+data[key.replace("service_", "")]);
+                        if (that[key] != data[key.replace("service_", "")])
                             throw new Exception();
                     });
                 } catch (updateNeeded) {
