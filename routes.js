@@ -150,8 +150,8 @@ routes.register = function(req, res, db) {
         res.send('There have been validation errors: ' + util.inspect(errors), 400);
         return false;
     }
-    res.type('text/plain');
-    res.send('register received, if this is a valid pod with suitable code, it will be visible at http://pods.jasonrobinson.me in a few seconds..');
+    res.type('text/html');
+    res.send('<html><head></head><body><h1>register received</h1><p>if this is a valid pod with suitable code, it will be visible at http://the-federation.info in a few seconds..</p></body></html>');
     return req.params.podhost;
 }
 

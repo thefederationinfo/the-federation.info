@@ -1,9 +1,11 @@
 diaspora-hub
 ============
 
-(Unofficial) statistics hub for diaspora*
+(Unofficial) statistics hub for The Federation (diaspora*, Friendica and Redmatrix).
 
-Check information and how to add your pod: http://pods.jasonrobinson.me
+Note: The Federation is NOT an official term from any of these projects. Credit about where it was first used coming.. :)
+
+Check information and how to add your instance: http://the-federation.info
 
 Database creation
 =================
@@ -37,7 +39,7 @@ Author
 Like this?
 ==========
 
-Please donate via the options at the end of [the hub page](http://pods.jasonrobinson.me).
+Please donate via the options at the end of [the hub page](http://the-federation.info).
 
 License
 =======
