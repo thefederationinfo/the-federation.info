@@ -14,12 +14,19 @@ head
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
     script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
     script(src='http://d3js.org/d3.v3.min.js')
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/floatthead/1.2.10/jquery.floatThead.min.js')
     include ../vendor/js/rickshaw.min.js
     include ../vendor/js/footable.min.js
     include ../vendor/js/footable.sort.js
     include ../vendor/js/hubinfo.min.js
     script(src='https://blockchain.info/Resources/wallet/pay-now-button.js')
     link(rel='icon', type='image/x-icon', href='/favicon.ico')
+
+    style.
+        table.floatThead-table {
+            border-top: none;
+            border-bottom: none;
+        }   
 
 body(style="background-color: rgb(238, 238, 238);")
     div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
@@ -111,7 +118,7 @@ body(style="background-color: rgb(238, 238, 238);")
 
         script.
             $(function() {
-                $('.footable').footable();
+                $('.footable').footable().floatThead();
                 $("#hubinfo").hubInfo({ 
                     user: "jaywink",
                     repo: "diaspora-hub"
