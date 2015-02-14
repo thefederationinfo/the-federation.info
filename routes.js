@@ -76,6 +76,12 @@ routes.item = function (req, res, db) {
                     data: [],
                     color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6),
                     renderer: 'line'
+                },
+                {
+                    name: "Active pods",
+                    data: [],
+                    color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6),
+                    renderer: 'line'
                 }
             ], i = 0;
             for (i = 0; i < stats.length; i++) {
@@ -83,6 +89,7 @@ routes.item = function (req, res, db) {
                 json[3].data.push({ x: stats[i].timestamp, y: stats[i].local_posts || 0 });
                 json[1].data.push({ x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0 });
                 json[0].data.push({ x: stats[i].timestamp, y: stats[i].active_users_monthly || 0 });
+                json[4].data.push({ x: stats[i].timestamp, y: stats[i].pod_count || 0 });
             }
             res.json(json);
         });
@@ -143,6 +150,21 @@ routes.item = function (req, res, db) {
             ], i = 0;
             for (i = 0; i < stats.length; i++) {
                 json[0].data.push({ x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0 });
+            }
+            res.json(json);
+        });
+    } else if (req.params.item === 'global_pod_count') {
+        db.GlobalStat.getStats(function (stats) {
+            var json = [
+                {
+                    name: "Active pods",
+                    data: [],
+                    color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6),
+                    renderer: 'line'
+                }
+            ], i = 0;
+            for (i = 0; i < stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].pod_count || 0 });
             }
             res.json(json);
         });

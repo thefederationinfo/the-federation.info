@@ -46,13 +46,17 @@ function setUpModels(db) {
                     checkKeys.forEach(function (key) {
                         // TODO: fix ugly 'services_' replacing by moving
                         // services to their own table
-                        if (data[key.replace("service_", "")] === undefined) {
-                            if (services.indexOf(key.replace("service_", "")) > -1) {
-                                data[key.replace("service_", "")] = 0;
+                        if (key.indexOf("service_") > -1) {
+                            if (data[key.replace("service_", "")] === undefined) {
+                                if (services.indexOf(key.replace("service_", "")) > -1) {
+                                    data[key.replace("service_", "")] = 0;
+                                }
+                            } else {
+                                data[key.replace("service_", "")] = (data[key.replace("service_", "")]) ? 1 : 0;
                             }
-                            if (key === 'network') {
-                                data[key] = 'unknown';
-                            }
+                        }
+                        if (data.network === undefined) {
+                            data.network = 'unknown';
                         }
                         utils.logger('db', 'Pod.needsUpdate', 'DEBUG', that.host + ': comparing ' + key + ' (old <-> new): ' + that[key] + ' <-> ' + data[key.replace("service_", "")]);
                         if (that[key] !== data[key.replace("service_", "")]) {
@@ -155,7 +159,7 @@ function setUpModels(db) {
                 }
                 var result = { pods: data };
                 db.driver.execQuery(
-                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts \
+                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts, pod_count \
                         from global_stats order by id desc limit 1",
                     [],
                     function (err, totals) {
@@ -169,7 +173,8 @@ function setUpModels(db) {
                                 total_users: 0,
                                 active_users_monthly: 0,
                                 active_users_halfyear: 0,
-                                local_posts: 0
+                                local_posts: 0,
+                                pod_count: 0
                             };
                         }
                         callback(result);
@@ -206,11 +211,12 @@ function setUpModels(db) {
         local_posts: { type: "number" },
         new_users: { type: "number" },
         new_posts: { type: "number" },
+        pod_count: { type: "number" }
     });
     models.GlobalStat.logStats = function () {
         var d = new Date(),
             curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-        models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts) {
+        models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").count().get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts, count) {
             if (err) {
                 console.log(err);
             }
@@ -221,7 +227,8 @@ function setUpModels(db) {
                 total_users: total_users,
                 active_users_monthly: active_users_monthly,
                 active_users_halfyear: active_users_halfyear,
-                local_posts: local_posts
+                local_posts: local_posts,
+                pod_count: count
             }, prevDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
             models.Stat.exists({ date: prevDate }, function (err, exists) {
                 if (err) {
@@ -254,7 +261,7 @@ function setUpModels(db) {
     };
     models.GlobalStat.getStats = function (callback) {
         db.driver.execQuery(
-            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly FROM global_stats where date >= '2014-01-23' order by date",
+            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
             [],
             function (err, data) {
                 if (err) {
@@ -352,7 +359,7 @@ function doMigration(migrations, migrdb, db) {
         });
         python.on('close', function (code) {
             console.log(code);
-            if (code !== '0') {
+            if (code !== 0) {
                 // migration failed
                 console.log("Non-zero exit code from Python: " + code);
                 throw "error";
@@ -454,6 +461,9 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
                             fakemigrations: fakemigrations
                         };
                     } else {
+                        continue;
+                    }
+                    if (isNaN(migration.number)) {
                         continue;
                     }
                     if (result) {

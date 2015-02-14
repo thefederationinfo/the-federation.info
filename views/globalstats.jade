@@ -1,13 +1,15 @@
 table.footable.table#globalstats(data-filter="#filter")
     thead
         tr
-            th Total users
-            th Total posts
             th Active users 6 months
             th Active users 1 month
+            th Active pods
+            th Total users
+            th Total posts
     tbody
         tr
-            th= data.totals.total_users
-            th= data.totals.local_posts
             th= data.totals.active_users_halfyear
             th= data.totals.active_users_monthly
+            th= data.totals.pod_count
+            th= data.totals.total_users
+            th= data.totals.local_posts
