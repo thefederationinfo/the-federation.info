@@ -2,7 +2,6 @@
 "use strict";
 var express = require('express'),
     https = require('https'),
-    util = require('util'),
     expressValidator = require('express-validator'),
     scheduler = require('node-schedule'),
     db = require('./database'),
