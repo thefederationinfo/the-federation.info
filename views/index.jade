@@ -26,7 +26,7 @@ head
         table.floatThead-table {
             border-top: none;
             border-bottom: none;
-        }   
+        }
 
 body(style="background-color: rgb(238, 238, 238);")
     div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
@@ -37,20 +37,22 @@ body(style="background-color: rgb(238, 238, 238);")
 
         h2 network statistics
         p Total counts from monitored pods from the last check.
-        
+
         include globalstats.jade
-        
+
         p
             em.small Disclaimer: These counts reflect only a part of the network due to the opt-in nature of the statistics.
-            
+
         h3 network history
-        include networkcharts.jade
-        include activecharts.jade
+        p
+            include activecharts.jade
+        p
+            include networkcharts.jade
 
         h2 list of pods
-        
+
         p When choosing a pod make sure to consider not only network location (<em>Country</em>) and pod version, but also what cross posting services it offers (if you wan't to cross post to other social networks).
-        
+
         p Notes about the <em>Services</em> column.
             ul
                 li There is a bug currently that causes the services to be listed as not enabled for any pods that have configuration set as environment variables. This is why the services column is mostly empty at the moment.
@@ -62,21 +64,21 @@ body(style="background-color: rgb(238, 238, 238);")
                         li wp = wordpress
 
         include podlist.jade
-        
+
         p Find more pods at <a href="http://podupti.me">podupti.me</a>, <a href="http://diapod.net/active">diapod.net</a>, <a href="http://dir.friendica.com/siteinfo">dir.friendica.com</a> and <a href="http://redstats.tarine.net/">redstats.tarine.net</a>.
-        
+
         p
             em.small Disclaimer: This pod list is in no way an official list of diaspora* pods and Friendica/Redmatrix hubs. Also it does not contain all of the pods or hubs in those networks. Due to the distributed way these networks work, it is not possible to even make a list of all pods and hubs.
-            
+
         h3 pod graphs
         include charts.jade
 
         div(style="clear: both")
-        
+
         h2 what is the federation?
         p A loving term for three awesome decentralized social media projects.
         small TODO: link post where it was mentioned for the first time, give credit, and longer explanation. Sorry this site renewal is under construction.
-        
+
         h3 what is diaspora*?
         p Diaspora* is an awesome decentralized open source social network full of really cool people. Instead of being owned and controlled by a single corporation, all the pods (servers) in the diaspora* network are totally independent and controlled usually by single individuals. The project, which is run by a community of volunteers, builds the software which is free to use by anyone. You can easily run a pod yourself too, or if you don't want to, check out some of the open pods listed here and go create an account!
         p
@@ -84,7 +86,7 @@ body(style="background-color: rgb(238, 238, 238);")
 
         h3 what is friendica?
         p See http://friendica.com/
-        
+
         h3 what is redmatrix?
         p See https://redmatrix.me/
 
@@ -96,7 +98,7 @@ body(style="background-color: rgb(238, 238, 238);")
         p For diaspora*, if your pod runs 0.3.0.0 or newer, you already have the code! Go to <code>https://&lt;yourpod.tld&gt;/statistics.json</code> to verify it works. It is suggested to also activate the counts, which is done by editing the <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f#diff-72093d13f77e805ad8de330c99e6c73eR195">relevant configuration</a> and restarting your diaspora* pod.
         p For registering your pod with this hub, go to <code>http://the-federation.info/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
         p For Friendica and Redmatrix, information TBA.
-        
+
         h3 under the hood
         p Full stack JavaScript power:
         ul
@@ -105,10 +107,10 @@ body(style="background-color: rgb(238, 238, 238);")
             li The podlist table is powered by <a href="http://fooplugins.com/plugins/footable-jquery/">Footable</a>
             li The general theme is <a href="http://getbootstrap.com/">Twitter Bootstrap</a>
             li Country flags are by Mark James at <a href="http://www.famfamfam.com/lab/icons/flags/" target="_blanc">famfamfam.com</a>
-            
+
         h3 show some love
         include donations.jade
-        
+
         h3 code stats
         p
             #hubinfo(style="width:400px;")
@@ -119,7 +121,7 @@ body(style="background-color: rgb(238, 238, 238);")
         script.
             $(function() {
                 $('.footable').footable().floatThead();
-                $("#hubinfo").hubInfo({ 
+                $("#hubinfo").hubInfo({
                     user: "jaywink",
                     repo: "diaspora-hub"
                 });
