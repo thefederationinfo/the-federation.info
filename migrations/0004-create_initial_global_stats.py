@@ -1,7 +1,7 @@
 #!/usr/env python
 
 import MySQLdb as mysql
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 configf = open('config.js', 'r')
 config = {}

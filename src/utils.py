@@ -1,6 +1,7 @@
 #!/usr/env python
 # -*- coding: utf-8 -*-
 import os
+import subprocess
 
 import MySQLdb as mysql
 
@@ -40,3 +41,8 @@ class DBConnection(object):
         self.conn.commit()
         self.cursor.close()
         self.conn.close()
+
+
+def call_pod(domain):
+    print("Calling pod at domain %s..." % domain)
+    subprocess.call(['/usr/bin/wget', 'http://the-federation.info/register/%s' % domain, '-O', '/dev/null'])

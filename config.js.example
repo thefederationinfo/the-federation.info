@@ -12,4 +12,21 @@ config.scheduler = {
     minute: 7
 };
 
+config.schedulerActivePodsSync = {
+    hour: 6,
+    minute: 15
+};
+
+config.email = {
+    type: "smtp",
+    host: "localhost",
+    port: 25,
+    username: "username",
+    password: "password"
+};
+
+config.admin = {
+    email: "admin@example.com"
+};
+
 module.exports = config;

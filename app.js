@@ -135,7 +135,6 @@ function callPod(podhost) {
     });
 }
 
-
 app.get('/', function (req, res) {
     routes.root(req, res, db);
 });
@@ -174,9 +173,7 @@ var callAllPods = function () {
 
 // Scheduling
 scheduler.scheduleJob(config.scheduler, callAllPods);
+scheduler.scheduleJob(config.schedulerActivePodsSync, utils.syncActivePods);
 
 app.listen(4730);
-console.log('Diaspora-Hub listening on http://127.0.0.1:4730...\nCalling all pods in 20s...');
-
-// always do a full call to all pods on app init
-setTimeout(callAllPods, 20000);
+console.log('Diaspora-Hub listening on http://127.0.0.1:4730...');
