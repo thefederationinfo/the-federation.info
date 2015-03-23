@@ -1,3 +1,1 @@
 MySQL-python==1.2.5
-mysql==0.0.1
-wsgiref==0.1.2

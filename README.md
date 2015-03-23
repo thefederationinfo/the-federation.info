@@ -27,7 +27,7 @@ Node stuff;
     
 Python stuff (2.x required);
 
-    sudo pip install MySQL-python
+    pip install -r python-requirements.txt
 
 Author
 ======
