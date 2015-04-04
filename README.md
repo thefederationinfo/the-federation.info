@@ -16,7 +16,7 @@ Something like this (MariaDB/MySQL example):
     create user diasporahub@localhost identified by 'putnicepasswordhere';
     grant all on diasporahub.* to diasporahub@localhost;
 
-Copy config.js.example to config.js and edit proper values there.
+Copy src/config.js.example to src/config.js and edit proper values there.
 
 Installation
 ============
@@ -28,6 +28,13 @@ Node stuff;
 Python stuff (2.x required);
 
     pip install -r python-requirements.txt
+
+Running
+=======
+
+Make sure correct Python virtualenv is active, if any. Then;
+
+    node src/app.js
 
 Author
 ======

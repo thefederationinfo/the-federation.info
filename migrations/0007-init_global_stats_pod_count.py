@@ -1,6 +1,6 @@
 #!/usr/env python
 # -*- coding: utf-8 -*-
-from utils import DBConnection
+from src.utils import DBConnection
 
 db = DBConnection()
 

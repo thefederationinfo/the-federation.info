@@ -1,4 +1,9 @@
-var utils = {};
+/*jslint todo: true, node: true, stupid: true, plusplus: true, continue: true */
+"use strict";
+var utils = {},
+    spawn = require('child_process').spawn,
+    mailer = require("./mailer"),
+    config = require('./config');
 
 utils.get_pod_network_and_version = function(network, version) {
     /* Return an array that contains network and version
@@ -37,18 +42,18 @@ utils.get_pod_network_and_version = function(network, version) {
         utils.logger('utils', 'get_pod_network_and_version', 'ERROR', e);
         return ["unknown", version];
     }
-}
+};
 
 utils.logger = function(module, object, level, msg) {
     /* Output to console some standard formatted logging */
     console.log(new Date() + ' - [' + level + '] ' + module + '.' + object + ' | ' + msg);
-}
+};
 
 utils.services_string = function(pod) {
     /* Build a string for the Services column in the podlist */
-    services = ["facebook", "twitter", "tumblr", "wordpress"];
-    service_keys = ["fb", "tw", "tu", "wp"];
-    enabled = [];
+    var services = ["facebook", "twitter", "tumblr", "wordpress"];
+    var service_keys = ["fb", "tw", "tu", "wp"];
+    var enabled = [];
     for (var i=0; i<services.length; i++) {
         if (pod["service_"+services[i]] == 1)
             enabled.push(service_keys[i]);
@@ -57,6 +62,29 @@ utils.services_string = function(pod) {
         return enabled.join(',');
     else
         return " ";
-}
+};
+
+utils.syncActivePods = function () {
+    /* Sync active pods list from diapod.net/active */
+    var python = spawn('python', [ "-m", "src.tasks.sync_from_diapod_net" ]);
+    python.stdout.on('data', function (data) {
+        console.log('stdout: ' + data);
+    });
+    python.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+    });
+    python.on('close', function (code) {
+        console.log("Result is " + code);
+        if (code !== 0) {
+            // Error from Python job, notify
+            mailer.send_mail({
+                from: 'do-not-reply@the-federation.info',
+                to: config.admin.email,
+                subject: '[warning] syncActivePods failed',
+                text: 'The scheduled job syncActivePods failed with code: ' + code
+            });
+        }
+    });
+};
 
 module.exports = utils;
