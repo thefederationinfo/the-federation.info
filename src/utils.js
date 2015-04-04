@@ -66,7 +66,7 @@ utils.services_string = function(pod) {
 
 utils.syncActivePods = function () {
     /* Sync active pods list from diapod.net/active */
-    var python = spawn('python', [ "-m", "src.tasks.sync_from_diapod_nets" ]);
+    var python = spawn('python', [ "-m", "src.tasks.sync_from_diapod_net" ]);
     python.stdout.on('data', function (data) {
         console.log('stdout: ' + data);
     });

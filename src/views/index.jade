@@ -38,16 +38,16 @@ body(style="background-color: rgb(238, 238, 238);")
         h2 network statistics
         p Total counts from monitored pods from the last check.
 
-        include globalstats.jade
+        include globalstats
 
         p
             em.small Disclaimer: These counts reflect only a part of the network due to the opt-in nature of the statistics.
 
         h3 network history
         p
-            include activecharts.jade
+            include activecharts
         p
-            include networkcharts.jade
+            include networkcharts
 
         h2 list of pods
 
@@ -63,7 +63,7 @@ body(style="background-color: rgb(238, 238, 238);")
                         li tu = tumblr
                         li wp = wordpress
 
-        include podlist.jade
+        include podlist
 
         p Find more pods at <a href="http://podupti.me">podupti.me</a>, <a href="http://diapod.net/active">diapod.net</a>, <a href="http://dir.friendica.com/siteinfo">dir.friendica.com</a> and <a href="http://redstats.tarine.net/">redstats.tarine.net</a>.
 
@@ -71,7 +71,7 @@ body(style="background-color: rgb(238, 238, 238);")
             em.small Disclaimer: This pod list is in no way an official list of diaspora* pods and Friendica/Redmatrix hubs. Also it does not contain all of the pods or hubs in those networks. Due to the distributed way these networks work, it is not possible to even make a list of all pods and hubs.
 
         h3 pod graphs
-        include charts.jade
+        include charts
 
         div(style="clear: both")
 
@@ -109,7 +109,7 @@ body(style="background-color: rgb(238, 238, 238);")
             li Country flags are by Mark James at <a href="http://www.famfamfam.com/lab/icons/flags/" target="_blanc">famfamfam.com</a>
 
         h3 show some love
-        include donations.jade
+        include donations
 
         h3 code stats
         p
