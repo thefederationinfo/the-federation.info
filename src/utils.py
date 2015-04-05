@@ -15,7 +15,7 @@ class DBConnection(object):
         self.connect()
 
     def read_config(self):
-        configf = open(BASEPATH + '/../config.js', 'rb')
+        configf = open(BASEPATH + '/config.js', 'rb')
         self.config = {}
         for line in configf:
             if line.find('host') > -1:
