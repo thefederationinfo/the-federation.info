@@ -17,7 +17,12 @@ class DBConnection(object):
     def read_config(self):
         configf = open(BASEPATH + '/config.js', 'rb')
         self.config = {}
+        db_config = False
         for line in configf:
+            if not db_config:
+                if line.find('config.db') > -1:
+                    db_config = True
+                continue
             if line.find('host') > -1:
                 self.config['host'] = line.translate(None, '"\r\n, ').split(':')[1]
             elif line.find('user') > -1:
@@ -26,6 +31,7 @@ class DBConnection(object):
                 self.config['password'] = line.translate(None, '"\r\n, ').split(':')[1]
             elif line.find('database') > -1:
                 self.config['database'] = line.translate(None, '"\r\n, ').split(':')[1]
+                break
         configf.close()
 
     def connect(self):
