@@ -15,6 +15,7 @@ app.engine('jade', require('jade').renderFile);
 app.set("views", "./src/views");
 app.locals.utils = utils;  // expose utils to jade
 app.use(expressValidator([]));
+app.use(express.compress());
 app.use(express.static(__dirname + '/../static'));
 
 function logKnownPodFailure(podhost) {
