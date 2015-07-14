@@ -94,6 +94,23 @@ body(style="background-color: rgb(238, 238, 238);")
         p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project pod list resource that would automatically pull in data from opt-in pods. The user and post count data here is opt-in for podmins and needs to be activated in pod settings. The idea is to generate some feel towards how many of us diasporians (and later, friendicans and redmatrixians!) there really are.
         p The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress.
 
+        h3 can I get a copy of the data?
+        p It's all available as JSON, feel free to use any data you want! I cannot guarantee the JSON will not change over time, though it should mostly stay stable. You can always let me know if you depend on some JSON feed and I'll make sure not to break it.
+        p Here are the endpoints:
+        ul
+            li <a href="http://the-federation.info/pods.json">Pod list + global counts</a>
+            li <a href="http://the-federation.info/stats/global_active_month">Global active users monthly history</a>
+            li <a href="http://the-federation.info/stats/global_active_halfyear">Global active users half yearly history</a>
+            li <a href="http://the-federation.info/stats/global_pod_count">Global pod counts history</a>
+            li <a href="http://the-federation.info/stats/global_users">Global users history</a>
+            li <a href="http://the-federation.info/stats/global_posts">Global posts history</a>
+            li <a href="http://the-federation.info/stats/total_users">Per pod total users history</a>
+            li <a href="http://the-federation.info/stats/active_users_halfyear">Per pod active users half year history</a>
+            li <a href="http://the-federation.info/stats/active_users_monthly">Per pod active users monthly history</a>
+            li <a href="http://the-federation.info/stats/local_posts">Per pod local posts history</a>
+
+        p Please don't abuse these endpoints. They are refreshed <b>only once per day</b>, at 00:13 EET, so there is no need to bang them every 10 minutes for new data..
+
         h3 how do I get my instance listed?
         p For diaspora*, if your pod runs 0.3.0.0 or newer, you already have the code! Go to <code>https://&lt;yourpod.tld&gt;/statistics.json</code> to verify it works. It is suggested to also activate the counts, which is done by editing the <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f#diff-72093d13f77e805ad8de330c99e6c73eR195">relevant configuration</a> and restarting your diaspora* pod.
         p For registering your pod with this hub, go to <code>http://the-federation.info/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
