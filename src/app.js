@@ -13,6 +13,7 @@ var app = express();
 
 app.engine('jade', require('jade').renderFile);
 app.set("env", "production");
+app.set("json spaces", 0);
 app.set("views", "./src/views");
 app.locals.utils = utils;  // expose utils to jade
 app.use(expressValidator([]));
