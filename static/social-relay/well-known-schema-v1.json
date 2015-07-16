@@ -6,13 +6,19 @@
     "subscribe": {
       "type": "boolean"
     },
+    "scope": {
+      "type": "string",
+      "pattern": "^all|tags$"
+    },
     "tags": {
       "type": "array",
-      "items": {"type": "string"}
+      "items": {"type": "string"},
+      "uniqueItems": true
     }
   },
   "required": [
     "subscribe",
+    "scope",
     "tags"
   ]
 }
