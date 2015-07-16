@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://the-federation.info/social-relay/well-known-schema-v1.json",
+  "type": "object",
+  "properties": {
+    "subscribe": {
+      "type": "boolean"
+    },
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "required": [
+    "subscribe",
+    "tags"
+  ]
+}
