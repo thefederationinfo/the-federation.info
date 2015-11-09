@@ -18,6 +18,8 @@ utils.get_pod_network_and_version = function(network, version) {
             case "red matrix":
             case "redmatrix":
                 return ["redmatrix", version];
+            case "hubzilla":
+                return ["hubzilla", version];
             // pyaspora has no network id atm, fall to default
             case "pyaspora":
             // diaspora has no network id atm, fall to default
