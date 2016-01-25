@@ -19,26 +19,23 @@ utils.get_pod_network_and_version = function(network, version) {
             case "redmatrix":
                 return ["redmatrix", version];
             case "hubzilla":
+            case "BlaBlaNet":  // See https://github.com/jaywink/diaspora-hub/issues/38
                 return ["hubzilla", version];
-            // pyaspora has no network id atm, fall to default
             case "pyaspora":
-            // diaspora has no network id atm, fall to default
+                return ["pyaspora", version];
             case "diaspora":
-            default:
-                // diaspora, most likely
                 if (version.indexOf('head') === 0)
-                    // diaspora, development head
+                    // development head, legacy
                     return ["diaspora", ".develop"];
                 else if (version.indexOf('-') > -1)
-                    // diaspora, maybe, normal, return version part only, no hash
+                    // return version part only, no hash
                     return ["diaspora", version.split('-')[0]];
-                else if (version.indexOf('x') > -1)
-                    // pyaspora, maybe
-                    return ["pyaspora", version];
                 else {
-                    // fallback, assume diaspora..
+                    // fallback, full version
                     return ["diaspora", version];
                 }
+            default:
+                return ["unknown", version];
         }
     } catch (e) {
         utils.logger('utils', 'get_pod_network_and_version', 'ERROR', e);
