@@ -3,8 +3,8 @@ head
     meta(property='og:title', content='the federation - a statistics hub')
     meta(property='og:type', content='website')
     meta(property='og:url', content='https://the-federation.info/')
-    meta(property='og:description', content='Podlist and statistics for The Federation (diaspora*, Friendica, Redmatrix).')
-    meta(property="og:image", content="https://the-federation.info/images/diaspora.png")
+    meta(property='og:description', content='Podlist and statistics for The Federation (diaspora*, Friendica, Hubzilla).')
+    meta(property="og:image", content="https://the-federation.info/images/the-federation.png")
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     include ../vendor/css/footable.core.min.css
     include ../vendor/css/footable.standalone.min.css
@@ -33,8 +33,9 @@ body(style="background-color: rgb(238, 238, 238);")
     div(style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;")
         h1
             a(href="https://the-federation.info", style="color:inherit")
-                img(src="/images/diaspora.png")
-                | the federation - a statistics hub
+                img(src="/images/the-federation.png")
+                span(style="padding-left: 30px;")
+                    the federation - a statistics hub
 
         h2 network statistics
         p Total counts from monitored pods from the last check.
@@ -56,7 +57,6 @@ body(style="background-color: rgb(238, 238, 238);")
 
         p Notes about the <em>Services</em> column.
             ul
-                li There is a bug currently that causes the services to be listed as not enabled for any pods that have configuration set as environment variables. This is why the services column is mostly empty at the moment.
                 li Keys:
                     ul
                         li fb = facebook
@@ -69,7 +69,7 @@ body(style="background-color: rgb(238, 238, 238);")
         p Find more pods at <a href="http://podupti.me">podupti.me</a>, <a href="http://diapod.net/active">diapod.net</a>, <a href="http://dir.friendica.com/siteinfo">dir.friendica.com</a> and <a href="http://redstats.tarine.net/">redstats.tarine.net</a>.
 
         p
-            em.small Disclaimer: This pod list is in no way an official list of diaspora* pods and Friendica/Redmatrix hubs. Also it does not contain all of the pods or hubs in those networks. Due to the distributed way these networks work, it is not possible to even make a list of all pods and hubs.
+            em.small Disclaimer: This pod list is in no way an official list of diaspora* pods and Friendica/Hubzilla hubs. Also it does not contain all of the pods or hubs in those networks. Due to the distributed way these networks work, it is not possible to even make a list of all pods and hubs.
 
         h3 pod graphs
         include charts
@@ -88,12 +88,12 @@ body(style="background-color: rgb(238, 238, 238);")
         h3 what is friendica?
         p See http://friendica.com/
 
-        h3 what is redmatrix?
-        p See https://redmatrix.me/
+        h3 what is hubzilla?
+        p See http://hubzilla.org/
 
         h2 what is this hub?
-        p The statistics hub is a piece of software that <a href="https://www.loomio.org/discussions/9190">was proposed</a> by <a href="https://iliketoast.net/u/jaywink">myself</a> as an official project pod list resource that would automatically pull in data from opt-in pods. The user and post count data here is opt-in for podmins and needs to be activated in pod settings. The idea is to generate some feel towards how many of us diasporians (and later, friendicans and redmatrixians!) there really are.
-        p The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too. This is very much work in progress.
+        p The statistics hub is a piece of software that automatically statistics from opt-in pods. The user and post count data here is opt-in for podmins and needs to be activated in pod settings. The idea is to generate some feel towards how many of us diasporians, friendicans and hubzillians there really are.
+        p The code is <a href="https://github.com/jaywink/diaspora-hub">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too.
 
         h3 can I get a copy of the data?
         p It's all available as JSON, feel free to use any data you want! I cannot guarantee the JSON will not change over time, though it should mostly stay stable. You can always let me know if you depend on some JSON feed and I'll make sure not to break it.
@@ -113,12 +113,11 @@ body(style="background-color: rgb(238, 238, 238);")
         p Please don't abuse these endpoints. They are refreshed <b>only once per day</b>, at 00:13 EET, so there is no need to bang them every 10 minutes for new data..
 
         h3 how do I get my instance listed?
-        p For diaspora*, if your pod runs 0.3.0.0 or newer, you already have the code! Go to <code>https://&lt;yourpod.tld&gt;/statistics.json</code> to verify it works. It is suggested to also activate the counts, which is done by editing the <a href="https://github.com/diaspora/diaspora/commit/0fb962cd1d942a04f3b58ed0174ba3eb7776b05f#diff-72093d13f77e805ad8de330c99e6c73eR195">relevant configuration</a> and restarting your diaspora* pod.
-        p For registering your pod with this hub, go to <code>http://the-federation.info/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
-        p For Friendica and Redmatrix, information TBA.
+        p For registering your pod with this hub, go to <code>https://the-federation.info/register/&lt;yourpod.tld&gt;</code>. After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
+        p For Friendica and Hubzilla, information TBA.
 
         h3 under the hood
-        p Full stack JavaScript power:
+        p Full stack JavaScript:
         ul
             li <a href="http://nodejs.org/">Node.js</a> with <a href="http://expressjs.com">Express</a>, <a href="https://github.com/ctavan/express-validator">Express-validator</a>, <a href="http://dresende.github.io/node-orm2/">Object Relational Mapping</a> (database), <a href="https://npmjs.org/package/node-schedule">Node-schedule</a> and <a href="http://jade-lang.com">Jade</a> (templating)
             li The graphs are powered by the awesome <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a> library which is in turn powered by <a href="http://d3js.org/">D3</a>
