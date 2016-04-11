@@ -4,11 +4,12 @@
 var network = {},
     https = require('https'),
     dns = require('dns'),
+    url = require("url"),
     utils = require('./utils'),
     db = require('./database');
 
 
-function getPodDataFromResponse(host, data) {
+function getPodDataFromStatisticsJSON(host, data) {
     return {
         name: data.name,
         host: host,
@@ -23,64 +24,82 @@ function getPodDataFromResponse(host, data) {
     };
 }
 
-network.handleCallResponse = function(podhost, data) {
-    try {
-        data = JSON.parse(data);
-        if (data.version !== undefined) {
-            db.Pod.exists({ host: podhost }, function (err, exists) {
+function getPodDataFromNodeInfo(host, data) {
+    return {
+        name: data.metadata.nodeName,
+        host: host,
+        version: data.software.version,
+        registrations_open: data.openRegistrations,
+        failures: 0,
+        network: data.software.name,
+        service_facebook: (data.services.outbound.indexOf("facebook") > -1)  ? 1 : 0,
+        service_twitter: (data.services.outbound.indexOf("twitter") > -1) ? 1 : 0,
+        service_tumblr: (data.services.outbound.indexOf("tumblr") > -1) ? 1 : 0,
+        service_wordpress: (data.services.outbound.indexOf("wordpress") > -1) ? 1 : 0
+    };
+}
+
+function getPodDataFromResponse(host, data, callType) {
+    if (callType == "nodeinfo") {
+        return getPodDataFromNodeInfo(host, data);
+    } else {
+        return getPodDataFromStatisticsJSON(host, data);
+    }
+}
+
+network.handleCallResponse = function(podhost, data, callType) {
+    data = JSON.parse(data);
+    console.log(data);
+    if (data.version !== undefined) {
+        db.Pod.exists({ host: podhost }, function (err, exists) {
+            if (err) {
+                console.log(err);
+            }
+            dns.resolve4(podhost, function (err, addresses) {
                 if (err) {
-                    console.log(err);
+                    utils.logger('app', 'handleCallResponse', 'ERROR', podhost + ': ' + err);
+                    data.ip4 = null;
+                } else {
+                    data.ip4 = addresses[0];
                 }
-                dns.resolve4(podhost, function (err, addresses) {
-                    if (err) {
-                        utils.logger('app', 'callPod', 'ERROR', podhost + ': ' + err);
-                        data.ip4 = null;
-                    } else {
-                        data.ip4 = addresses[0];
-                    }
-                    if (!exists) {
-                        // Insert
-                        db.Pod.create(getPodDataFromResponse(podhost, data), function (err, items) {
-                            if (err) {
-                                utils.logger('app', 'callPod', 'ERROR', 
-                                    podhost + ': Database error when inserting pod: ' + err);
-                            } else {
-                                items.getCountry();
-                                items.logStats(data);
-                            }
-                        });
-                    } else {
-                        // Check for changes
-                        db.Pod.find({ host: podhost }, function (err, pods) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            var pod = pods[0];
-                            if (pod.failures > 0 || pod.needsUpdate(data)) {
-                                utils.logger('app', 'callPod', 'INFO', podhost + ': UPDATING');
-                                pod.save(getPodDataFromResponse(podhost, data), function (err) {
-                                    if (err) {
-                                        utils.logger('app', 'callPod', 'ERROR', 
-                                            podhost + ': Trying to save pod update: ' + err);
-                                    } else {
-                                        pod.getCountry();
-                                    }
-                                });
-                            } else {
-                                utils.logger('app', 'callPod', 'INFO', podhost + ': no updates');
-                            }
-                            pod.logStats(data);
-                        });
-                    }
-                });
+                if (!exists) {
+                    // Insert
+                    db.Pod.create(getPodDataFromResponse(podhost, data, callType), function (err, items) {
+                        if (err) {
+                            utils.logger('app', 'handleCallResponse', 'ERROR',
+                                podhost + ': Database error when inserting pod: ' + err);
+                        } else {
+                            items.getCountry();
+                            items.logStats(data);
+                        }
+                    });
+                } else {
+                    // Check for changes
+                    db.Pod.find({ host: podhost }, function (err, pods) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        var pod = pods[0];
+                        if (pod.failures > 0 || pod.needsUpdate(data)) {
+                            utils.logger('app', 'handleCallResponse', 'INFO', podhost + ': UPDATING');
+                            pod.save(getPodDataFromResponse(podhost, data, callType), function (err) {
+                                if (err) {
+                                    utils.logger('app', 'handleCallResponse', 'ERROR',
+                                        podhost + ': Trying to save pod update: ' + err);
+                                } else {
+                                    pod.getCountry();
+                                }
+                            });
+                        } else {
+                            utils.logger('app', 'handleCallResponse', 'INFO', podhost + ': no updates');
+                        }
+                        pod.logStats(data);
+                    });
+                }
             });
-        } else {
-            throw "error";
-        }
-    } catch (err) {
-        utils.logger('app', 'callPod', 'ERROR', podhost + ': not a valid statistics json');
-        console.log('host ' + podhost + ' not a valid statistics json');
-        network.logKnownPodFailure(podhost);
+        });
+    } else {
+        throw "error";
     }
 };
 
@@ -93,25 +112,95 @@ network.callStatisticsJSON = function(podhost) {
         agent: false,
         rejectUnauthorized: false
     };
-    utils.logger('app', 'callPod', 'INFO', podhost + ': Calling for statistics.json');
+    utils.logger('app', 'callStatisticsJSON', 'INFO', podhost + ': Calling for statistics.json');
     var request = https.request(options, function (res) {
-        utils.logger('app', 'callPod', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
-        utils.logger('app', 'callPod', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
+        utils.logger('app', 'callStatisticsJSON', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
+        utils.logger('app', 'callStatisticsJSON', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
         res.setEncoding('utf8');
         res.on('data', function(data) {
-            network.handleCallResponse(podhost, data);
+            try {
+                network.handleCallResponse(podhost, data, "statistics.json");
+            } catch (err) {
+                utils.logger('app', 'callStatisticsJSON', 'ERROR', podhost + ': not a valid statistics json');
+                network.logKnownPodFailure(podhost);
+            }
         });
     });
     request.end();
     request.on('error', function (e) {
-        utils.logger('app', 'callPod', 'ERROR', podhost + ': ' + e);
+        utils.logger('app', 'callStatisticsJSON', 'ERROR', podhost + ': ' + e);
         network.logKnownPodFailure(podhost);
     });
 };
 
+function getNodeInfoURL(response) {
+    try {
+        response = JSON.parse(response);
+        // Yes, there is a better way, but for now just take the first
+        return response.links[0].href;
+    } catch (err) {
+        return null;
+    }
+}
+
+network.callNodeInfo = function(podhost) {
+    var options = {
+        host: podhost,
+        port: 443,
+        path: '/.well-known/nodeinfo',
+        method: 'GET',
+        agent: false,
+        rejectUnauthorized: false
+    };
+    utils.logger('app', 'callNodeInfo', 'INFO', podhost + ': Calling for NodeInfo');
+    var request = https.request(options, function (res) {
+        utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
+        utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
+        res.setEncoding('utf8');
+        res.on('data', function(data) {
+            var nodeInfoUrl = getNodeInfoURL(data);
+            if (nodeInfoUrl) {
+                var parsedUrl = url.parse(nodeInfoUrl);
+                options.host = parsedUrl.hostname;
+                options.path = parsedUrl.pathname;
+                utils.logger('app', 'callNodeInfo', 'INFO', podhost + ': NodeInfo URL: ' + nodeInfoUrl);
+                // request.end();
+                var nodeInfoRequest = https.request(options, function (res) {
+                    utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
+                    utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
+                    res.setEncoding('utf8');
+                    res.on('data', function (data) {
+                        try {
+                            network.handleCallResponse(podhost, data, "nodeinfo");
+                        } catch (err) {
+                            utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': not a valid NodeInfo document');
+                            // Fallback to statistics.json
+                            network.callStatisticsJSON(podhost);
+                        }
+                    });
+                }).on('error', function (e) {
+                    // Fallback to statistics.json
+                    utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': ' + e);
+                    network.callStatisticsJSON(podhost);
+                });
+                nodeInfoRequest.end();
+            } else {
+                // Fallback to statistics.json
+                utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': no nodeinfo url found');
+                network.callStatisticsJSON(podhost);
+            }
+        });
+    }).on('error', function (e) {
+        // Fallback to statistics.json
+        utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': ' + e);
+        network.callStatisticsJSON(podhost);
+    });
+    request.end();
+};
+
 network.callPod = function(podhost) {
     utils.logger('app', 'callPod', 'INFO', podhost + ': Calling for update');
-    network.callStatisticsJSON(podhost);
+    network.callNodeInfo(podhost);
 };
 
 // Call all pods
