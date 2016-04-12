@@ -47,6 +47,32 @@ function getPodDataFromResponse(host, data, callType) {
     }
 }
 
+function getPodStatsFromStatisticsJSON(data) {
+    return {
+        total_users: data.total_users,
+        active_users_halfyear: data.active_users_halfyear,
+        active_users_monthly: data.active_users_monthly,
+        local_posts: data.local_posts
+    }
+}
+
+function getPodStatsFromNodeInfo(data) {
+    return {
+        total_users: data.usage.users.total,
+        active_users_halfyear: data.usage.users.activeHalfyear,
+        active_users_monthly: data.usage.users.activeMonth,
+        local_posts: data.usage.localPosts
+    }
+}
+
+function getPodStatsFromResponse(data, callType) {
+    if (callType == "nodeinfo") {
+        return getPodStatsFromNodeInfo(data);
+    } else {
+        return getPodStatsFromStatisticsJSON(data);
+    }
+}
+
 network.handleCallResponse = function(podhost, data, callType) {
     data = JSON.parse(data);
     console.log(data);
@@ -70,7 +96,7 @@ network.handleCallResponse = function(podhost, data, callType) {
                                 podhost + ': Database error when inserting pod: ' + err);
                         } else {
                             items.getCountry();
-                            items.logStats(data);
+                            items.logStats(getPodStatsFromResponse(data, callType));
                         }
                     });
                 } else {
@@ -93,7 +119,7 @@ network.handleCallResponse = function(podhost, data, callType) {
                         } else {
                             utils.logger('app', 'handleCallResponse', 'INFO', podhost + ': no updates');
                         }
-                        pod.logStats(data);
+                        pod.logStats(getPodStatsFromResponse(data, callType));
                     });
                 }
             });
