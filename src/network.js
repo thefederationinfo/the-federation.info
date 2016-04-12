@@ -146,15 +146,20 @@ network.callStatisticsJSON = function(podhost) {
     var request = https.request(options, function (res) {
         utils.logger('app', 'callStatisticsJSON', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
         utils.logger('app', 'callStatisticsJSON', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', function(data) {
-            try {
-                network.handleCallResponse(podhost, data, "statistics.json");
-            } catch (err) {
-                utils.logger('app', 'callStatisticsJSON', 'ERROR', podhost + ': not a valid statistics json');
-                network.logKnownPodFailure(podhost);
-            }
-        });
+        if (res.statusCode === 404) {
+            utils.logger('app', 'callStatisticsJSON', 'ERROR', podhost + ': not statistics.json found');
+            network.logKnownPodFailure(podhost);
+        } else {
+            res.setEncoding('utf8');
+            res.on('data', function (data) {
+                try {
+                    network.handleCallResponse(podhost, data, "statistics.json");
+                } catch (err) {
+                    utils.logger('app', 'callStatisticsJSON', 'ERROR', podhost + ': not a valid statistics json');
+                    network.logKnownPodFailure(podhost);
+                }
+            });
+        }
     });
     request.end();
     request.on('error', function (e) {
@@ -186,46 +191,53 @@ network.callNodeInfo = function(podhost) {
     var request = https.request(options, function (res) {
         utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
         utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', function(data) {
-            var nodeInfoUrl = getNodeInfoURL(data);
-            if (nodeInfoUrl) {
-                var parsedUrl = url.parse(nodeInfoUrl);
-                options.host = parsedUrl.hostname;
-                options.path = parsedUrl.pathname;
-                utils.logger('app', 'callNodeInfo', 'INFO', podhost + ': NodeInfo URL: ' + nodeInfoUrl);
-                // request.end();
-                var nodeInfoRequest = https.request(options, function (res) {
-                    utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
-                    utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
-                    res.setEncoding('utf8');
-                    res.on('data', function (data) {
-                        try {
-                            network.handleCallResponse(podhost, data, "nodeinfo");
-                        } catch (err) {
-                            utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': not a valid NodeInfo document');
-                            // Fallback to statistics.json
-                            network.callStatisticsJSON(podhost);
-                        }
+        if (res.statusCode === 404) {
+            // Fallback to statistics.json
+            utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': nodeinfo not supported');
+            network.callStatisticsJSON(podhost);
+        } else {
+            res.setEncoding('utf8');
+            res.on('data', function (data) {
+                var nodeInfoUrl = getNodeInfoURL(data);
+                if (nodeInfoUrl) {
+                    var parsedUrl = url.parse(nodeInfoUrl);
+                    options.host = parsedUrl.hostname;
+                    options.path = parsedUrl.pathname;
+                    utils.logger('app', 'callNodeInfo', 'INFO', podhost + ': NodeInfo URL: ' + nodeInfoUrl);
+                    // request.end();
+                    var nodeInfoRequest = https.request(options, function (res) {
+                        utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
+                        utils.logger('app', 'callNodeInfo', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
+                        res.setEncoding('utf8');
+                        res.on('data', function (data) {
+                            try {
+                                network.handleCallResponse(podhost, data, "nodeinfo");
+                            } catch (err) {
+                                utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': not a valid NodeInfo document');
+                                // Fallback to statistics.json
+                                network.callStatisticsJSON(podhost);
+                            }
+                        });
+                    }).on('error', function (e) {
+                        // Fallback to statistics.json
+                        utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': ' + e);
+                        network.callStatisticsJSON(podhost);
                     });
-                }).on('error', function (e) {
+                    nodeInfoRequest.end();
+                } else {
                     // Fallback to statistics.json
-                    utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': ' + e);
+                    utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': no nodeinfo url found');
                     network.callStatisticsJSON(podhost);
-                });
-                nodeInfoRequest.end();
-            } else {
-                // Fallback to statistics.json
-                utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': no nodeinfo url found');
-                network.callStatisticsJSON(podhost);
-            }
-        });
-    }).on('error', function (e) {
+                }
+            });
+        }
+    });
+    request.end();
+    request.on('error', function (e) {
         // Fallback to statistics.json
         utils.logger('app', 'callNodeInfo', 'ERROR', podhost + ': ' + e);
         network.callStatisticsJSON(podhost);
     });
-    request.end();
 };
 
 network.callPod = function(podhost) {
