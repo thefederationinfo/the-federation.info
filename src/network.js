@@ -20,7 +20,8 @@ function getPodDataFromStatisticsJSON(host, data) {
         service_facebook: (data.facebook) ? 1 : 0,
         service_twitter: (data.twitter) ? 1 : 0,
         service_tumblr: (data.tumblr) ? 1 : 0,
-        service_wordpress: (data.wordpress) ? 1 : 0
+        service_wordpress: (data.wordpress) ? 1 : 0,
+        ip4: data.ip4
     };
 }
 
@@ -35,7 +36,8 @@ function getPodDataFromNodeInfo(host, data) {
         service_facebook: (data.services.outbound.indexOf("facebook") > -1)  ? 1 : 0,
         service_twitter: (data.services.outbound.indexOf("twitter") > -1) ? 1 : 0,
         service_tumblr: (data.services.outbound.indexOf("tumblr") > -1) ? 1 : 0,
-        service_wordpress: (data.services.outbound.indexOf("wordpress") > -1) ? 1 : 0
+        service_wordpress: (data.services.outbound.indexOf("wordpress") > -1) ? 1 : 0,
+        ip4: data.ip4
     };
 }
 
@@ -88,15 +90,17 @@ network.handleCallResponse = function(podhost, data, callType) {
                 } else {
                     data.ip4 = addresses[0];
                 }
+                var responseData = getPodDataFromResponse(podhost, data, callType);
+                var podStats = getPodStatsFromResponse(data, callType);
                 if (!exists) {
                     // Insert
-                    db.Pod.create(getPodDataFromResponse(podhost, data, callType), function (err, items) {
+                    db.Pod.create(responseData, function (err, items) {
                         if (err) {
                             utils.logger('app', 'handleCallResponse', 'ERROR',
                                 podhost + ': Database error when inserting pod: ' + err);
                         } else {
                             items.getCountry();
-                            items.logStats(getPodStatsFromResponse(data, callType));
+                            items.logStats(podStats);
                         }
                     });
                 } else {
@@ -106,9 +110,9 @@ network.handleCallResponse = function(podhost, data, callType) {
                             console.log(err);
                         }
                         var pod = pods[0];
-                        if (pod.failures > 0 || pod.needsUpdate(data)) {
+                        if (pod.failures > 0 || pod.needsUpdate(responseData)) {
                             utils.logger('app', 'handleCallResponse', 'INFO', podhost + ': UPDATING');
-                            pod.save(getPodDataFromResponse(podhost, data, callType), function (err) {
+                            pod.save(responseData, function (err) {
                                 if (err) {
                                     utils.logger('app', 'handleCallResponse', 'ERROR',
                                         podhost + ': Trying to save pod update: ' + err);
@@ -119,7 +123,7 @@ network.handleCallResponse = function(podhost, data, callType) {
                         } else {
                             utils.logger('app', 'handleCallResponse', 'INFO', podhost + ': no updates');
                         }
-                        pod.logStats(getPodStatsFromResponse(data, callType));
+                        pod.logStats(podStats);
                     });
                 }
             });

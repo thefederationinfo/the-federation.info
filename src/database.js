@@ -34,7 +34,7 @@ function setUpModels(db) {
         service_facebook: { type: "number" },
         service_twitter: { type: "number" },
         service_tumblr: { type: "number" },
-        service_wordpress: { type: "number" },
+        service_wordpress: { type: "number" }
     }, {
         methods: {
             needsUpdate: function (data) {
@@ -44,22 +44,11 @@ function setUpModels(db) {
                 ], that = this;
                 try {
                     checkKeys.forEach(function (key) {
-                        // TODO: fix ugly 'services_' replacing by moving
-                        // services to their own table
-                        if (key.indexOf("service_") > -1) {
-                            if (data[key.replace("service_", "")] === undefined) {
-                                if (services.indexOf(key.replace("service_", "")) > -1) {
-                                    data[key.replace("service_", "")] = 0;
-                                }
-                            } else {
-                                data[key.replace("service_", "")] = (data[key.replace("service_", "")]) ? 1 : 0;
-                            }
-                        }
                         if (data.network === undefined) {
                             data.network = 'unknown';
                         }
-                        utils.logger('db', 'Pod.needsUpdate', 'DEBUG', that.host + ': comparing ' + key + ' (old <-> new): ' + that[key] + ' <-> ' + data[key.replace("service_", "")]);
-                        if (that[key] !== data[key.replace("service_", "")]) {
+                        utils.logger('db', 'Pod.needsUpdate', 'DEBUG', that.host + ': comparing ' + key + ' (old <-> new): ' + that[key] + ' <-> ' + data[key]);
+                        if (that[key] !== data[key]) {
                             throw "Update needed";
                         }
                     });
