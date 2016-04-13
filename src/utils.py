@@ -51,4 +51,4 @@ class DBConnection(object):
 
 def call_pod(domain):
     print("Calling pod at domain %s..." % domain)
-    subprocess.call(['/usr/bin/wget', 'http://the-federation.info/register/%s' % domain, '-O', '/dev/null'])
+    subprocess.call(['/usr/bin/wget', 'https://the-federation.info/register/%s' % domain, '-O', '/dev/null'])
