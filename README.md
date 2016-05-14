@@ -1,14 +1,8 @@
-diaspora-hub
-============
+# The-Federation.info
 
-(Unofficial) statistics hub for The Federation (diaspora*, Friendica and Redmatrix).
+Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla/Redmatrix).
 
-Note: The Federation is NOT an official term from any of these projects. Credit about where it was first used coming.. :)
-
-Check information and how to add your instance: http://the-federation.info
-
-Database creation
-=================
+## Database creation
 
 Something like this (MariaDB/MySQL example):
 
@@ -18,8 +12,7 @@ Something like this (MariaDB/MySQL example):
 
 Copy src/config.js.example to src/config.js and edit proper values there.
 
-Installation
-============
+## Installation
 
 Node stuff;
 
@@ -29,26 +22,16 @@ Python stuff (2.x required);
 
     pip install -r python-requirements.txt
 
-Running
-=======
+## Running
 
 Make sure correct Python virtualenv is active, if any. Then;
 
     node src/app.js
 
-Author
-======
+## Author
 
-[Jason Robinson](https://github.com/jaywink)
+Jason Robinson / @jaywink / https://jasonrobinson.me / https://iliketoast.net/u/jaywink
 
-[Me on diaspora*](https://iliketoast.net/u/jaywink)
-
-Like this?
-==========
-
-Please donate via the options at the end of [the hub page](http://the-federation.info).
-
-License
-=======
+## License
 
 AGPLv3

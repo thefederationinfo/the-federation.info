@@ -1,10 +1,8 @@
 {
   "author": "Jason Robinson",
-  "name": "diaspora-hub",
-  "description": "Statistics hub for The Federation",
-  "version": "0.2.0",
+  "name": "the-federation.info",
   "repository": {
-    "url": "https://github.com/jaywink/diaspora-hub"
+    "url": "https://github.com/jaywink/the-federation.info"
   },
   "dependencies": {
     "mysql": "2.0.0-rc1",

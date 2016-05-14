@@ -181,7 +181,7 @@ routes.register = function (req, res, db) {
         return false;
     }
     res.type('text/html');
-    res.send('<html><head></head><body><h1>register received</h1><p>if this is a valid pod with suitable code, it will be visible at <a href="http://the-federation.info">the-federation.info</a> in a few seconds..</p></body></html>');
+    res.send('<html><head></head><body><h1>register received</h1><p>if this is a valid pod with suitable code, it will be visible at <a href="https://the-federation.info">the-federation.info</a> in a few seconds..</p></body></html>');
     return req.params.podhost;
 };
 

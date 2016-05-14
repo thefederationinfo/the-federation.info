@@ -19,7 +19,7 @@ utils.get_pod_network_and_version = function(network, version) {
             case "redmatrix":
                 return ["redmatrix", version];
             case "hubzilla":
-            case "blablanet":  // See https://github.com/jaywink/diaspora-hub/issues/38
+            case "blablanet":  // See https://github.com/jaywink/the-federation.info/issues/38
                 return ["hubzilla", version];
             case "pyaspora":
                 return ["pyaspora", version];
