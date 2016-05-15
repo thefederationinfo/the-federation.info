@@ -1,12 +1,5 @@
 var config = {};
 
-config.db = {
-    host: "localhost",
-    user: "user",
-    password: "password",
-    database: "database"
-};
-
 config.scheduler = {
     hour: 0,
     minute: 7
