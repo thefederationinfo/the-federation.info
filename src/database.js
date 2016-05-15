@@ -2,22 +2,15 @@
 "use strict";
 var orm = require('orm'),
     util = require('util'),
-    config = require('./config'),
     fs = require('fs'),
     events = require('events'),
-    mysql = require('mysql'),
+    database = require('sqlite3'),
     geoip = require('geoip-lite'),
     spawn = require('child_process').spawn,
     models = {},
     eventEmitter = new events.EventEmitter(),
     utils = require('./utils');
 
-var services = [
-    "facebook",
-    "twitter",
-    "tumblr",
-    "wordpress"
-];
 
 function setUpModels(db) {
     // set up models
@@ -72,7 +65,7 @@ function setUpModels(db) {
                                 active_users_halfyear: (isNaN(data.active_users_halfyear)) ? 0 : data.active_users_halfyear,
                                 active_users_monthly: (isNaN(data.active_users_monthly)) ? 0 : data.active_users_monthly,
                                 local_posts: (isNaN(data.local_posts)) ? 0 : data.local_posts,
-                                pod_id: podId,
+                                pod_id: podId
                             }, function (err) {
                                 if (err) {
                                     console.log("Database error when inserting stat: " + err);
@@ -129,7 +122,7 @@ function setUpModels(db) {
                         utils.logger('db', 'Pod.getCountry', 'DEBUG', this.host + ': Nothing found? ' + geo);
                     }
                 }
-            },
+            }
         }
     });
     models.Pod.allForList = function (callback) {
@@ -174,7 +167,7 @@ function setUpModels(db) {
     };
     models.Pod.allPodStats = function (item, callback) {
         db.driver.execQuery(
-            "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
+            "SELECT p.name, p.host, s.pod_id, CAST(strftime('%s', s.date) as INT) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
             [],
             function (err, data) {
                 if (err) {
@@ -189,7 +182,7 @@ function setUpModels(db) {
         total_users: { type: "number" },
         active_users_halfyear: { type: "number" },
         active_users_monthly: { type: "number" },
-        local_posts: { type: "number" },
+        local_posts: { type: "number" }
     });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });
     models.GlobalStat = db.define('global_stats', {
@@ -250,7 +243,7 @@ function setUpModels(db) {
     };
     models.GlobalStat.getStats = function (callback) {
         db.driver.execQuery(
-            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
+            "SELECT CAST(strftime('%s', date) as INT) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
             [],
             function (err, data) {
                 if (err) {
@@ -299,43 +292,33 @@ function doMigration(migrations, migrdb, db) {
             // no more, set up models
             console.log('** Migrations done, launching app.. **');
             eventEmitter.emit('migrations-done', db);
-            migrdb.end();
+            migrdb.close();
         }
     } else if (migration.type === 'sql') {
-        migrdb.query(migration.sql, function (err) {
+        migrdb.run(migration.sql, function (err) {
             if (err) {
                 // migration failed
                 console.log("Error: " + err.message);
-                migrdb.rollback(function () {
-                    throw err;
-                });
             } else {
-                migrdb.commit(function (err) {
+                console.log('success!');
+                models.Migration.create({
+                    number: migration.number,
+                    name: migration.name,
+                    timestamp: new Date()
+                }, function (err) {
                     if (err) {
-                        migrdb.rollback(function () {
-                            throw err;
-                        });
-                    }
-                    console.log('success!');
-                    models.Migration.create({
-                        number: migration.number,
-                        name: migration.name,
-                        timestamp: new Date()
-                    }, function (err) {
-                        if (err) {
-                            console.log("Database error when inserting migration: " + err);
-                        }
-                    });
-                    if (migrations.length) {
-                        // do next
-                        doMigration(migrations, migrdb, db);
-                    } else {
-                        // no more, set up models
-                        console.log('** Migrations done, launching app.. **');
-                        eventEmitter.emit('migrations-done', db);
-                        migrdb.end();
+                        console.log("Database error when inserting migration: " + err);
                     }
                 });
+                if (migrations.length) {
+                    // do next
+                    doMigration(migrations, migrdb, db);
+                } else {
+                    // no more, set up models
+                    console.log('** Migrations done, launching app.. **');
+                    eventEmitter.emit('migrations-done', db);
+                    migrdb.close();
+                }
             }
         });
     } else if (migration.type === 'py') {
@@ -370,13 +353,13 @@ function doMigration(migrations, migrdb, db) {
                 // no more, set up models
                 console.log('** Migrations done, launching app.. **');
                 eventEmitter.emit('migrations-done', db);
-                migrdb.end();
+                migrdb.close();
             }
         });
     }
 }
 
-orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + config.db.host + "/" + config.db.database + '?pool=true', function (err, db) {
+orm.connect("sqlite://thefederation.db?pool=true", function (err, db) {
     if (err) {
         console.log("Something is wrong with the db connection", err);
         return;
@@ -403,7 +386,6 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
         }
         var migratefiles = fs.readdirSync('migrations/').sort(),
             fakemigrations = false,
-            dbconfig = null,
             migrdb = null,
             migrations = [],
             i = 0,
@@ -416,72 +398,58 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
             fakemigrations = true;
         }
         if (migratefiles.length) {
-            // separate non-orm mysql connection for flexibility
-            dbconfig = config.db;
-            dbconfig.multipleStatements = true;
-            migrdb = mysql.createConnection(dbconfig);
-            migrdb.connect(function (err) {
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-            });
-            migrdb.beginTransaction(function (err) {
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-                // collect migrations
-                for (i = 0; i < migratefiles.length; i++) {
-                    if (migratefiles[i].indexOf('.sql') > -1) {
-                        migration = {
-                            number: parseInt(migratefiles[i].split('-')[0], 10),
-                            name: migratefiles[i].split('-')[1],
-                            filename: 'migrations/' + migratefiles[i],
-                            type: "sql",
-                            fakemigrations: fakemigrations
-                        };
-                    } else if (migratefiles[i].indexOf('.py') > -1) {
-                        migration = {
-                            number: parseInt(migratefiles[i].split('-')[0], 10),
-                            name: migratefiles[i].split('-')[1],
-                            filename: 'migrations/' + migratefiles[i],
-                            type: "py",
-                            fakemigrations: fakemigrations
-                        };
-                    } else {
-                        continue;
-                    }
-                    if (isNaN(migration.number)) {
-                        continue;
-                    }
-                    if (result) {
-                        done = false;
-                        for (j = 0; j < result.length; j++) {
-                            if (result[j].number === migration.number) {
-                                // done already
-                                done = true;
-                                break;
-                            }
-                        }
-                        if (done) {
-                            continue;
-                        }
-                    }
-                    if (migration.type === 'sql') {
-                        sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
-                        migration.sql = sql;
-                    }
-                    migrations.push(migration);
-                }
-                // launch migrations if found
-                if (migrations.length) {
-                    doMigration(migrations, migrdb, db);
+            // separate non-orm connection for flexibility
+            migrdb = new database.Database("thefederation.db");
+            // collect migrations
+            for (i = 0; i < migratefiles.length; i++) {
+                if (migratefiles[i].indexOf('.sql') > -1) {
+                    migration = {
+                        number: parseInt(migratefiles[i].split('-')[0], 10),
+                        name: migratefiles[i].split('-')[1],
+                        filename: 'migrations/' + migratefiles[i],
+                        type: "sql",
+                        fakemigrations: fakemigrations
+                    };
+                } else if (migratefiles[i].indexOf('.py') > -1) {
+                    migration = {
+                        number: parseInt(migratefiles[i].split('-')[0], 10),
+                        name: migratefiles[i].split('-')[1],
+                        filename: 'migrations/' + migratefiles[i],
+                        type: "py",
+                        fakemigrations: fakemigrations
+                    };
                 } else {
-                    eventEmitter.emit('migrations-done', db);
-                    migrdb.end();
+                    continue;
                 }
-            });
+                if (isNaN(migration.number)) {
+                    continue;
+                }
+                if (result) {
+                    done = false;
+                    for (j = 0; j < result.length; j++) {
+                        if (result[j].number === migration.number) {
+                            // done already
+                            done = true;
+                            break;
+                        }
+                    }
+                    if (done) {
+                        continue;
+                    }
+                }
+                if (migration.type === 'sql') {
+                    sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
+                    migration.sql = sql;
+                }
+                migrations.push(migration);
+            }
+            // launch migrations if found
+            if (migrations.length) {
+                doMigration(migrations, migrdb, db);
+            } else {
+                eventEmitter.emit('migrations-done', db);
+                migrdb.close();
+            }
         } else {
             eventEmitter.emit('migrations-done', db);
         }
