@@ -5,7 +5,7 @@ var routes = {},
 
 routes.root = function (req, res, db) {
     db.Pod.allForList(function (pods) {
-        res.render('index.jade', { data: pods });
+        res.render('index.njk', { data: pods });
     }, function (err) {
         console.log(err);
     });

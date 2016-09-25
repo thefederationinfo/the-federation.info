@@ -1,0 +1,48 @@
+<table class="footable table" id="podlist" data-filter="#filter">
+    <thead>
+        <tr>
+            <th></th>
+            <th data-class="expand">Name</th>
+            <th>Version</th>
+            <th>Open signups</th>
+            <th data-hide="phone" data-type="numeric">Active users 6 months</th>
+            <th data-sort-initial="descending" data-type="numeric">Active users 1 month</th>
+            <th data-hide="phone" data-type="numeric">Total users</th>
+            <th data-hide="phone" data-type="numeric">Posts</th>
+            <th data-hide="phone">Services</th>
+            <th data-hide="phone">Country</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pod in data.pods %}
+            {% set pod_meta = utils.get_pod_network_and_version(pod.network, pod.version) %}
+            {% if pod.name|lower == 'diaspora*' %}
+                {% set podname = pod.host %}
+            {% else %}
+                {% set podname = pod.name %}
+            {% endif %}
+            <tr>
+                {% if pod.network == "unknown" %}
+                    <td></td>
+                {% else %}
+                    <td><img title="{{ pod_meta[0] }}" src="images/{{ pod_meta[0] }}-16.png"></td>
+                {% endif %}
+                <td><a href="https://{{ pod.host }}">{{ podname }}</a></td>
+                <td>{{ pod_meta[1] }}</td>
+                <td>{{ "Yes" if pod.registrations_open else 'No' }}</td>
+                <td>{{ pod.active_users_halfyear if  pod.active_users_halfyear else "-" }}</td>
+                <td>{{ pod.active_users_monthly if  pod.active_users_monthly else "-" }}</td>
+                <td>{{ pod.total_users if  pod.total_users else "-" }}</td>
+                <td>{{ pod.local_posts if  pod.local_posts else "-" }}</td>
+                <td>{{ utils.services_string(pod) }}</td>
+                <td>
+                    {% if pod.country %}
+                        <a href="http://countrycode.org/{{ pod.country }}" target="_blanc"><img src="flags/{{ pod.country|lower }}.png"></a>
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

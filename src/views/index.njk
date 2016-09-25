@@ -1,0 +1,21 @@
+{% extends "base.njk" %}
+
+{% block content %}
+    <h1>
+        <a href="https://the-federation.info" style="color:inherit">
+            <img src="/images/the-federation.png">
+            <span style="padding-left: 30px;">
+                the federation - a statistics hub
+            </span>
+        </a>
+    </h1>
+
+    {% include "_network_stats.njk" %}
+    {% include "_node_list.njk" %}
+    {% include "_info_the_federation.njk" %}
+    {% include "_info_site.njk" %}
+
+    <p class="text-center">
+        built with &lt;3 by <a href="https://jasonrobinson.me">jason robinson</a> and <a href="https://github.com/jaywink/the-federation.info/graphs/contributors">contributors</a>
+    </p>
+{% endblock content %}

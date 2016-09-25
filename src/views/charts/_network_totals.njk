@@ -1,0 +1,77 @@
+<style>
+    .rickshaw_graph .detail .x_label { display: none }
+    .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
+    .rickshaw_graph .detail .date { color: #a0a0a0 }
+</style>
+
+<div id="activepods" class="text-center">
+    <div id="networkpodschart_container" style="display: inline-block;">
+        <h4>active pods</h4>
+        <div id="networkpodschart"></div>
+    </div>
+</div>
+
+<div id="showallnetworkcharts" class="text-center">
+    <p>
+        <a href="#">toggle all network graphs</a>
+    </p>
+</div>
+
+<div id="hiddennetworkgraphs" class="hidden text-center">
+    <div id="networkuserschart_container" style="display: inline-block;">
+        <h4>total users</h4>
+        <div id="networkuserschart"></div>
+    </div>
+
+    <div id="networkpostschart_container" style="display: inline-block;">
+        <h4>total posts</h4>
+        <div id="networkpostschart"></div>
+    </div>
+
+    <script>
+        $().ready(function () {
+            $("#showallnetworkcharts a").click(function (ev) {
+                ev.preventDefault();
+                if ($("#hiddennetworkgraphs.hidden")) {
+                    drawChart("#networkuserschart", "global_users");
+                    drawChart("#networkpostschart", "global_posts");
+                }
+                $("#hiddennetworkgraphs").toggleClass("hidden");
+            });
+            var drawChart = function(element, dataset) {
+                $(function() {
+                    var chart = new Rickshaw.Graph.Ajax({
+                        element: document.querySelector(element),
+                        dataURL: '/stats/' + dataset,
+                        width: $(window).width()-160,
+                        height: 200,
+                        renderer: 'line',
+                        onComplete: function(transport) {
+                            var graph = transport.graph;
+                            var detail = new Rickshaw.Graph.HoverDetail({
+                                graph: graph,
+                                xFormatter: function(x) {
+                                    return new Date((x+7200)*1000).toDateString();
+                                },
+                                formatter: function(series, x, y) {
+                                    var date = '<span class="date">' + new Date((x+7200) * 1000).toDateString() + '</span>';
+                                    var content = series.name + ": " + parseInt(y) + '<br>' + date;
+                                    return content;
+                                }
+                            });
+                            var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                                graph: graph,
+                                legend: legend
+                            });
+                            var xAxis = new Rickshaw.Graph.Axis.Time({
+                                graph: graph
+                            });
+                            xAxis.render();
+                        }
+                    });
+                });
+            };
+            drawChart("#networkpodschart", "global_pod_count");
+        });
+    </script>
+</div>

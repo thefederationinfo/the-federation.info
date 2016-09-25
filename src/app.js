@@ -9,13 +9,17 @@ var express = require('express'),
     routes = require('./routes'),
     utils = require('./utils'),
     network = require('./network'),
+    nunjucks = require('nunjucks'),
     app = express();
 
-app.engine('jade', require('jade').renderFile);
+var nunjucks_env = nunjucks.configure('src/views', {
+    autoescape: true,
+    express: app
+});
+nunjucks_env.addGlobal("utils", utils);
+
 app.set("env", "production");
 app.set("json spaces", 0);
-app.set("views", "./src/views");
-app.locals.utils = utils;  // expose utils to jade
 app.use(expressValidator([]));
 app.use(express.compress());
 app.use(express.static(__dirname + '/../static'));
