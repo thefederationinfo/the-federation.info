@@ -12,12 +12,6 @@ var orm = require('orm'),
     eventEmitter = new events.EventEmitter(),
     utils = require('./utils');
 
-var services = [
-    "facebook",
-    "twitter",
-    "tumblr",
-    "wordpress"
-];
 
 function setUpModels(db) {
     // set up models
@@ -72,7 +66,7 @@ function setUpModels(db) {
                                 active_users_halfyear: (isNaN(data.active_users_halfyear)) ? 0 : data.active_users_halfyear,
                                 active_users_monthly: (isNaN(data.active_users_monthly)) ? 0 : data.active_users_monthly,
                                 local_posts: (isNaN(data.local_posts)) ? 0 : data.local_posts,
-                                pod_id: podId,
+                                pod_id: podId
                             }, function (err) {
                                 if (err) {
                                     console.log("Database error when inserting stat: " + err);
@@ -129,7 +123,7 @@ function setUpModels(db) {
                         utils.logger('db', 'Pod.getCountry', 'DEBUG', this.host + ': Nothing found? ' + geo);
                     }
                 }
-            },
+            }
         }
     });
     models.Pod.allForList = function (callback) {
@@ -189,7 +183,7 @@ function setUpModels(db) {
         total_users: { type: "number" },
         active_users_halfyear: { type: "number" },
         active_users_monthly: { type: "number" },
-        local_posts: { type: "number" },
+        local_posts: { type: "number" }
     });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });
     models.GlobalStat = db.define('global_stats', {
