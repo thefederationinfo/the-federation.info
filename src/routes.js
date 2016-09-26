@@ -30,20 +30,18 @@ routes.item = function (req, res, db) {
             var json = [],
                 podids = {},
                 i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    if (stats[i].item) {
-                        if (podids[stats[i].pod_id] === undefined) {
-                            json.push({
-                                name: (stats[i].name.toLowerCase() === 'diaspora*') ? stats[i].host : stats[i].name,
-                                data: [],
-                                // following tip from http://stackoverflow.com/a/1152508/1489738
-                                color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6)
-                            });
-                            podids[stats[i].pod_id] = json.length - 1;
-                        }
-                        json[podids[stats[i].pod_id]].data.push({x: stats[i].timestamp, y: stats[i].item});
+            for (i = 0; i < stats.length; i++) {
+                if (stats[i].item) {
+                    if (podids[stats[i].pod_id] === undefined) {
+                        json.push({
+                            name: (stats[i].name.toLowerCase() === 'diaspora*') ? stats[i].host : stats[i].name,
+                            data: [ ],
+                            // following tip from http://stackoverflow.com/a/1152508/1489738
+                            color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6)
+                        });
+                        podids[stats[i].pod_id] = json.length - 1;
                     }
+                    json[podids[stats[i].pod_id]].data.push({ x: stats[i].timestamp, y: stats[i].item });
                 }
             }
             res.json(json);
@@ -86,14 +84,12 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 }
             ], i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    json[2].data.push({x: stats[i].timestamp, y: stats[i].total_users || 0});
-                    json[3].data.push({x: stats[i].timestamp, y: stats[i].local_posts || 0});
-                    json[1].data.push({x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0});
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].active_users_monthly || 0});
-                    json[4].data.push({x: stats[i].timestamp, y: stats[i].pod_count || 0});
-                }
+            for (i = 0; i < stats.length; i++) {
+                json[2].data.push({ x: stats[i].timestamp, y: stats[i].total_users || 0 });
+                json[3].data.push({ x: stats[i].timestamp, y: stats[i].local_posts || 0 });
+                json[1].data.push({ x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0 });
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].active_users_monthly || 0 });
+                json[4].data.push({ x: stats[i].timestamp, y: stats[i].pod_count || 0 });
             }
             res.json(json);
         });
@@ -107,10 +103,8 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 }
             ], i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].total_users || 0});
-                }
+            for (i = 0; i < stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].total_users || 0 });
             }
             res.json(json);
         });
@@ -124,10 +118,8 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 }
             ], i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].local_posts || 0});
-                }
+            for (i = 0; i < stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].local_posts || 0 });
             }
             res.json(json);
         });
@@ -141,10 +133,8 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 }
             ], i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].active_users_monthly || 0});
-                }
+            for (i = 0; i < stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].active_users_monthly || 0 });
             }
             res.json(json);
         });
@@ -158,10 +148,8 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 }
             ], i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0});
-                }
+            for (i = 0; i < stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0 });
             }
             res.json(json);
         });
@@ -175,10 +163,8 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 }
             ], i = 0;
-            if (stats) {
-                for (i = 0; i < stats.length; i++) {
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].pod_count || 0});
-                }
+            for (i = 0; i < stats.length; i++) {
+                json[0].data.push({ x: stats[i].timestamp, y: stats[i].pod_count || 0 });
             }
             res.json(json);
         });

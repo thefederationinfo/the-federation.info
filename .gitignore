@@ -15,7 +15,6 @@ npm-debug.log
 node_modules
 
 config.js
-thefederation.db
 
 *.pyc
 .idea/

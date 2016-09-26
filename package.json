@@ -4,9 +4,8 @@
   "repository": {
     "url": "https://github.com/jaywink/the-federation.info"
   },
-  "license": "AGPLv3",
   "dependencies": {
-    "sqlite3": "3.1.3",
+    "mysql": "2.0.0-rc1",
     "express": "3.2.4",
     "express-validator": "1.0.0",
     "orm": "2.1.3",
