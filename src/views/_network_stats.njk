@@ -1,0 +1,33 @@
+<h2>network statistics</h2>
+<p>
+    Total counts from monitored pods from the last check.
+</p>
+
+<table class="footable" id="globalstats" data-filter="#filter">
+    <thead>
+        <tr>
+            <th>Active users 6 months</th>
+            <th>Active users 1 month</th>
+            <th>Active pods</th>
+            <th>Total users</th>
+            <th>Total posts</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th class="text-center">{{ data.totals.active_users_halfyear }}</th>
+            <th class="text-center">{{ data.totals.active_users_monthly }}</th>
+            <th class="text-center">{{ data.totals.pod_count }}</th>
+            <th class="text-center">{{ data.totals.total_users }}</th>
+            <th class="text-center">{{ data.totals.local_posts }}</th>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    <em><small>
+            Disclaimer: These counts will not reflect the whole network due to the opt-in nature of the statistics.
+    </small></em>
+</p>
+
+{% include "_network_history.njk" %}
