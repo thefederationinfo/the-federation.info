@@ -25,7 +25,7 @@ routes.pods = function (req, res, db) {
 };
 
 routes.item = function (req, res, db) {
-    if (['total_users', 'active_users_halfyear', 'active_users_monthly', 'local_posts'].indexOf(req.params.item) > -1) {
+    if (['total_users', 'active_users_halfyear', 'active_users_monthly', 'local_posts', 'local_comments'].indexOf(req.params.item) > -1) {
         db.Pod.allPodStats(req.params.item, function (stats) {
             var json = [],
                 podids = {},
@@ -80,6 +80,12 @@ routes.item = function (req, res, db) {
                     renderer: 'line'
                 },
                 {
+                    name: "Total comments",
+                    data: [],
+                    color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6),
+                    renderer: 'line'
+                },
+                {
                     name: "Active pods",
                     data: [],
                     color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6),
@@ -88,11 +94,12 @@ routes.item = function (req, res, db) {
             ], i = 0;
             if (stats) {
                 for (i = 0; i < stats.length; i++) {
+                    json[0].data.push({x: stats[i].timestamp, y: stats[i].active_users_monthly || 0});
+                    json[1].data.push({x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0});
                     json[2].data.push({x: stats[i].timestamp, y: stats[i].total_users || 0});
                     json[3].data.push({x: stats[i].timestamp, y: stats[i].local_posts || 0});
-                    json[1].data.push({x: stats[i].timestamp, y: stats[i].active_users_halfyear || 0});
-                    json[0].data.push({x: stats[i].timestamp, y: stats[i].active_users_monthly || 0});
-                    json[4].data.push({x: stats[i].timestamp, y: stats[i].pod_count || 0});
+                    json[4].data.push({x: stats[i].timestamp, y: stats[i].local_comments || 0});
+                    json[5].data.push({x: stats[i].timestamp, y: stats[i].pod_count || 0});
                 }
             }
             res.json(json);
@@ -127,6 +134,23 @@ routes.item = function (req, res, db) {
             if (stats) {
                 for (i = 0; i < stats.length; i++) {
                     json[0].data.push({x: stats[i].timestamp, y: stats[i].local_posts || 0});
+                }
+            }
+            res.json(json);
+        });
+    } else if (req.params.item === 'global_comments') {
+        db.GlobalStat.getStats(function (stats) {
+            var json = [
+                {
+                    name: "Total comments",
+                    data: [],
+                    color: '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6),
+                    renderer: 'line'
+                }
+            ], i = 0;
+            if (stats) {
+                for (i = 0; i < stats.length; i++) {
+                    json[0].data.push({x: stats[i].timestamp, y: stats[i].local_comments || 0});
                 }
             }
             res.json(json);
