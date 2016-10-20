@@ -31,17 +31,15 @@
 
     <script src="//blockchain.info/Resources/wallet/pay-now-button.js"></script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-
-    <style>
-        table.floatThead-table {
-            border-top: none;
-            border-bottom: none;
-        }
-    </style>
 </head>
-<body style="background-color: rgb(238, 238, 238);">
-    <div style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;">
-        {% block content %}{% endblock content %}
-    </div>
+<body>
+    {% block content %}{% endblock content %}
+    <footer>
+        <p>
+            Hosted with <3 by <a href="https://iliketoast.net/u/jaywink">Jason Robinson</a> -
+            More about this project -
+            Code <a href="https://github.com/jaywink/diaspora-hub">on github</a>
+        </p>
+    </footer>
 </body>
 </html>
