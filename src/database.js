@@ -464,7 +464,8 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
                     }
                     if (migration.type === 'sql') {
                         sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
-                        migration.sql = sql;
+                        // Ensure migration runs in correct database
+                        migration.sql = "USE " + config.db.database + "; " + sql;
                     }
                     migrations.push(migration);
                 }
