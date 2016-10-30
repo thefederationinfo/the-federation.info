@@ -206,50 +206,56 @@ function setUpModels(db) {
     models.GlobalStat.logStats = function () {
         var d = new Date(),
             curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-        models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").sum("local_comments").count().get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments, count) {
+        models.GlobalStat.exists({ date: curDate }, function (err, exists) {
             if (err) {
                 console.log(err);
-            }
-            d = new Date();
-            d.setDate(d.getDate() - 1);
-            var data = {
-                date: new Date(),
-                total_users: total_users,
-                active_users_monthly: active_users_monthly,
-                active_users_halfyear: active_users_halfyear,
-                local_posts: local_posts,
-                local_comments: local_comments,
-                pod_count: count
-            }, prevDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-            models.Stat.exists({ date: prevDate }, function (err, exists) {
-                if (err) {
-                    console.log(err);
-                }
-                if (exists) {
-                    models.Stat.aggregate({ date: prevDate }).sum("total_users").sum("local_posts").sum("local_comments").get(function (err, total_users, local_posts, local_comments) {
+            } else if (! exists) {
+                models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").sum("local_comments").count().get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments, count) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    d = new Date();
+                    d.setDate(d.getDate() - 1);
+                    var data = {
+                        date: new Date(),
+                        total_users: total_users,
+                        active_users_monthly: active_users_monthly,
+                        active_users_halfyear: active_users_halfyear,
+                        local_posts: local_posts,
+                        local_comments: local_comments,
+                        pod_count: count
+                    }, prevDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                    models.Stat.exists({ date: prevDate }, function (err, exists) {
                         if (err) {
                             console.log(err);
                         }
-                        data.new_users = data.total_users - total_users;
-                        data.new_posts = data.local_posts - local_posts;
-                        data.new_comments = data.local_comments - local_comments;
-                        models.GlobalStat.create(data, function (err) {
-                            if (err) {
-                                console.log("Database error when global stat: " + err);
-                            }
-                        });
-                    });
-                } else {
-                    data.new_users = 0;
-                    data.new_posts = 0;
-                    data.new_comments = 0;
-                    models.GlobalStat.create(data, function (err) {
-                        if (err) {
-                            console.log("Database error when global stat: " + err);
+                        if (exists) {
+                            models.Stat.aggregate({ date: prevDate }).sum("total_users").sum("local_posts").sum("local_comments").get(function (err, total_users, local_posts, local_comments) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                data.new_users = data.total_users - total_users;
+                                data.new_posts = data.local_posts - local_posts;
+                                data.new_comments = data.local_comments - local_comments;
+                                models.GlobalStat.create(data, function (err) {
+                                    if (err) {
+                                        console.log("Database error when global stat: " + err);
+                                    }
+                                });
+                            });
+                        } else {
+                            data.new_users = 0;
+                            data.new_posts = 0;
+                            data.new_comments = 0;
+                            models.GlobalStat.create(data, function (err) {
+                                if (err) {
+                                    console.log("Database error when global stat: " + err);
+                                }
+                            });
                         }
                     });
-                }
-            });
+                });
+            }
         });
     };
     models.GlobalStat.getStats = function (callback) {
@@ -380,6 +386,15 @@ function doMigration(migrations, migrdb, db) {
     }
 }
 
+
+function logGlobalStats() {
+    /* Helper method to log global stats */
+    utils.logger("database", "logGlobalStats", "INFO", "Updating global stats..");
+    models.GlobalStat.logStats();
+    utils.logger("database", "logGlobalStats", "INFO", "..done");
+}
+
+
 orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + config.db.host + "/" + config.db.database + '?pool=true', function (err, db) {
     if (err) {
         console.log("Something is wrong with the db connection", err);
@@ -400,6 +415,8 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
     });
     // listen to migrations done and launch models setup when we get that
     eventEmitter.on('migrations-done', setUpModels);
+    // Trigger global stats update on migrations done
+    eventEmitter.on('migrations-done', logGlobalStats);
     // get migrations
     models.Migration.find({}, function (error, result) {
         if (error) {
