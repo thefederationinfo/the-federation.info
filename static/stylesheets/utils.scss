@@ -1,0 +1,98 @@
+$breakview: 642px;
+$btn-bg: #ddd;
+$btn-text: black;
+$primary: #83886C;
+$primary-text: black;
+$secondary: #43372E;
+$secondary-text: white;
+
+.center {
+	text-align: center;
+}
+
+.btn {
+	display: inline-block;
+	padding: 12px 25px;
+	background-color: $btn-bg;
+	border: solid darken($btn-bg, 10%) 1px;
+	color: $btn-text;
+	text-decoration: none;
+	font-size: 1.2rem;
+	border-radius: 5px;
+	white-space: nowrap;
+	cursor: pointer;
+
+	&:hover {
+		background-color: lighten($btn-bg, 5%);
+	}
+}
+
+.btn-big {
+	@extend .btn;
+
+	text-transform: uppercase;
+	font-size: 1.4rem;
+}
+
+@mixin btn-color($bg-color, $text-color) {
+  background-color: $bg-color;
+  border-color: darken($bg-color, 10%);
+
+  &:hover {
+    background-color: lighten($bg-color, 5%);
+  }
+
+  &,
+  &:hover,
+  &:visited {
+    color: $text-color;
+  }
+}
+
+.btn-primary {
+  @include btn-color($primary, $primary-text);
+}
+
+.btn-secondary {
+  @include btn-color($secondary, $secondary-text);
+}
+
+.valign-wrapper {
+	@include flexbox;
+  @include flex-direction(column);
+  @include justify-content(center);
+}
+
+.flex {
+  @include flexbox;
+  @include flex-direction(row);
+
+  > .col2 {
+    width: 48%;
+    padding: 1%;
+  }
+
+  > .col3 {
+    width: 30%;
+    padding: 1.66%;
+  }
+
+  > .col4 {
+    width: 21%;
+    padding: 2%;
+  }
+}
+
+@media screen and (max-width: $breakview) {
+
+  .flex {
+    @include flex-direction(column);
+
+    > .col2,
+    > .col3,
+    > .col4 {
+      width: 98%;
+      padding: 1%;
+    }
+  }
+}
