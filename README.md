@@ -33,23 +33,13 @@ Install then the Node packages
 
 Python 3 should hopefully be shipped in your system, if not, [install it](https://www.python.org/downloads/).
 
-You should create a virtualenv. I use `virtualenvwrapper` simply because it is awesome. We also update `pip` since that always makes sense. Do these globally.
+Create [a virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) using the Python 3 executable and activate it.
 
-    sudo pip install -U virtualenvwrapper pip
-    
-Create the virtualenv
-
-    mkvirtualenv thefederation -p /usr/bin/python3
-    
-It will automatically activate. In the future to activate it, just type:
-
-    workon thefederation
-    
 The Python dependencies need some system packages. For Ubuntu, this will work, for other systems, find the relevant packages and install.
 
     sudo apt-get install python3-dev libmysqlclient-dev
-    
-Install dependencies
+
+Install dependencies in your activated virtualenv:
 
     pip install -r python-requirements.txt
 
@@ -58,8 +48,8 @@ Install dependencies
 Make sure correct Python virtualenv is active. Then in the application abse directory;
 
     node src/app.js
-    
-The app will be running at [http://127.0.0.1:4730](http://127.0.0.1:4730). 
+
+The app will be running at [http://127.0.0.1:4730](http://127.0.0.1:4730).
 
 ## We need data
 
