@@ -11,6 +11,27 @@ routes.root = function (req, res, db) {
     });
 };
 
+routes.globalStatsPage = function (req, res, db) {
+    res.render('global_stats.njk');
+}
+
+routes.diaspora = function (req, res, db) {
+    res.render('diaspora.njk');
+}
+
+routes.friendica = function (req, res, db) {
+    res.render('friendica.njk');
+}
+
+routes.redmatrix = function (req, res, db) {
+    res.render('redmatrix.njk');
+}
+
+routes.hubzilla = function (req, res, db) {
+    res.render('hubzilla.njk');
+}
+
+/* API routes */
 routes.pods = function (req, res, db) {
     db.Pod.allForList(
         function (pods) {

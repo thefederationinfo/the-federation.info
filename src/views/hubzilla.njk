@@ -1,0 +1,59 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<main>
+  <header class="main-header">
+    <div class="main-title">
+      <h1>Hubzilla</h1>
+      <h2>subtitle</h2>
+    </div>
+    <div class="flex">
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{data.nodes}} <strong>Nodes</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{data.users}} <strong>Users</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{data.posts}} <strong>Posts</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{data.comments}} <strong>Comments</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+  <section class="tile">
+    <header>
+      <h2>What is hubzilla?</h2>
+    </header>
+    <div>
+      <div class="flex">
+        <div class="col2">
+          <p>Presentation text</p>
+          <div class="center">
+            <a href="#" class="btn btn-primary">Visit network evolution</a>
+          </div>
+        </div>
+        <div class="col2">
+          <ul>
+            <li>Nodes: <strong>X</strong></li>
+            <li>Users: <strong>X</strong></li>
+            <li>Last 6 months users: <strong>X</strong></li>
+            <li>Last month users: <strong>X</strong></li>
+            <li>Posts: <strong>X</strong></li>
+            <li>Comments: <strong>X</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock content %}

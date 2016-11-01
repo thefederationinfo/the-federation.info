@@ -15,12 +15,12 @@
             </div>
             <div class="col4">
                 <div class="tile valign-wrapper">
-                337 <strong>Nodes</strong>
+                {{ data.totals.pod_count }} <strong>Nodes</strong>
                 </div>
             </div>
             <div class="col4">
                 <div class="tile valign-wrapper">
-                626 112 <strong>Users</strong>
+                {{ data.totals.total_users }} <strong>Users</strong>
                 </div>
             </div>
             <div class="col4">
@@ -44,7 +44,7 @@
                         This website lists all the registered servers among the world to draw statistics. You know, we love numbers and numbers love us.
                     </p>
                     <div class="center">
-                        <a href="#" class="btn btn-primary">Visit network evolution</a>
+                        <a href="/global-stats.html" class="btn btn-primary">Visit network evolution</a>
                     </div>
                 </div>
                 <div class="col2">
@@ -70,10 +70,10 @@
                 <thead>
                     <tr>
                         <th>Project</th>
-                        <th>diaspora*</th>
-                        <th>Friendica</th>
-                        <th>Redmatrix</th>
-                        <th>Hubzilla</th>
+                        <th><a href="/diaspora.html">diaspora*</a></th>
+                        <th><a href="/friendica.html">Friendica</a></th>
+                        <th><a href="/redmatrix.html">Redmatrix</a></th>
+                        <th><a href="/hubzilla.html">Hubzilla</a></th>
                     </tr>
                 </thead>
                 <tbody>

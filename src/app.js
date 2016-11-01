@@ -28,6 +28,27 @@ app.get('/', function (req, res) {
     routes.root(req, res, db);
 });
 
+app.get('/global-stats.html', function (req, res) {
+    routes.globalStatsPage(req, res, db);
+});
+
+app.get('/diaspora.html', function (req, res) {
+    routes.diaspora(req, res, db);
+});
+
+app.get('/friendica.html', function (req, res) {
+    routes.friendica(req, res, db);
+});
+
+app.get('/redmatrix.html', function (req, res) {
+    routes.redmatrix(req, res, db);
+});
+
+app.get('/hubzilla.html', function (req, res) {
+    routes.hubzilla(req, res, db);
+});
+
+/* API routes */
 app.get('/pods.json', function (req, res) {
     routes.pods(req, res, db);
 });
