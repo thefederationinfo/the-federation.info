@@ -28,6 +28,11 @@
         <div id="networkpostschart"></div>
     </div>
 
+    <div id="networkcommentschart_container" style="display: inline-block;">
+        <h4>total comments</h4>
+        <div id="networkcommentschart"></div>
+    </div>
+
     <script>
         $().ready(function () {
             $("#showallnetworkcharts a").click(function (ev) {
@@ -35,6 +40,7 @@
                 if ($("#hiddennetworkgraphs.hidden")) {
                     drawChart("#networkuserschart", "global_users");
                     drawChart("#networkpostschart", "global_posts");
+                    drawChart("#networkcommentschart", "global_comments");
                 }
                 $("#hiddennetworkgraphs").toggleClass("hidden");
             });
