@@ -35,7 +35,7 @@ Python 3 should hopefully be shipped in your system, if not, [install it](https:
 
 You should create a virtualenv. I use `virtualenvwrapper` simply because it is awesome. We also update `pip` since that always makes sense. Do these globally.
 
-    sudo pip install -U virtualenvwrapper pip
+    sudo -H pip install -U virtualenvwrapper pip
     
 Create the virtualenv
 
