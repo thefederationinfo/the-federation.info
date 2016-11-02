@@ -49,12 +49,12 @@
                 </div>
                 <div class="col2">
                     <ul>
-                        <li>Nodes: <strong>337</strong></li>
-                        <li>Users: <strong>626 112</strong></li>
-                        <li>Last 6 months users: <strong>78 644</strong></li>
-                        <li>Last month users: <strong>24 696</strong></li>
-                        <li>Posts: <strong>4 240 924</strong></li>
-                        <li>Comments: <strong>X</strong></li>
+                        <li>Nodes: <strong>{{ data.totals.pod_count }}</strong></li>
+                        <li>Users: <strong>{{ data.totals.total_users }}</strong></li>
+                        <li>Last 6 months active users: <strong>{{ data.totals.active_users_halfyear }}</strong></li>
+                        <li>Last month active users: <strong>{{ data.totals.active_users_monthly }}</strong></li>
+                        <li>Posts: <strong>{{ data.totals.local_posts }}</strong></li>
+                        <li>Comments: <strong>{{ data.totals.local_comments }}</strong></li>
                     </ul>
                 </div>
             </div>
