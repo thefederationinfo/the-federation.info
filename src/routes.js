@@ -4,8 +4,8 @@ var routes = {},
     util = require('util');
 
 routes.root = function (req, res, db) {
-    db.Pod.allForList(function (pods) {
-        res.render('index.njk', { data: pods });
+    db.Pod.homeStats(function (home_stats) {
+        res.render('index.njk', { data: home_stats});
     }, function (err) {
         console.log(err);
     });
