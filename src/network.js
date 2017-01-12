@@ -54,7 +54,8 @@ function getPodStatsFromStatisticsJSON(data) {
         total_users: data.total_users,
         active_users_halfyear: data.active_users_halfyear,
         active_users_monthly: data.active_users_monthly,
-        local_posts: data.local_posts
+        local_posts: data.local_posts,
+        local_comments: data.local_comments
     }
 }
 
@@ -63,7 +64,8 @@ function getPodStatsFromNodeInfo(data) {
         total_users: data.usage.users.total,
         active_users_halfyear: data.usage.users.activeHalfyear,
         active_users_monthly: data.usage.users.activeMonth,
-        local_posts: data.usage.localPosts
+        local_posts: data.usage.localPosts,
+        local_comments: data.usage.localComments
     }
 }
 

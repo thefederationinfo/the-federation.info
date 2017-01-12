@@ -59,13 +59,14 @@ function setUpModels(db) {
                         console.log("Database error when finding stat: " + err);
                     }
                     if (!stats.length) {
-                        if (!isNaN(data.total_users) || !isNaN(data.active_users_halfyear) || !isNaN(data.active_users_monthly) || isNaN(data.local_posts)) {
+                        if (!isNaN(data.total_users) || !isNaN(data.active_users_halfyear) || !isNaN(data.active_users_monthly) || isNaN(data.local_posts) || isNaN(data.local_comments)) {
                             models.Stat.create({
                                 date: new Date(),
                                 total_users: (isNaN(data.total_users)) ? 0 : data.total_users,
                                 active_users_halfyear: (isNaN(data.active_users_halfyear)) ? 0 : data.active_users_halfyear,
                                 active_users_monthly: (isNaN(data.active_users_monthly)) ? 0 : data.active_users_monthly,
                                 local_posts: (isNaN(data.local_posts)) ? 0 : data.local_posts,
+                                local_comments: (isNaN(data.local_comments)) ? 0 : data.local_comments,
                                 pod_id: podId
                             }, function (err) {
                                 if (err) {
@@ -98,6 +99,7 @@ function setUpModels(db) {
                                 active_users_halfyear: stats[0].active_users_halfyear,
                                 active_users_monthly: stats[0].active_users_monthly,
                                 local_posts: stats[0].local_posts,
+                                local_comments: stats[0].local_comments,
                                 pod_id: stats[0].pod_id
                             }, function (err) {
                                 if (err) {
@@ -133,7 +135,8 @@ function setUpModels(db) {
                 (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
                 (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
                 (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
-                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts FROM pods p\
+                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts,\
+                (select local_comments from stats where pod_id = p.id order by id desc limit 1) as local_comments FROM pods p\
                     where failures < 3",
             [],
             function (err, data) {
@@ -142,7 +145,7 @@ function setUpModels(db) {
                 }
                 var result = { pods: data };
                 db.driver.execQuery(
-                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts, pod_count \
+                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments, pod_count \
                         from global_stats order by id desc limit 1",
                     [],
                     function (err, totals) {
@@ -157,6 +160,7 @@ function setUpModels(db) {
                                 active_users_monthly: 0,
                                 active_users_halfyear: 0,
                                 local_posts: 0,
+                                local_comments: 0,
                                 pod_count: 0
                             };
                         }
@@ -183,7 +187,8 @@ function setUpModels(db) {
         total_users: { type: "number" },
         active_users_halfyear: { type: "number" },
         active_users_monthly: { type: "number" },
-        local_posts: { type: "number" }
+        local_posts: { type: "number" },
+        local_comments: { type: "number" }
     });
     models.Stat.hasOne('pod', models.Pod, { reverse: 'stats' });
     models.GlobalStat = db.define('global_stats', {
@@ -192,59 +197,70 @@ function setUpModels(db) {
         active_users_halfyear: { type: "number" },
         active_users_monthly: { type: "number" },
         local_posts: { type: "number" },
+        local_comments: { type: "number" },
         new_users: { type: "number" },
         new_posts: { type: "number" },
+        new_comments: { type: "number" },
         pod_count: { type: "number" }
     });
     models.GlobalStat.logStats = function () {
         var d = new Date(),
             curDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-        models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").count().get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts, count) {
+        models.GlobalStat.exists({ date: curDate }, function (err, exists) {
             if (err) {
                 console.log(err);
-            }
-            d = new Date();
-            d.setDate(d.getDate() - 1);
-            var data = {
-                date: new Date(),
-                total_users: total_users,
-                active_users_monthly: active_users_monthly,
-                active_users_halfyear: active_users_halfyear,
-                local_posts: local_posts,
-                pod_count: count
-            }, prevDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-            models.Stat.exists({ date: prevDate }, function (err, exists) {
-                if (err) {
-                    console.log(err);
-                }
-                if (exists) {
-                    models.Stat.aggregate({ date: prevDate }).sum("total_users").sum("local_posts").get(function (err, total_users, local_posts) {
+            } else if (! exists) {
+                models.Stat.aggregate({ date: curDate }).sum("total_users").sum("active_users_halfyear").sum("active_users_monthly").sum("local_posts").sum("local_comments").count().get(function (err, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments, count) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    d = new Date();
+                    d.setDate(d.getDate() - 1);
+                    var data = {
+                        date: new Date(),
+                        total_users: total_users,
+                        active_users_monthly: active_users_monthly,
+                        active_users_halfyear: active_users_halfyear,
+                        local_posts: local_posts,
+                        local_comments: local_comments,
+                        pod_count: count
+                    }, prevDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                    models.Stat.exists({ date: prevDate }, function (err, exists) {
                         if (err) {
                             console.log(err);
                         }
-                        data.new_users = data.total_users - total_users;
-                        data.new_posts = data.local_posts - local_posts;
-                        models.GlobalStat.create(data, function (err) {
-                            if (err) {
-                                console.log("Database error when global stat: " + err);
-                            }
-                        });
-                    });
-                } else {
-                    data.new_users = 0;
-                    data.new_posts = 0;
-                    models.GlobalStat.create(data, function (err) {
-                        if (err) {
-                            console.log("Database error when global stat: " + err);
+                        if (exists) {
+                            models.Stat.aggregate({ date: prevDate }).sum("total_users").sum("local_posts").sum("local_comments").get(function (err, total_users, local_posts, local_comments) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                data.new_users = data.total_users - total_users;
+                                data.new_posts = data.local_posts - local_posts;
+                                data.new_comments = data.local_comments - local_comments;
+                                models.GlobalStat.create(data, function (err) {
+                                    if (err) {
+                                        console.log("Database error when global stat: " + err);
+                                    }
+                                });
+                            });
+                        } else {
+                            data.new_users = 0;
+                            data.new_posts = 0;
+                            data.new_comments = 0;
+                            models.GlobalStat.create(data, function (err) {
+                                if (err) {
+                                    console.log("Database error when global stat: " + err);
+                                }
+                            });
                         }
                     });
-                }
-            });
+                });
+            }
         });
     };
     models.GlobalStat.getStats = function (callback) {
         db.driver.execQuery(
-            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
+            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, local_comments, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
             [],
             function (err, data) {
                 if (err) {
@@ -370,6 +386,15 @@ function doMigration(migrations, migrdb, db) {
     }
 }
 
+
+function logGlobalStats() {
+    /* Helper method to log global stats */
+    utils.logger("database", "logGlobalStats", "INFO", "Updating global stats..");
+    models.GlobalStat.logStats();
+    utils.logger("database", "logGlobalStats", "INFO", "..done");
+}
+
+
 orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + config.db.host + "/" + config.db.database + '?pool=true', function (err, db) {
     if (err) {
         console.log("Something is wrong with the db connection", err);
@@ -390,6 +415,8 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
     });
     // listen to migrations done and launch models setup when we get that
     eventEmitter.on('migrations-done', setUpModels);
+    // Trigger global stats update on migrations done
+    eventEmitter.on('migrations-done', logGlobalStats);
     // get migrations
     models.Migration.find({}, function (error, result) {
         if (error) {
@@ -464,7 +491,8 @@ orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + confi
                     }
                     if (migration.type === 'sql') {
                         sql = fs.readFileSync(migration.filename, { encoding: 'utf8' });
-                        migration.sql = sql;
+                        // Ensure migration runs in correct database
+                        migration.sql = "USE " + config.db.database + "; " + sql;
                     }
                     migrations.push(migration);
                 }
