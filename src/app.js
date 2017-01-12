@@ -32,6 +32,10 @@ app.get('/global-stats.html', function (req, res) {
     routes.globalStatsPage(req, res, db);
 });
 
+app.get('/info.html', function (req, res) {
+    routes.info(req, res, db);
+});
+
 app.get('/diaspora.html', function (req, res) {
     routes.diaspora(req, res, db);
 });

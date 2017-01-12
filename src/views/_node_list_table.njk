@@ -48,3 +48,14 @@
         {% endfor %}
     </tbody>
 </table>
+
+<script src="/vendor/js/jquery.floatThead.min.js"></script>
+<script src="/vendor/js/footable.min.js"></script>
+<script src="/vendor/js/footable.sort.js"></script>
+<link rel="stylesheet" href="/vendor/css/footable.core.min.css">
+<link rel="stylesheet" href="/vendor/css/footable.standalone.min.css">
+<script>
+    $(function() {
+        $('.footable').footable().floatThead();
+    });
+</script>

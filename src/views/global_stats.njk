@@ -2,6 +2,11 @@
 
 {% block content %}
 <main>
-    Here will came content about the whole network
+  <script src="/vendor/js/jquery-1.9.1.min.js"></script>
+  <script src="/vendor/js/rickshaw.min.js"></script>
+  <script src="/vendor/js/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
+  {% include "_network_stats.njk" %}
+  {% include "_node_list.njk" %}
 </main>
 {% endblock content %}

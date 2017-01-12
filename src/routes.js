@@ -5,7 +5,6 @@ var routes = {},
 
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
-      console.log(home_stats[0]);
         res.render('index.njk', { data: home_stats[0]});
     }, function (err) {
         console.log(err);
@@ -13,7 +12,19 @@ routes.root = function (req, res, db) {
 };
 
 routes.globalStatsPage = function (req, res, db) {
-    res.render('global_stats.njk');
+    db.Pod.homeStats(function (home_stats) {
+      db.Pod.allForList(function (pods) {
+        res.render('global_stats.njk', {data: pods, global: home_stats[0]});
+      }, function (err) {
+          console.log(err);
+      });
+  }, function (err) {
+      console.log(err);
+  });
+}
+
+routes.info = function (req, res, db) {
+    res.render('_info_site.njk');
 }
 
 routes.diaspora = function (req, res, db) {
