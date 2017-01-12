@@ -5,7 +5,8 @@ var routes = {},
 
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
-        res.render('index.njk', { data: home_stats});
+      console.log(home_stats[0]);
+        res.render('index.njk', { data: home_stats[0]});
     }, function (err) {
         console.log(err);
     });
