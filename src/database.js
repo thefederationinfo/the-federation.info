@@ -131,11 +131,11 @@ function setUpModels(db) {
     models.Pod.homeStats = function (callback) {
         db.driver.execQuery(
           "SELECT \
-            (SELECT COUNT(*) FROM pods) AS total_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE network = 'diaspora') AS total_diaspora_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE network = 'friendica') AS total_friendica_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE network = 'redmatrix') AS total_redmatrix_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE network = 'hubzilla') AS total_hubzilla_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3) AS total_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'diaspora') AS total_diaspora_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'friendica') AS total_friendica_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'redmatrix') AS total_redmatrix_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'hubzilla') AS total_hubzilla_nodes,\
             (SELECT SUM(total_users) FROM stats WHERE date = CURDATE()) AS total_users,\
             (SELECT SUM(active_users_halfyear) FROM stats WHERE date = CURDATE()) AS active_users_halfyear,\
             (SELECT SUM(active_users_monthly) FROM stats WHERE date = CURDATE()) AS active_users_monthly,\
