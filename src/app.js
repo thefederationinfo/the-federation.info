@@ -28,27 +28,27 @@ app.get('/', function (req, res) {
     routes.root(req, res, db);
 });
 
-app.get('/global-stats.html', function (req, res) {
+app.get('/global-stats', function (req, res) {
     routes.globalStatsPage(req, res, db);
 });
 
-app.get('/info.html', function (req, res) {
+app.get('/info', function (req, res) {
     routes.info(req, res, db);
 });
 
-app.get('/diaspora.html', function (req, res) {
+app.get('/diaspora', function (req, res) {
     routes.diaspora(req, res, db);
 });
 
-app.get('/friendica.html', function (req, res) {
+app.get('/friendica', function (req, res) {
     routes.friendica(req, res, db);
 });
 
-app.get('/redmatrix.html', function (req, res) {
+app.get('/redmatrix', function (req, res) {
     routes.redmatrix(req, res, db);
 });
 
-app.get('/hubzilla.html', function (req, res) {
+app.get('/hubzilla', function (req, res) {
     routes.hubzilla(req, res, db);
 });
 
