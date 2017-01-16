@@ -168,6 +168,9 @@ table {
   margin: 2rem; }
   .main-header .main-title h1 {
     font-size: 4rem; }
+    .main-header .main-title h1 a {
+      color: black;
+      text-decoration: none; }
   .main-header .main-title h2 {
     font-size: 1.7rem; }
 .main-header .tile {
