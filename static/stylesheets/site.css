@@ -15,7 +15,7 @@
 .center {
   text-align: center; }
 
-.btn, .btn-big {
+.btn, .btn-medium, .btn-big {
   display: inline-block;
   padding: 12px 25px;
   background-color: #ddd;
@@ -26,8 +26,12 @@
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer; }
-  .btn:hover, .btn-big:hover {
+  .btn:hover, .btn-medium:hover, .btn-big:hover {
     background-color: #eaeaea; }
+
+.btn-medium {
+  padding: 6px 12px;
+  font-size: 1rem; }
 
 .btn-big {
   text-transform: uppercase;

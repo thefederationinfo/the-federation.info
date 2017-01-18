@@ -27,6 +27,13 @@ $secondary-text: white;
 	}
 }
 
+.btn-medium {
+	@extend .btn;
+
+	padding: 6px 12px;
+	font-size: 1rem;
+}
+
 .btn-big {
 	@extend .btn;
 

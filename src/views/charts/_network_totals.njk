@@ -49,7 +49,6 @@
                     var chart = new Rickshaw.Graph.Ajax({
                         element: document.querySelector(element),
                         dataURL: '/stats/' + dataset,
-                        width: $(window).width()-160,
                         height: 200,
                         renderer: 'line',
                         onComplete: function(transport) {

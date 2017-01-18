@@ -1,5 +1,5 @@
 <div class="text-center">
-    <div id="activemonthly_container" style="display: inline-block;">
+    <div id="activemonthly_container">
         <h4>active users last 30 days</h4>
         <div id="activemonthlychart"></div>
         <script>
@@ -7,7 +7,6 @@
                 var activemonthlychart = new Rickshaw.Graph.Ajax({
                     element: document.querySelector('#activemonthlychart'),
                     dataURL: '/stats/global_active_month',
-                    width: $(window).width()-160,
                     renderer: 'line',
                     height: 200,
                     onComplete: function(transport) {
@@ -39,7 +38,7 @@
 </div>
 
 <div class="text-center">
-    <div id="activehalfyear_container" style="display: inline-block;">
+    <div id="activehalfyear_container">
         <h4>active users last six months</h4>
         <div id="activehalfyearchart"></div>
         <script>
@@ -47,7 +46,6 @@
                 var activehalfyearchart = new Rickshaw.Graph.Ajax({
                     element: document.querySelector('#activehalfyearchart'),
                     dataURL: '/stats/global_active_halfyear',
-                    width: $(window).width()-160,
                     renderer: 'line',
                     height: 200,
                     onComplete: function(transport) {
