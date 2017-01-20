@@ -27,20 +27,12 @@ routes.info = function (req, res, db) {
     res.render('_info_site.njk');
 }
 
-routes.diaspora = function (req, res, db) {
-    res.render('diaspora.njk');
-}
-
-routes.friendica = function (req, res, db) {
-    res.render('friendica.njk');
-}
-
-routes.redmatrix = function (req, res, db) {
-    res.render('redmatrix.njk');
-}
-
-routes.hubzilla = function (req, res, db) {
-    res.render('hubzilla.njk');
+routes.renderNetwork = function (network, res, db) {
+  db.Pod.projectStats(network, function (projectStats) {
+    res.render(network + '.njk', {data: projectStats[0]});
+  }, function (err) {
+      console.log(err);
+  });
 }
 
 /* API routes */

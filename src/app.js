@@ -37,19 +37,19 @@ app.get('/info', function (req, res) {
 });
 
 app.get('/diaspora', function (req, res) {
-    routes.diaspora(req, res, db);
+    routes.renderNetwork('diaspora', res, db);
 });
 
 app.get('/friendica', function (req, res) {
-    routes.friendica(req, res, db);
+    routes.renderNetwork('friendica', res, db);
 });
 
 app.get('/redmatrix', function (req, res) {
-    routes.redmatrix(req, res, db);
+    routes.renderNetwork('redmatrix', res, db);
 });
 
 app.get('/hubzilla', function (req, res) {
-    routes.hubzilla(req, res, db);
+    routes.renderNetwork('hubzilla', res, db);
 });
 
 /* API routes */

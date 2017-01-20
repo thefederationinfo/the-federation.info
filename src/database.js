@@ -151,9 +151,25 @@ function setUpModels(db) {
                   console.log(err);
               }
               callback(data);
-          }
-          );
-    }
+          });
+    };
+    models.Pod.projectStats = function (projectName, callback) {
+      db.driver.execQuery(
+        "SELECT \
+          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = '" + projectName +"') AS nodes,\
+          (SELECT SUM(total_users) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS users,\
+          (SELECT SUM(active_users_halfyear) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS active_users_halfyear,\
+          (SELECT SUM(active_users_monthly) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS active_users_monthly,\
+          (SELECT SUM(local_posts) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS local_posts,\
+          (SELECT SUM(local_comments) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS local_comments",
+        [],
+        function(err, data) {
+            if (err) {
+                console.log(err);
+            }
+            callback(data);
+        });
+    };
     models.Pod.allForList = function (callback) {
         db.driver.execQuery(
             "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
