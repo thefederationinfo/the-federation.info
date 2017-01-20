@@ -4,13 +4,38 @@ var routes = {},
     util = require('util');
 
 routes.root = function (req, res, db) {
-    db.Pod.allForList(function (pods) {
-        res.render('index.njk', { data: pods });
+    db.Pod.homeStats(function (home_stats) {
+        res.render('index.njk', { data: home_stats[0]});
     }, function (err) {
         console.log(err);
     });
 };
 
+routes.globalStatsPage = function (req, res, db) {
+    db.Pod.homeStats(function (home_stats) {
+      db.Pod.allForList(function (pods) {
+        res.render('global_stats.njk', {data: pods, global: home_stats[0]});
+      }, function (err) {
+          console.log(err);
+      });
+  }, function (err) {
+      console.log(err);
+  });
+}
+
+routes.info = function (req, res, db) {
+    res.render('_info_site.njk');
+}
+
+routes.renderNetwork = function (network, res, db) {
+  db.Pod.projectStats(network, function (projectStats) {
+    res.render(network + '.njk', {data: projectStats[0]});
+  }, function (err) {
+      console.log(err);
+  });
+}
+
+/* API routes */
 routes.pods = function (req, res, db) {
     db.Pod.allForList(
         function (pods) {

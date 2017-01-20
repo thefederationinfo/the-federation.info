@@ -128,6 +128,48 @@ function setUpModels(db) {
             }
         }
     });
+    models.Pod.homeStats = function (callback) {
+        db.driver.execQuery(
+          "SELECT \
+            (SELECT COUNT(*) FROM pods WHERE failures < 3) AS total_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'diaspora') AS total_diaspora_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'friendica') AS total_friendica_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'redmatrix') AS total_redmatrix_nodes,\
+            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'hubzilla') AS total_hubzilla_nodes,\
+            (SELECT SUM(total_users) FROM stats WHERE date = CURDATE()) AS total_users,\
+            (SELECT SUM(active_users_halfyear) FROM stats WHERE date = CURDATE()) AS active_users_halfyear,\
+            (SELECT SUM(active_users_monthly) FROM stats WHERE date = CURDATE()) AS active_users_monthly,\
+            (SELECT SUM(local_posts) FROM stats WHERE date = CURDATE()) AS local_posts,\
+            (SELECT SUM(local_comments) FROM stats WHERE date = CURDATE()) AS local_comments,\
+            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'diaspora') AS total_diaspora_users,\
+            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'friendica') AS total_friendica_users,\
+            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'redmatrix') AS total_redmatrix_users,\
+            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'hubzilla') AS total_hubzilla_users",
+          [],
+          function(err, data) {
+              if (err) {
+                  console.log(err);
+              }
+              callback(data);
+          });
+    };
+    models.Pod.projectStats = function (projectName, callback) {
+      db.driver.execQuery(
+        "SELECT \
+          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = '" + projectName +"') AS nodes,\
+          (SELECT SUM(total_users) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS users,\
+          (SELECT SUM(active_users_halfyear) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS active_users_halfyear,\
+          (SELECT SUM(active_users_monthly) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS active_users_monthly,\
+          (SELECT SUM(local_posts) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS local_posts,\
+          (SELECT SUM(local_comments) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS local_comments",
+        [],
+        function(err, data) {
+            if (err) {
+                console.log(err);
+            }
+            callback(data);
+        });
+    };
     models.Pod.allForList = function (callback) {
         db.driver.execQuery(
             "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\

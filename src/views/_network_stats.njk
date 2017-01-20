@@ -1,35 +1,43 @@
-<h2>network statistics</h2>
-<p>
-    Total counts from monitored pods from the last check.
-</p>
+<section class="tile">
+  <header>
+    <h2>Network statistics</h2>
+  </header>
+  <div>
+    <p>
+        Total counts from monitored pods from the last check.
+    </p>
 
-<table class="footable" id="globalstats" data-filter="#filter">
-    <thead>
-        <tr>
-            <th>Active users 6 months</th>
-            <th>Active users 1 month</th>
-            <th>Active pods</th>
-            <th>Total users</th>
-            <th>Total posts</th>
-            <th>Total comments</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th class="text-center">{{ data.totals.active_users_halfyear }}</th>
-            <th class="text-center">{{ data.totals.active_users_monthly }}</th>
-            <th class="text-center">{{ data.totals.pod_count }}</th>
-            <th class="text-center">{{ data.totals.total_users }}</th>
-            <th class="text-center">{{ data.totals.local_posts }}</th>
-            <th class="text-center">{{ data.totals.local_comments }}</th>
-        </tr>
-    </tbody>
-</table>
+    <div class="overflow-x">
+      <table>
+          <thead>
+              <tr>
+                  <th>Active pods</th>
+                  <th>Total users</th>
+                  <th>Active users 6 months</th>
+                  <th>Active users 1 month</th>
+                  <th>Total posts</th>
+                  <th>Total comments</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>{{ global.total_nodes }}</td>
+                  <td>{{ global.total_users }}</td>
+                  <td>{{ global.active_users_halfyear }}</td>
+                  <td>{{ global.active_users_monthly }}</td>
+                  <td>{{ global.local_posts }}</td>
+                  <td>{{ global.local_comments }}</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+    
+    <p>
+        <em><small>
+                Disclaimer: These counts will not reflect the whole network due to the opt-in nature of the statistics.
+        </small></em>
+    </p>
 
-<p>
-    <em><small>
-            Disclaimer: These counts will not reflect the whole network due to the opt-in nature of the statistics.
-    </small></em>
-</p>
-
-{% include "_network_history.njk" %}
+    {% include "_network_history.njk" %}
+  </div>
+</section>

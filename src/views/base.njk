@@ -2,46 +2,24 @@
 <html lang="en">
 <head>
     <title>the federation - a statistics hub</title>
-    <meta charset="UTF-8">
-    <meta property="og:title" content="the federation - a statistics hub">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://the-federation.info/">
-    <meta property="og:description" content="Podlist and statistics for The Federation (diaspora*, Friendica, Hubzilla).">
-    <meta property="og:image" content="https://the-federation.info/images/the-federation.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="/vendor/css/footable.core.min.css">
-    <link rel="stylesheet" href="/vendor/css/footable.standalone.min.css">
-    <link rel="stylesheet" href="/vendor/css/hubinfo.min.css">
-
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
-
-    <link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-    <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/floatthead/1.2.10/jquery.floatThead.min.js"></script>
-
-    <script src="/vendor/js/rickshaw.min.js"></script>
-    <script src="/vendor/js/footable.min.js"></script>
-    <script src="/vendor/js/footable.sort.js"></script>
-    <script src="/vendor/js/hubinfo.min.js"></script>
-
-    <script src="//blockchain.info/Resources/wallet/pay-now-button.js"></script>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-
-    <style>
-        table.floatThead-table {
-            border-top: none;
-            border-bottom: none;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta property="og:title" content="the federation - a statistics hub" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://the-federation.info/" />
+    <meta property="og:description" content="Podlist and statistics for The Federation (diaspora*, Friendica, Hubzilla)." />
+    <meta property="og:image" content="https://the-federation.info/images/the-federation.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/site.css" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 </head>
-<body style="background-color: rgb(238, 238, 238);">
-    <div style="padding: 5px 15px; margin: 15px; background-color: white; border-radius: 6px;">
-        {% block content %}{% endblock content %}
-    </div>
+<body>
+    {% block content %}{% endblock content %}
+    <footer>
+        <p>
+            Hosted with <3 by <a href="https://iliketoast.net/u/jaywink">Jason Robinson</a> -
+            <a href="/info">More about this project</a> -
+            Code <a href="https://github.com/jaywink/the-federation.info">on github</a>
+        </p>
+    </footer>
 </body>
 </html>
