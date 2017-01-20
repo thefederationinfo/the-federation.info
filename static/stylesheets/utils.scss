@@ -90,7 +90,15 @@ $secondary-text: white;
   }
 }
 
+.overflow-x {
+	overflow-x: auto;
+}
+
 @media screen and (max-width: $breakview) {
+
+	main > header {
+		margin: 1%;
+	}
 
   .flex {
     @include flex-direction(column);
@@ -100,6 +108,7 @@ $secondary-text: white;
     > .col4 {
       width: 98%;
       padding: 1%;
+			margin-bottom: 12px;
     }
   }
 }

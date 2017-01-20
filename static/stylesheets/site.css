@@ -93,7 +93,13 @@
     width: 21%;
     padding: 2%; }
 
+.overflow-x {
+  overflow-x: auto; }
+
 @media screen and (max-width: 642px) {
+  main > header {
+    margin: 1%; }
+
   .flex {
     -webkit-box-direction: normal;
     -webkit-box-orient: vertical;
@@ -105,7 +111,8 @@
     .flex > .col3,
     .flex > .col4 {
       width: 98%;
-      padding: 1%; } }
+      padding: 1%;
+      margin-bottom: 12px; } }
 body {
   margin: 0;
   font-family: lato, "Helvetica Neue",Helvetica,sans-serif;
@@ -197,5 +204,11 @@ section > header {
 section > div {
   padding: 1rem;
   color: #333; }
+
+@media screen and (max-width: 642px) {
+  .main-header .main-title h1 {
+    font-size: 2rem; }
+  .main-header .main-title h2 {
+    font-size: 1.4rem; } }
 
 /*# sourceMappingURL=site.css.map */

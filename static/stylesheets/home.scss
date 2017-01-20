@@ -45,3 +45,15 @@ section {
     color: #333;
   }
 }
+
+@media screen and (max-width: $breakview) {
+  .main-header .main-title {
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+}
