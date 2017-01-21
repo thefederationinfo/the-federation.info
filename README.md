@@ -59,6 +59,13 @@ Things wont look nice without any data, so register a node, for example this in 
 
 Check the front page and there should be a node listed.
 
+## Development
+
+### Sass
+
+If you want to touch the CSS part of the-federation, you need to modify the .scss files in `static/stylesheet` and then compile site.scss to site.css.
+There is a [node compiler](https://github.com/sass/node-sass) or a [python compiler](https://github.com/dahlia/libsass-python). More about the [Sass](http://sass-lang.com/) extension of the CSS language.
+
 ## Author
 
 Jason Robinson / @jaywink / https://jasonrobinson.me / https://iliketoast.net/u/jaywink
