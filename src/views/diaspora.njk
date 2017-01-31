@@ -10,22 +10,22 @@
     <div class="flex">
       <div class="col4">
         <div class="tile valign-wrapper">
-          {{data.nodes}} <strong>Nodes</strong>
+          {{globalData.nodes}} <strong>Nodes</strong>
         </div>
       </div>
       <div class="col4">
         <div class="tile valign-wrapper">
-          {{data.users}} <strong>Users</strong>
+          {{globalData.users}} <strong>Users</strong>
         </div>
       </div>
       <div class="col4">
         <div class="tile valign-wrapper">
-          {{data.posts}} <strong>Posts</strong>
+          {{globalData.posts}} <strong>Posts</strong>
         </div>
       </div>
       <div class="col4">
         <div class="tile valign-wrapper">
-          {{data.comments}} <strong>Comments</strong>
+          {{globalData.comments}} <strong>Comments</strong>
         </div>
       </div>
     </div>
@@ -44,12 +44,12 @@
         </div>
         <div class="col2">
           <ul>
-            <li>Nodes: <strong>{{data.nodes}}</strong></li>
-            <li>Users: <strong>{{data.users}}</strong></li>
-            <li>Last 6 months users: <strong>{{data.active_users_halfyear}}</strong></li>
-            <li>Last month users: <strong>{{data.active_users_monthly}}</strong></li>
-            <li>Posts: <strong>{{data.posts}}</strong></li>
-            <li>Comments: <strong>{{data.comments}}</strong></li>
+            <li>Nodes: <strong>{{globalData.nodes}}</strong></li>
+            <li>Users: <strong>{{globalData.users}}</strong></li>
+            <li>Last 6 months users: <strong>{{globalData.active_users_halfyear}}</strong></li>
+            <li>Last month users: <strong>{{globalData.active_users_monthly}}</strong></li>
+            <li>Posts: <strong>{{globalData.posts}}</strong></li>
+            <li>Comments: <strong>{{globalData.comments}}</strong></li>
           </ul>
         </div>
       </div>
@@ -94,5 +94,38 @@
       </table>
     </div>
   </section>
+  <section class="tile">
+    <header>
+      <h2>Software version</h2>
+    </header>
+    <div>
+      <div id="chart-container" data-chart="{{chartData[0]}}"></div>
+      <div class="flex">
+        <div id="nodes-chart" class="btn-medium">Nodes</div>
+        <div id="users-chart" class="btn-medium">Total users</div>
+        <div id="last6months-chart" class="btn-medium">Last 6 months users</div>
+        <div id="monthly-chart" class="btn-medium">Last month users</div>
+        <div id="posts-chart" class="btn-medium">Posts</div>
+        <div id="comments-chart" class="btn-medium">Comments</div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<script src="/vendor/js/rickshaw.min.js"></script>
+<script src="/vendor/js/d3.v3.min.js"></script>
+<link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
+<script src="/javascript/chart-helper.js"></script>
+<script type="text/javascript">
+  var nodesData = [{ x: 1990, y: 2 }, { x: 1995, y: 4 }, {x: 2000, y:3}];
+  var usersData = [{ x: 0, y: 5 }, { x: 1, y: 8 }, {x: 2, y:12}];
+  var chart = initChart(document.getElementById("chart-container"), nodesData);
+
+  document.getElementById('nodes-chart').addEventListener('click', function() {
+    refreshChart(chart, nodesData);
+  });
+  document.getElementById('users-chart').addEventListener('click', function() {
+    refreshChart(chart, usersData);
+  });
+</script>
 {% endblock content %}

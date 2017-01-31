@@ -28,8 +28,11 @@ routes.info = function (req, res, db) {
 }
 
 routes.renderNetwork = function (network, res, db) {
-  db.Pod.projectStats(network, function (projectStats) {
-    res.render(network + '.njk', {data: projectStats[0]});
+  db.Pod.projectCharts(network, function (data) {
+    res.render(network + '.njk', {
+      globalData: data[data.length],
+      chartData: data
+    });
   }, function (err) {
       console.log(err);
   });
