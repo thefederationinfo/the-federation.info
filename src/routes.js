@@ -30,7 +30,7 @@ routes.info = function (req, res, db) {
 routes.renderNetwork = function (network, res, db) {
   db.Pod.projectCharts(network, function (data) {
     res.render(network + '.njk', {
-      globalData: data[data.length],
+      globalData: data[data.length - 1],
       chartData: data
     });
   }, function (err) {

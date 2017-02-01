@@ -171,19 +171,9 @@ function setUpModels(db) {
         });
     };
 
-    /*
-    "SELECT\
-      (SELECT date FROM stats s) AS date,\
-      (SELECT COUNT(pod_id) FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName +"' GROUP BY date) AS nodes,\
-      (SELECT SUM(total_users) FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date) AS users,\
-      (SELECT SUM(active_users_halfyear) FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date) AS active_users_halfyear,\
-      (SELECT SUM(active_users_monthly) FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date) AS active_users_monthly,\
-      (SELECT SUM(local_posts) FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date) AS local_posts,\
-      (SELECT SUM(local_comments) FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date) AS local_comments",
-    */
     models.Pod.projectCharts = function (projectName, callback) {
       db.driver.execQuery(
-        "SELECT UNIX_TIMESTAMP(date),\
+        "SELECT UNIX_TIMESTAMP(date) AS timestamp,\
          COUNT(pod_id) AS nodes,\
          SUM(total_users) AS users,\
          SUM(active_users_halfyear) AS active_users_halfyear,\

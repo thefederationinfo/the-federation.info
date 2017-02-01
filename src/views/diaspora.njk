@@ -20,12 +20,12 @@
       </div>
       <div class="col4">
         <div class="tile valign-wrapper">
-          {{globalData.posts}} <strong>Posts</strong>
+          {{globalData.local_posts}} <strong>Posts</strong>
         </div>
       </div>
       <div class="col4">
         <div class="tile valign-wrapper">
-          {{globalData.comments}} <strong>Comments</strong>
+          {{globalData.local_comments}} <strong>Comments</strong>
         </div>
       </div>
     </div>
@@ -48,8 +48,8 @@
             <li>Users: <strong>{{globalData.users}}</strong></li>
             <li>Last 6 months users: <strong>{{globalData.active_users_halfyear}}</strong></li>
             <li>Last month users: <strong>{{globalData.active_users_monthly}}</strong></li>
-            <li>Posts: <strong>{{globalData.posts}}</strong></li>
-            <li>Comments: <strong>{{globalData.comments}}</strong></li>
+            <li>Posts: <strong>{{globalData.local_posts}}</strong></li>
+            <li>Comments: <strong>{{globalData.local_comments}}</strong></li>
           </ul>
         </div>
       </div>
@@ -60,7 +60,7 @@
       <h2>Software version</h2>
     </header>
     <div>
-      <p><strong>61%</strong> of the nodes hosting <strong>71%</strong> of the users are actually running the last released version or a development version.</p>
+      <p><strong>61%</strong> of the nodes hosting <strong>71%</strong> of the users are actually up-to-date (running the last released version or a development version).</p>
       <table>
         <thead>
             <tr>
@@ -96,14 +96,14 @@
   </section>
   <section class="tile">
     <header>
-      <h2>Software version</h2>
+      <h2>Charts</h2>
     </header>
     <div>
-      <div id="chart-container" data-chart="{{chartData[0]}}"></div>
+      <div id="chart-container"></div>
       <div class="flex">
         <div id="nodes-chart" class="btn-medium">Nodes</div>
         <div id="users-chart" class="btn-medium">Total users</div>
-        <div id="last6months-chart" class="btn-medium">Last 6 months users</div>
+        <div id="half-year-chart" class="btn-medium">Last 6 months users</div>
         <div id="monthly-chart" class="btn-medium">Last month users</div>
         <div id="posts-chart" class="btn-medium">Posts</div>
         <div id="comments-chart" class="btn-medium">Comments</div>
@@ -117,8 +117,21 @@
 <link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
 <script src="/javascript/chart-helper.js"></script>
 <script type="text/javascript">
-  var nodesData = [{ x: 1990, y: 2 }, { x: 1995, y: 4 }, {x: 2000, y:3}];
-  var usersData = [{ x: 0, y: 5 }, { x: 1, y: 8 }, {x: 2, y:12}];
+  function prepareData(data, selectedCriteria) {
+    var preparedData = [];
+    for (var i = 0; i < data.length; i++) {
+      preparedData.push({x: data[i].timestamp, y: data[i][selectedCriteria]});
+    }
+    return preparedData;
+  }
+
+  var data = {{chartData | dump | safe }};
+  var nodesData = prepareData(data, "nodes");
+  var usersData = prepareData(data, "users");
+  var halfYearUsersData = prepareData(data, "active_users_halfyear");
+  var monthlyUsersData = prepareData(data, "active_users_monthly");
+  var postsData = prepareData(data, "local_posts");
+  var commentsData = prepareData(data, "local_comments");
   var chart = initChart(document.getElementById("chart-container"), nodesData);
 
   document.getElementById('nodes-chart').addEventListener('click', function() {
@@ -126,6 +139,18 @@
   });
   document.getElementById('users-chart').addEventListener('click', function() {
     refreshChart(chart, usersData);
+  });
+  document.getElementById('half-year-chart').addEventListener('click', function() {
+    refreshChart(chart, halfYearUsersData);
+  });
+  document.getElementById('monthly-chart').addEventListener('click', function() {
+    refreshChart(chart, monthlyUsersData);
+  });
+  document.getElementById('posts-chart').addEventListener('click', function() {
+    refreshChart(chart, postsData);
+  });
+  document.getElementById('comments-chart').addEventListener('click', function() {
+    refreshChart(chart, commentsData);
   });
 </script>
 {% endblock content %}
