@@ -99,7 +99,10 @@
       <h2>Charts</h2>
     </header>
     <div>
-      <div id="chart-container"></div>
+      <div class="chart-container">
+        <div id="y-axis"></div>
+        <div id="chart"></div>
+      </div>
       <div class="flex">
         <div id="nodes-chart" class="btn-medium">Nodes</div>
         <div id="users-chart" class="btn-medium">Total users</div>
@@ -132,7 +135,7 @@
   var monthlyUsersData = prepareData(data, "active_users_monthly");
   var postsData = prepareData(data, "local_posts");
   var commentsData = prepareData(data, "local_comments");
-  var chart = initChart(document.getElementById("chart-container"), nodesData);
+  var chart = initChart(document.getElementById("chart"), nodesData);
 
   document.getElementById('nodes-chart').addEventListener('click', function() {
     refreshChart(chart, nodesData);

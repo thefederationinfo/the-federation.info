@@ -9,6 +9,13 @@ function initChart(chartContainer, data) {
     height: 250
   });
   var axes = new Rickshaw.Graph.Axis.Time( { graph: chart } );
+  var y_axis = new Rickshaw.Graph.Axis.Y( {
+        graph: chart,
+        orientation: 'left',
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        element: document.getElementById('y-axis'),
+  });
+
   chart.render();
   return chart;
 }
