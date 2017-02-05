@@ -135,25 +135,25 @@
   var monthlyUsersData = prepareData(data, "active_users_monthly");
   var postsData = prepareData(data, "local_posts");
   var commentsData = prepareData(data, "local_comments");
-  var chart = initChart(document.getElementById("chart"), nodesData);
+  var chart = initChart(document.getElementById("chart"), "Nodes", nodesData);
 
   document.getElementById('nodes-chart').addEventListener('click', function() {
-    refreshChart(chart, nodesData);
+    refreshChart(chart, "Nodes", nodesData);
   });
   document.getElementById('users-chart').addEventListener('click', function() {
-    refreshChart(chart, usersData);
+    refreshChart(chart, "Users", usersData);
   });
   document.getElementById('half-year-chart').addEventListener('click', function() {
-    refreshChart(chart, halfYearUsersData);
+    refreshChart(chart, "Half year active users", halfYearUsersData);
   });
   document.getElementById('monthly-chart').addEventListener('click', function() {
-    refreshChart(chart, monthlyUsersData);
+    refreshChart(chart, "Monthly active users", monthlyUsersData);
   });
   document.getElementById('posts-chart').addEventListener('click', function() {
-    refreshChart(chart, postsData);
+    refreshChart(chart, "Local posts", postsData);
   });
   document.getElementById('comments-chart').addEventListener('click', function() {
-    refreshChart(chart, commentsData);
+    refreshChart(chart, "Local comments", commentsData);
   });
 </script>
 {% endblock content %}

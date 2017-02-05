@@ -1,11 +1,12 @@
-function initChart(chartContainer, data) {
+function initChart(chartContainer, name, data) {
   var chart = new Rickshaw.Graph({
     element: chartContainer,
     renderer: 'line',
-    series: [ {
-            color: 'steelblue',
-            data: data
-    } ],
+    series: [{
+      name: name,
+      color: 'steelblue',
+      data: data
+    }],
     height: 250
   });
   var axes = new Rickshaw.Graph.Axis.Time( { graph: chart } );
@@ -15,12 +16,16 @@ function initChart(chartContainer, data) {
         tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
         element: document.getElementById('y-axis'),
   });
+  var hoverDetail = new Rickshaw.Graph.HoverDetail({
+    graph: chart
+  });
 
   chart.render();
   return chart;
 }
 
-function refreshChart(chart, data) {
+function refreshChart(chart, name, data) {
+  chart.series[0].name = name;
   chart.series[0].data = data;
   chart.render();
 }
