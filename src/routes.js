@@ -3,6 +3,24 @@
 var routes = {},
     util = require('util');
 
+var networkTexts = {
+  diaspora: {
+      title: 'diaspora*',
+      subtitle: 'Share what you want with whom you want',
+      description: 'This is the description of the diaspora* project'
+  },
+  friendica: {
+      title: 'friendica',
+      subtitle: 'friendica subtitle',
+      description: 'This is the description of the friendica project'
+  },
+  hubzilla: {
+      title: 'hubzilla',
+      subtitle: 'hubzilla subtitle',
+      description: 'This is the description of the hubzilla project'
+  }
+};
+
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
         res.render('index.njk', { data: home_stats[0]});
@@ -29,7 +47,8 @@ routes.info = function (req, res, db) {
 
 routes.renderNetwork = function (network, res, db) {
   db.Pod.projectCharts(network, function (data) {
-    res.render(network + '.njk', {
+    res.render('network-page.njk', {
+      texts: networkTexts[network],
       globalData: data[data.length - 1],
       chartData: data
     });
