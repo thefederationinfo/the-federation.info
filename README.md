@@ -1,7 +1,7 @@
 [![Stories in Ready](https://badge.waffle.io/jaywink/the-federation.info.png?label=ready&title=Ready)](https://waffle.io/jaywink/the-federation.info)
 # The-Federation.info
 
-Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla/Redmatrix).
+Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla).
 
 ## Requirements
 
