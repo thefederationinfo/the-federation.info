@@ -13,11 +13,21 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 </head>
 <body>
-    {% block content %}{% endblock content %}
-    <footer>
-        <p>
-            <a href="/info">About</a> - <a href="https://github.com/jaywink/the-federation.info">Source code</a>
-        </p>
-    </footer>
+  <nav id="menu" class="tile">
+    <ul>
+      <li><a href="/">Home</li>
+      <li><a href="/global-stats">Global stats</li>
+      <li><a href="/diaspora">diaspora*</li>
+      <li><a href="/hubzilla">Hubzilla</li>
+      <li><a href="/info">About</li>
+    </ul>
+  </nav>
+  <div class="menu-icon"></div>
+  {% block content %}{% endblock content %}
+  <footer>
+      <p>
+          <a href="/info">About</a> - <a href="https://github.com/jaywink/the-federation.info">Source code</a>
+      </p>
+  </footer>
 </body>
 </html>

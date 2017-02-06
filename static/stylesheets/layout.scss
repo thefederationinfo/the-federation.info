@@ -1,0 +1,51 @@
+$max-width: 1200px;
+
+#menu {
+  position: fixed;
+  top: 12rem;
+  left: 0;
+  padding: 3px 6px;
+
+  a {
+    color: black;
+
+    &:hover {
+      color: #555;
+    }
+  }
+}
+
+@media screen and (max-width: $max-width + 160) {
+  #menu {
+    top: 1rem;
+  }
+}
+
+@media screen and (max-width: $breakview) {
+  #menu {
+    display: none;
+  }
+}
+
+main {
+  max-width: $max-width;
+  margin: auto;
+}
+
+section {
+  & > header {
+    background-color: #ddd;
+    padding: 1rem;
+  }
+
+  & > div {
+    padding: 1rem;
+    color: #333;
+  }
+}
+
+.tile {
+  border: solid #ccc 1px;
+  background-color: white;
+  box-shadow: 0 0 4px -3px black;
+}

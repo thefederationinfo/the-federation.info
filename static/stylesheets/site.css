@@ -123,10 +123,6 @@ body {
 p {
   line-height: 1.1; }
 
-main {
-  max-width: 1200px;
-  margin: auto; }
-
 a,
 a:visited {
   color: #333; }
@@ -186,6 +182,38 @@ table {
   .chart-container #chart {
     margin-left: 30px; }
 
+#menu {
+  position: fixed;
+  top: 12rem;
+  left: 0;
+  padding: 3px 6px; }
+  #menu a {
+    color: black; }
+    #menu a:hover {
+      color: #555; }
+
+@media screen and (max-width: 1360px) {
+  #menu {
+    top: 1rem; } }
+@media screen and (max-width: 642px) {
+  #menu {
+    display: none; } }
+main {
+  max-width: 1200px;
+  margin: auto; }
+
+section > header {
+  background-color: #ddd;
+  padding: 1rem; }
+section > div {
+  padding: 1rem;
+  color: #333; }
+
+.tile {
+  border: solid #ccc 1px;
+  background-color: white;
+  box-shadow: 0 0 4px -3px black; }
+
 .main-header .main-title {
   margin: 2rem; }
   .main-header .main-title h1 {
@@ -203,18 +231,6 @@ table {
   .main-header .tile strong {
     font-size: 2rem;
     display: block; }
-
-.tile {
-  border: solid #ccc 1px;
-  background-color: white;
-  box-shadow: 0 0 4px -3px black; }
-
-section > header {
-  background-color: #ddd;
-  padding: 1rem; }
-section > div {
-  padding: 1rem;
-  color: #333; }
 
 @media screen and (max-width: 642px) {
   .main-header .main-title h1 {
