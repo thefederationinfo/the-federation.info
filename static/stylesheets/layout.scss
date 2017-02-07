@@ -13,6 +13,24 @@ $max-width: 1200px;
       color: #555;
     }
   }
+
+  .close-drawer {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    text-decoration: none;
+  }
+}
+
+#drawer-icon {
+  display: none;
+  position: absolute;
+  top: 2.3rem;
+  left: 3%;
+  width: 25px;
+  height: 25px;
+  background: url('../images/toggle_menu.png') no-repeat center center;
 }
 
 @media screen and (max-width: $max-width + 160) {
@@ -22,8 +40,22 @@ $max-width: 1200px;
 }
 
 @media screen and (max-width: $breakview) {
+  #drawer-icon {
+    display: block;
+  }
+
   #menu {
-    display: none;
+    left: -200px;
+    transition: transform ease 500ms;
+
+    .close-drawer {
+      display: block;
+    }
+  }
+
+  #drawer-opened:target #menu {
+
+    transform: translateX(200px);
   }
 }
 

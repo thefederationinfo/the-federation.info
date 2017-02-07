@@ -191,13 +191,37 @@ table {
     color: black; }
     #menu a:hover {
       color: #555; }
+  #menu .close-drawer {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    text-decoration: none; }
+
+#drawer-icon {
+  display: none;
+  position: absolute;
+  top: 2.3rem;
+  left: 3%;
+  width: 25px;
+  height: 25px;
+  background: url("../images/toggle_menu.png") no-repeat center center; }
 
 @media screen and (max-width: 1360px) {
   #menu {
     top: 1rem; } }
 @media screen and (max-width: 642px) {
+  #drawer-icon {
+    display: block; }
+
   #menu {
-    display: none; } }
+    left: -200px;
+    transition: transform ease 500ms; }
+    #menu .close-drawer {
+      display: block; }
+
+  #drawer-opened:target #menu {
+    transform: translateX(200px); } }
 main {
   max-width: 1200px;
   margin: auto; }
