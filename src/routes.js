@@ -1,7 +1,8 @@
 /*jslint todo: true, node: true, stupid: true, plusplus: true, continue: true, unparam: true */
 "use strict";
 var routes = {},
-    util = require('util');
+    util = require('util'),
+    texts = require('./texts');
 
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
@@ -28,8 +29,12 @@ routes.info = function (req, res, db) {
 }
 
 routes.renderNetwork = function (network, res, db) {
-  db.Pod.projectStats(network, function (projectStats) {
-    res.render(network + '.njk', {data: projectStats[0]});
+  db.Pod.projectCharts(network, function (data) {
+    res.render('network-page.njk', {
+      texts: texts.networks[network],
+      globalData: data[data.length - 1],
+      chartData: data
+    });
   }, function (err) {
       console.log(err);
   });

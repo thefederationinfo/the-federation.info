@@ -1,0 +1,159 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<main>
+  <header class="main-header">
+    <div class="main-title">
+      <h1>{{texts.title}}</h1>
+      <h2>{{texts.subtitle}}</h2>
+    </div>
+    <div class="flex">
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.nodes}} <strong>Nodes</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.users}} <strong>Users</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.local_posts}} <strong>Posts</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.local_comments}} <strong>Comments</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+  <section class="tile">
+    <header>
+      <h2>What is {{texts.title}}?</h2>
+    </header>
+    <div>
+      <div class="flex">
+        <div class="col2">
+          <p>{{texts.description}}</p>
+          <div class="center">
+            <a href="#" class="btn btn-primary">Visit network evolution</a>
+          </div>
+        </div>
+        <div class="col2">
+          <ul>
+            <li>Nodes: <strong>{{globalData.nodes}}</strong></li>
+            <li>Users: <strong>{{globalData.users}}</strong></li>
+            <li>Last 6 months users: <strong>{{globalData.active_users_halfyear}}</strong></li>
+            <li>Last month users: <strong>{{globalData.active_users_monthly}}</strong></li>
+            <li>Posts: <strong>{{globalData.local_posts}}</strong></li>
+            <li>Comments: <strong>{{globalData.local_comments}}</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="tile">
+    <header>
+      <h2>Software version</h2>
+    </header>
+    <div>
+      <p><strong>61%</strong> of the nodes hosting <strong>71%</strong> of the users are actually up-to-date (running the last released version or a development version).</p>
+      <table>
+        <thead>
+            <tr>
+                <th>Version</th>
+                <th>Nodes</th>
+                <th>Users</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <th>Develop</th>
+              <td>12 (5%)</td>
+              <td>1321 (6%)</td>
+          </tr>
+          <tr>
+              <th>Last version</th>
+              <td>142 (54%)</td>
+              <td>123321 (65%)</td>
+          </tr>
+          <tr>
+              <th>Last major version</th>
+              <td>142 (32%)</td>
+              <td>62324 (25%)</td>
+          </tr>
+          <tr>
+              <th>Older</th>
+              <td>142 (9%)</td>
+              <td>3521 (7%)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="tile">
+    <header>
+      <h2>Charts</h2>
+    </header>
+    <div>
+      <div class="chart-container">
+        <div id="y-axis"></div>
+        <div id="chart"></div>
+      </div>
+      <div class="flex">
+        <div id="nodes-chart" class="btn-medium">Nodes</div>
+        <div id="users-chart" class="btn-medium">Total users</div>
+        <div id="half-year-chart" class="btn-medium">Last 6 months users</div>
+        <div id="monthly-chart" class="btn-medium">Last month users</div>
+        <div id="posts-chart" class="btn-medium">Posts</div>
+        <div id="comments-chart" class="btn-medium">Comments</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="/vendor/js/rickshaw.min.js"></script>
+<script src="/vendor/js/d3.v3.min.js"></script>
+<link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
+<script src="/javascript/chart-helper.js"></script>
+<script type="text/javascript">
+  function prepareData(data, selectedCriteria) {
+    var preparedData = [];
+    for (var i = 0; i < data.length; i++) {
+      preparedData.push({x: data[i].timestamp, y: data[i][selectedCriteria]});
+    }
+    return preparedData;
+  }
+
+  var data = {{chartData | dump | safe }};
+  var nodesData = prepareData(data, "nodes");
+  var usersData = prepareData(data, "users");
+  var halfYearUsersData = prepareData(data, "active_users_halfyear");
+  var monthlyUsersData = prepareData(data, "active_users_monthly");
+  var postsData = prepareData(data, "local_posts");
+  var commentsData = prepareData(data, "local_comments");
+  var chart = initChart(document.getElementById("chart"), "Nodes", nodesData);
+
+  document.getElementById('nodes-chart').addEventListener('click', function() {
+    refreshChart(chart, "Nodes", nodesData);
+  });
+  document.getElementById('users-chart').addEventListener('click', function() {
+    refreshChart(chart, "Users", usersData);
+  });
+  document.getElementById('half-year-chart').addEventListener('click', function() {
+    refreshChart(chart, "Half year active users", halfYearUsersData);
+  });
+  document.getElementById('monthly-chart').addEventListener('click', function() {
+    refreshChart(chart, "Monthly active users", monthlyUsersData);
+  });
+  document.getElementById('posts-chart').addEventListener('click', function() {
+    refreshChart(chart, "Local posts", postsData);
+  });
+  document.getElementById('comments-chart').addEventListener('click', function() {
+    refreshChart(chart, "Local comments", commentsData);
+  });
+</script>
+{% endblock content %}

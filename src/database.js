@@ -151,15 +151,17 @@ function setUpModels(db) {
               callback(data);
           });
     };
-    models.Pod.projectStats = function (projectName, callback) {
+
+    models.Pod.projectCharts = function (projectName, callback) {
       db.driver.execQuery(
-        "SELECT \
-          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = '" + projectName +"') AS nodes,\
-          (SELECT SUM(total_users) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS users,\
-          (SELECT SUM(active_users_halfyear) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS active_users_halfyear,\
-          (SELECT SUM(active_users_monthly) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS active_users_monthly,\
-          (SELECT SUM(local_posts) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS local_posts,\
-          (SELECT SUM(local_comments) FROM stats s, pods p WHERE date = CURDATE() AND s.pod_id = p.id AND p.network = '" + projectName + "') AS local_comments",
+        "SELECT UNIX_TIMESTAMP(date) AS timestamp,\
+         COUNT(pod_id) AS nodes,\
+         SUM(total_users) AS users,\
+         SUM(active_users_halfyear) AS active_users_halfyear,\
+         SUM(active_users_monthly) AS active_users_monthly,\
+         SUM(local_posts) AS local_posts,\
+         SUM(local_comments) AS local_comments\
+         FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date",
         [],
         function(err, data) {
             if (err) {

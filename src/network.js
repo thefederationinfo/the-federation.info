@@ -8,7 +8,6 @@ var network = {},
     utils = require('./utils'),
     db = require('./database');
 
-
 function getPodDataFromStatisticsJSON(host, data) {
     return {
         name: data.name,

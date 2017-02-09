@@ -175,6 +175,17 @@ table {
   table tbody tr:nth-child(odd) {
     background-color: #eee; }
 
+.chart-container {
+  position: relative;
+  margin-bottom: 12px; }
+  .chart-container #y-axis {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 30px; }
+  .chart-container #chart {
+    margin-left: 30px; }
+
 .main-header .main-title {
   margin: 2rem; }
   .main-header .main-title h1 {
