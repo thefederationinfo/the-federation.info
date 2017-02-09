@@ -44,10 +44,6 @@ app.get('/friendica', function (req, res) {
     routes.renderNetwork('friendica', res, db);
 });
 
-app.get('/redmatrix', function (req, res) {
-    routes.renderNetwork('redmatrix', res, db);
-});
-
 app.get('/hubzilla', function (req, res) {
     routes.renderNetwork('hubzilla', res, db);
 });
