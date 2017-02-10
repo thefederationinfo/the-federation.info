@@ -28,24 +28,6 @@
   }
 }
 
-.tile {
-  border: solid #ccc 1px;
-  background-color: white;
-  box-shadow: 0 0 4px -3px black;
-}
-
-section {
-  & > header {
-    background-color: #ddd;
-    padding: 1rem;
-  }
-
-  & > div {
-    padding: 1rem;
-    color: #333;
-  }
-}
-
 @media screen and (max-width: $breakview) {
   .main-header .main-title {
     h1 {

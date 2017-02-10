@@ -1,0 +1,83 @@
+$max-width: 1200px;
+
+#menu {
+  position: fixed;
+  top: 12rem;
+  left: 0;
+  padding: 3px 6px;
+
+  a {
+    color: black;
+
+    &:hover {
+      color: #555;
+    }
+  }
+
+  .close-drawer {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    text-decoration: none;
+  }
+}
+
+#drawer-icon {
+  display: none;
+  position: absolute;
+  top: 2.3rem;
+  left: 3%;
+  width: 25px;
+  height: 25px;
+  background: url('../images/toggle_menu.png') no-repeat center center;
+}
+
+@media screen and (max-width: $max-width + 160) {
+  #menu {
+    top: 0.5rem;
+  }
+}
+
+@media screen and (max-width: $breakview) {
+  #drawer-icon {
+    display: block;
+  }
+
+  #menu {
+    left: -200px;
+    transition: transform ease 500ms;
+
+    .close-drawer {
+      display: block;
+    }
+  }
+
+  #drawer-opened:target #menu {
+
+    transform: translateX(200px);
+  }
+}
+
+main {
+  max-width: $max-width;
+  margin: auto;
+}
+
+section {
+  & > header {
+    background-color: #ddd;
+    padding: 1rem;
+  }
+
+  & > div {
+    padding: 1rem;
+    color: #333;
+  }
+}
+
+.tile {
+  border: solid #ccc 1px;
+  background-color: white;
+  box-shadow: 0 0 4px -3px black;
+}
