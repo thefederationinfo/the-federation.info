@@ -209,7 +209,7 @@ table {
 
 @media screen and (max-width: 1360px) {
   #menu {
-    top: 1rem; } }
+    top: 0.5rem; } }
 @media screen and (max-width: 642px) {
   #drawer-icon {
     display: block; }
