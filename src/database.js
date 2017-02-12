@@ -13,15 +13,17 @@ var orm = require('orm'),
     utils = require('./utils');
 
 function setUpModels(db) {
-  function execQueryWithCallback(query, callback) {
-    db.driver.execQuery(query, [],
-    function(err, data) {
-        if (err) {
-            console.log(err);
-        }
-        callback(data);
-    });
-  }
+
+    function execQueryWithCallback(query, callback) {
+      db.driver.execQuery(query, [],
+      function(err, data) {
+          if (err) {
+              console.log(err);
+          }
+          callback(data);
+      });
+    }
+
     // set up models
     models.Pod = db.define('pods', {
         name: { type: "text", size: 300 },
@@ -162,7 +164,11 @@ function setUpModels(db) {
          SUM(active_users_halfyear) AS active_users_halfyear,\
          SUM(active_users_monthly) AS active_users_monthly,\
          SUM(local_posts) AS local_posts,\
-         SUM(local_comments) AS local_comments\
+         SUM(local_comments) AS local_comments,\
+         users / nodes AS users_per_node,\
+         active_users_monthly / users AS active_users_ratio,\
+         local_posts / users AS posts_per_user,\
+         local_comments / users AS comments_per_user \
          FROM stats s";
       if (projectName != undefined && projectName != "") {
         query += ", pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "'";
