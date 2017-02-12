@@ -6,7 +6,14 @@ var routes = {},
 
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
-        res.render('index.njk', { data: home_stats[0]});
+      db.Pod.projectCharts("", function (data) {
+        res.render('index.njk', {
+          data: home_stats[0],
+          chartData: data
+        });
+      }, function (err) {
+          console.log(err);
+      });
     }, function (err) {
         console.log(err);
     });

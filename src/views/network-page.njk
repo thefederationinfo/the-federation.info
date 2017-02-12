@@ -94,66 +94,6 @@
       </table>
     </div>
   </section>
-  <section class="tile">
-    <header>
-      <h2>Charts</h2>
-    </header>
-    <div>
-      <div class="chart-container">
-        <div id="y-axis"></div>
-        <div id="chart"></div>
-      </div>
-      <div class="flex">
-        <div id="nodes-chart" class="btn-medium">Nodes</div>
-        <div id="users-chart" class="btn-medium">Total users</div>
-        <div id="half-year-chart" class="btn-medium">Last 6 months users</div>
-        <div id="monthly-chart" class="btn-medium">Last month users</div>
-        <div id="posts-chart" class="btn-medium">Posts</div>
-        <div id="comments-chart" class="btn-medium">Comments</div>
-      </div>
-    </div>
-  </section>
+  {% include "charts/_stats_with_selectors.njk" %}
 </main>
-
-<script src="/vendor/js/rickshaw.min.js"></script>
-<script src="/vendor/js/d3.v3.min.js"></script>
-<link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
-<script src="/javascript/chart-helper.js"></script>
-<script type="text/javascript">
-  function prepareData(data, selectedCriteria) {
-    var preparedData = [];
-    for (var i = 0; i < data.length; i++) {
-      preparedData.push({x: data[i].timestamp, y: data[i][selectedCriteria]});
-    }
-    return preparedData;
-  }
-
-  var data = {{chartData | dump | safe }};
-  var nodesData = prepareData(data, "nodes");
-  var usersData = prepareData(data, "users");
-  var halfYearUsersData = prepareData(data, "active_users_halfyear");
-  var monthlyUsersData = prepareData(data, "active_users_monthly");
-  var postsData = prepareData(data, "local_posts");
-  var commentsData = prepareData(data, "local_comments");
-  var chart = initChart(document.getElementById("chart"), "Nodes", nodesData);
-
-  document.getElementById('nodes-chart').addEventListener('click', function() {
-    refreshChart(chart, "Nodes", nodesData);
-  });
-  document.getElementById('users-chart').addEventListener('click', function() {
-    refreshChart(chart, "Users", usersData);
-  });
-  document.getElementById('half-year-chart').addEventListener('click', function() {
-    refreshChart(chart, "Half year active users", halfYearUsersData);
-  });
-  document.getElementById('monthly-chart').addEventListener('click', function() {
-    refreshChart(chart, "Monthly active users", monthlyUsersData);
-  });
-  document.getElementById('posts-chart').addEventListener('click', function() {
-    refreshChart(chart, "Local posts", postsData);
-  });
-  document.getElementById('comments-chart').addEventListener('click', function() {
-    refreshChart(chart, "Local comments", commentsData);
-  });
-</script>
 {% endblock content %}

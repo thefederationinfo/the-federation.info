@@ -153,7 +153,7 @@ function setUpModels(db) {
     };
 
     models.Pod.projectCharts = function (projectName, callback) {
-      db.driver.execQuery(
+      var query =
         "SELECT UNIX_TIMESTAMP(date) AS timestamp,\
          COUNT(pod_id) AS nodes,\
          SUM(total_users) AS users,\
@@ -161,7 +161,13 @@ function setUpModels(db) {
          SUM(active_users_monthly) AS active_users_monthly,\
          SUM(local_posts) AS local_posts,\
          SUM(local_comments) AS local_comments\
-         FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date",
+         FROM stats s, pods p WHERE s.pod_id = p.id";
+      if (projectName != undefined && projectName != "") {
+        query += " AND p.network = '" + projectName + "'";
+      }
+      query += " GROUP BY date";
+
+      db.driver.execQuery(query,
         [],
         function(err, data) {
             if (err) {
