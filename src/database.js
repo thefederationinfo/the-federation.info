@@ -158,22 +158,23 @@ function setUpModels(db) {
 
     models.Pod.projectCharts = function (projectName, callback) {
       var query =
-        "SELECT UNIX_TIMESTAMP(date) AS timestamp,\
+        "SELECT timestamp, nodes, users, active_users_halfyear, active_users_monthly, local_posts, local_comments,\
+        users / nodes AS users_per_node,\
+        active_users_monthly / users AS active_users_ratio,\
+        local_posts / users AS posts_per_user,\
+        local_comments / users AS comments_per_user \
+        FROM (SELECT UNIX_TIMESTAMP(date) AS timestamp,\
          COUNT(pod_id) AS nodes,\
          SUM(total_users) AS users,\
          SUM(active_users_halfyear) AS active_users_halfyear,\
          SUM(active_users_monthly) AS active_users_monthly,\
          SUM(local_posts) AS local_posts,\
-         SUM(local_comments) AS local_comments,\
-         users / nodes AS users_per_node,\
-         active_users_monthly / users AS active_users_ratio,\
-         local_posts / users AS posts_per_user,\
-         local_comments / users AS comments_per_user \
+         SUM(local_comments) AS local_comments \
          FROM stats s";
       if (projectName != undefined && projectName != "") {
         query += ", pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "'";
       }
-      query += " GROUP BY date";
+      query += " GROUP BY date) temp";
       execQueryWithCallback(query, callback);
     };
     models.Pod.allForList = function (callback) {
