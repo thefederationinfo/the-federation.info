@@ -16,10 +16,12 @@ function sortTable(table, col, reverse) {
         i;
     reverse = -((+reverse) || -1);
     tr = tr.sort(function (a, b) { // sort rows
-        return reverse // `-1 *` if want opposite order
-            * (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
-                .localeCompare(b.cells[col].textContent.trim(), undefined, {numeric: true})
-               );
+      var aValue = (a.cells[col].textContent != "") ? a.cells[col].textContent : a.cells[col].innerHTML;
+      var bValue = (b.cells[col].textContent != "") ? b.cells[col].textContent : b.cells[col].innerHTML;
+      return reverse // `-1 *` if want opposite order
+          * (aValue.trim() // using `.textContent.trim()` for test
+              .localeCompare(bValue.trim(), undefined, {numeric: true})
+             );
     });
     for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
 }
