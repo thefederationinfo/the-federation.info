@@ -171,6 +171,9 @@ table {
   table tbody tr:nth-child(odd) {
     background-color: #eee; }
 
+#nodes-table thead th {
+  cursor: pointer; }
+
 .chart-container {
   position: relative;
   margin-bottom: 12px; }

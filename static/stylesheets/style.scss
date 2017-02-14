@@ -77,3 +77,7 @@ table {
     background-color: #eee;
   }
 }
+
+#nodes-table thead th {
+  cursor: pointer;
+}

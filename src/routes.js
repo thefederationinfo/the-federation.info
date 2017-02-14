@@ -21,8 +21,8 @@ routes.root = function (req, res, db) {
 
 routes.globalStatsPage = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
-      db.Pod.allForList(function (pods) {
-        res.render('global_stats.njk', {data: pods, global: home_stats[0]});
+      db.Pod.allForList("", function (podsList) {
+        res.render('global_stats.njk', {nodesData: podsList});
       }, function (err) {
           console.log(err);
       });
@@ -36,11 +36,16 @@ routes.info = function (req, res, db) {
 }
 
 routes.renderNetwork = function (network, res, db) {
-  db.Pod.projectCharts(network, function (data) {
-    res.render('network-page.njk', {
-      texts: texts.networks[network],
-      globalData: data[data.length - 1],
-      chartData: data
+  db.Pod.projectCharts(network, function (chartsData) {
+    db.Pod.allForList(network, function (podsList) {
+      res.render('network-page.njk', {
+        texts: texts.networks[network],
+        globalData: chartsData[chartsData.length - 1],
+        chartData: chartsData,
+        nodesData: podsList
+      });
+    }, function (err) {
+        console.log(err);
     });
   }, function (err) {
       console.log(err);
@@ -49,7 +54,7 @@ routes.renderNetwork = function (network, res, db) {
 
 /* API routes */
 routes.pods = function (req, res, db) {
-    db.Pod.allForList(
+    db.Pod.allForList("",
         function (pods) {
             res.json(pods);
         },
