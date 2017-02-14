@@ -12,8 +12,16 @@ var orm = require('orm'),
     eventEmitter = new events.EventEmitter(),
     utils = require('./utils');
 
-
 function setUpModels(db) {
+  function execQueryWithCallback(query, callback) {
+    db.driver.execQuery(query, [],
+    function(err, data) {
+        if (err) {
+            console.log(err);
+        }
+        callback(data);
+    });
+  }
     // set up models
     models.Pod = db.define('pods', {
         name: { type: "text", size: 300 },
@@ -129,31 +137,25 @@ function setUpModels(db) {
         }
     });
     models.Pod.homeStats = function (callback) {
-        db.driver.execQuery(
-          "SELECT \
-            (SELECT COUNT(*) FROM pods WHERE failures < 3) AS total_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'diaspora') AS total_diaspora_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'friendica') AS total_friendica_nodes,\
-            (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'hubzilla') AS total_hubzilla_nodes,\
-            (SELECT SUM(total_users) FROM stats WHERE date = CURDATE()) AS total_users,\
-            (SELECT SUM(active_users_halfyear) FROM stats WHERE date = CURDATE()) AS active_users_halfyear,\
-            (SELECT SUM(active_users_monthly) FROM stats WHERE date = CURDATE()) AS active_users_monthly,\
-            (SELECT SUM(local_posts) FROM stats WHERE date = CURDATE()) AS local_posts,\
-            (SELECT SUM(local_comments) FROM stats WHERE date = CURDATE()) AS local_comments,\
-            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'diaspora') AS total_diaspora_users,\
-            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'friendica') AS total_friendica_users,\
-            (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'hubzilla') AS total_hubzilla_users",
-          [],
-          function(err, data) {
-              if (err) {
-                  console.log(err);
-              }
-              callback(data);
-          });
+      execQueryWithCallback(
+        "SELECT \
+          (SELECT COUNT(*) FROM pods WHERE failures < 3) AS total_nodes,\
+          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'diaspora') AS total_diaspora_nodes,\
+          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'friendica') AS total_friendica_nodes,\
+          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'hubzilla') AS total_hubzilla_nodes,\
+          (SELECT SUM(total_users) FROM stats WHERE date = CURDATE()) AS total_users,\
+          (SELECT SUM(active_users_halfyear) FROM stats WHERE date = CURDATE()) AS active_users_halfyear,\
+          (SELECT SUM(active_users_monthly) FROM stats WHERE date = CURDATE()) AS active_users_monthly,\
+          (SELECT SUM(local_posts) FROM stats WHERE date = CURDATE()) AS local_posts,\
+          (SELECT SUM(local_comments) FROM stats WHERE date = CURDATE()) AS local_comments,\
+          (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'diaspora') AS total_diaspora_users,\
+          (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'friendica') AS total_friendica_users,\
+          (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'hubzilla') AS total_hubzilla_users",
+        callback);
     };
 
     models.Pod.projectCharts = function (projectName, callback) {
-      db.driver.execQuery(
+      var query =
         "SELECT UNIX_TIMESTAMP(date) AS timestamp,\
          COUNT(pod_id) AS nodes,\
          SUM(total_users) AS users,\
@@ -161,14 +163,12 @@ function setUpModels(db) {
          SUM(active_users_monthly) AS active_users_monthly,\
          SUM(local_posts) AS local_posts,\
          SUM(local_comments) AS local_comments\
-         FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "' GROUP BY date",
-        [],
-        function(err, data) {
-            if (err) {
-                console.log(err);
-            }
-            callback(data);
-        });
+         FROM stats s";
+      if (projectName != undefined && projectName != "") {
+        query += ", pods p WHERE s.pod_id = p.id AND p.network = '" + projectName + "'";
+      }
+      query += " GROUP BY date";
+      execQueryWithCallback(query, callback);
     };
     models.Pod.allForList = function (callback) {
         db.driver.execQuery(
@@ -213,16 +213,9 @@ function setUpModels(db) {
         );
     };
     models.Pod.allPodStats = function (item, callback) {
-        db.driver.execQuery(
-            "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                }
-                callback(data);
-            }
-        );
+        db.driver.execQueryWithCallback(
+          "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
+          callback);
     };
     models.Stat = db.define('stats', {
         date: { type: "date", time: false },
@@ -301,16 +294,9 @@ function setUpModels(db) {
         });
     };
     models.GlobalStat.getStats = function (callback) {
-        db.driver.execQuery(
-            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, local_comments, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                }
-                callback(data);
-            }
-        );
+        db.driver.execQueryWithCallback(
+          "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, local_comments, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
+          callback);
     };
     models.Pod.sync(function (err) {
         if (err) {
