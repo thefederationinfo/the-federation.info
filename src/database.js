@@ -159,10 +159,10 @@ function setUpModels(db) {
     models.Pod.projectCharts = function (projectName, callback) {
       var query =
         "SELECT timestamp, nodes, users, active_users_halfyear, active_users_monthly, local_posts, local_comments,\
-        users / nodes AS users_per_node,\
-        active_users_monthly / users AS active_users_ratio,\
-        local_posts / users AS posts_per_user,\
-        local_comments / users AS comments_per_user \
+        users / NULLIF(nodes, 0) AS users_per_node,\
+        active_users_monthly / NULLIF(users, 0) AS active_users_ratio,\
+        local_posts / NULLIF(users, 0) AS posts_per_user,\
+        local_comments / NULLIF(users, 0) AS comments_per_user \
         FROM (SELECT UNIX_TIMESTAMP(date) AS timestamp,\
          COUNT(pod_id) AS nodes,\
          SUM(total_users) AS users,\
