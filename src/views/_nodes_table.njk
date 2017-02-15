@@ -23,7 +23,7 @@
               {% set podname = pod.name %}
           {% endif %}
           <tr>
-              {% if pod.network == "unknown" %}
+              {% if pod.network not in  ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
                   <td></td>
               {% else %}
                   <td><img alt="{{ pod_meta[0] }}" title="{{ podname }}" src="images/{{ pod_meta[0] }}-16.png" /></td>
