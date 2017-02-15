@@ -14,6 +14,10 @@
       <div id="monthly-chart" class="btn-medium">Last month users</div>
       <div id="posts-chart" class="btn-medium">Posts</div>
       <div id="comments-chart" class="btn-medium">Comments</div>
+      <div id="users-per-node-chart" class="btn-medium">Users per node</div>
+      <div id="active-users-ratio-chart" class="btn-medium">Active users ratio</div>
+      <div id="posts-per-user-chart" class="btn-medium">Posts per user</div>
+      <div id="comments-per-user-chart" class="btn-medium">Comments per user</div>
     </div>
   </div>
 </section>
@@ -38,6 +42,10 @@
   var monthlyUsersData = prepareData(data, "active_users_monthly");
   var postsData = prepareData(data, "local_posts");
   var commentsData = prepareData(data, "local_comments");
+  var usersPerNodeData = prepareData(data, "users_per_node");
+  var activeUsersRatioData = prepareData(data, "active_users_ratio");
+  var postsPerUserData = prepareData(data, "posts_per_user");
+  var commentsPerUserData = prepareData(data, "comments_per_user");
   var chart = initChart(document.getElementById("chart"), "Nodes", nodesData);
 
   document.getElementById('nodes-chart').addEventListener('click', function() {
@@ -57,5 +65,17 @@
   });
   document.getElementById('comments-chart').addEventListener('click', function() {
     refreshChart(chart, "Local comments", commentsData);
+  });
+  document.getElementById('users-per-node-chart').addEventListener('click', function() {
+    refreshChart(chart, "Users per node", usersPerNodeData);
+  });
+  document.getElementById('active-users-ratio-chart').addEventListener('click', function() {
+    refreshChart(chart, "Active users ratio", activeUsersRatioData);
+  });
+  document.getElementById('posts-per-user-chart').addEventListener('click', function() {
+    refreshChart(chart, "Posts per user", postsPerUserData);
+  });
+  document.getElementById('comments-per-user-chart').addEventListener('click', function() {
+    refreshChart(chart, "Comments per user", commentsPerUserData);
   });
 </script>
