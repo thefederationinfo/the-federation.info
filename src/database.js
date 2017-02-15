@@ -177,47 +177,20 @@ function setUpModels(db) {
       query += " GROUP BY date) temp";
       execQueryWithCallback(query, callback);
     };
-    models.Pod.allForList = function (callback) {
-        db.driver.execQuery(
-            "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
-                p.service_facebook, p.service_twitter, p.service_tumblr, p.service_wordpress,\
-                (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
-                (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
-                (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
-                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts,\
-                (select local_comments from stats where pod_id = p.id order by id desc limit 1) as local_comments FROM pods p\
-                    where failures < 3",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                }
-                var result = { pods: data };
-                db.driver.execQuery(
-                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments, pod_count \
-                        from global_stats order by id desc limit 1",
-                    [],
-                    function (err, totals) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        if (totals.length) {
-                            result.totals = totals[0];
-                        } else {
-                            result.totals = {
-                                total_users: 0,
-                                active_users_monthly: 0,
-                                active_users_halfyear: 0,
-                                local_posts: 0,
-                                local_comments: 0,
-                                pod_count: 0
-                            };
-                        }
-                        callback(result);
-                    }
-                );
-            }
-        );
+    models.Pod.allForList = function (projectName, callback) {
+      var query =
+          "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
+              p.service_facebook, p.service_twitter, p.service_tumblr, p.service_wordpress,\
+              (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
+              (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
+              (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
+              (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts,\
+              (select local_comments from stats where pod_id = p.id order by id desc limit 1) as local_comments FROM pods p \
+                  where failures < 3";
+      if (projectName != undefined && projectName != "") {
+        query += " AND p.network = '" + projectName + "'";
+      }
+      execQueryWithCallback(query, callback);
     };
     models.Pod.allPodStats = function (item, callback) {
         db.driver.execQueryWithCallback(

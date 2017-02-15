@@ -2,10 +2,14 @@
 
 {% block content %}
 <main>
-  <script src="/vendor/js/jquery-1.9.1.min.js"></script>
-  <script src="/vendor/js/rickshaw.min.js"></script>
-  <script src="/vendor/js/d3.v3.min.js"></script>
-  <link rel="stylesheet" href="/vendor/css/rickshaw.min.css">
-  {% include "_node_list.njk" %}
+  <section class="tile">
+    <header>
+      <h2>List of the nodes composing The Federation</h2>
+    </header>
+    <div>
+      <p>You can also access each project nodes list using the global menu on the left.</p>
+      {% include "_nodes_table.njk" %}
+    </div>
+  </section>
 </main>
 {% endblock content %}

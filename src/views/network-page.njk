@@ -95,5 +95,13 @@
     </div>
   </section>
   {% include "charts/_stats_with_selectors.njk" %}
+  <section class="tile">
+    <header>
+      <h2>All {{texts.title}} nodes</h2>
+    </header>
+    <div>
+      {% include "_nodes_table.njk" %}
+    </div>
+  </section>
 </main>
 {% endblock content %}

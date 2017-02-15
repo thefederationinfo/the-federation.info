@@ -1,0 +1,56 @@
+<table id="nodes-table">
+  <thead>
+      <tr>
+          <th>Software</th>
+          <th>Name</th>
+          <th>Version</th>
+          <th>Open signups</th>
+          <th>Total users</th>
+          <th>Active users half year</th>
+          <th>Active users monthly</th>
+          <th>Local posts</th>
+          <th>Local comments</th>
+          <th>Services</th>
+          <th>Country</th>
+      </tr>
+  </thead>
+  <tbody>
+      {% for pod in nodesData %}
+          {% set pod_meta = utils.get_pod_network_and_version(pod.network, pod.version) %}
+          {% if pod.name|lower == 'diaspora*' %}
+              {% set podname = pod.host %}
+          {% else %}
+              {% set podname = pod.name %}
+          {% endif %}
+          <tr>
+              {% if pod.network not in  ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
+                  <td></td>
+              {% else %}
+                  <td><img alt="{{ pod_meta[0] }}" title="{{ podname }}" src="images/{{ pod_meta[0] }}-16.png" /></td>
+              {% endif %}
+              <td><a href="https://{{ pod.host }}">{{ podname }}</a></td>
+              <td>{{ pod_meta[1] }}</td>
+              <td>{{ "Yes" if pod.registrations_open else "No" }}</td>
+              <td>{{ pod.active_users_halfyear if  pod.active_users_halfyear else "-" }}</td>
+              <td>{{ pod.active_users_monthly if  pod.active_users_monthly else "-" }}</td>
+              <td>{{ pod.total_users if  pod.total_users else "-" }}</td>
+              <td>{{ pod.local_posts if  pod.local_posts else "-" }}</td>
+              <td>{{ pod.local_comments if  pod.local_comments else "-" }}</td>
+              <td>{{ utils.services_string(pod) }}</td>
+              <td>
+                  {% if pod.country %}
+                      <a href="http://countrycode.org/{{ pod.country }}" target="_blanc"><img src="flags/{{ pod.country|lower }}.png"></a>
+                  {% else %}
+                      &nbsp;
+                  {% endif %}
+              </td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
+<script src="/javascript/table-sort.js"></script>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    makeSortable(document.getElementById("nodes-table"));
+  });
+</script>
