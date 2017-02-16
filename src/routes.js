@@ -6,7 +6,7 @@ var routes = {},
 
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
-      db.Pod.projectCharts("", function (data) {
+      db.Pod.globalCharts(function (data) {
         res.render('index.njk', {
           data: home_stats[0],
           chartData: data
