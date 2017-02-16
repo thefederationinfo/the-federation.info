@@ -26,7 +26,7 @@
               {% if pod.network not in  ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
                   <td></td>
               {% else %}
-                  <td><img alt="{{ pod_meta[0] }}" title="{{ podname }}" src="images/{{ pod_meta[0] }}-16.png" /></td>
+                  <td><img alt="{{ pod_meta[0] }}" title="{{ pod_meta[0] }}" src="images/{{ pod_meta[0] }}-16.png" /></td>
               {% endif %}
               <td><a href="https://{{ pod.host }}">{{ podname }}</a></td>
               <td>{{ pod_meta[1] }}</td>
