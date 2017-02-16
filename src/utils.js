@@ -5,6 +5,31 @@ var utils = {},
     mailer = require("./mailer"),
     config = require('./config');
 
+utils.formatPodInfo = function(pod) {
+  pod.name = (pod.name.toLowerCase() == 'diaspora*') ? pod.host : pod.name;
+  var pod_meta_tab = utils.get_pod_network_and_version(pod.network, pod.version);
+  pod.network = pod_meta_tab[0];
+  pod.version = pod_meta_tab[1];
+  pod.registrations_open = (pod.registrations_open) ? "Yes" : "No";
+  if (pod.active_users_halfyear == undefined) {
+    pod.active_users_halfyear = "-";
+  }
+  if (pod.active_users_monthly == undefined) {
+    pod.active_users_monthly = "-";
+  }
+  if (pod.total_users == undefined) {
+    pod.total_users = "-";
+  }
+  if (pod.local_posts == undefined) {
+    pod.local_posts = "-";
+  }
+  if (pod.local_comments == undefined) {
+    pod.local_comments = "-";
+  }
+  pod.services = utils.services_string(pod);
+  return pod;
+}
+
 utils.get_pod_network_and_version = function(network, version) {
     /* Return an array that contains network and version
     by looking at network and version from pod data. These are
@@ -24,13 +49,13 @@ utils.get_pod_network_and_version = function(network, version) {
             case "pyaspora":
                 return ["pyaspora", version];
             case "diaspora":
-                if (version.indexOf('head') === 0)
+                if (version.indexOf('head') === 0) {
                     // development head, legacy
                     return ["diaspora", ".develop"];
-                else if (version.indexOf('-') > -1)
+                } else if (version.indexOf('-') > -1) {
                     // return version part only, no hash
                     return ["diaspora", version.split('-')[0]];
-                else {
+                } else {
                     // fallback, full version
                     return ["diaspora", version];
                 }
@@ -53,14 +78,12 @@ utils.services_string = function(pod) {
     var services = ["facebook", "twitter", "tumblr", "wordpress"];
     var service_keys = ["fb", "tw", "tu", "wp"];
     var enabled = [];
-    for (var i=0; i<services.length; i++) {
-        if (pod["service_"+services[i]] == 1)
+    for (var i = 0; i < services.length; i++) {
+        if (pod["service_" + services[i]] == 1) {
             enabled.push(service_keys[i]);
+        }
     }
-    if (enabled.length)
-        return enabled.join(',');
-    else
-        return " ";
+    return (enabled.length) ? enabled.join(',') : " ";
 };
 
 utils.syncActivePods = function () {
