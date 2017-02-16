@@ -48,6 +48,10 @@ app.get('/hubzilla', function (req, res) {
     routes.renderNetwork('hubzilla', res, db);
 });
 
+app.get('/node/:id', function (req, res) {
+    routes.renderNode(req, res, db);
+});
+
 /* API routes */
 app.get('/pods.json', function (req, res) {
     routes.pods(req, res, db);

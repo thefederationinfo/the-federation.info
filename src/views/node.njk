@@ -1,0 +1,34 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<main>
+  <header class="main-header">
+    <div class="main-title">
+      <h1>{{pod.name}}</h1>
+      <h2>{{pod.host}}</h2>
+    </div>
+    <div class="flex">
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.users}} <strong>Users</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.active_users_monthly}} <strong>Monthly users</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.local_posts}} <strong>Posts</strong>
+        </div>
+      </div>
+      <div class="col4">
+        <div class="tile valign-wrapper">
+          {{globalData.local_comments}} <strong>Comments</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+  {% include "charts/_stats_with_selectors.njk" %}
+{% endblock content %}

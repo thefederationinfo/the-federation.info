@@ -36,12 +36,12 @@ routes.info = function (req, res, db) {
 }
 
 routes.renderNetwork = function (network, res, db) {
-  db.Pod.projectCharts(network, function (chartsData) {
+  db.Pod.projectCharts(network, function (chartData) {
     db.Pod.allForList(network, function (podsList) {
       res.render('network-page.njk', {
         texts: texts.networks[network],
-        globalData: chartsData[chartsData.length - 1],
-        chartData: chartsData,
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData,
         nodesData: podsList
       });
     }, function (err) {
@@ -49,6 +49,19 @@ routes.renderNetwork = function (network, res, db) {
     });
   }, function (err) {
       console.log(err);
+  });
+}
+
+routes.renderNode = function (req, res, db) {
+  var nodeId = req.params.id;
+  db.Pod.nodeInfo(nodeId, function(podInfo) {
+    db.Pod.nodeCharts(nodeId, function(chartData) {
+      res.render('node.njk', {
+        pod: podInfo[0],
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData
+      });
+    });
   });
 }
 
