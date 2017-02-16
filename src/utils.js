@@ -5,34 +5,34 @@ var utils = {},
     mailer = require("./mailer"),
     config = require('./config');
 
-utils.formatPodInfo = function(pod) {
-  pod.name = (pod.name.toLowerCase() == 'diaspora*') ? pod.host : pod.name;
-  var pod_meta_tab = utils.get_pod_network_and_version(pod.network, pod.version);
-  pod.network = pod_meta_tab[0];
-  pod.version = pod_meta_tab[1];
-  pod.registrations_open = (pod.registrations_open) ? "Yes" : "No";
-  if (pod.active_users_halfyear == undefined) {
-    pod.active_users_halfyear = "-";
+utils.formatNodeInfo = function(node) {
+  node.name = (node.name.toLowerCase() == 'diaspora*') ? node.host : node.name;
+  var node_meta_tab = utils.get_node_network_and_version(node.network, node.version);
+  node.network = node_meta_tab[0];
+  node.version = node_meta_tab[1];
+  node.registrations_open = (node.registrations_open) ? "Yes" : "No";
+  if (node.active_users_halfyear == undefined) {
+    node.active_users_halfyear = "-";
   }
-  if (pod.active_users_monthly == undefined) {
-    pod.active_users_monthly = "-";
+  if (node.active_users_monthly == undefined) {
+    node.active_users_monthly = "-";
   }
-  if (pod.total_users == undefined) {
-    pod.total_users = "-";
+  if (node.total_users == undefined) {
+    node.total_users = "-";
   }
-  if (pod.local_posts == undefined) {
-    pod.local_posts = "-";
+  if (node.local_posts == undefined) {
+    node.local_posts = "-";
   }
-  if (pod.local_comments == undefined) {
-    pod.local_comments = "-";
+  if (node.local_comments == undefined) {
+    node.local_comments = "-";
   }
-  pod.services = utils.services_string(pod);
-  return pod;
+  node.services = utils.services_string(node);
+  return node;
 }
 
-utils.get_pod_network_and_version = function(network, version) {
+utils.get_node_network_and_version = function(network, version) {
     /* Return an array that contains network and version
-    by looking at network and version from pod data. These are
+    by looking at network and version from node data. These are
     not always filled properly. */
     if (typeof network === 'undefined')
         network = 'unknown';
@@ -63,7 +63,7 @@ utils.get_pod_network_and_version = function(network, version) {
                 return ["unknown", version];
         }
     } catch (e) {
-        utils.logger('utils', 'get_pod_network_and_version', 'ERROR', e);
+        utils.logger('utils', 'get_node_network_and_version', 'ERROR', e);
         return ["unknown", version];
     }
 };
@@ -73,13 +73,13 @@ utils.logger = function(module, object, level, msg) {
     console.log(new Date() + ' - [' + level + '] ' + module + '.' + object + ' | ' + msg);
 };
 
-utils.services_string = function(pod) {
-    /* Build a string for the Services column in the podlist */
+utils.services_string = function(node) {
+    /* Build a string for the Services column in the nodelist */
     var services = ["facebook", "twitter", "tumblr", "wordpress"];
     var service_keys = ["fb", "tw", "tu", "wp"];
     var enabled = [];
     for (var i = 0; i < services.length; i++) {
-        if (pod["service_" + services[i]] == 1) {
+        if (node["service_" + services[i]] == 1) {
             enabled.push(service_keys[i]);
         }
     }

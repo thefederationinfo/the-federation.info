@@ -54,7 +54,6 @@ $max-width: 1200px;
   }
 
   #drawer-opened:target #menu {
-
     transform: translateX(200px);
   }
 }
@@ -66,13 +65,26 @@ main {
 
 section {
   & > header {
+    position: relative;
     background-color: #ddd;
     padding: 1rem;
+
+    .right-action {
+      position: absolute;
+      top: 25px;
+      right: 12px;
+    }
   }
 
   & > div {
     padding: 1rem;
     color: #333;
+  }
+}
+
+@media screen and (max-width: $breakview) {
+  section > header .right-action {
+    position: static;
   }
 }
 

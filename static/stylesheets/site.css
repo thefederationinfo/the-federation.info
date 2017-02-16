@@ -230,12 +230,20 @@ main {
   margin: auto; }
 
 section > header {
+  position: relative;
   background-color: #ddd;
   padding: 1rem; }
+  section > header .right-action {
+    position: absolute;
+    top: 25px;
+    right: 12px; }
 section > div {
   padding: 1rem;
   color: #333; }
 
+@media screen and (max-width: 642px) {
+  section > header .right-action {
+    position: static; } }
 .tile {
   border: solid #ccc 1px;
   background-color: white;

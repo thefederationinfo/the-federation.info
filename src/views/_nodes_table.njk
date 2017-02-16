@@ -16,7 +16,7 @@
   </thead>
   <tbody>
       {% for pod in nodesData %}
-          {% set pod = utils.formatPodInfo(pod) %}
+          {% set pod = utils.formatNodeInfo(pod) %}
           <tr>
               <td>
               {% if pod.network in ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
