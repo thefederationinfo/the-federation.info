@@ -202,7 +202,7 @@ function setUpModels(db) {
       execQueryWithCallback(query, [], callback);
     };
     models.Pod.allPodStats = function (item, callback) {
-        db.driver.execQueryWithCallback(
+        execQueryWithCallback(
           "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
           [], callback);
     };
@@ -283,7 +283,7 @@ function setUpModels(db) {
         });
     };
     models.GlobalStat.getStats = function (callback) {
-        db.driver.execQueryWithCallback(
+      execQueryWithCallback(
           "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, local_comments, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
           [], callback);
     };
