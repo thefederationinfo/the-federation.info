@@ -199,6 +199,7 @@ function setUpModels(db) {
       if (projectName != undefined && projectName != "") {
         query += " AND p.network = '" + projectName + "'";
       }
+      query += " ORDER BY active_users_monthly DESC";
       execQueryWithCallback(query, [], callback);
     };
     models.Pod.allPodStats = function (item, callback) {
