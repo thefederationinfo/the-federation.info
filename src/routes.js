@@ -2,7 +2,8 @@
 "use strict";
 var routes = {},
     util = require('util'),
-    texts = require('./texts');
+    texts = require('./texts'),
+    utils = require('./utils');
 
 routes.root = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
@@ -21,8 +22,8 @@ routes.root = function (req, res, db) {
 
 routes.globalStatsPage = function (req, res, db) {
     db.Pod.homeStats(function (home_stats) {
-      db.Pod.allForList("", function (podsList) {
-        res.render('global_stats.njk', {nodesData: podsList});
+      db.Pod.allForList("", function (nodesList) {
+        res.render('global_stats.njk', {nodesData: nodesList});
       }, function (err) {
           console.log(err);
       });
@@ -36,19 +37,32 @@ routes.info = function (req, res, db) {
 }
 
 routes.renderNetwork = function (network, res, db) {
-  db.Pod.projectCharts(network, function (chartsData) {
-    db.Pod.allForList(network, function (podsList) {
+  db.Pod.projectCharts(network, function (chartData) {
+    db.Pod.allForList(network, function (nodesList) {
       res.render('network-page.njk', {
         texts: texts.networks[network],
-        globalData: chartsData[chartsData.length - 1],
-        chartData: chartsData,
-        nodesData: podsList
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData,
+        nodesData: nodesList
       });
     }, function (err) {
         console.log(err);
     });
   }, function (err) {
       console.log(err);
+  });
+}
+
+routes.renderNode = function (req, res, db) {
+  var nodeId = req.params.id;
+  db.Pod.nodeInfo(nodeId, function(nodeInfo) {
+    db.Pod.nodeCharts(nodeId, function(chartData) {
+      res.render('node.njk', {
+        node: utils.formatNodeInfo(nodeInfo[0]),
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData
+      });
+    });
   });
 }
 

@@ -16,30 +16,27 @@
   </thead>
   <tbody>
       {% for pod in nodesData %}
-          {% set pod_meta = utils.get_pod_network_and_version(pod.network, pod.version) %}
-          {% if pod.name|lower == 'diaspora*' %}
-              {% set podname = pod.host %}
-          {% else %}
-              {% set podname = pod.name %}
-          {% endif %}
+          {% set pod = utils.formatNodeInfo(pod) %}
           <tr>
-              {% if pod.network not in  ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
-                  <td></td>
-              {% else %}
-                  <td><img alt="{{ pod_meta[0] }}" title="{{ pod_meta[0] }}" src="images/{{ pod_meta[0] }}-16.png" /></td>
+              <td>
+              {% if pod.network in ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
+                  <img alt="{{pod.network}}" title="{{pod.network}}" src="images/{{pod.network}}-16.png" />
               {% endif %}
-              <td><a href="https://{{ pod.host }}">{{ podname }}</a></td>
-              <td>{{ pod_meta[1] }}</td>
-              <td>{{ "Yes" if pod.registrations_open else "No" }}</td>
-              <td>{{ pod.active_users_halfyear if  pod.active_users_halfyear else "-" }}</td>
-              <td>{{ pod.active_users_monthly if  pod.active_users_monthly else "-" }}</td>
-              <td>{{ pod.total_users if  pod.total_users else "-" }}</td>
-              <td>{{ pod.local_posts if  pod.local_posts else "-" }}</td>
-              <td>{{ pod.local_comments if  pod.local_comments else "-" }}</td>
-              <td>{{ utils.services_string(pod) }}</td>
+              </td>
+              <td><a title="{{pod.name}}" href="/node/{{pod.id}}">{{pod.name}}</a></td>
+              <td>{{pod.version}}</td>
+              <td>{{pod.registrations_open}}</td>
+              <td>{{pod.active_users_halfyear}}</td>
+              <td>{{pod.active_users_monthly}}</td>
+              <td>{{pod.total_users}}</td>
+              <td>{{pod.local_posts}}</td>
+              <td>{{pod.local_comments}}</td>
+              <td>{{pod.services}}</td>
               <td>
                   {% if pod.country %}
-                      <a href="http://countrycode.org/{{ pod.country }}" target="_blanc"><img src="flags/{{ pod.country|lower }}.png"></a>
+                      <a href="http://countrycode.org/{{pod.country}}" target="_blank">
+                        <img src="flags/{{pod.country|lower}}.png">
+                      </a>
                   {% else %}
                       &nbsp;
                   {% endif %}

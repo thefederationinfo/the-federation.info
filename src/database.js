@@ -183,9 +183,12 @@ function setUpModels(db) {
       var query = chartQuery(" WHERE s.pod_id = ?");
       execQueryWithCallback(query, [nodeId], callback);
     };
+    models.Pod.nodeInfo = function (nodeId, callback) {
+      execQueryWithCallback("SELECT * FROM pods WHERE id = ?", [nodeId], callback);
+    };
     models.Pod.allForList = function (projectName, callback) {
       var query =
-          "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
+          "SELECT p.id, p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
               p.service_facebook, p.service_twitter, p.service_tumblr, p.service_wordpress,\
               (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
               (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
