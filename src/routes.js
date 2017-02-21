@@ -54,9 +54,9 @@ routes.renderNetwork = function (network, res, db) {
 }
 
 routes.renderNode = function (req, res, db) {
-  var nodeId = req.params.id;
-  db.Pod.nodeInfo(nodeId, function(nodeInfo) {
-    db.Pod.nodeCharts(nodeId, function(chartData) {
+  var nodeHost = req.params.host;
+  db.Pod.nodeInfo(nodeHost, function(nodeInfo) {
+    db.Pod.nodeCharts(nodeHost, function(chartData) {
       res.render('node.njk', {
         node: utils.formatNodeInfo(nodeInfo[0]),
         globalData: chartData[chartData.length - 1],
