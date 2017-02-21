@@ -11,19 +11,19 @@ utils.formatNodeInfo = function(node) {
   node.network = node_meta_tab[0];
   node.version = node_meta_tab[1];
   node.registrations_open = (node.registrations_open) ? "Yes" : "No";
-  if (node.active_users_halfyear == undefined) {
+  if (node.active_users_halfyear == undefined || node.active_users_halfyear == 0) {
     node.active_users_halfyear = "-";
   }
-  if (node.active_users_monthly == undefined) {
+  if (node.active_users_monthly == undefined || node.active_users_monthly == 0) {
     node.active_users_monthly = "-";
   }
-  if (node.total_users == undefined) {
+  if (node.total_users == undefined || node.total_users == 0) {
     node.total_users = "-";
   }
-  if (node.local_posts == undefined) {
+  if (node.local_posts == undefined || node.local_posts == 0) {
     node.local_posts = "-";
   }
-  if (node.local_comments == undefined) {
+  if (node.local_comments == undefined || node.local_comments == 0) {
     node.local_comments = "-";
   }
   node.services = utils.services_string(node);
