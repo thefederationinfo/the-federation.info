@@ -2,22 +2,27 @@
   <header>
     <h2>Charts</h2>
   </header>
+
   <div>
     <div class="chart-container">
       <div id="y-axis"></div>
       <div id="chart"></div>
     </div>
-    <div class="flex">
-      <div id="nodes-chart" class="btn-medium">Nodes</div>
-      <div id="users-chart" class="btn-medium">Total users</div>
-      <div id="half-year-chart" class="btn-medium">Last 6 months users</div>
-      <div id="monthly-chart" class="btn-medium">Last month users</div>
-      <div id="posts-chart" class="btn-medium">Posts</div>
-      <div id="comments-chart" class="btn-medium">Comments</div>
-      <div id="users-per-node-chart" class="btn-medium">Users per node</div>
-      <div id="active-users-ratio-chart" class="btn-medium">Active users ratio</div>
-      <div id="posts-per-user-chart" class="btn-medium">Posts per user</div>
-      <div id="comments-per-user-chart" class="btn-medium">Comments per user</div>
+    <div id="charts-buttons" class="flex">
+      {% if globalData.nodes > 1 %}
+      <div data-name="nodes" class="btn-medium">Nodes</div>
+      {% endif %}
+      <div data-name="users" class="btn-medium">Total users</div>
+      <div data-name="active_users_halfyear" class="btn-medium">Last 6 months users</div>
+      <div data-name="active_users_monthly" class="btn-medium">Last month users</div>
+      <div data-name="local_posts" class="btn-medium">Posts</div>
+      <div data-name="local_comments" class="btn-medium">Comments</div>
+      {% if globalData.nodes > 1 %}
+      <div data-name="users_per_node" class="btn-medium">Users per node</div>
+      {% endif %}
+      <div data-name="active_users_ratio" class="btn-medium">Active users ratio</div>
+      <div data-name="posts_per_user" class="btn-medium">Posts per user</div>
+      <div data-name="comments_per_user" class="btn-medium">Comments per user</div>
     </div>
   </div>
 </section>
@@ -36,48 +41,19 @@
   }
 
   window.addEventListener('load', function() {
-    var data = {{chartData | dump | safe }};
-    var nodesData = prepareData(data, "nodes");
-    var usersData = prepareData(data, "users");
-    var halfYearUsersData = prepareData(data, "active_users_halfyear");
-    var monthlyUsersData = prepareData(data, "active_users_monthly");
-    var postsData = prepareData(data, "local_posts");
-    var commentsData = prepareData(data, "local_comments");
-    var usersPerNodeData = prepareData(data, "users_per_node");
-    var activeUsersRatioData = prepareData(data, "active_users_ratio");
-    var postsPerUserData = prepareData(data, "posts_per_user");
-    var commentsPerUserData = prepareData(data, "comments_per_user");
-    var chart = initChart(document.getElementById("chart"), "Nodes", nodesData);
+    var allData = {{chartData | dump | safe }};
+    var buttons = document.getElementById("charts-buttons").children;
+    var chartData = {};
+    for (var i = 0; i < buttons.length; i++) {
+      var name = buttons[i].dataset.name;
+      chartData[name] = prepareData(allData, name);
+      buttons[i].addEventListener('click', function(ev) {
+        var el = ev.currentTarget;
+        refreshChart(chart, el.textContent, chartData[el.dataset.name]);
+      });;
+    }
 
-    document.getElementById('nodes-chart').addEventListener('click', function() {
-      refreshChart(chart, "Nodes", nodesData);
-    });
-    document.getElementById('users-chart').addEventListener('click', function() {
-      refreshChart(chart, "Users", usersData);
-    });
-    document.getElementById('half-year-chart').addEventListener('click', function() {
-      refreshChart(chart, "Half year active users", halfYearUsersData);
-    });
-    document.getElementById('monthly-chart').addEventListener('click', function() {
-      refreshChart(chart, "Monthly active users", monthlyUsersData);
-    });
-    document.getElementById('posts-chart').addEventListener('click', function() {
-      refreshChart(chart, "Local posts", postsData);
-    });
-    document.getElementById('comments-chart').addEventListener('click', function() {
-      refreshChart(chart, "Local comments", commentsData);
-    });
-    document.getElementById('users-per-node-chart').addEventListener('click', function() {
-      refreshChart(chart, "Users per node", usersPerNodeData);
-    });
-    document.getElementById('active-users-ratio-chart').addEventListener('click', function() {
-      refreshChart(chart, "Active users ratio", activeUsersRatioData);
-    });
-    document.getElementById('posts-per-user-chart').addEventListener('click', function() {
-      refreshChart(chart, "Posts per user", postsPerUserData);
-    });
-    document.getElementById('comments-per-user-chart').addEventListener('click', function() {
-      refreshChart(chart, "Comments per user", commentsPerUserData);
-    });
+    var firstButton = document.getElementById("charts-buttons").children[0];
+    var chart = initChart(document.getElementById("chart"), firstButton.textContent, chartData[firstButton.dataset.name]);
   });
 </script>
