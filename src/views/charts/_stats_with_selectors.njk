@@ -9,13 +9,17 @@
       <div id="chart"></div>
     </div>
     <div id="charts-buttons" class="flex">
+      {% if globalData.nodes > 1 %}
       <div data-name="nodes" class="btn-medium">Nodes</div>
+      {% endif %}
       <div data-name="users" class="btn-medium">Total users</div>
       <div data-name="active_users_halfyear" class="btn-medium">Last 6 months users</div>
       <div data-name="active_users_monthly" class="btn-medium">Last month users</div>
       <div data-name="local_posts" class="btn-medium">Posts</div>
       <div data-name="local_comments" class="btn-medium">Comments</div>
+      {% if globalData.nodes > 1 %}
       <div data-name="users_per_node" class="btn-medium">Users per node</div>
+      {% endif %}
       <div data-name="active_users_ratio" class="btn-medium">Active users ratio</div>
       <div data-name="posts_per_user" class="btn-medium">Posts per user</div>
       <div data-name="comments_per_user" class="btn-medium">Comments per user</div>
