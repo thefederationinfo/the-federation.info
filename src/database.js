@@ -179,12 +179,12 @@ function setUpModels(db) {
       var query = chartQuery(", pods p WHERE s.pod_id = p.id AND p.network = ?");
       execQueryWithCallback(query, [projectName], callback);
     };
-    models.Pod.nodeCharts = function (nodeId, callback) {
-      var query = chartQuery(" WHERE s.pod_id = ?");
-      execQueryWithCallback(query, [nodeId], callback);
+    models.Pod.nodeCharts = function (nodeHost, callback) {
+      var query = chartQuery(", pods p WHERE s.pod_id = p.id AND p.host = ?");
+      execQueryWithCallback(query, [nodeHost], callback);
     };
-    models.Pod.nodeInfo = function (nodeId, callback) {
-      execQueryWithCallback("SELECT * FROM pods WHERE id = ?", [nodeId], callback);
+    models.Pod.nodeInfo = function (nodeHost, callback) {
+      execQueryWithCallback("SELECT * FROM pods WHERE host = ?", [nodeHost], callback);
     };
     models.Pod.allForList = function (projectName, callback) {
       var query =

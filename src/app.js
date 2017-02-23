@@ -48,7 +48,7 @@ app.get('/hubzilla', function (req, res) {
     routes.renderNetwork('hubzilla', res, db);
 });
 
-app.get('/node/:id', function (req, res) {
+app.get('/node/:host', function (req, res) {
     routes.renderNode(req, res, db);
 });
 
