@@ -15,12 +15,12 @@
             </div>
             <div class="col4">
                 <div class="tile valign-wrapper">
-                {{ data.total_nodes }} <strong>Nodes</strong>
+                {{ globalData.nodes }} <strong>Nodes</strong>
                 </div>
             </div>
             <div class="col4">
                 <div class="tile valign-wrapper">
-                {{ data.total_users }} <strong>Users</strong>
+                {{ globalData.users }} <strong>Users</strong>
                 </div>
             </div>
             <div class="col4">
@@ -49,12 +49,12 @@
                 </div>
                 <div class="col2">
                     <ul>
-                        <li>Nodes: <strong>{{ data.total_nodes }}</strong></li>
-                        <li>Users: <strong>{{ data.total_users }}</strong></li>
-                        <li>Last 6 months active users: <strong>{{ data.active_users_halfyear }}</strong></li>
-                        <li>Last month active users: <strong>{{ data.active_users_monthly }}</strong></li>
-                        <li>Posts: <strong>{{ data.local_posts }}</strong></li>
-                        <li>Comments: <strong>{{ data.local_comments }}</strong></li>
+                        <li>Nodes: <strong>{{ globalData.nodes }}</strong></li>
+                        <li>Users: <strong>{{ globalData.users }}</strong></li>
+                        <li>Last 6 months active users: <strong>{{ globalData.active_users_halfyear }}</strong></li>
+                        <li>Last month active users: <strong>{{ globalData.active_users_monthly }}</strong></li>
+                        <li>Posts: <strong>{{ globalData.local_posts }}</strong></li>
+                        <li>Comments: <strong>{{ globalData.local_comments }}</strong></li>
                     </ul>
                     <div><strong>Disclaimer:</strong> These counts do not reflect the whole network due to the opt-in nature of the statistics.</div>
                 </div>
@@ -94,15 +94,15 @@
                     </tr>
                     <tr>
                         <th>Nodes</th>
-                        <td>{{data.total_diaspora_nodes}}</td>
-                        <td>{{data.total_friendica_nodes}}</td>
-                        <td>{{data.total_hubzilla_nodes}}</td>
+                        <td>{{stats.total_diaspora_nodes}}</td>
+                        <td>{{stats.total_friendica_nodes}}</td>
+                        <td>{{stats.total_hubzilla_nodes}}</td>
                     </tr>
                     <tr>
                         <th>Users</th>
-                        <td>{{data.total_diaspora_users}}</td>
-                        <td>{{data.total_friendica_users}}</td>
-                        <td>{{data.total_hubzilla_users}}</td>
+                        <td>{{stats.total_diaspora_users}}</td>
+                        <td>{{stats.total_friendica_users}}</td>
+                        <td>{{stats.total_hubzilla_users}}</td>
                     </tr>
                     <tr>
                         <th>Official website</th>
