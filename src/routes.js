@@ -6,34 +6,31 @@ var routes = {},
     utils = require('./utils');
 
 routes.root = function (req, res, db) {
-    db.Pod.homeStats(function (home_stats) {
-      db.Pod.globalCharts(function (data) {
-        res.render('index.njk', {
-          data: home_stats[0],
-          chartData: data
-        });
-      }, function (err) {
-          console.log(err);
+  db.Pod.homeStats(function (home_stats) {
+    db.Pod.globalCharts(function (chartData) {
+      res.render('index.njk', {
+        stats: home_stats[0],
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData
       });
     }, function (err) {
         console.log(err);
     });
+  }, function (err) {
+      console.log(err);
+  });
 };
 
 routes.globalStatsPage = function (req, res, db) {
-    db.Pod.homeStats(function (home_stats) {
-      db.Pod.allForList("", function (nodesList) {
-        res.render('global_stats.njk', {nodesData: nodesList});
-      }, function (err) {
-          console.log(err);
-      });
+  db.Pod.allForList("", function (nodesList) {
+    res.render('global_stats.njk', {nodesData: nodesList});
   }, function (err) {
       console.log(err);
   });
 }
 
 routes.info = function (req, res, db) {
-    res.render('_info_site.njk');
+  res.render('_info_site.njk');
 }
 
 routes.renderNetwork = function (network, res, db) {
