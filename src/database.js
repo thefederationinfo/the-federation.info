@@ -154,22 +154,9 @@ function setUpModels(db) {
             }
         }
     });
-    models.Pod.homeStats = function (callback) {
-      execQueryWithCallback(
-        "SELECT \
-          (SELECT COUNT(*) FROM pods WHERE failures < 3) AS total_nodes,\
-          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'diaspora') AS total_diaspora_nodes,\
-          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'friendica') AS total_friendica_nodes,\
-          (SELECT COUNT(*) FROM pods WHERE failures < 3 AND network = 'hubzilla') AS total_hubzilla_nodes,\
-          (SELECT SUM(total_users) FROM stats WHERE date = CURDATE()) AS total_users,\
-          (SELECT SUM(active_users_halfyear) FROM stats WHERE date = CURDATE()) AS active_users_halfyear,\
-          (SELECT SUM(active_users_monthly) FROM stats WHERE date = CURDATE()) AS active_users_monthly,\
-          (SELECT SUM(local_posts) FROM stats WHERE date = CURDATE()) AS local_posts,\
-          (SELECT SUM(local_comments) FROM stats WHERE date = CURDATE()) AS local_comments,\
-          (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'diaspora') AS total_diaspora_users,\
-          (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'friendica') AS total_friendica_users,\
-          (SELECT SUM(total_users) FROM stats s, pods p WHERE s.date = CURDATE() AND s.pod_id = p.id AND p.network = 'hubzilla') AS total_hubzilla_users",
-        [], callback);
+    models.Pod.projectStats = function (projectName, callback) {
+      execQueryWithCallback("SELECT COUNT(p.id) AS nodes, SUM(total_users) AS users FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = ? GROUP BY date ORDER BY date DESC LIMIT 1",
+        [projectName], callback);
     };
     models.Pod.globalCharts = function (callback) {
       var query = chartQuery("");
