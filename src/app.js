@@ -28,8 +28,8 @@ app.get('/', function (req, res) {
     routes.root(req, res, db);
 });
 
-app.get('/global-stats', function (req, res) {
-    routes.globalStatsPage(req, res, db);
+app.get('/nodes', function (req, res) {
+    routes.nodesList(req, res, db);
 });
 
 app.get('/info', function (req, res) {

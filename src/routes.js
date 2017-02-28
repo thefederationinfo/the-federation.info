@@ -27,9 +27,9 @@ routes.root = function (req, res, db) {
   });
 };
 
-routes.globalStatsPage = function (req, res, db) {
+routes.nodesList = function (req, res, db) {
   db.Pod.allForList("", function (nodesList) {
-    res.render('global_stats.njk', {nodesData: nodesList});
+    res.render('nodes-list.njk', {nodesData: nodesList});
   }, function (err) {
       console.log(err);
   });
