@@ -16,6 +16,7 @@ routes.root = function (req, res, db) {
               friendica: friendica_stats[0],
               hubzilla: hubzilla_stats[0]
             },
+            texts: texts.networks,
             globalData: chartData[chartData.length - 1],
             chartData: chartData
           });
