@@ -5,6 +5,9 @@ $primary: #83886C;
 $primary-text: black;
 $secondary: #43372E;
 $secondary-text: white;
+$selected: steelblue;
+$selected-text: white;
+
 
 .center {
 	text-align: center;
@@ -62,6 +65,10 @@ $secondary-text: white;
 
 .btn-secondary {
   @include btn-color($secondary, $secondary-text);
+}
+
+.btn.selected {
+  @include btn-color($selected, $selected-text);
 }
 
 .valign-wrapper {

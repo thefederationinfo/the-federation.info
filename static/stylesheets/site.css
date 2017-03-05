@@ -53,6 +53,14 @@
   .btn-secondary, .btn-secondary:hover, .btn-secondary:visited {
     color: white; }
 
+.btn.selected, .selected.btn-medium, .selected.btn-big {
+  background-color: steelblue;
+  border-color: #38678f; }
+  .btn.selected:hover, .selected.btn-medium:hover, .selected.btn-big:hover {
+    background-color: #568ebd; }
+  .btn.selected, .selected.btn-medium, .selected.btn-big, .btn.selected:hover, .selected.btn-medium:hover, .selected.btn-big:hover, .btn.selected:visited, .selected.btn-medium:visited, .selected.btn-big:visited {
+    color: white; }
+
 .valign-wrapper {
   display: -webkit-box;
   display: -webkit-flex;

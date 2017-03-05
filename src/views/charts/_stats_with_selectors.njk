@@ -48,12 +48,17 @@
       var name = buttons[i].dataset.name;
       chartData[name] = prepareData(allData, name);
       buttons[i].addEventListener('click', function(ev) {
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].classList.remove('selected');
+        }
         var el = ev.currentTarget;
+        el.classList.add('selected');
         refreshChart(chart, el.textContent, chartData[el.dataset.name]);
-      });;
+      });
     }
 
-    var firstButton = document.getElementById("charts-buttons").children[0];
+    var firstButton = buttons[0];
+    firstButton.classList.add('selected');
     var chart = initChart(document.getElementById("chart"), firstButton.textContent, chartData[firstButton.dataset.name]);
   });
 </script>
