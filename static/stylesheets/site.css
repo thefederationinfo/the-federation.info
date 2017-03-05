@@ -208,7 +208,8 @@ table {
   position: fixed;
   top: 12rem;
   left: 0;
-  padding: 3px 6px; }
+  padding: 3px 6px;
+  z-index: 1; }
   #menu a {
     color: black; }
     #menu a:hover {
