@@ -3,7 +3,7 @@ var texts = {
     diaspora: {
       title: 'diaspora*',
       subtitle: 'Share what you want with whom you want',
-      description: 'This is the description of the diaspora* project',
+      description: 'Open source, decentralized and privacy oriented, diaspora* is the online social world where you are in control',
       website: 'diasporafoundation.org',
       github: 'https://github.com/diaspora/diaspora'
     },
