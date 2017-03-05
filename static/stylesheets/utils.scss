@@ -65,7 +65,7 @@ $secondary-text: white;
 }
 
 .valign-wrapper {
-	@include flexbox;
+  @include flexbox;
   @include flex-direction(column);
   @include justify-content(center);
 }
@@ -87,6 +87,16 @@ $secondary-text: white;
   > .col4 {
     width: 21%;
     padding: 2%;
+  }
+}
+
+.flex-wrap {
+  @include flexbox;
+  @include flex-direction(row);
+  @include flex-wrap(wrap);
+
+  > * {
+	  margin: 5px;
   }
 }
 
