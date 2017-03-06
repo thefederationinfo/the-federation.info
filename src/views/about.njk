@@ -5,6 +5,7 @@
   <header class="main-header">
     <div class="main-title">
       <h1>About</h1>
+      <h2>Behind the scenes</h2>
     </div>
   </header>
   <section class="tile">
@@ -50,11 +51,6 @@
           For registering your node with this hub, go to <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>. After some seconds, you should see your node added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
       </p>
 
-      <h3>Code stats</h3>
-      <p>
-          <div id="hubinfo" style="width:400px;"></div>
-      </p>
-
       <h3>Licence</h3>
       <ul>
         <li>The Federation website code <a href="https://github.com/jaywink/the-federation.info">on GitHub</a> (<a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPLv3</a>)</li>
@@ -64,20 +60,7 @@
       </ul>
 
       <p class="center">Hosted with <3 by <a href="https://iliketoast.net/u/jaywink">Jason Robinson</a></p>
-
-      <!--TODO Can we get a version of hubinfo which doesn't depend of jquery?-->
-      <script src="/vendor/js/jquery-1.9.1.min.js"></script>
-      <link rel="stylesheet" href="/vendor/css/hubinfo.min.css">
-      <script src="/vendor/js/hubinfo.min.js"></script>
-      <script>
-          $(function() {
-              $("#hubinfo").hubInfo({
-                  user: "jaywink",
-                  repo: "the-federation.info"
-              });
-          });
-      </script>
-    </div>
+     </div>
   </section>
 </main>
 {% endblock content %}
