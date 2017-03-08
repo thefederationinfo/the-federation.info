@@ -37,7 +37,7 @@ routes.nodesList = function (req, res, db) {
 }
 
 routes.info = function (req, res, db) {
-  res.render('_info_site.njk');
+  res.render('about.njk');
 }
 
 routes.renderNetwork = function (network, res, db) {

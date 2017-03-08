@@ -53,6 +53,14 @@
   .btn-secondary, .btn-secondary:hover, .btn-secondary:visited {
     color: white; }
 
+.btn.selected, .selected.btn-medium, .selected.btn-big {
+  background-color: steelblue;
+  border-color: #38678f; }
+  .btn.selected:hover, .selected.btn-medium:hover, .selected.btn-big:hover {
+    background-color: #568ebd; }
+  .btn.selected, .selected.btn-medium, .selected.btn-big, .btn.selected:hover, .selected.btn-medium:hover, .selected.btn-big:hover, .btn.selected:visited, .selected.btn-medium:visited, .selected.btn-big:visited {
+    color: white; }
+
 .valign-wrapper {
   display: -webkit-box;
   display: -webkit-flex;
@@ -92,6 +100,25 @@
   .flex > .col4 {
     width: 21%;
     padding: 2%; }
+
+.flex-wrap {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+  .flex-wrap > * {
+    margin: 5px; }
 
 .overflow-x {
   overflow-x: auto; }
@@ -189,7 +216,8 @@ table {
   position: fixed;
   top: 12rem;
   left: 0;
-  padding: 3px 6px; }
+  padding: 3px 6px;
+  z-index: 1; }
   #menu a {
     color: black; }
     #menu a:hover {
