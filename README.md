@@ -68,9 +68,8 @@ There is a [node compiler](https://github.com/sass/node-sass) or a [python compi
 
 ## Authors
 
-Jason Robinson / @jaywink / https://jasonrobinson.me
-Flaburgan / @Flaburgan
-
+* Jason Robinson / @jaywink / https://jasonrobinson.me
+* Flaburgan / @Flaburgan
 
 ## License
 
