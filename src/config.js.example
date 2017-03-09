@@ -29,4 +29,9 @@ config.admin = {
     email: "admin@example.com"
 };
 
+config.app = {
+    // This is the port the application will listen on
+    port: 4730
+};
+
 module.exports = config;

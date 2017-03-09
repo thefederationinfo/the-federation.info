@@ -28,6 +28,31 @@ app.get('/', function (req, res) {
     routes.root(req, res, db);
 });
 
+app.get('/nodes', function (req, res) {
+    routes.nodesList(req, res, db);
+});
+
+app.get('/info', function (req, res) {
+    routes.info(req, res, db);
+});
+
+app.get('/diaspora', function (req, res) {
+    routes.renderNetwork('diaspora', res, db);
+});
+
+app.get('/friendica', function (req, res) {
+    routes.renderNetwork('friendica', res, db);
+});
+
+app.get('/hubzilla', function (req, res) {
+    routes.renderNetwork('hubzilla', res, db);
+});
+
+app.get('/node/:host', function (req, res) {
+    routes.renderNode(req, res, db);
+});
+
+/* API routes */
 app.get('/pods.json', function (req, res) {
     routes.pods(req, res, db);
 });
@@ -47,5 +72,5 @@ app.get('/register/:podhost', function (req, res) {
 scheduler.scheduleJob(config.scheduler, network.callAllPods);
 scheduler.scheduleJob(config.schedulerActivePodsSync, utils.syncActivePods);
 
-app.listen(4730);
-console.log('The-Federation.info listening on http://127.0.0.1:4730...');
+app.listen(config.app.port);
+console.log('The-Federation.info listening on http://127.0.0.1:' + config.app.port);

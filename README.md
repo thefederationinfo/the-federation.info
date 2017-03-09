@@ -1,7 +1,7 @@
 [![Stories in Ready](https://badge.waffle.io/jaywink/the-federation.info.png?label=ready&title=Ready)](https://waffle.io/jaywink/the-federation.info)
 # The-Federation.info
 
-Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla/Redmatrix).
+Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla).
 
 ## Requirements
 
@@ -49,7 +49,7 @@ Make sure correct Python virtualenv is active. Then in the application abse dire
 
     node src/app.js
 
-The app will be running at [http://127.0.0.1:4730](http://127.0.0.1:4730).
+The app will be running at [http://127.0.0.1:4730](http://127.0.0.1:4730). You can change the port in the `src/config.js` file if you want.
 
 ## We need data
 
@@ -58,6 +58,13 @@ Things wont look nice without any data, so register a node, for example this in 
     http://127.0.0.1:4730/register/iliketoast.net
 
 Check the front page and there should be a node listed.
+
+## Development
+
+### Sass
+
+If you want to touch the CSS part of the-federation, you need to modify the .scss files in `static/stylesheet` and then compile site.scss to site.css.
+There is a [node compiler](https://github.com/sass/node-sass) or a [python compiler](https://github.com/dahlia/libsass-python). More about the [Sass](http://sass-lang.com/) extension of the CSS language.
 
 ## Author
 

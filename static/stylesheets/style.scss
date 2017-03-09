@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  font-family: lato, "Helvetica Neue",Helvetica,sans-serif;
+  background-image: url('../images/blur.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+p {
+  line-height: 1.1;
+}
+
+a,
+a:visited {
+  color: #333;
+}
+
+a:hover {
+  color: #555;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.4;
+  margin: 0;
+}
+
+section {
+  margin: 2%;
+  border-radius: 3px;
+
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+header {
+  text-align: center;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 5px 0;
+  }
+}
+
+footer {
+  text-align: center;
+
+  p,
+  a,
+  a:visited {
+    color: white;
+  }
+}
+
+table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+
+  th:first-child {
+    text-align: left;
+  }
+
+  td,
+  th {
+    padding: 5px;
+  }
+
+  tbody tr:nth-child(odd) {
+    background-color: #eee;
+  }
+}
+
+#nodes-table thead th {
+  cursor: pointer;
+}

@@ -1,0 +1,66 @@
+{% extends "base.njk" %}
+
+{% block content %}
+<main>
+  <header class="main-header">
+    <div class="main-title">
+      <h1>About</h1>
+      <h2>Behind the scenes</h2>
+    </div>
+  </header>
+  <section class="tile">
+    <header>
+      <h2>What is this site?</h2>
+    </header>
+    <div>
+      <p>
+          This site is for gathering statistics from opt-in nodes. The user and post count data here is opt-in for node admins and needs to be activated in node settings. The idea is to generate some feel towards how many of us diasporians, friendicans and hubzillians there really are.
+      </p>
+      <p>
+          The code is <a href="https://github.com/jaywink/the-federation.info">in GitHub</a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull request are welcome too.
+      </p>
+
+      <h3>Can I get a copy of the data?</h3>
+      <p>
+          It's all available as JSON, feel free to use any data you want! I cannot guarantee the JSON will not change over time, though it should mostly stay stable. You can always let me know if you depend on some JSON feed and I'll make sure not to break it.
+      </p>
+      <p>
+          Here are the endpoints:
+      </p>
+      <ul>
+          <li><a href="/pods.json">Node list + global counts</a></li>
+          <li><a href="/stats/global_active_month">Global active users monthly history</a></li>
+          <li><a href="/stats/global_active_halfyear">Global active users half yearly history</a></li>
+          <li><a href="/stats/global_pod_count">Global node counts history</a></li>
+          <li><a href="/stats/global_users">Global users history</a></li>
+          <li><a href="/stats/global_posts">Global posts history</a></li>
+          <li><a href="/stats/global_comments">Global comments history</a></li>
+          <li><a href="/stats/total_users">Per node total users history</a></li>
+          <li><a href="/stats/active_users_halfyear">Per node active users half year history</a></li>
+          <li><a href="/stats/active_users_monthly">Per node active users monthly history</a></li>
+          <li><a href="/stats/local_posts">Per node local posts history</a></li>
+          <li><a href="/stats/local_comments">Per node local comments history</a></li>
+      </ul>
+
+      <p>
+          Please don't abuse these endpoints. They are refreshed <b>only once per day</b>, at 00:13 EET, so there is no need to bang them every 10 minutes for new data..
+      </p>
+
+      <h3>How do I get my node listed?</h3>
+      <p>
+          For registering your node with this hub, go to <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>. After some seconds, you should see your node added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
+      </p>
+
+      <h3>Licence</h3>
+      <ul>
+        <li>The Federation website code <a href="https://github.com/jaywink/the-federation.info">on GitHub</a> (<a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPLv3</a>)</li>
+        <li>The Federation network is based on the <a href="https://github.com/diaspora/diaspora_federation">diaspora* protocol</a> (<a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPLv3</a>)</li>
+        <li>Blur background image <a href="https://www.flickr.com/photos/voidobjects/6204459845/">by Teppo Kotirinta on flickr</a> (<a href="https://creativecommons.org/licenses/by/2.0/">CC-BY</a>)</li>
+        <li>The font used is <a href="http://www.latofonts.com/lato-free-fonts/">lato</a> (<a href="http://scripts.sil.org/OFL">SIL Open Font License 1.1</a>)</li>
+      </ul>
+
+      <p class="center">Hosted with <3 by <a href="https://iliketoast.net/u/jaywink">Jason Robinson</a></p>
+     </div>
+  </section>
+</main>
+{% endblock content %}

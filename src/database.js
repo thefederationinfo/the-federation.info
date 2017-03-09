@@ -12,8 +12,34 @@ var orm = require('orm'),
     eventEmitter = new events.EventEmitter(),
     utils = require('./utils');
 
-
 function setUpModels(db) {
+
+    function execQueryWithCallback(query, params, callback) {
+      db.driver.execQuery(query, params,
+      function(err, data) {
+          if (err) {
+              console.log(err);
+          }
+          callback(data);
+      });
+    }
+
+    function chartQuery(complete) {
+      return "SELECT timestamp, nodes, users, active_users_halfyear, active_users_monthly, local_posts, local_comments,\
+          users / NULLIF(nodes, 0) AS users_per_node,\
+          active_users_monthly / NULLIF(users, 0) AS active_users_ratio,\
+          local_posts / NULLIF(users, 0) AS posts_per_user,\
+          local_comments / NULLIF(users, 0) AS comments_per_user \
+          FROM (SELECT UNIX_TIMESTAMP(date) AS timestamp,\
+           COUNT(pod_id) AS nodes,\
+           SUM(total_users) AS users,\
+           SUM(active_users_halfyear) AS active_users_halfyear,\
+           SUM(active_users_monthly) AS active_users_monthly,\
+           SUM(local_posts) AS local_posts,\
+           SUM(local_comments) AS local_comments \
+           FROM stats s" + complete + " GROUP BY date) temp";
+    }
+
     // set up models
     models.Pod = db.define('pods', {
         name: { type: "text", size: 300 },
@@ -128,59 +154,45 @@ function setUpModels(db) {
             }
         }
     });
-    models.Pod.allForList = function (callback) {
-        db.driver.execQuery(
-            "SELECT p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
-                p.service_facebook, p.service_twitter, p.service_tumblr, p.service_wordpress,\
-                (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
-                (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
-                (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
-                (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts,\
-                (select local_comments from stats where pod_id = p.id order by id desc limit 1) as local_comments FROM pods p\
-                    where failures < 3",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                }
-                var result = { pods: data };
-                db.driver.execQuery(
-                    "SELECT total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments, pod_count \
-                        from global_stats order by id desc limit 1",
-                    [],
-                    function (err, totals) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        if (totals.length) {
-                            result.totals = totals[0];
-                        } else {
-                            result.totals = {
-                                total_users: 0,
-                                active_users_monthly: 0,
-                                active_users_halfyear: 0,
-                                local_posts: 0,
-                                local_comments: 0,
-                                pod_count: 0
-                            };
-                        }
-                        callback(result);
-                    }
-                );
-            }
-        );
+    models.Pod.projectStats = function (projectName, callback) {
+      execQueryWithCallback("SELECT COUNT(p.id) AS nodes, SUM(total_users) AS users FROM stats s, pods p WHERE s.pod_id = p.id AND p.network = ? GROUP BY date ORDER BY date DESC LIMIT 1",
+        [projectName], callback);
+    };
+    models.Pod.globalCharts = function (callback) {
+      var query = chartQuery("");
+      execQueryWithCallback(chartQuery(), [], callback);
+    };
+    models.Pod.projectCharts = function (projectName, callback) {
+      var query = chartQuery(", pods p WHERE s.pod_id = p.id AND p.network = ?");
+      execQueryWithCallback(query, [projectName], callback);
+    };
+    models.Pod.nodeCharts = function (nodeHost, callback) {
+      var query = chartQuery(", pods p WHERE s.pod_id = p.id AND p.host = ?");
+      execQueryWithCallback(query, [nodeHost], callback);
+    };
+    models.Pod.nodeInfo = function (nodeHost, callback) {
+      execQueryWithCallback("SELECT * FROM pods WHERE host = ?", [nodeHost], callback);
+    };
+    models.Pod.allForList = function (projectName, callback) {
+      var query =
+          "SELECT p.id, p.name, p.host, p.version, p.registrations_open, p.country, p.network,\
+              p.service_facebook, p.service_twitter, p.service_tumblr, p.service_wordpress,\
+              (select total_users from stats where pod_id = p.id order by id desc limit 1) as total_users,\
+              (select active_users_halfyear from stats where pod_id = p.id order by id desc limit 1) as active_users_halfyear,\
+              (select active_users_monthly from stats where pod_id = p.id order by id desc limit 1) as active_users_monthly,\
+              (select local_posts from stats where pod_id = p.id order by id desc limit 1) as local_posts,\
+              (select local_comments from stats where pod_id = p.id order by id desc limit 1) as local_comments FROM pods p \
+                  where failures < 3";
+      if (projectName != undefined && projectName != "") {
+        query += " AND p.network = '" + projectName + "'";
+      }
+      query += " ORDER BY active_users_monthly DESC";
+      execQueryWithCallback(query, [], callback);
     };
     models.Pod.allPodStats = function (item, callback) {
-        db.driver.execQuery(
-            "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                }
-                callback(data);
-            }
-        );
+        execQueryWithCallback(
+          "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
+          [], callback);
     };
     models.Stat = db.define('stats', {
         date: { type: "date", time: false },
@@ -259,16 +271,9 @@ function setUpModels(db) {
         });
     };
     models.GlobalStat.getStats = function (callback) {
-        db.driver.execQuery(
-            "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, local_comments, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
-            [],
-            function (err, data) {
-                if (err) {
-                    console.log(err);
-                }
-                callback(data);
-            }
-        );
+      execQueryWithCallback(
+          "SELECT unix_timestamp(date) as timestamp, total_users, local_posts, local_comments, active_users_halfyear, active_users_monthly, pod_count FROM global_stats where date >= '2014-01-23' order by date",
+          [], callback);
     };
     models.Pod.sync(function (err) {
         if (err) {
@@ -386,14 +391,12 @@ function doMigration(migrations, migrdb, db) {
     }
 }
 
-
 function logGlobalStats() {
     /* Helper method to log global stats */
     utils.logger("database", "logGlobalStats", "INFO", "Updating global stats..");
     models.GlobalStat.logStats();
     utils.logger("database", "logGlobalStats", "INFO", "..done");
 }
-
 
 orm.connect("mysql://" + config.db.user + ":" + config.db.password + "@" + config.db.host + "/" + config.db.database + '?pool=true', function (err, db) {
     if (err) {

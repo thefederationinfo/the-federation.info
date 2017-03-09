@@ -1,18 +1,78 @@
 /*jslint todo: true, node: true, stupid: true, plusplus: true, continue: true, unparam: true */
 "use strict";
 var routes = {},
-    util = require('util');
+    util = require('util'),
+    texts = require('./texts'),
+    utils = require('./utils');
 
 routes.root = function (req, res, db) {
-    db.Pod.allForList(function (pods) {
-        res.render('index.njk', { data: pods });
+  db.Pod.projectStats('diaspora', function (diaspora_stats) {
+    db.Pod.projectStats('friendica', function (friendica_stats) {
+      db.Pod.projectStats('hubzilla', function (hubzilla_stats) {
+        db.Pod.globalCharts(function (chartData) {
+          res.render('index.njk', {
+            stats: {
+              diaspora: diaspora_stats[0],
+              friendica: friendica_stats[0],
+              hubzilla: hubzilla_stats[0]
+            },
+            texts: texts.networks,
+            globalData: chartData[chartData.length - 1],
+            chartData: chartData
+          });
+        }, function (err) {
+            console.log(err);
+        });
+      });
+    });
+  });
+};
+
+routes.nodesList = function (req, res, db) {
+  db.Pod.allForList("", function (nodesList) {
+    res.render('nodes-list.njk', {nodesData: nodesList});
+  }, function (err) {
+      console.log(err);
+  });
+}
+
+routes.info = function (req, res, db) {
+  res.render('about.njk');
+}
+
+routes.renderNetwork = function (network, res, db) {
+  db.Pod.projectCharts(network, function (chartData) {
+    db.Pod.allForList(network, function (nodesList) {
+      res.render('network-page.njk', {
+        texts: texts.networks[network],
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData,
+        nodesData: nodesList
+      });
     }, function (err) {
         console.log(err);
     });
-};
+  }, function (err) {
+      console.log(err);
+  });
+}
 
+routes.renderNode = function (req, res, db) {
+  var nodeHost = req.params.host;
+  db.Pod.nodeInfo(nodeHost, function(nodeInfo) {
+    db.Pod.nodeCharts(nodeHost, function(chartData) {
+      res.render('node.njk', {
+        node: utils.formatNodeInfo(nodeInfo[0]),
+        globalData: chartData[chartData.length - 1],
+        chartData: chartData
+      });
+    });
+  });
+}
+
+/* API routes */
 routes.pods = function (req, res, db) {
-    db.Pod.allForList(
+    db.Pod.allForList("",
         function (pods) {
             res.json(pods);
         },
