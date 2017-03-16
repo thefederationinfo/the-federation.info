@@ -74,7 +74,7 @@ routes.renderNode = function (req, res, db) {
 routes.pods = function (req, res, db) {
     db.Pod.allForList("",
         function (pods) {
-            res.json(pods);
+            res.json({pods: pods});
         },
         function (err, result) {
             if (err) {
