@@ -40,15 +40,71 @@ routes.info = function (req, res, db) {
   res.render('about.njk');
 }
 
+function processVersionStats(pageData) {
+    var versionsStats = {
+      stats063: {
+        nodes: 0,
+        users: 0,
+        monthlyUsers: 0
+      },
+      stats060: {
+        nodes: 0,
+        users: 0,
+        monthlyUsers: 0
+      },
+      stats050: {
+        nodes: 0,
+        users: 0,
+        monthlyUsers: 0
+      }
+    };
+    for (var i = 0; i < pageData.nodesData.length; i++) {
+      var node = pageData.nodesData[i];
+      if (node.version.startsWith("0.6.0") || node.version.startsWith("0.6.1") || node.version.startsWith("0.6.2")) {
+        versionsStats.stats060.nodes++;
+        versionsStats.stats060.users += node.total_users;
+        versionsStats.stats060.monthlyUsers += node.active_users_monthly;
+      } else if (node.version.startsWith("0.6")) {
+        versionsStats.stats063.nodes++;
+        versionsStats.stats063.users += node.total_users;
+        versionsStats.stats063.monthlyUsers += node.active_users_monthly;
+      } else {
+        versionsStats.stats050.nodes++;
+        versionsStats.stats050.users += node.total_users;
+        versionsStats.stats050.monthlyUsers += node.active_users_monthly;
+      }
+    }
+
+    if (pageData.globalData.nodes > 0) {
+      versionsStats.stats063.nodesRatio = Math.round(versionsStats.stats063.nodes / pageData.globalData.nodes * 100);
+      versionsStats.stats060.nodesRatio = Math.round(versionsStats.stats060.nodes / pageData.globalData.nodes * 100);
+      versionsStats.stats050.nodesRatio = Math.round(versionsStats.stats050.nodes / pageData.globalData.nodes * 100);
+    }
+    if (pageData.globalData.users > 0) {
+      versionsStats.stats063.usersRatio = Math.round(versionsStats.stats063.users / pageData.globalData.users * 100);
+      versionsStats.stats060.usersRatio = Math.round(versionsStats.stats060.users / pageData.globalData.users * 100);
+      versionsStats.stats050.usersRatio = Math.round(versionsStats.stats050.users / pageData.globalData.users * 100);
+    }
+    if (pageData.globalData.active_users_monthly > 0) {
+      versionsStats.stats063.monthlyUsersRatio = Math.round(versionsStats.stats063.monthlyUsers / pageData.globalData.active_users_monthly * 100);
+      versionsStats.stats060.monthlyUsersRatio = Math.round(versionsStats.stats060.monthlyUsers / pageData.globalData.active_users_monthly * 100);
+      versionsStats.stats050.monthlyUsersRatio = Math.round(versionsStats.stats050.monthlyUsers / pageData.globalData.active_users_monthly * 100);
+    }
+    return versionsStats;
+}
+
 routes.renderNetwork = function (network, res, db) {
   db.Pod.projectCharts(network, function (chartData) {
     db.Pod.allForList(network, function (nodesList) {
-      res.render('network-page.njk', {
+      var pageData = {
+        network: network,
         texts: texts.networks[network],
         globalData: chartData[chartData.length - 1],
         chartData: chartData,
         nodesData: nodesList
-      });
+      };
+      pageData.versionStats = processVersionStats(pageData);
+      res.render('network-page.njk', pageData);
     }, function (err) {
         console.log(err);
     });
