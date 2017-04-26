@@ -40,8 +40,33 @@ function getPodDataFromNodeInfo(host, data) {
     };
 }
 
+function getPodDataFromNodeInfo2(host, data) {
+    var info = {
+        name: data.server.name,
+        host: host,  // Don't trust `server.baseUrl` directly, use the one we called instead
+        version: data.server.version,
+        registrations_open: data.openRegistrations,
+        failures: 0,
+        network: data.server.software,
+        services_facebook: 0,
+        services_twitter: 0,
+        services_tumblr: 0,
+        services_wordpress: 0,
+        ip4: data.ip4
+    };
+    if (data.services && data.services.outbound) {
+        info.service_facebook =  (data.services.outbound.indexOf("facebook") > -1)  ? 1 : 0;
+        info.service_twitter = (data.services.outbound.indexOf("twitter") > -1) ? 1 : 0;
+        info.service_tumblr = (data.services.outbound.indexOf("tumblr") > -1) ? 1 : 0;
+        info.service_wordpress = (data.services.outbound.indexOf("wordpress") > -1) ? 1 : 0;
+    }
+    return info;
+}
+
 function getPodDataFromResponse(host, data, callType) {
-    if (callType == "nodeinfo") {
+    if (callType === "nodeinfo2") {
+        return getPodDataFromNodeInfo2(host, data);
+    } else if (callType === "nodeinfo") {
         return getPodDataFromNodeInfo(host, data);
     } else {
         return getPodDataFromStatisticsJSON(host, data);
@@ -68,8 +93,27 @@ function getPodStatsFromNodeInfo(data) {
     }
 }
 
+function getPodStatsFromNodeInfo2(data) {
+    var usage = data.usage;
+    var stats = {
+        total_users: 0, active_users_halfyear: 0, active_users_monthly: 0, local_posts: 0, local_comments: 0
+    };
+    if (usage) {
+        if (usage.users) {
+            stats.total_users = usage.users.total_users ? usage.users.total_users : 0;
+            stats.active_users_halfyear = usage.users.active_users_halfyear ? usage.users.active_users_halfyear : 0;
+            stats.active_users_monthly = usage.users.active_users_monthly ? usage.users.active_users_monthly : 0;
+        }
+        stats.local_posts = usage.total_posts ? usage.total_posts : 0;
+        stats.local_comments = usage.local_comments ? usage.local_comments : 0;
+    }
+    return stats;
+}
+
 function getPodStatsFromResponse(data, callType) {
-    if (callType == "nodeinfo") {
+    if (callType === "nodeinfo2") {
+        return getPodStatsFromNodeInfo2(data);
+    } else if (callType === "nodeinfo") {
         return getPodStatsFromNodeInfo(data);
     } else {
         return getPodStatsFromStatisticsJSON(data);
@@ -179,6 +223,44 @@ function getNodeInfoURL(response) {
     }
 }
 
+network.callNodeInfo2 = function(podhost) {
+    var options = {
+        host: podhost,
+        port: 443,
+        path: '/.well-known/x-nodeinfo2',
+        method: 'GET',
+        agent: false,
+        rejectUnauthorized: false
+    };
+    utils.logger('app', 'callNodeInfo2', 'INFO', podhost + ': Calling for NodeInfo2');
+    var request = https.request(options, function (res) {
+        utils.logger('app', 'callNodeInfo2', 'DEBUG', podhost + ': STATUS: ' + res.statusCode);
+        utils.logger('app', 'callNodeInfo2', 'DEBUG', podhost + ': HEADERS: ' + JSON.stringify(res.headers));
+        if (res.statusCode === 404) {
+            // Fallback to nodeinfo
+            utils.logger('app', 'callNodeInfo2', 'DEBUG', podhost + ': nodeinfo2 not supported');
+            network.callNodeInfo(podhost);
+        } else {
+            res.setEncoding('utf8');
+            res.on('data', function (data) {
+                try {
+                    network.handleCallResponse(podhost, data, "nodeinfo2");
+                } catch (err) {
+                    utils.logger('app', 'callNodeInfo2', 'ERROR', podhost + ': not a valid NodeInfo2 document');
+                    // Fallback to nodeinfo
+                    network.callNodeInfo(podhost);
+                }
+            });
+        }
+    });
+    request.end();
+    request.on('error', function (e) {
+        // Fallback to nodeinfo
+        utils.logger('app', 'callNodeInfo2', 'ERROR', podhost + ': ' + e);
+        network.callNodeInfo(podhost);
+    });
+};
+
 network.callNodeInfo = function(podhost) {
     var options = {
         host: podhost,
@@ -241,9 +323,17 @@ network.callNodeInfo = function(podhost) {
     });
 };
 
-network.callPod = function(podhost) {
+network.callPod = function(podhost, software) {
+    var callFunc = undefined;
     utils.logger('app', 'callPod', 'INFO', podhost + ': Calling for update');
-    network.callNodeInfo(podhost);
+    // Determine the most likely call function to start with
+    // Known software we use the highest one we know is supported, for unknown we start from the top and fall down
+    if (["diaspora", "friendica", "hubzilla", "redmatrix"].indexOf(software) >= 0) {
+        callFunc = network.callNodeInfo;
+    } else {
+        callFunc = network.callNodeInfo2;
+    }
+    callFunc(podhost);
 };
 
 // Call all pods
