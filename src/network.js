@@ -346,8 +346,10 @@ network.callAllPods = function() {
             console.log(err);
         }
         for (i = 0; i < pods.length; i++) {
-            podhost = pods[i].host;
-            setTimeout(network.callPod, Math.floor(Math.random() * 10000) + 1, podhost);
+            if (pods[i].failures < 30) {
+                podhost = pods[i].host;
+                setTimeout(network.callPod, Math.floor(Math.random() * 10000) + 1, podhost);
+            }
         }
         setTimeout(db.GlobalStat.logStats, 300000);
     });
