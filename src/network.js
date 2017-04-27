@@ -338,17 +338,14 @@ network.callPod = function(podhost, software) {
 
 // Call all pods
 network.callAllPods = function() {
-    var i = 0,
-        podhost = null;
     console.log('Calling pods for an update..');
     db.Pod.find({}, function (err, pods) {
         if (err) {
             console.log(err);
         }
-        for (i = 0; i < pods.length; i++) {
+        for (var i = 0; i < pods.length; i++) {
             if (pods[i].failures < 30) {
-                podhost = pods[i].host;
-                setTimeout(network.callPod, Math.floor(Math.random() * 10000) + 1, podhost);
+                setTimeout(network.callPod, Math.floor(Math.random() * 10000) + 1, pods[i].host, pods[i].network);
             }
         }
         setTimeout(db.GlobalStat.logStats, 300000);
