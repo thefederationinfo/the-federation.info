@@ -1,4 +1,5 @@
-[![Stories in Ready](https://badge.waffle.io/jaywink/the-federation.info.png?label=ready&title=Ready)](https://waffle.io/jaywink/the-federation.info)
+[![Stories in Ready](https://badge.waffle.io/jaywink/the-federation.info.png?label=ready&title=Ready)](https://waffle.io/jaywink/the-federation.info) [![chat on freenode](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://webchat.freenode.net?channels=%23thefederation&uio=d4) [![Chat on Gitter](https://badges.gitter.im/the-federation-info/Lobby.svg)](https://gitter.im/the-federation-info/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # The-Federation.info
 
 Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla).
