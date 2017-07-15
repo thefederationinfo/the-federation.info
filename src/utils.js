@@ -59,6 +59,8 @@ utils.get_node_network_and_version = function(network, version) {
                     // fallback, full version
                     return ["diaspora", version];
                 }
+            case "ganggo":
+                return ["ganggo", version];
             default:
                 return ["unknown", version];
         }

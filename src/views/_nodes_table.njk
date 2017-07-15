@@ -19,7 +19,7 @@
           {% set pod = utils.formatNodeInfo(pod) %}
           <tr>
               <td>
-              {% if pod.network in ["diaspora", "friendica", "hubzilla", "redmatrix"] %}
+              {% if pod.network in ["diaspora", "friendica", "hubzilla", "redmatrix", "ganggo"] %}
                   <img alt="{{pod.network}}" title="{{pod.network}}" src="images/{{pod.network}}-16.png" />
               {% endif %}
               </td>
