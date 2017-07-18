@@ -189,7 +189,7 @@ function setUpModels(db) {
       query += " ORDER BY active_users_monthly DESC";
       execQueryWithCallback(query, [], callback);
     };
-    models.Pod.allPodStats = function (item, callback) {
+    models.Pod.allPodStats = function(item, callback) {
         execQueryWithCallback(
           "SELECT p.name, p.host, s.pod_id, unix_timestamp(s.date) as timestamp, s." + item + " as item FROM pods p, stats s where p.failures < 3 and p.id = s.pod_id order by s.date",
           [], callback);

@@ -60,47 +60,48 @@
       </div>
     </div>
   </section>
-  {# Will be reintroduced with #57, commented at the moment to be able to release
+  {# #57 will make this dynamic by getting the last version from Github API#}
+  {% if network == 'diaspora' %}
   <section class="tile">
     <header>
       <h2>Software version</h2>
     </header>
     <div>
-      <p><strong>61%</strong> of the nodes hosting <strong>71%</strong> of the users are actually up-to-date (running the last released version or a development version).</p>
+      <p>The new version of the federation protocol is being deployed.
+        The first part came with 0.6.0.0 and the second part with 0.6.3.0, that's why we're interested about these versions usage.</p>
       <table>
         <thead>
             <tr>
                 <th>Version</th>
                 <th>Nodes</th>
                 <th>Users</th>
+                <th>Monthly users</th>
             </tr>
         </thead>
         <tbody>
           <tr>
-              <th>Develop</th>
-              <td>12 (5%)</td>
-              <td>1321 (6%)</td>
+              <th>0.6.3.0 or newer</th>
+              <td>{{versionStats.stats063.nodes}} ({{versionStats.stats063.nodesRatio}}%)</td>
+              <td>{{versionStats.stats063.users}} ({{versionStats.stats063.usersRatio}}%)</td>
+              <td>{{versionStats.stats063.monthlyUsers}} ({{versionStats.stats063.monthlyUsersRatio}}%)</td>
           </tr>
           <tr>
-              <th>Last version</th>
-              <td>142 (54%)</td>
-              <td>123321 (65%)</td>
+              <th>0.6.0.0 to 0.6.2.0</th>
+              <td>{{versionStats.stats060.nodes}} ({{versionStats.stats060.nodesRatio}}%)</td>
+              <td>{{versionStats.stats060.users}} ({{versionStats.stats060.usersRatio}}%)</td>
+              <td>{{versionStats.stats060.monthlyUsers}} ({{versionStats.stats060.monthlyUsersRatio}}%)</td>
           </tr>
           <tr>
-              <th>Last major version</th>
-              <td>142 (32%)</td>
-              <td>62324 (25%)</td>
-          </tr>
-          <tr>
-              <th>Older</th>
-              <td>142 (9%)</td>
-              <td>3521 (7%)</td>
+              <th>Older than 0.6.0.0</th>
+              <td>{{versionStats.stats050.nodes}} ({{versionStats.stats050.nodesRatio}}%)</td>
+              <td>{{versionStats.stats050.users}} ({{versionStats.stats050.usersRatio}}%)</td>
+              <td>{{versionStats.stats050.monthlyUsers}} ({{versionStats.stats050.monthlyUsersRatio}}%)</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
-  #}
+  {% endif %}
   {% include "charts/_stats_with_selectors.njk" %}
   <section class="tile">
     <header>
