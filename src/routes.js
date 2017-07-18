@@ -9,19 +9,22 @@ routes.root = function (req, res, db) {
   db.Pod.projectStats('diaspora', function (diaspora_stats) {
     db.Pod.projectStats('friendica', function (friendica_stats) {
       db.Pod.projectStats('hubzilla', function (hubzilla_stats) {
-        db.Pod.globalCharts(function (chartData) {
-          res.render('index.njk', {
-            stats: {
-              diaspora: diaspora_stats[0],
-              friendica: friendica_stats[0],
-              hubzilla: hubzilla_stats[0]
-            },
-            texts: texts.networks,
-            globalData: chartData[chartData.length - 1],
-            chartData: chartData
+        db.Pod.projectStats('ganggo', function (ganggo_stats) {
+          db.Pod.globalCharts(function (chartData) {
+            res.render('index.njk', {
+              stats: {
+                diaspora: diaspora_stats[0],
+                friendica: friendica_stats[0],
+                hubzilla: hubzilla_stats[0],
+                ganggo: ganggo_stats[0]
+              },
+              texts: texts.networks,
+              globalData: chartData[chartData.length - 1],
+              chartData: chartData
+            });
+          }, function (err) {
+              console.log(err);
           });
-        }, function (err) {
-            console.log(err);
         });
       });
     });

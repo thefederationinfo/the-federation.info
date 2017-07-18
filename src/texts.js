@@ -23,6 +23,14 @@ var texts = {
       website: 'hubzilla.org',
       website_protocol: 'https',
       github: 'https://github.com/redmatrix/hubzilla'
+    },
+    ganggo: {
+      title: 'GangGo',
+      subtitle: 'A Decentralized Social Network',
+      description: 'Open source, decentralized and privacy oriented social network written in GoLang',
+      website: 'github.com/ganggo',
+      website_protocol: 'https',
+      github: 'https://github.com/ganggo/ganggo'
     }
   }
 };

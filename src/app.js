@@ -48,6 +48,10 @@ app.get('/hubzilla', function (req, res) {
     routes.renderNetwork('hubzilla', res, db);
 });
 
+app.get('/ganggo', function (req, res) {
+    routes.renderNetwork('ganggo', res, db);
+});
+
 app.get('/node/:host', function (req, res) {
     routes.renderNode(req, res, db);
 });
