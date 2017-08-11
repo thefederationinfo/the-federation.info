@@ -2,7 +2,7 @@
 
 # The-Federation.info
 
-Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla).
+Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla, GangGo, Socialhome).
 
 ## Requirements
 

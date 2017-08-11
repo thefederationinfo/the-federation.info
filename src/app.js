@@ -52,6 +52,10 @@ app.get("/ganggo", function (req, res) {
     routes.renderNetwork("ganggo", res, db);
 });
 
+app.get("/socialhome", function (req, res) {
+    routes.renderNetwork("socialhome", res, db);
+});
+
 app.get("/node/:host", function (req, res) {
     routes.renderNode(req, res, db);
 });
