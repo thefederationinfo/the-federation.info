@@ -15,5 +15,8 @@
     "nodemailer-smtp-transport": "1.0.2",
     "nunjucks": "2.5.2",
     "orm": "3.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.4.1"
   }
 }
