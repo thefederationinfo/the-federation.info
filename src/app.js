@@ -74,7 +74,9 @@ app.get("/register/:podhost", function (req, res) {
 
 // Scheduling
 scheduler.scheduleJob(config.scheduler, network.callAllPods);
-scheduler.scheduleJob(config.schedulerActivePodsSync, utils.syncActivePods);
+if (config.doActivePodsSync) {
+    scheduler.scheduleJob(config.schedulerActivePodsSync, utils.syncActivePods);
+}
 
 app.listen(config.app.port);
 console.log("The-Federation.info listening on http://127.0.0.1:" + config.app.port);
