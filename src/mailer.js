@@ -1,13 +1,13 @@
-/*jslint todo: true, node: true, stupid: true, plusplus: true, continue: true */
+/* jslint todo: true, node: true, stupid: true, plusplus: true, continue: true */
 "use strict";
 var mailer = {},
     transport = null,
-    nodemailer = require('nodemailer'),
+    nodemailer = require("nodemailer"),
     smtpTransport = require("nodemailer-smtp-transport"),
-    config = require('./config');
+    config = require("./config");
 
-mailer.get_transport = function() {
-    if (! transport) {
+mailer.get_transport = function () {
+    if (!transport) {
         transport = nodemailer.createTransport(
             smtpTransport({
                 host: config.email.host,
@@ -22,7 +22,7 @@ mailer.get_transport = function() {
     return transport;
 };
 
-mailer.send_mail = function(mail) {
+mailer.send_mail = function (mail) {
     var transporter = mailer.get_transport();
     transporter.sendMail(mail);
 };

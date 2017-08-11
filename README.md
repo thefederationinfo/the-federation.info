@@ -67,6 +67,10 @@ Check the front page and there should be a node listed.
 If you want to touch the CSS part of the-federation, you need to modify the .scss files in `static/stylesheet` and then compile site.scss to site.css.
 There is a [node compiler](https://github.com/sass/node-sass) or a [python compiler](https://github.com/dahlia/libsass-python). More about the [Sass](http://sass-lang.com/) extension of the CSS language.
 
+### ESLint
+
+There is an `.eslintrc.js` config file for editors to use. We follow a slightly modified legacy ES5 Airbnb style.
+
 ## Authors
 
 * Jason Robinson / @jaywink / https://jasonrobinson.me
