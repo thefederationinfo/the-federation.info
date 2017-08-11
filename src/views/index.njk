@@ -1,85 +1,89 @@
 {% extends "base.njk" %}
 
 {% block content %}
-<main>
-    <header class="main-header">
-        <div class="main-title">
-            <h1><a href="/">The Federation</a></h1>
-            <h2>Welcome to the new social web</h2>
-        </div>
-        <div class="flex">
-            <div class="col4">
-                <div class="tile valign-wrapper">
-                3 <strong>Projects</strong>
-                </div>
+    <main>
+        <header class="main-header">
+            <div class="main-title">
+                <h1><a href="/">The Federation</a></h1>
+                <h2>Welcome to the new social web</h2>
             </div>
-            <div class="col4">
-                <div class="tile valign-wrapper">
-                {{ globalData.nodes }} <strong>Nodes</strong>
-                </div>
-            </div>
-            <div class="col4">
-                <div class="tile valign-wrapper">
-                {{ globalData.users }} <strong>Users</strong>
-                </div>
-            </div>
-            <div class="col4">
-                <div class="tile valign-wrapper">
-                ONE <strong>Network</strong>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <section class="tile">
-        <header>
-            <h2>What is The Federation?</h2>
-        </header>
-        <div>
             <div class="flex">
-                <div class="col2">
-                    <p>
-                        The Federation refers to a global social network composed by nodes talking together.
-                        Each of them is an installation of a software which supports the <a href="https://diaspora.github.io/diaspora_federation/">diaspora* protocol</a>.
-                        This website lists all the registered servers among the world to draw statistics. You know, we love numbers and numbers love us.
-                    </p>
-                    <div class="center">
-                        <a href="/nodes" class="btn btn-primary">Access nodes list</a>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        3 <strong>Projects</strong>
                     </div>
                 </div>
-                <div class="col2">
-                    <ul>
-                        <li>Nodes: <strong>{{ globalData.nodes }}</strong></li>
-                        <li>Users: <strong>{{ globalData.users }}</strong></li>
-                        <li>Last 6 months active users: <strong>{{ globalData.active_users_halfyear }}</strong></li>
-                        <li>Last month active users: <strong>{{ globalData.active_users_monthly }}</strong></li>
-                        <li>Posts: <strong>{{ globalData.local_posts }}</strong></li>
-                        <li>Comments: <strong>{{ globalData.local_comments }}</strong></li>
-                    </ul>
-                    <div><strong>Disclaimer:</strong> These counts do not reflect the whole network due to the opt-in nature of the statistics.</div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        {{ globalData.nodes }} <strong>Nodes</strong>
+                    </div>
+                </div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        {{ globalData.users }} <strong>Users</strong>
+                    </div>
+                </div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        ONE <strong>Network</strong>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    {% include "charts/_stats_with_selectors.njk" %}
-
-    <section class="tile">
-        <header>
-            <h2>diaspora* - Friendica - Hubzilla</h2>
-            <h3>Discover the projects which are composing the federation</h3>
         </header>
-        <div class="overflow-x">
-            <table>
-                <thead>
+
+        <section class="tile">
+            <header>
+                <h2>What is The Federation?</h2>
+            </header>
+            <div>
+                <div class="flex">
+                    <div class="col2">
+                        <p>
+                            The Federation refers to a global social network composed by nodes talking together.
+                            Each of them is an installation of a software which supports the <a
+                                href="https://diaspora.github.io/diaspora_federation/">diaspora* protocol</a>.
+                            This website lists all the registered servers among the world to draw statistics. You know,
+                            we love numbers and numbers love us.
+                        </p>
+                        <div class="center">
+                            <a href="/nodes" class="btn btn-primary">Access nodes list</a>
+                        </div>
+                    </div>
+                    <div class="col2">
+                        <ul>
+                            <li>Nodes: <strong>{{ globalData.nodes }}</strong></li>
+                            <li>Users: <strong>{{ globalData.users }}</strong></li>
+                            <li>Last 6 months active users: <strong>{{ globalData.active_users_halfyear }}</strong></li>
+                            <li>Last month active users: <strong>{{ globalData.active_users_monthly }}</strong></li>
+                            <li>Posts: <strong>{{ globalData.local_posts }}</strong></li>
+                            <li>Comments: <strong>{{ globalData.local_comments }}</strong></li>
+                        </ul>
+                        <div><strong>Disclaimer:</strong> These counts do not reflect the whole network due to the
+                            opt-in nature of the statistics.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% include "charts/_stats_with_selectors.njk" %}
+
+        <section class="tile">
+            <header>
+                <h2>diaspora* - Friendica - Hubzilla</h2>
+                <h3>Discover the projects which are composing the federation</h3>
+            </header>
+            <div class="overflow-x">
+                <table>
+                    <thead>
                     <tr>
                         <th>Project</th>
                         <th><a href="/diaspora">diaspora*</a></th>
                         <th><a href="/friendica">Friendica</a></th>
                         <th><a href="/hubzilla">Hubzilla</a></th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <tr>
                         <th>First release date</th>
                         <td>11-2010</td>
@@ -96,27 +100,30 @@
                     #}
                     <tr>
                         <th>Nodes</th>
-                        <td>{{stats.diaspora.nodes}}</td>
-                        <td>{{stats.friendica.nodes}}</td>
-                        <td>{{stats.hubzilla.nodes}}</td>
+                        <td>{{ stats.diaspora.nodes }}</td>
+                        <td>{{ stats.friendica.nodes }}</td>
+                        <td>{{ stats.hubzilla.nodes }}</td>
                     </tr>
                     <tr>
                         <th>Users</th>
-                        <td>{{stats.diaspora.users}}</td>
-                        <td>{{stats.friendica.users}}</td>
-                        <td>{{stats.hubzilla.users}}</td>
+                        <td>{{ stats.diaspora.users }}</td>
+                        <td>{{ stats.friendica.users }}</td>
+                        <td>{{ stats.hubzilla.users }}</td>
                     </tr>
                     <tr>
                         <th>Official website</th>
-                        <td><a href="{{texts.diaspora.website_protocol}}://{{texts.diaspora.website}}" target="_blank">{{texts.diaspora.website}}</a></td>
-                        <td><a href="{{texts.friendica.website_protocol}}://{{texts.friendica.website}}" target="_blank">{{texts.friendica.website}}</a></td>
-                        <td><a href="{{texts.hubzilla.website_protocol}}://{{texts.hubzilla.website}}" target="_blank">{{texts.hubzilla.website}}</a></td>
+                        <td><a href="{{ texts.diaspora.website_protocol }}://{{ texts.diaspora.website }}"
+                               target="_blank">{{ texts.diaspora.website }}</a></td>
+                        <td><a href="{{ texts.friendica.website_protocol }}://{{ texts.friendica.website }}"
+                               target="_blank">{{ texts.friendica.website }}</a></td>
+                        <td><a href="{{ texts.hubzilla.website_protocol }}://{{ texts.hubzilla.website }}"
+                               target="_blank">{{ texts.hubzilla.website }}</a></td>
                     </tr>
                     <tr>
                         <th>Source code</th>
-                        <td><a href="{{texts.diaspora.github}}" target="_blank">Github</a></td>
-                        <td><a href="{{texts.friendica.github}}" target="_blank">Github</a></td>
-                        <td><a href="{{texts.hubzilla.github}}" target="_blank">Github</a></td>
+                        <td><a href="{{ texts.diaspora.github }}" target="_blank">Github</a></td>
+                        <td><a href="{{ texts.friendica.github }}" target="_blank">Github</a></td>
+                        <td><a href="{{ texts.hubzilla.github }}" target="_blank">Github</a></td>
                     </tr>
                     <tr>
                         <th>Licence</th>
@@ -124,32 +131,35 @@
                         <td>AGPL</td>
                         <td>MIT</td>
                     </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-    <section class="tile">
-        <header>
-            <h2>Be part of our world</h2>
-        </header>
-        <div class="flex">
-            <div class="col2">
-                <h3>Host yourself</h3>
-                <p>You want to install your own node? Awesome! Choose a project and follow an installation guide.</p>
-                <p>
-                    <a href="https://wiki.diasporafoundation.org/Installation" target="_blank">diaspora*</a> -
-                    <a href="https://github.com/friendica/friendica/blob/master/INSTALL.txt" target="_blank">Friendica</a> -
-                    <a href="https://github.com/redmatrix/hubzilla/blob/master/install/INSTALL.txt" target="_blank">Hubzilla</a>
-                </p>
+                    </tbody>
+                </table>
             </div>
-            <div class="col2">
-                <h3>I already have my node!</h3>
-                <p>
-                    Yay! Welcome in the crew! To see your node included in this website, please go to <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>.
-                    After some seconds, you should see your pod added. After that, daily updates happen once per 24 hours (some minutes past midnight EET).
-                </p>
+        </section>
+        <section class="tile">
+            <header>
+                <h2>Be part of our world</h2>
+            </header>
+            <div class="flex">
+                <div class="col2">
+                    <h3>Host yourself</h3>
+                    <p>You want to install your own node? Awesome! Choose a project and follow an installation
+                        guide.</p>
+                    <p>
+                        <a href="https://wiki.diasporafoundation.org/Installation" target="_blank">diaspora*</a> -
+                        <a href="https://github.com/friendica/friendica/blob/master/INSTALL.txt" target="_blank">Friendica</a>
+                        -
+                        <a href="https://github.com/redmatrix/hubzilla/blob/master/install/INSTALL.txt" target="_blank">Hubzilla</a>
+                    </p>
+                </div>
+                <div class="col2">
+                    <h3>I already have my node!</h3>
+                    <p>
+                        Yay! Welcome in the crew! To see your node included in this website, please go to <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>.
+                        After some seconds, you should see your pod added. After that, daily updates happen once per 24
+                        hours (some minutes past midnight EET).
+                    </p>
+                </div>
             </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 {% endblock content %}

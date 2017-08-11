@@ -1,66 +1,67 @@
 {% extends "base.njk" %}
 
 {% block content %}
-<main>
-  <header class="main-header">
-    <div class="main-title">
-      <h1>{{texts.title}}</h1>
-      <h2>{{texts.subtitle}}</h2>
-    </div>
-    <div class="flex">
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.nodes}} <strong>Nodes</strong>
-        </div>
-      </div>
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.users}} <strong>Users</strong>
-        </div>
-      </div>
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.local_posts}} <strong>Posts</strong>
-        </div>
-      </div>
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.local_comments}} <strong>Comments</strong>
-        </div>
-      </div>
-    </div>
-  </header>
-  <section class="tile">
-    <header>
-      <h2>What is {{texts.title}}?</h2>
-    </header>
-    <div>
-      <div class="flex">
-        <div class="col2">
-          <p>{{texts.description}}</p>
-          <div class="flex">
-              <div class="col2 center">
-                  <a href="{{texts.website_protocol}}://{{texts.website}}" class="btn btn-primary" target="_blank">Official website</a>
-              </div>
-              <div class="col2 center">
-                  <a href="{{texts.github}}" class="btn" target="_blank">Source code</a>
-              </div>
-          </div>
-        </div>
-        <div class="col2">
-          <ul>
-            <li>Nodes: <strong>{{globalData.nodes}}</strong></li>
-            <li>Users: <strong>{{globalData.users}}</strong></li>
-            <li>Last 6 months users: <strong>{{globalData.active_users_halfyear}}</strong></li>
-            <li>Last month users: <strong>{{globalData.active_users_monthly}}</strong></li>
-            <li>Posts: <strong>{{globalData.local_posts}}</strong></li>
-            <li>Comments: <strong>{{globalData.local_comments}}</strong></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-  {# Will be reintroduced with #57, commented at the moment to be able to release
+    <main>
+        <header class="main-header">
+            <div class="main-title">
+                <h1>{{ texts.title }}</h1>
+                <h2>{{ texts.subtitle }}</h2>
+            </div>
+            <div class="flex">
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        {{ globalData.nodes }} <strong>Nodes</strong>
+                    </div>
+                </div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        {{ globalData.users }} <strong>Users</strong>
+                    </div>
+                </div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        {{ globalData.local_posts }} <strong>Posts</strong>
+                    </div>
+                </div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
+                        {{ globalData.local_comments }} <strong>Comments</strong>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="tile">
+            <header>
+                <h2>What is {{ texts.title }}?</h2>
+            </header>
+            <div>
+                <div class="flex">
+                    <div class="col2">
+                        <p>{{ texts.description }}</p>
+                        <div class="flex">
+                            <div class="col2 center">
+                                <a href="{{ texts.website_protocol }}://{{ texts.website }}" class="btn btn-primary"
+                                   target="_blank">Official website</a>
+                            </div>
+                            <div class="col2 center">
+                                <a href="{{ texts.github }}" class="btn" target="_blank">Source code</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col2">
+                        <ul>
+                            <li>Nodes: <strong>{{ globalData.nodes }}</strong></li>
+                            <li>Users: <strong>{{ globalData.users }}</strong></li>
+                            <li>Last 6 months users: <strong>{{ globalData.active_users_halfyear }}</strong></li>
+                            <li>Last month users: <strong>{{ globalData.active_users_monthly }}</strong></li>
+                            <li>Posts: <strong>{{ globalData.local_posts }}</strong></li>
+                            <li>Comments: <strong>{{ globalData.local_comments }}</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {# Will be reintroduced with #57, commented at the moment to be able to release
   <section class="tile">
     <header>
       <h2>Software version</h2>
@@ -101,14 +102,14 @@
     </div>
   </section>
   #}
-  {% include "charts/_stats_with_selectors.njk" %}
-  <section class="tile">
-    <header>
-      <h2>All {{texts.title}} nodes</h2>
-    </header>
-    <div class="overflow-x">
-      {% include "_nodes_table.njk" %}
-    </div>
-  </section>
-</main>
+        {% include "charts/_stats_with_selectors.njk" %}
+        <section class="tile">
+            <header>
+                <h2>All {{ texts.title }} nodes</h2>
+            </header>
+            <div class="overflow-x">
+                {% include "_nodes_table.njk" %}
+            </div>
+        </section>
+    </main>
 {% endblock content %}

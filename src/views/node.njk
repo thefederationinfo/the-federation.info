@@ -1,66 +1,66 @@
 {% extends "base.njk" %}
 
 {% block content %}
-<main>
-  <header class="main-header">
-    <div class="main-title">
-      <h1>{{node.name}}</h1>
-      <h2><a href="https://{{node.host}}" target="_blank">{{node.host}}</a></h2>
-    </div>
-    <div class="flex">
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.users}} <strong>Users</strong>
+    <main>
+    <header class="main-header">
+        <div class="main-title">
+            <h1>{{ node.name }}</h1>
+            <h2><a href="https://{{ node.host }}" target="_blank">{{ node.host }}</a></h2>
         </div>
-      </div>
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.active_users_monthly}} <strong>Monthly users</strong>
+        <div class="flex">
+            <div class="col4">
+                <div class="tile valign-wrapper">
+                    {{ globalData.users }} <strong>Users</strong>
+                </div>
+            </div>
+            <div class="col4">
+                <div class="tile valign-wrapper">
+                    {{ globalData.active_users_monthly }} <strong>Monthly users</strong>
+                </div>
+            </div>
+            <div class="col4">
+                <div class="tile valign-wrapper">
+                    {{ globalData.local_posts }} <strong>Posts</strong>
+                </div>
+            </div>
+            <div class="col4">
+                <div class="tile valign-wrapper">
+                    {{ globalData.local_comments }} <strong>Comments</strong>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.local_posts}} <strong>Posts</strong>
-        </div>
-      </div>
-      <div class="col4">
-        <div class="tile valign-wrapper">
-          {{globalData.local_comments}} <strong>Comments</strong>
-        </div>
-      </div>
-    </div>
-  </header>
-  <section class="tile">
-    <header>
-      <h2>Global info</h2>
-      <div class="center right-action">
-        {% if node.network == "diaspora" %}
-         Access <a href="https://{{node.host}}/statistics" target="_blank">real time stats</a>
-        {% endif %}
-      </div>
     </header>
-    <div>
-      <div class="flex">
-        <div class="col2">
-          <ul>
-            <li>Software: <strong>{{node.network}}</strong></li>
-            <li>Version: <strong>{{node.version}}</strong></li>
-            <li>Open signups: <strong>{{node.registrations_open}}</strong></li>
-            <li>Services: <strong>{{node.services}}</strong></li>
-            <li>Country: <strong>{{node.country}}</strong></li>
-          </ul>
+    <section class="tile">
+        <header>
+            <h2>Global info</h2>
+            <div class="center right-action">
+                {% if node.network == "diaspora" %}
+                    Access <a href="https://{{ node.host }}/statistics" target="_blank">real time stats</a>
+                {% endif %}
+            </div>
+        </header>
+        <div>
+            <div class="flex">
+                <div class="col2">
+                    <ul>
+                        <li>Software: <strong>{{ node.network }}</strong></li>
+                        <li>Version: <strong>{{ node.version }}</strong></li>
+                        <li>Open signups: <strong>{{ node.registrations_open }}</strong></li>
+                        <li>Services: <strong>{{ node.services }}</strong></li>
+                        <li>Country: <strong>{{ node.country }}</strong></li>
+                    </ul>
+                </div>
+                <div class="col2">
+                    <ul>
+                        <li>Users: <strong>{{ globalData.users }}</strong></li>
+                        <li>Last 6 months active users: <strong>{{ globalData.active_users_halfyear }}</strong></li>
+                        <li>Last month active users: <strong>{{ globalData.active_users_monthly }}</strong></li>
+                        <li>Posts: <strong>{{ globalData.local_posts }}</strong></li>
+                        <li>Comments: <strong>{{ globalData.local_comments }}</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col2">
-          <ul>
-            <li>Users: <strong>{{globalData.users}}</strong></li>
-            <li>Last 6 months active users: <strong>{{globalData.active_users_halfyear}}</strong></li>
-            <li>Last month active users: <strong>{{globalData.active_users_monthly}}</strong></li>
-            <li>Posts: <strong>{{globalData.local_posts}}</strong></li>
-            <li>Comments: <strong>{{globalData.local_comments}}</strong></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-  {% include "charts/_stats_with_selectors.njk" %}
+    </section>
+    {% include "charts/_stats_with_selectors.njk" %}
 {% endblock content %}
