@@ -81,6 +81,7 @@
                         <th><a href="/diaspora">diaspora*</a></th>
                         <th><a href="/friendica">Friendica</a></th>
                         <th><a href="/hubzilla">Hubzilla</a></th>
+                        <th><a href="/socialhome">Socialhome</a></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -89,6 +90,7 @@
                         <td>11-2010</td>
                         <td>07-2010</td>
                         <td>08-2015</td>
+                        <td>07-2017</td>
                     </tr>
                     {#
                     <tr>
@@ -103,12 +105,14 @@
                         <td>{{ stats.diaspora.nodes }}</td>
                         <td>{{ stats.friendica.nodes }}</td>
                         <td>{{ stats.hubzilla.nodes }}</td>
+                        <td>{{ stats.socialhome.nodes }}</td>
                     </tr>
                     <tr>
                         <th>Users</th>
                         <td>{{ stats.diaspora.users }}</td>
                         <td>{{ stats.friendica.users }}</td>
                         <td>{{ stats.hubzilla.users }}</td>
+                        <td>{{ stats.socialhome.users }}</td>
                     </tr>
                     <tr>
                         <th>Official website</th>
@@ -118,18 +122,22 @@
                                target="_blank">{{ texts.friendica.website }}</a></td>
                         <td><a href="{{ texts.hubzilla.website_protocol }}://{{ texts.hubzilla.website }}"
                                target="_blank">{{ texts.hubzilla.website }}</a></td>
+                        <td><a href="{{ texts.socialhome.website_protocol }}://{{ texts.socialhome.website }}"
+                               target="_blank">{{ texts.socialhome.website }}</a></td>
                     </tr>
                     <tr>
                         <th>Source code</th>
                         <td><a href="{{ texts.diaspora.github }}" target="_blank">Github</a></td>
                         <td><a href="{{ texts.friendica.github }}" target="_blank">Github</a></td>
                         <td><a href="{{ texts.hubzilla.github }}" target="_blank">Github</a></td>
+                        <td><a href="{{ texts.socialhome.github }}" target="_blank">Github</a></td>
                     </tr>
                     <tr>
                         <th>Licence</th>
                         <td>AGPL</td>
                         <td>AGPL</td>
                         <td>MIT</td>
+                        <td>AGPL</td>
                     </tr>
                     </tbody>
                 </table>
@@ -145,10 +153,13 @@
                     <p>You want to install your own node? Awesome! Choose a project and follow an installation
                         guide.</p>
                     <p>
-                        <a href="https://wiki.diasporafoundation.org/Installation" target="_blank">diaspora*</a> -
+                        <a href="https://wiki.diasporafoundation.org/Installation" target="_blank">diaspora*</a>
+                        -
                         <a href="https://github.com/friendica/friendica/blob/master/INSTALL.txt" target="_blank">Friendica</a>
                         -
                         <a href="https://github.com/redmatrix/hubzilla/blob/master/install/INSTALL.txt" target="_blank">Hubzilla</a>
+                        -
+                        <a href="http://socialhome.readthedocs.io/en/latest/installation.html" target="_blank">Socialhome</a>
                     </p>
                 </div>
                 <div class="col2">

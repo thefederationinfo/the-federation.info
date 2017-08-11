@@ -60,6 +60,8 @@ utils.get_node_network_and_version = function (network, version) {
 
         case "ganggo":
             return ["ganggo", version];
+        case "socialhome":
+            return ["socialhome", version];
         default:
             return ["unknown", version];
         }
