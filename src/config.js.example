@@ -35,4 +35,19 @@ config.app = {
     port: 4730
 };
 
+config.shcli = {
+    domain: "socialhome.network",
+    token: "1234567890abcdefg",
+};
+
+config.statisticsPosts = {
+    daily: {
+        enabled: false,
+        schedule: {
+            hour: 11,
+            minute: 0,
+        }
+    }
+};
+
 module.exports = config;

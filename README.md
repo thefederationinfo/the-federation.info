@@ -42,7 +42,7 @@ The Python dependencies need some system packages. For Ubuntu, this will work, f
 
 Install dependencies in your activated virtualenv:
 
-    pip install -r python-requirements.txt
+    pip install -U -r python-requirements.txt
 
 ## Running
 
