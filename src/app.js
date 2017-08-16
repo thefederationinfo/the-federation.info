@@ -11,6 +11,7 @@ var express = require("express"),
     network = require("./network"),
     nunjucks = require("nunjucks"),
     app = express();
+var social = require("./social");
 
 var nunjucks_env = nunjucks.configure("src/views", {
     autoescape: true,
@@ -80,6 +81,9 @@ app.get("/register/:podhost", function (req, res) {
 scheduler.scheduleJob(config.scheduler, network.callAllPods);
 if (config.doActivePodsSync) {
     scheduler.scheduleJob(config.schedulerActivePodsSync, utils.syncActivePods);
+}
+if (config.statisticsPosts.daily.enabled) {
+    scheduler.scheduleJob(config.statisticsPosts.daily.schedule, social.dailyStatistics);
 }
 
 app.listen(config.app.port);
