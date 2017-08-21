@@ -110,25 +110,39 @@ function setUpModels(db) {
                     }
                 });
                 if (this.failures < 3) {
-                    // copy last stats too
-                    var d = new Date();
-                    d.setDate(d.getDate() - 1);
-                    models.Stat.find({ pod_id: this.id, date: new Date(d.getFullYear(), d.getMonth(), d.getDate()) }, function (err, stats) {
+                    // copy last stats too, if none exist yet
+                    var today = new Date();
+                    var podId = this.id;
+                    var filter = {
+                        pod_id: podId, date: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+                    };
+                    models.Stat.find(filter, function (err, stats) {
                         if (err) {
-                            console.log(err);
+                            console.log("Database error when finding stat: " + err);
                         }
-                        if (stats.length) {
-                            models.Stat.create({
-                                date: new Date(),
-                                total_users: stats[0].total_users,
-                                active_users_halfyear: stats[0].active_users_halfyear,
-                                active_users_monthly: stats[0].active_users_monthly,
-                                local_posts: stats[0].local_posts,
-                                local_comments: stats[0].local_comments,
-                                pod_id: stats[0].pod_id
-                            }, function (err) {
+                        if (!stats.length) {
+                            // no stats for today, get previous day and insert
+                            var d = new Date();
+                            d.setDate(d.getDate() - 1);
+                            filter = { pod_id: podId, date: new Date(d.getFullYear(), d.getMonth(), d.getDate()) };
+                            models.Stat.find(filter, function (err, stats) {
                                 if (err) {
-                                    console.log("Database error when copying previous stat: " + err);
+                                    console.log(err);
+                                }
+                                if (stats.length) {
+                                    models.Stat.create({
+                                        date: new Date(),
+                                        total_users: stats[0].total_users,
+                                        active_users_halfyear: stats[0].active_users_halfyear,
+                                        active_users_monthly: stats[0].active_users_monthly,
+                                        local_posts: stats[0].local_posts,
+                                        local_comments: stats[0].local_comments,
+                                        pod_id: stats[0].pod_id,
+                                    }, function (err) {
+                                        if (err) {
+                                            console.log("Database error when copying previous stat: " + err);
+                                        }
+                                    });
                                 }
                             });
                         }
