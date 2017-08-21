@@ -189,8 +189,8 @@ network.callStatisticsJSON = function (podhost) {
     var request = https.request(options, function (res) {
         utils.logger("app", "callStatisticsJSON", "DEBUG", podhost + ": STATUS: " + res.statusCode);
         utils.logger("app", "callStatisticsJSON", "DEBUG", podhost + ": HEADERS: " + JSON.stringify(res.headers));
-        if (res.statusCode === 404) {
-            utils.logger("app", "callStatisticsJSON", "ERROR", podhost + ": not statistics.json found");
+        if (res.statusCode !== 200) {
+            utils.logger("app", "callStatisticsJSON", "ERROR", podhost + ": no statistics.json found");
             network.logKnownPodFailure(podhost);
         } else {
             res.setEncoding("utf8");
@@ -234,7 +234,7 @@ network.callNodeInfo2 = function (podhost) {
     var request = https.request(options, function (res) {
         utils.logger("app", "callNodeInfo2", "DEBUG", podhost + ": STATUS: " + res.statusCode);
         utils.logger("app", "callNodeInfo2", "DEBUG", podhost + ": HEADERS: " + JSON.stringify(res.headers));
-        if (res.statusCode === 404) {
+        if (res.statusCode !== 200) {
             // Fallback to nodeinfo
             utils.logger("app", "callNodeInfo2", "DEBUG", podhost + ": nodeinfo2 not supported");
             network.callNodeInfo(podhost);
@@ -272,7 +272,7 @@ network.callNodeInfo = function (podhost) {
     var request = https.request(options, function (res) {
         utils.logger("app", "callNodeInfo", "DEBUG", podhost + ": STATUS: " + res.statusCode);
         utils.logger("app", "callNodeInfo", "DEBUG", podhost + ": HEADERS: " + JSON.stringify(res.headers));
-        if (res.statusCode === 404) {
+        if (res.statusCode !== 200) {
             // Fallback to statistics.json
             utils.logger("app", "callNodeInfo", "DEBUG", podhost + ": nodeinfo not supported");
             network.callStatisticsJSON(podhost);
