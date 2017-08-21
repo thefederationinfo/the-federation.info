@@ -37,7 +37,7 @@ class DiapodListParser(object):
 
     def collect_pod_domains(self):
         list = []
-        with open("/tmp/diapod_net_list.txt", "rb") as f:
+        with open("/tmp/diapod_net_list.txt", "r") as f:
             for line in f:
                 list.append(line.strip("\r\n"))
         self.pods = []
