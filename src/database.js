@@ -28,7 +28,13 @@ function setUpModels(db) {
           users / NULLIF(nodes, 0) AS users_per_node,\
           active_users_monthly / NULLIF(users, 0) AS active_users_ratio,\
           local_posts / NULLIF(users, 0) AS posts_per_user,\
-          local_comments / NULLIF(users, 0) AS comments_per_user \
+          local_comments / NULLIF(users, 0) AS comments_per_user,\
+          users - NULLIF(@preRowUsers, 0) AS new_users,\
+          @preRowUsers := users AS dummyUsers,\
+          local_posts - NULLIF(@preRowPosts, 0) AS new_posts,\
+          @preRowPosts := local_posts AS dummyPosts,\
+          local_comments - NULLIF(@preRowComments, 0) AS new_comments,\
+          @preRowComments := local_comments AS dummyComments\
           FROM (SELECT UNIX_TIMESTAMP(date) AS timestamp,\
            COUNT(pod_id) AS nodes,\
            SUM(total_users) AS users,\
