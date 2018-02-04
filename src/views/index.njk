@@ -10,7 +10,7 @@
             <div class="flex">
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        4 <strong>Projects</strong>
+                        5 <strong>Projects</strong>
                     </div>
                 </div>
                 <div class="col4">
@@ -70,7 +70,7 @@
 
         <section class="tile">
             <header>
-                <h2>diaspora* - Friendica - Hubzilla - Socialhome</h2>
+                <h2>diaspora* - Friendica - GangGo - Hubzilla - Socialhome</h2>
                 <h3>Discover the projects which are composing the federation</h3>
             </header>
             <div class="overflow-x">
@@ -80,6 +80,7 @@
                         <th>Project</th>
                         <th><a href="/diaspora">diaspora*</a></th>
                         <th><a href="/friendica">Friendica</a></th>
+                        <th><a href="/ganggo">GangGo</a></th>
                         <th><a href="/hubzilla">Hubzilla</a></th>
                         <th><a href="/socialhome">Socialhome</a></th>
                     </tr>
@@ -89,6 +90,7 @@
                         <th>First release date</th>
                         <td>11-2010</td>
                         <td>07-2010</td>
+                        <td>02-2017</td>
                         <td>08-2015</td>
                         <td>07-2017</td>
                     </tr>
@@ -104,6 +106,7 @@
                         <th>Nodes</th>
                         <td>{{ stats.diaspora.nodes }}</td>
                         <td>{{ stats.friendica.nodes }}</td>
+                        <td>{{ stats.ganggo.nodes }}</td>
                         <td>{{ stats.hubzilla.nodes }}</td>
                         <td>{{ stats.socialhome.nodes }}</td>
                     </tr>
@@ -111,6 +114,7 @@
                         <th>Users</th>
                         <td>{{ stats.diaspora.users }}</td>
                         <td>{{ stats.friendica.users }}</td>
+                        <td>{{ stats.ganggo.users }}</td>
                         <td>{{ stats.hubzilla.users }}</td>
                         <td>{{ stats.socialhome.users }}</td>
                     </tr>
@@ -120,6 +124,8 @@
                                target="_blank">{{ texts.diaspora.website }}</a></td>
                         <td><a href="{{ texts.friendica.website_protocol }}://{{ texts.friendica.website }}"
                                target="_blank">{{ texts.friendica.website }}</a></td>
+                        <td><a href="{{ texts.ganggo.website_protocol }}://{{ texts.ganggo.website }}"
+                               target="_blank">{{ texts.ganggo.website }}</a></td>
                         <td><a href="{{ texts.hubzilla.website_protocol }}://{{ texts.hubzilla.website }}"
                                target="_blank">{{ texts.hubzilla.website }}</a></td>
                         <td><a href="{{ texts.socialhome.website_protocol }}://{{ texts.socialhome.website }}"
@@ -129,6 +135,7 @@
                         <th>Source code</th>
                         <td><a href="{{ texts.diaspora.github }}" target="_blank">Github</a></td>
                         <td><a href="{{ texts.friendica.github }}" target="_blank">Github</a></td>
+                        <td><a href="{{ texts.ganggo.github }}" target="_blank">Github</a></td>
                         <td><a href="{{ texts.hubzilla.github }}" target="_blank">Github</a></td>
                         <td><a href="{{ texts.socialhome.github }}" target="_blank">Github</a></td>
                     </tr>
@@ -136,6 +143,7 @@
                         <th>Licence</th>
                         <td>AGPL</td>
                         <td>AGPL</td>
+                        <td>GPLv3</td>
                         <td>MIT</td>
                         <td>AGPL</td>
                     </tr>
