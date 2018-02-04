@@ -28,7 +28,7 @@ var texts = {
             title: "GangGo",
             subtitle: "A Decentralized Social Network",
             description: "Open source, decentralized and privacy oriented social network written in GoLang",
-            website: "github.com/ganggo",
+            website: "ganggo.github.io",
             website_protocol: "https",
             github: "https://github.com/ganggo/ganggo",
         },
