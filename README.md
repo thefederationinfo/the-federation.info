@@ -6,7 +6,7 @@ Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla,
 
 ## Requirements
 
-* Node 4.x
+* Node 4.x - 6.x
 * Python 3.x
 * MySQL/MariaDB
 
@@ -24,7 +24,7 @@ Copy src/config.js.example to src/config.js and edit proper values there.
 
 ### Node
 
-The 4.x LTS version has been tested. For Ubuntu, [follow this guide](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions). Other systems follow [NodeJS](https://nodejs.org/en/download/) docs.
+The 4.x to 6.x versions have been tested to work. For Ubuntu, [follow this guide](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions). Other systems follow [NodeJS](https://nodejs.org/en/download/) docs.
 
 Install then the Node packages
 
@@ -75,6 +75,8 @@ There is an `.eslintrc.js` config file for editors to use. We follow a slightly 
 
 * Jason Robinson / @jaywink / https://jasonrobinson.me
 * Flaburgan / @Flaburgan
+
+See [other awesome contributors](https://github.com/thefederationinfo/the-federation.info/graphs/contributors)!
 
 ## License
 
