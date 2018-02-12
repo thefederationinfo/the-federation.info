@@ -133,8 +133,18 @@ network.handleCallResponse = function (podhost, data, callType) {
                 } else {
                     data.ip4 = addresses[0];
                 }
-                var responseData = getPodDataFromResponse(podhost, data, callType);
-                var podStats = getPodStatsFromResponse(data, callType);
+                try {
+                    var responseData = getPodDataFromResponse(podhost, data, callType);
+                } catch (err) {
+                    console.log(err);
+                    return;
+                }
+                try {
+                    var podStats = getPodStatsFromResponse(data, callType);
+                } catch (err) {
+                    console.log(err);
+                    return;
+                }
                 if (!exists) {
                     // Insert
                     db.Pod.create(responseData, function (err, items) {
