@@ -39,9 +39,14 @@ utils.get_node_network_and_version = function (network, version) {
         switch (network.toLowerCase()) {
         case "friendica":
             return ["friendica", version];
+		// The zotlabs project family is quite diverse and dynamic
+		// software.name probably isn't the right thing to use as
+		// a project identifier, but that's what we have today.
+		case "red":
+		case "zap":
+		case "denim":
         case "red matrix":
         case "redmatrix":
-            return ["redmatrix", version];
         case "hubzilla":
         case "blablanet":  // See https://github.com/jaywink/the-federation.info/issues/38
             return ["hubzilla", version];
