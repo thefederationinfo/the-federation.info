@@ -9,13 +9,14 @@ var network = {},
     db = require("./database");
 
 function getPodDataFromStatisticsJSON(host, data) {
+	var nv = utils.get_node_network_and_version(data.network || "unknown",data.version);
     return {
         name: data.name,
         host: host,
-        version: data.version,
+        version: nv[1],
         registrations_open: data.registrations_open,
         failures: 0,
-        network: data.network || "unknown",
+        network: nv[0],
         service_facebook: (data.facebook) ? 1 : 0,
         service_twitter: (data.twitter) ? 1 : 0,
         service_tumblr: (data.tumblr) ? 1 : 0,
@@ -25,13 +26,14 @@ function getPodDataFromStatisticsJSON(host, data) {
 }
 
 function getPodDataFromNodeInfo(host, data) {
+	var nv = utils.get_node_network_and_version(data.software.name,data.software.version);
     return {
         name: data.metadata.nodeName,
         host: host,
-        version: data.software.version,
+        version: nv[1],
         registrations_open: data.openRegistrations,
         failures: 0,
-        network: data.software.name,
+        network: nv[0],
         service_facebook: (data.services.outbound.indexOf("facebook") > -1)  ? 1 : 0,
         service_twitter: (data.services.outbound.indexOf("twitter") > -1) ? 1 : 0,
         service_tumblr: (data.services.outbound.indexOf("tumblr") > -1) ? 1 : 0,
@@ -41,13 +43,14 @@ function getPodDataFromNodeInfo(host, data) {
 }
 
 function getPodDataFromNodeInfo2(host, data) {
+	var nv = utils.get_node_network_and_version(data.server.software,data.server.version);
     var info = {
         name: data.server.name,
         host: host,  // Don't trust `server.baseUrl` directly, use the one we called instead
-        version: data.server.version,
+        version: nv[1],
         registrations_open: data.openRegistrations,
         failures: 0,
-        network: data.server.software,
+        network: nv[0],
         services_facebook: 0,
         services_twitter: 0,
         services_tumblr: 0,
