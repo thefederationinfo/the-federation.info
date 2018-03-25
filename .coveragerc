@@ -1,0 +1,5 @@
+[run]
+include = thefederation/*
+omit = *migrations*, *tests*, *scripts*, *commands*
+plugins =
+    django_coverage_plugin

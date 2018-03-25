@@ -1,0 +1,19 @@
+circus
+django-enumfields
+django-environ
+django-extensions
+django-redis
+django-rq
+django
+ipython
+psycopg2-binary
+raven
+redis
+rq
+rq-scheduler
+tornado<5.0  # Not a direct requirement but we need to lock due to circus not working with 5.0
+             # Remove from this file once circus works with this
+uwsgi
+whitenoise
+
+-e git+https://github.com/jaywink/federation.git@2a02f866aad037495b9d56f1a6c3e44a5e04c20a#egg=federation==0.15.0.1
