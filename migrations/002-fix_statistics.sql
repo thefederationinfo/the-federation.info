@@ -1,7 +1,0 @@
-INSERT INTO stats (date, pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments) SELECT '2014-08-15', pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments FROM stats s2 WHERE date = '2014-08-14' AND NOT EXISTS (SELECT 1 FROM stats s1 WHERE date = '2014-08-15' AND s1.pod_id = s2.pod_id);
-
-INSERT INTO stats (date, pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments) SELECT '2016-09-26', pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments FROM stats s2 WHERE date = '2016-09-25' AND NOT EXISTS (SELECT 1 FROM stats s1 WHERE date = '2016-09-26' AND s1.pod_id = s2.pod_id);
-
-INSERT INTO stats (date, pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments) SELECT '2016-09-27', pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments FROM stats s2 WHERE date = '2016-09-26' AND NOT EXISTS (SELECT 1 FROM stats s1 WHERE date = '2016-09-27' AND s1.pod_id = s2.pod_id);
-
-INSERT INTO stats (date, pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments) SELECT '2016-10-30', pod_id, total_users, active_users_halfyear, active_users_monthly, local_posts, local_comments FROM stats s2 WHERE date = '2016-10-29' AND NOT EXISTS (SELECT 1 FROM stats s1 WHERE date = '2016-10-30' AND s1.pod_id = s2.pod_id);

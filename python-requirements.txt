@@ -1,4 +1,0 @@
-mysqlclient==1.3.9
-
-# For posting status messages
-shcli==0.1.4
