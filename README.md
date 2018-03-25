@@ -1,5 +1,7 @@
 [![Stories in Ready](https://badge.waffle.io/jaywink/the-federation.info.png?label=ready&title=Ready)](https://waffle.io/jaywink/the-federation.info) [![chat on freenode](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://webchat.freenode.net?channels=%23thefederation&uio=d4) [![Chat on Gitter](https://badges.gitter.im/the-federation-info/Lobby.svg)](https://gitter.im/the-federation-info/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![chat on matrix](https://img.shields.io/badge/chat-on%20matrix-orange.svg)](https://riot.im/app/#/room/#thefederation:matrix.org) [![](https://img.shields.io/badge/license-AGPLv3-green.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))
 
+**NOTE! This version of the code base will not be developed further. There is a rewrite happening in the `rewrite` branch. Please see that if interested in contributing.**
+
 # The-Federation.info
 
 Statistics hub and node list for The Federation (diaspora*, Friendica, Hubzilla, GangGo, Socialhome).
