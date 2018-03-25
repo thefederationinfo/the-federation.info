@@ -47,6 +47,7 @@ utils.get_node_network_and_version = function (network, version) {
 		case "denim":
         case "red matrix":
         case "redmatrix":
+		case "red_platform":
         case "hubzilla":
         case "blablanet":  // See https://github.com/jaywink/the-federation.info/issues/38
             return ["hubzilla", version];
