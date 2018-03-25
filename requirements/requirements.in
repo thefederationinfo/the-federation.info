@@ -1,4 +1,5 @@
 circus
+django-countries
 django-enumfields
 django-environ
 django-extensions

@@ -1,9 +1,7 @@
 '''
 Production Configurations
 '''
-from django.core.exceptions import ImproperlyConfigured
-
-from .common import *  # noqa
+from .base import *  # noqa
 
 
 # SECRET CONFIGURATION

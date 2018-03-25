@@ -2,10 +2,9 @@
 """
 Local settings for development environments
 """
-import os
 import sys
 
-from .common import *  # noqa
+from .base import *  # noqa
 
 testing = env.bool("CI", default=False) or env.bool("TEST", default=False) or "test" in sys.argv
 

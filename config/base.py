@@ -1,6 +1,5 @@
 import environ
 import os
-import warnings
 
 ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
 
@@ -10,8 +9,6 @@ env = environ.Env()
 
 if os.path.isfile(".env"):
     env.read_env(".env")
-else:
-    warnings.warn("!!! No .env file found!")
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -66,7 +63,7 @@ MANAGERS = ADMINS
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///thefederation"),
+    "default": env.db("DATABASE_URL", default="postgres://thefederation:thefederation@127.0.0.1:5432/thefederation"),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 

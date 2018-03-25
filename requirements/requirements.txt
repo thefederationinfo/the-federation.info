@@ -13,6 +13,7 @@ croniter==0.3.20          # via rq-scheduler
 cssselect==1.0.3
 decorator==4.2.1          # via ipython, traitlets
 dirty-validators==0.4.0
+django-countries==5.2
 django-enumfields==0.10.0
 django-environ==0.4.4
 django-extensions==2.0.6
