@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.utils.functional import cached_property
 from django_countries.fields import CountryField
 from enumfields import EnumField
 
@@ -31,3 +32,33 @@ class Node(ModelBase):
 
     def __str__(self):
         return f"{self.name} ({self.host})"
+
+    @property
+    def clean_version(self):
+        """
+        Get the version number cleaned as a number.
+        """
+        if not self.version:
+            return
+        # Strip all non-numbers
+        cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."])
+        # Split into tuple
+        return tuple(cleaned_str.split("."))
+
+    @staticmethod
+    def log_failure(host):
+        """
+        Increment failure counter of node.
+        """
+        # TODO implement
+        pass
+
+    @cached_property
+    def preferred_method(self):
+        """
+        Calls a function to get the preferred method.
+
+        Function is passed in the version.
+        :return:
+        """
+        return self.platform.get_method(self.clean_version)
