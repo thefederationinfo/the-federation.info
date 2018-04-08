@@ -172,14 +172,18 @@ REDIS_PASSWORD = env("REDIS_PASSWORD", default=None)
 
 # RQ
 # --
+_rq_redis_params = {
+    "HOST": REDIS_HOST,
+    "PORT": REDIS_PORT,
+    "DB": REDIS_DB,
+    "PASSWORD": REDIS_PASSWORD,
+    "DEFAULT_TIMEOUT": 360,
+}
 RQ_QUEUES = {
-    "default": {
-        "HOST": REDIS_HOST,
-        "PORT": REDIS_PORT,
-        "DB": REDIS_DB,
-        "PASSWORD": REDIS_PASSWORD,
-        "DEFAULT_TIMEOUT": 360,
-    },
+    "high": _rq_redis_params,
+    "medium": _rq_redis_params,
+    "low": _rq_redis_params,
+    "default": _rq_redis_params,
 }
 RQ_SHOW_ADMIN_LINK = True
 
