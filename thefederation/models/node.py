@@ -43,7 +43,7 @@ class Node(ModelBase):
         # Strip all non-numbers
         cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."])
         # Split into tuple
-        return tuple(cleaned_str.split("."))
+        return tuple([int(i) for i in cleaned_str.split(".")])
 
     @staticmethod
     def log_failure(host):
