@@ -7,7 +7,7 @@ from django_rq import job
 from federation.hostmeta import fetchers
 
 from thefederation.enums import Relay
-from thefederation.models import Node, Platform, Protocol, Service
+from thefederation.models import Node, Platform, Protocol, Service, Stat
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +79,7 @@ def poll_node(host):
             'platform': platform,
         }
     )
+
     protocols = set()
     for protocol in result.get('protocols', []):
         assert protocol != ""
@@ -91,6 +92,26 @@ def poll_node(host):
         serv, _created = Service.objects.get_or_create(name=service)
         services.add(serv)
     node.services.set(services)
+
+    activity = result.get('activity', {})
+    users = activity.get('users', {})
+    if any([users.get('total'), users.get('half_year'), users.get('monthly'), users.get('weekly'),
+            activity.get('local_posts'), activity.get('local_comments')]):
+        Stat.objects.update_or_create(
+            node=node,
+            date=now().date(),
+            defaults={
+                # TODO should we guess some missing stats, like guess weekly from monthly
+                # or monthly from weekly?
+                'users_total': users.get('total'),
+                'users_half_year': users.get('half_year'),
+                'users_monthly': users.get('monthly'),
+                'users_weekly': users.get('weekly'),
+                'local_posts': activity.get('local_posts'),
+                'local_comments': activity.get('local_comments'),
+            },
+        )
+
     logger.info(f'Updated {host} successfully.')
 
 
