@@ -13,11 +13,11 @@ __all__ = ('Node',)
 class Node(ModelBase):
     blocked = models.BooleanField(default=False)
     country = CountryField(blank=True)
-    failures = models.PositiveIntegerField(default=0)
     features = JSONField(default={})
     hide_from_list = models.BooleanField(default=False)
     host = models.CharField(max_length=128, unique=True)
     ip = models.GenericIPAddressField(blank=True, null=True)
+    last_success = models.DateTimeField(null=True)
     name = models.CharField(max_length=300)
     open_signups = models.BooleanField()
     organization_account = models.CharField(max_length=256, blank=True)
@@ -44,14 +44,6 @@ class Node(ModelBase):
         cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."])
         # Split into tuple
         return tuple([int(i) for i in cleaned_str.split(".")])
-
-    @staticmethod
-    def log_failure(host):
-        """
-        Increment failure counter of node.
-        """
-        # TODO implement
-        pass
 
     @cached_property
     def preferred_method(self):

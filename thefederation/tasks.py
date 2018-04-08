@@ -1,5 +1,8 @@
+import datetime
 import logging
 
+from django.db.models import Q
+from django.utils.timezone import now
 from django_rq import job
 from federation.hostmeta import fetchers
 
@@ -11,13 +14,18 @@ logger = logging.getLogger(__name__)
 METHODS = ['nodeinfo2', 'nodeinfo', 'statisticsjson']
 
 
+def aggregate_daily_stats():
+    # TODO count daily stats, aggregate values, update if old values exist
+    pass
+
+
 def fetch_using_method(host, method):
     logger.debug(f'Fetching {host} using method {method}')
     func = getattr(fetchers, f"fetch_{method}_document")
     return func(host)
 
 
-def fetch_server(host):
+def fetch_node(host):
     """
     Fetch differet documents in order
 
@@ -46,11 +54,10 @@ def fetch_server(host):
 
 
 @job('medium')
-def poll_server(host):
-    result = fetch_server(host)
+def poll_node(host):
+    result = fetch_node(host)
     if not result:
-        logger.info(f'No result for {host}, incrementing failure count.')
-        Node.log_failure(host)
+        logger.info(f'No result for {host}.')
         return
 
     assert host == result.get('host')
@@ -58,9 +65,9 @@ def poll_server(host):
     node, _created = Node.objects.update_or_create(
         host=host,
         defaults={
-            'failures': 0,
             'features': result.get('features', {}),
             'ip': result.get('ip'),
+            'last_success': now(),
             'name': result.get('name') or host,
             'open_signups': result.get('open_signups', False),
             'organization_account': result.get('organization', {}).get('account', ''),
@@ -87,8 +94,10 @@ def poll_server(host):
     logger.info(f'Updated {host} successfully.')
 
 
-@job('medium')
-def poll_servers():
-    logger.info(f'Queueing polling all servers.')
-    for node in Node.objects.only('host').filter(failures__lte=30):
-        poll_server.delay(node.host)
+def poll_nodes():
+    logger.info(f'Queueing polling all nodes.')
+    nodes_qs = Node.objects.only('host').filter(
+        Q(last_success__isnull=True) | Q(last_success__gte=now() - datetime.timedelta(days=30))
+    )
+    for node in nodes_qs:
+        poll_node.delay(node.host)
