@@ -30,6 +30,25 @@ TBD
 * Webpack
 * GraphQL
 
+## Backend
+
+### Dependencies
+
+``` bash
+pip install -U pip setuptools pip-tools
+pip-sync dev-requirements.txt
+```
+
+### DB
+
+``` bash
+sudo su - postgres
+createuser -s -P thefederation  # give password 'thefederation'
+createdb -O thefederation thefederation
+exit
+python manage.py migrate
+```
+
 ## Frontend
 
 ### Build Setup
