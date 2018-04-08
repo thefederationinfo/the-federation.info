@@ -10,7 +10,6 @@ __all__ = ('Node',)
 
 
 class Node(ModelBase):
-    admin_email = models.EmailField(blank=True)
     blocked = models.BooleanField(default=False)
     country = CountryField(blank=True)
     failures = models.PositiveIntegerField(default=0)
@@ -20,6 +19,9 @@ class Node(ModelBase):
     ip = models.GenericIPAddressField(blank=True, null=True)
     name = models.CharField(max_length=300)
     open_signups = models.BooleanField()
+    organization_account = models.CharField(max_length=256, blank=True)
+    organization_contact = models.CharField(max_length=256, blank=True)
+    organization_name = models.CharField(max_length=128, blank=True)
     protocols = models.ManyToManyField('thefederation.Protocol', related_name='nodes')
     relay = EnumField(Relay, default=Relay.NONE)
     server_meta = JSONField(default={})
