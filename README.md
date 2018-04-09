@@ -28,7 +28,6 @@ TBD
 * PostgreSQL
 * Vue 2
 * Webpack
-* GraphQL
 
 ## Backend
 
