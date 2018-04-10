@@ -53,14 +53,11 @@ node_modules/
 # Compass
 .sass-cache
 
-# virtual environments
+# env file
 .env
 
 # User-uploaded media
-socialhome/media/
-
-# Hitch directory
-tests/.hitch
+/media/
 
 # MailHog binary
 mailhog
@@ -68,26 +65,7 @@ mailhog
 # Pytest
 .cache
 
-# Socialhome environment file
-env.local
-
-# Collected statics
-socialhome/static/css/*.css
-socialhome/static/css/*.css.map
-socialhome/static/js/project.js
-socialhome/static/js/webpack.*.js
-socialhome/static/js/webpack.*.js.map
-socialhome/static/fonts/
-!/socialhome/static/fonts/.gitkeep
-staticfiles/
-
-# Bower
-bower_components/
-
-# Mocha test statics
-socialhome/static/mocha/
-
-# DOcs
+# Docs
 /docs/_build/
 /yarn.lock
 /staticfiles/
@@ -95,3 +73,4 @@ socialhome/static/mocha/
 # Docker
 docker-compose.yml
 
+dist/

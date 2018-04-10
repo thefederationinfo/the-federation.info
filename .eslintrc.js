@@ -50,5 +50,7 @@ module.exports = {
       "max-len": ["error", 120],
       "object-curly-spacing": ["error", "never"],
       "semi": ["error", "never"],
+      "quotes": "off",
+      "vue/html-indent": ["error", 4],
   }
 }
