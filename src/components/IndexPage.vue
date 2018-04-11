@@ -1,6 +1,7 @@
 <template>
     <div>
         <Drawer />
+        <IndexContent />
         <Footer />
     </div>
 </template>
@@ -8,10 +9,11 @@
 <script>
 import Drawer from "./Drawer"
 import Footer from "./Footer"
+import IndexContent from "./IndexContent";
 
 export default {
     name: 'IndexPage',
-    components: {Footer, Drawer},
+    components: {IndexContent, Footer, Drawer},
 }
 </script>
 
