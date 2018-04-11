@@ -8,6 +8,11 @@
             <div class="flex">
                 <div class="col4">
                     <div class="tile valign-wrapper">
+                        1 <strong>Protocol</strong>
+                    </div>
+                </div>
+                <div class="col4">
+                    <div class="tile valign-wrapper">
                         5 <strong>Projects</strong>
                     </div>
                 </div>
@@ -37,14 +42,12 @@
                 <div class="flex">
                     <div class="col2">
                         <p>
-                            The Federation refers to a global social network composed by nodes talking together.
-                            Each of them is an installation of a software which supports the <a
-                                href="https://diaspora.github.io/diaspora_federation/">diaspora* protocol</a>.
-                            This website lists all the registered servers among the world to draw statistics. You know,
-                            we love numbers and numbers love us.
+                            The Federation refers to a global social network composed of nodes talking together.
+                            Each of them is an installation of software which supports one of the federated social web
+                            protocols.
                         </p>
                         <div class="center">
-                            <a href="/nodes" class="btn btn-primary">Access nodes list</a>
+                            <a href="/nodes" class="btn btn-primary">Nodes list</a>
                         </div>
                     </div>
                     <div class="col2">
