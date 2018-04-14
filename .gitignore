@@ -70,7 +70,5 @@ mailhog
 /yarn.lock
 /staticfiles/
 
-# Docker
-docker-compose.yml
 
 dist/
