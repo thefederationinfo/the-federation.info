@@ -1,45 +1,35 @@
 version: '3'
+
 services:
   db:
     image: postgres
     environment:
       POSTGRES_PASSWORD: postgres
+
+  redis:
+    image: redis
+
   backend:
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
     ports:
       - "5000:5000"
-    volumes:
-      - logsbackend:/logs
     depends_on:
       - db
       - redis
-    links:
-      - redis
-      - db
     environment:
-      DJANGO_SECRET_KEY: 12345
-    command: circusd /app/config/circus.ini
-  redis:
-    image: redis
+      # TODO force setting outside compose
+      - DJANGO_SECRET_KEY=12345
+
   nginx:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
-    depends_on:
-      - backend
     ports:
       - 8000:80
-#  webserver:
-#    build:
-#      context: .
-#      dockerfile: docker/caddy/Dockerfile
-#    #    image: abiosoft/caddy
-#    depends_on:
-#      - backend
-#    ports:
-#      - "2015:2015"
-#    command: -port 8000 -host 0.0.0.0 "proxy / backend:5000 { transparent }"
+    volumes:
+      - frontendstatics:/srv/frontend:ro
+
 volumes:
-  logsbackend: {}
+  frontendstatics:

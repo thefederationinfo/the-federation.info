@@ -1,7 +1,7 @@
 import environ
 import os
 
-ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
+ROOT_DIR = environ.Path(__file__) - 2  # (/a/b/myfile.py - 2 = /a)
 
 # Local environment
 # -----------------
