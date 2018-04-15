@@ -20,14 +20,15 @@ services:
       - redis
     environment:
       # TODO force setting outside compose
-      - DJANGO_SECRET_KEY=12345
+      - DJANGO_SECRET_KEY
+      - DJANGO_DEBUG=False
 
   nginx:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-      - 8000:80
+      - 8123:80
     volumes:
       - frontendstatics:/srv/frontend:ro
 
