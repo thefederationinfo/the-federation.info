@@ -19,9 +19,7 @@ services:
       - db
       - redis
     environment:
-      # TODO force setting outside compose
       - DJANGO_SECRET_KEY
-      - DJANGO_DEBUG=False
 
   nginx:
     build:

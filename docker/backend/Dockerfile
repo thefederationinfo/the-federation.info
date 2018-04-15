@@ -29,9 +29,9 @@ ENV RQWORKER_NUM 5
 ENV DJANGO_SETTINGS_MODULE config.production
 ENV REDIS_HOST redis
 ENV DATABASE_URL postgres://postgres:postgres@db:5432/postgres
-ENV DJANGO_SECURE_SSL_REDIRECT False
-ENV DJANGO_DEBUG True
-ENV DJANGO_ALLOWED_HOSTS the-federation.info,thefederation.local
+ENV DJANGO_SECURE_SSL_REDIRECT True
+ENV DJANGO_DEBUG False
+ENV DJANGO_ALLOWED_HOSTS the-federation.info,dev.the-federation.info,thefederation.local
 
 EXPOSE 5000
 
