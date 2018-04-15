@@ -4,8 +4,7 @@ ENV PYTHONUNBUFFERED 1
 
 COPY requirements/requirements.txt ./
 
-# pip 10 breaks pip-tools for now, see https://github.com/jazzband/pip-tools/issues/648
-RUN pip install -U 'pip<10' setuptools pip-tools
+RUN pip install -U pip setuptools pip-tools
 
 RUN pip-sync requirements.txt
 

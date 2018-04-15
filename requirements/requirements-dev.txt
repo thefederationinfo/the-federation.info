@@ -7,7 +7,6 @@
 attrs==17.4.0             # via pytest
 certifi==2018.1.18        # via requests
 chardet==3.0.4            # via requests
-click==6.7                # via pip-tools
 codecov==2.0.15
 coverage==4.5.1
 decorator==4.2.1          # via ipython, traitlets
@@ -19,7 +18,6 @@ django-test-plus==1.0.22
 django==2.0.3
 factory-boy==2.10.0
 faker==0.8.12
-first==2.0.1              # via pip-tools
 flake8==3.5.0
 freezegun==0.3.10
 idna==2.6                 # via requests
@@ -31,7 +29,6 @@ mccabe==0.6.1             # via flake8
 parso==0.1.1              # via jedi
 pexpect==4.4.0            # via ipython
 pickleshare==0.7.4        # via ipython
-pip-tools==1.11.0
 pluggy==0.6.0             # via pytest
 prompt-toolkit==1.0.15    # via ipython
 ptyprocess==0.5.2         # via pexpect
@@ -48,7 +45,7 @@ python-dateutil==2.7.0    # via faker, freezegun
 pytz==2018.3              # via django
 requests==2.18.4          # via codecov
 simplegeneric==0.8.1      # via ipython
-six==1.11.0               # via django-coverage-plugin, faker, freezegun, pip-tools, prompt-toolkit, pytest, python-dateutil, traitlets
+six==1.11.0               # via django-coverage-plugin, faker, freezegun, prompt-toolkit, pytest, python-dateutil, traitlets
 sqlparse==0.2.4           # via django-debug-toolbar
 termcolor==1.1.0          # via pytest-sugar
 text-unidecode==1.2       # via faker
