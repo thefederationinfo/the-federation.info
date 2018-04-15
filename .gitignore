@@ -72,3 +72,5 @@ mailhog
 
 
 dist/
+
+playbook.yml

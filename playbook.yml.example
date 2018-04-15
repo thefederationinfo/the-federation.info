@@ -1,0 +1,58 @@
+---
+- name: Deploy the-federation.info
+  hosts: host
+  become: yes
+  become_user: root
+
+  roles:
+    - { role: geerlingguy.pip, pip_install_packages: ["docker", "docker-compose"], tags: ["docker"] }
+    - { role: geerlingguy.docker, tags: ["docker"] }
+    - { role: jaywink.letsencrypt, letsencrypt_email: mail@example.com, letsencrypt_pause_services: ["apache2"], letsencrypt_domain: "dev.the-federation.info", letsencrypt_request_www: false, letsencrypt_force_renew: false, tags: ["ssl"] }
+
+  tasks:
+    - apt: name=git
+    - name: Thefederation rewrite user
+      user: name="thefedrewrite" state=present
+    - name: Ensure github.com is a known host
+      lineinfile:
+        dest: /home/thefedrewrite/.ssh/known_hosts
+        create: yes
+        state: present
+        line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+        regexp: "^github\\.com"
+      become_user: thefedrewrite
+    - name: Get latest application code
+      git: accept_hostkey=yes dest=/home/thefedrewrite/thefederation repo="https://github.com/thefederationinfo/the-federation.info.git" force=yes version="rewrite"
+      become_user: thefedrewrite
+
+    - name: Apache proxy module
+      apache2_module: state=present name=proxy
+
+    - name: Apache additional modules
+      apache2_module: state=present name={{ item }}
+      with_items:
+        - ssl
+
+    - name: Apache site
+      template: dest=/etc/apache2/sites-available/dev.the-federation.info.conf src=docker/apache.conf
+
+    - name: Enable site
+      command: a2ensite dev.the-federation.info
+
+    - name: restart apache
+      service: name=apache2 state=restarted
+
+    - docker_service:
+        project_src: /home/thefedrewrite/thefederation
+        build: yes
+        restarted: yes
+      register: output
+      tags:
+        - compose
+      environment:
+        - DJANGO_SECRET_KEY: setmetosomethingsupasecret
+
+    - debug:
+        var: output
+      tags:
+        - compose
