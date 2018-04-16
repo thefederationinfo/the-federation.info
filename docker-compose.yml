@@ -20,6 +20,8 @@ services:
       - redis
     environment:
       - DJANGO_SECRET_KEY
+    volumes:
+      - frontendstatics:/app/frontend
 
   nginx:
     build:

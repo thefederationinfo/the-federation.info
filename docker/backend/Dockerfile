@@ -1,3 +1,19 @@
+# --------------------
+# Build frontend first
+# --------------------
+
+FROM node:9 AS frontend
+
+COPY . /app
+
+WORKDIR /app
+
+RUN npm i && npm run build
+
+# -----------
+# Backend
+# -----------
+
 FROM python:3.6
 
 ENV PYTHONUNBUFFERED 1
@@ -15,8 +31,6 @@ RUN groupadd -r django \
 
 COPY . /app
 
-RUN chown -R django /app
-
 COPY docker/backend/gunicorn.sh /gunicorn.sh
 
 RUN sed -i 's/\r//' /gunicorn.sh \
@@ -24,6 +38,10 @@ RUN sed -i 's/\r//' /gunicorn.sh \
     && chown django /gunicorn.sh
 
 WORKDIR /app
+
+COPY --from=frontend /app/dist /app/frontend
+
+RUN chown -R django /app
 
 ENV RQWORKER_NUM 5
 ENV DJANGO_SETTINGS_MODULE config.production
