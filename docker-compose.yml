@@ -9,12 +9,10 @@ services:
   redis:
     image: redis
 
-  backend:
+  app:
     build:
       context: .
-      dockerfile: docker/backend/Dockerfile
-    ports:
-      - "5000:5000"
+      dockerfile: docker/app/Dockerfile
     depends_on:
       - db
       - redis
@@ -28,7 +26,7 @@ services:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-      - 8123:80
+      - "127.0.0.1:8123:80"
     volumes:
       - frontendstatics:/srv/frontend:ro
 

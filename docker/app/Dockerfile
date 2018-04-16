@@ -31,15 +31,15 @@ RUN groupadd -r django \
 
 COPY . /app
 
-COPY docker/backend/gunicorn.sh /gunicorn.sh
+COPY --from=frontend /app/dist /app/frontend
+
+COPY docker/app/gunicorn.sh /gunicorn.sh
 
 RUN sed -i 's/\r//' /gunicorn.sh \
     && chmod +x /gunicorn.sh \
     && chown django /gunicorn.sh
 
 WORKDIR /app
-
-COPY --from=frontend /app/dist /app/frontend
 
 RUN chown -R django /app
 
@@ -50,7 +50,5 @@ ENV DATABASE_URL postgres://postgres:postgres@db:5432/postgres
 ENV DJANGO_SECURE_SSL_REDIRECT True
 ENV DJANGO_DEBUG False
 ENV DJANGO_ALLOWED_HOSTS the-federation.info,dev.the-federation.info,thefederation.local
-
-EXPOSE 5000
 
 CMD circusd /app/config/circus.ini
