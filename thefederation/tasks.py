@@ -58,7 +58,7 @@ def poll_node(host):
     result = fetch_node(host)
     if not result:
         logger.info(f'No result for {host}.')
-        return
+        return False
 
     assert host == result.get('host')
     platform, _created = Platform.objects.get_or_create(name=result['platform'])
@@ -113,6 +113,7 @@ def poll_node(host):
         )
 
     logger.info(f'Updated {host} successfully.')
+    return True
 
 
 def poll_nodes():
