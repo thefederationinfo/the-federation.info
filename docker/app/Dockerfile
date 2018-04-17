@@ -24,14 +24,14 @@ RUN pip install -U pip setuptools pip-tools
 
 RUN pip-sync requirements.txt
 
+COPY . /app
+
+COPY --from=frontend /app/dist /app/frontend
+
 RUN mkdir -p /logs
 
 RUN groupadd -r django \
     && useradd -r -g django django
-
-COPY . /app
-
-COPY --from=frontend /app/dist /app/frontend
 
 COPY docker/app/gunicorn.sh /gunicorn.sh
 

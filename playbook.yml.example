@@ -42,6 +42,9 @@
     - name: restart apache
       service: name=apache2 state=restarted
 
+    - name: Replace compose file
+      command: mv /home/thefedrewrite/thefederation/production.yml /home/thefedrewrite/thefederation/docker-compose.yml
+
     - docker_service:
         project_src: /home/thefedrewrite/thefederation
         build: yes
