@@ -39,11 +39,17 @@
     - name: Enable site
       command: a2ensite dev.the-federation.info
 
-    - name: restart apache
+    - name: Restart apache
       service: name=apache2 state=restarted
 
-    - name: Replace compose file
-      command: mv /home/thefedrewrite/thefederation/production.yml /home/thefedrewrite/thefederation/docker-compose.yml
+    - name: Copy .env file
+      template: dest=/home/thefedrewrite/thefederation/.env src=.env.prod.example mode=0600
+
+    - name: Set secret key
+      lineinfile:
+        path: /home/thefedrewrite/thefederation/.env
+        regexp: '^DJANGO_SECRET_KEY='
+        line: 'DJANGO_SECRET_KEY='   # SET ME TO SOMETHING
 
     - docker_service:
         project_src: /home/thefedrewrite/thefederation
@@ -52,8 +58,6 @@
       register: output
       tags:
         - compose
-      environment:
-        - DJANGO_SECRET_KEY: setmetosomethingsupasecret
 
     - debug:
         var: output

@@ -4,7 +4,7 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
 
   redis:
     image: redis
@@ -16,10 +16,8 @@ services:
     depends_on:
       - db
       - redis
-    environment:
-      - DJANGO_SECRET_KEY=12345
-      - DJANGO_DEBUG=True
-      - DJANGO_SECURE_SSL_REDIRECT=False
+    env_file:
+      - .env
     volumes:
       - frontendstatics:/app/frontend
 
@@ -28,7 +26,7 @@ services:
       context: .
       dockerfile: docker/nginx/Dockerfile
       args:
-        env: local
+        env: $TARGET_ENV
     ports:
       - "127.0.0.1:8123:80"
     volumes:

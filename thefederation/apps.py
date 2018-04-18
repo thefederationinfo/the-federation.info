@@ -2,7 +2,6 @@ import datetime
 
 import django_rq
 from django.apps import AppConfig
-from django.utils.timezone import now
 
 
 class TheFederationConfig(AppConfig):
@@ -14,14 +13,23 @@ class TheFederationConfig(AppConfig):
         from thefederation.tasks import poll_nodes
 
         scheduler = django_rq.get_scheduler('high')
+        # Delete any existing jobs in the scheduler when the app starts up
+        for job in scheduler.get_jobs():
+            job.delete()
+
         scheduler.schedule(
-            scheduled_time=now() + datetime.timedelta(minutes=15),
+            scheduled_time=datetime.datetime.utcnow() + datetime.timedelta(minutes=15),
             func=aggregate_daily_stats,
             interval=1500,
         )
+
         scheduler = django_rq.get_scheduler('medium')
+        # Delete any existing jobs in the scheduler when the app starts up
+        for job in scheduler.get_jobs():
+            job.delete()
+
         scheduler.schedule(
-            scheduled_time=now(),
+            scheduled_time=datetime.datetime.utcnow(),
             func=poll_nodes,
             interval=3600,
         )
