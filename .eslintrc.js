@@ -52,5 +52,6 @@ module.exports = {
       "semi": ["error", "never"],
       "quotes": "off",
       "vue/html-indent": ["error", 4],
+      "arrow-parens": "off",
   }
 }

@@ -5,8 +5,11 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.i18n import JavaScriptCatalog
+from graphene_django.views import GraphQLView
 
 urlpatterns = [
+    url(r'^graphql', GraphQLView.as_view(graphiql=True)),
+
     url(r"", include("thefederation.urls")),
 
     # JavaScript translations

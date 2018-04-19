@@ -2,7 +2,7 @@
     <main>
         <header class="main-header">
             <div class="main-title">
-                <h1><a href="/">The Federation</a></h1>
+                <h1><router-link to="/">The Federation</router-link></h1>
                 <h2>Welcome to the new social web</h2>
             </div>
             <div class="flex">
@@ -47,7 +47,7 @@
                             protocols.
                         </p>
                         <div class="center">
-                            <a href="/nodes" class="btn btn-primary">Nodes list</a>
+                            <router-link to="/nodes" class="btn btn-primary">Nodes list</router-link>
                         </div>
                     </div>
                     <div class="col2">

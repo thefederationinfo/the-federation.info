@@ -1,0 +1,59 @@
+<template>
+    <table id="nodes-table">
+        <thead>
+            <tr>
+                <th>Software</th>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Open signups</th>
+                <th>Total users</th>
+                <th>Active users half year</th>
+                <th>Active users monthly</th>
+                <th>Local posts</th>
+                <th>Local comments</th>
+                <th>Services</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+        <tbody>
+            <NodesTableRow
+                v-for="node in allNodes"
+                :node="node"
+                :key="node.id"
+            />
+        </tbody>
+    </table>
+</template>
+
+<script>
+import gql from 'graphql-tag'
+
+import NodesTableRow from "./NodesTableRow"
+
+
+const query = gql`
+  {
+      allNodes {
+        id
+        name
+      }
+  }
+`
+
+export default {
+    apollo: {
+        allNodes: query,
+    },
+    name: "NodesTable",
+    components: {NodesTableRow},
+    data() {
+        return {
+            allNodes: [],
+        }
+    },
+}
+</script>
+
+<style scoped>
+
+</style>

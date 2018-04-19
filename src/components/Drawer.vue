@@ -4,8 +4,8 @@
         <nav id="menu" class="tile">
             <a class="close-drawer" href="#">x</a>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/nodes">Nodes list</a></li>
+                <li><router-link to="/">Home</router-link></li>
+                <li><router-link to="/nodes">Nodes list</router-link></li>
                 <li><a href="/diaspora">diaspora*</a></li>
                 <li><a href="/friendica">Friendica</a></li>
                 <li><a href="/ganggo">GangGo</a></li>

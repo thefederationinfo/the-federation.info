@@ -1,11 +1,13 @@
 circus
 django-countries
+django-cors-headers
 django-enumfields
 django-environ
 django-extensions
 django-redis
 django-rq
 django
+graphene_django
 ipython
 psycopg2-binary
 raven

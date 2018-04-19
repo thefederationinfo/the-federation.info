@@ -21,8 +21,10 @@ DJANGO_APPS = (
     "django.contrib.admin",
 )
 THIRD_PARTY_APPS = (
+    "corsheaders",
     "django_extensions",
     "django_rq",
+    'graphene_django',
 )
 LOCAL_APPS = (
     "thefederation",
@@ -34,6 +36,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -204,6 +207,12 @@ THEFEDERATION_URL = "{protocol}://{domain}".format(
     protocol="https" if THEFEDERATION_HTTPS else "http",
     domain=THEFEDERATION_DOMAIN
 )
+
+# Graphene
+# --------
+GRAPHENE = {
+    'SCHEMA': 'config.schema.schema'
+}
 
 # LOGGING CONFIGURATION
 # ------------------------------------------------------------------------------
