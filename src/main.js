@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 
 const httpLink = new HttpLink({
-    uri: 'http://127.0.0.1:8000/graphql',
+    uri: process.env.API_URI,
     useGETForQueries: true,
     headers: {
         'Content-Type': 'application/graphql',

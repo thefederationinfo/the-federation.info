@@ -1,4 +1,5 @@
 'use strict'
 module.exports = {
-  NODE_ENV: '"production"'
+    API_URI: '"https://dev.the-federation.info/graphql"',
+    NODE_ENV: '"production"',
 }
