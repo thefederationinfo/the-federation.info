@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             <NodesTableRow
-                v-for="node in allNodes"
+                v-for="node in nodes"
                 :node="node"
                 :key="node.id"
             />
@@ -33,8 +33,7 @@ import NodesTableRow from "./NodesTableRow"
 
 const query = gql`
   {
-      allNodes {
-        id
+      nodes {
         name
         version
         openSignups
@@ -48,13 +47,13 @@ const query = gql`
 
 export default {
     apollo: {
-        allNodes: query,
+        nodes: query,
     },
     name: "NodesTable",
     components: {NodesTableRow},
     data() {
         return {
-            allNodes: [],
+            nodes: [],
         }
     },
 }

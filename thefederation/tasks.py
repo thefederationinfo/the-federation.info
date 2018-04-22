@@ -83,6 +83,10 @@ def poll_node(host):
     protocols = set()
     for protocol in result.get('protocols', []):
         assert protocol != ""
+        if protocol == 'friendica':
+            protocol = 'dfrn'
+        elif protocol == 'gnusocial':
+            protocol = 'ostatus'
         proto, _created = Protocol.objects.get_or_create(name=protocol)
         protocols.add(proto)
     node.protocols.set(protocols)

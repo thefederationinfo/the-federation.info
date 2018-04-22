@@ -10,13 +10,3 @@ class Protocol(ModelBase):
 
     def __str__(self):
         return f"{self.name}"
-
-    def save(self, *args, **kwargs):
-        """
-        Fix some values given by some metadata documents.
-        """
-        if self.name == 'friendica':
-            self.name = 'dfrn'
-        elif self.name == 'gnusocial':
-            self.name = 'ostatus'
-        super().save(*args, **kwargs)

@@ -8,17 +8,17 @@
             <div class="flex">
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        1 <strong>Protocol</strong>
+                        {{ protocols.length }} <strong>Protocols</strong>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        5 <strong>Projects</strong>
+                        {{ platforms.length }} <strong>Projects</strong>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        100 <strong>Nodes</strong>
+                        {{ nodes.length }} <strong>Nodes</strong>
                     </div>
                 </div>
                 <div class="col4">
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col2">
                         <ul>
-                            <li>Nodes: <strong>100</strong></li>
+                            <li>Nodes: <strong>{{ nodes.length }}</strong></li>
                             <li>Users: <strong>10000</strong></li>
                             <li>Last 6 months active users: <strong>6000</strong></li>
                             <li>Last month active users: <strong>2000</strong></li>
@@ -67,11 +67,8 @@
             </div>
         </section>
 
-        <!--{% include "charts/_stats_with_selectors.njk" %}-->
-
         <section class="tile">
             <header>
-                <h2>diaspora* - Friendica - GangGo - Hubzilla - Socialhome</h2>
                 <h3>Discover the projects which are composing the federation</h3>
             </header>
             <div class="overflow-x">
@@ -177,8 +174,46 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
+const nodesQuery = gql`
+  {
+      nodes {
+        id
+      }
+  }
+`
+
+const platformsQuery = gql`
+  {
+      platforms {
+        name
+      }
+  }
+`
+
+const protocolsQuery = gql`
+  {
+      protocols {
+        name
+      }
+  }
+`
+
 export default {
+    apollo: {
+        nodes: nodesQuery,
+        platforms: platformsQuery,
+        protocols: protocolsQuery,
+    },
     name: "IndexContent",
+    data() {
+        return {
+            nodes: [],
+            platforms: [],
+            protocols: [],
+        }
+    },
 }
 </script>
 
