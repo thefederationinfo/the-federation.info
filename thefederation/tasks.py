@@ -15,7 +15,7 @@ METHODS = ['nodeinfo2', 'nodeinfo', 'statisticsjson']
 
 
 def aggregate_daily_stats():
-    # Do all platforms and then global
+    # Do all platforms, protocols and then global
     totals = {
         'users_total': 0,
         'users_half_year': 0,
@@ -40,13 +40,30 @@ def aggregate_daily_stats():
             local_comments=Sum('local_comments'),
         )
         Stat.objects.update_or_create(
-            date=today, platform=platform, node=None, defaults=stats,
+            date=today, protocol=None, platform=platform, node=None, defaults=stats,
         )
         # Increment globals
         for key in totals:
             totals[key] += stats[key] if stats[key] else 0
+    for protocol in Protocol.objects.all():
+        stats = Stat.objects.exclude(
+            node__last_success__lt=now() - datetime.timedelta(days=30)
+        ).filter(
+            node__protocols=protocol,
+            date=today,
+        ).aggregate(
+            users_total=Sum('users_total'),
+            users_half_year=Sum('users_half_year'),
+            users_monthly=Sum('users_monthly'),
+            users_weekly=Sum('users_weekly'),
+            local_posts=Sum('local_posts'),
+            local_comments=Sum('local_comments'),
+        )
+        Stat.objects.update_or_create(
+            date=today, protocol=protocol, platform=None, node=None, defaults=stats,
+        )
     # Add global stat
-    Stat.objects.update_or_create(date=today, platform=None, node=None, defaults=totals)
+    Stat.objects.update_or_create(date=today, protocol=None, platform=None, node=None, defaults=totals)
 
 
 def fetch_using_method(host, method):

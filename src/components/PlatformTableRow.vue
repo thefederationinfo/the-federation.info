@@ -42,11 +42,6 @@ const platformStatsQuery = gql`
     query PlatformStats($name: String!) {
         statsPlatformToday(name: $name) {
             usersTotal
-            usersHalfYear
-            usersMonthly
-            usersWeekly
-            localPosts
-            localComments
         }
     }
 `

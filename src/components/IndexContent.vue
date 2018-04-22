@@ -117,6 +117,31 @@
                 </table>
             </div>
         </section>
+
+        <section class="tile">
+            <header>
+                <h2>Protocols</h2>
+            </header>
+            <div class="overflow-x">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Protocol</th>
+                            <th>Nodes</th>
+                            <th>Users</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ProtocolTableRow
+                            v-for="protocol in protocols"
+                            :key="protocol.id"
+                            :protocol="protocol"
+                        />
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section class="tile">
             <header>
                 <h2>Be part of our world</h2>
@@ -161,6 +186,7 @@
 import gql from 'graphql-tag'
 
 import PlatformTableRow from "./PlatformTableRow"
+import ProtocolTableRow from "./ProtocolTableRow"
 
 
 const nodesQuery = gql`
@@ -191,7 +217,11 @@ const platformsQuery = gql`
 const protocolsQuery = gql`
   {
       protocols {
+        id
         name
+        nodes {
+          name
+        }
       }
   }
 `
@@ -202,7 +232,6 @@ const statsGlobalTodayQuery = gql`
         usersTotal
         usersHalfYear
         usersMonthly
-        usersWeekly
         localPosts
         localComments
       }
@@ -217,7 +246,7 @@ export default {
         statsGlobalToday: statsGlobalTodayQuery,
     },
     name: "IndexContent",
-    components: {PlatformTableRow},
+    components: {PlatformTableRow, ProtocolTableRow},
     data() {
         return {
             nodes: [],
