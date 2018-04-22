@@ -36,6 +36,12 @@ const query = gql`
       allNodes {
         id
         name
+        version
+        openSignups
+        host
+        platform {
+          name
+        }
       }
   }
 `

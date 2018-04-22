@@ -1,12 +1,22 @@
 <template>
     <tr>
         <td>
-            <!--<img alt="{{ node.network }}" title="{{ node.network }}" src="images/{{ node.network }}-16.png"/>-->
+            <img
+                :alt="node.platform.name"
+                :title="node.platform.name"
+                :src="imageSource"
+            />
         </td>
-        <!--<td><a title="{{ node.name }}" href="/node/{{ node.host }}">{{ node.name }}</a></td>-->
-        <td>{{ node.name }}</td>
-        <!--<td>{{ node.version }}</td>-->
-        <!--<td>{{ node.registrations_open }}</td>-->
+        <td>
+            <router-link
+                :title="node.name"
+                :to="nodeUrl"
+            >
+                {{ node.name }}
+            </router-link>
+        </td>
+        <td>{{ node.version }}</td>
+        <td>{{ openSignups }}</td>
         <!--<td>{{ node.total_users }}</td>-->
         <!--<td>{{ node.active_users_halfyear }}</td>-->
         <!--<td>{{ node.active_users_monthly }}</td>-->
@@ -29,7 +39,23 @@
 <script>
 export default {
     name: "NodesTableRow",
-    props: ['node'],
+    props: {
+        node: {
+            type: Object,
+            default: null,
+        },
+    },
+    computed: {
+        imageSource()  {
+            return `./static/images/${this.node.platform.name}-16.png`
+        },
+        nodeUrl() {
+            return `/node/${this.node.host}`
+        },
+        openSignups() {
+            return this.node.openSignups ? "Yes" : "No"
+        },
+    },
 }
 </script>
 
