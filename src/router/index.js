@@ -6,15 +6,16 @@ import NodesPage from '@/components/NodesPage'
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
+    fallback: false,
+    base: '/',
     routes: [
         {
             path: '/',
-            name: 'index',
             component: IndexPage,
         },
         {
-            path: '/nodes',
-            name: 'nodes',
+            path: '/nodes/',
             component: NodesPage,
         },
     ],

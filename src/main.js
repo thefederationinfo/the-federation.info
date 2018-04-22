@@ -12,7 +12,7 @@ const httpLink = new HttpLink({
     useGETForQueries: true,
     headers: {
         'Content-Type': 'application/graphql',
-    }
+    },
 })
 
 const apolloClient = new ApolloClient({
