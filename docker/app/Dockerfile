@@ -34,4 +34,4 @@ ENV DJANGO_SECURE_SSL_REDIRECT True
 ENV DJANGO_DEBUG False
 ENV DJANGO_ALLOWED_HOSTS the-federation.info,dev.the-federation.info,thefederation.local
 
-CMD circusd /app/config/circus.ini
+CMD bash -c "./utils/wait-for-it/wait-for-it.sh --strict --timeout=10 db:5432 && circusd /app/config/circus.ini"
