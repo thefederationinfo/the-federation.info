@@ -5,6 +5,8 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
 
   redis:
     image: redis
