@@ -6,12 +6,23 @@ __all__ = ('Platform',)
 
 
 class Platform(ModelBase):
+    code = models.URLField(max_length=128, blank=True)
+    display_name = models.CharField(max_length=128, blank=True)
+    first_release = models.DateField(null=True)
     latest_version = models.CharField(max_length=128, blank=True)
+    license = models.CharField(max_length=128, blank=True)
     icon = models.CharField(max_length=80, default='unknown')
+    install_guide = models.URLField(max_length=256, blank=True)
     name = models.CharField(max_length=80, unique=True)
+    website = models.URLField(max_length=128, blank=True)
 
     def __str__(self):
         return f"{self.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.display_name:
+            self.display_name = self.name
+        super().save(*args, **kwargs)
 
     def get_method(self, version):
         """

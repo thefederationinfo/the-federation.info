@@ -34,6 +34,7 @@ import NodesTableRow from "./NodesTableRow"
 const query = gql`
   {
       nodes {
+        id
         name
         version
         openSignups

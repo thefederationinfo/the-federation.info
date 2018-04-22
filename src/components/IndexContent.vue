@@ -47,7 +47,12 @@
                             protocols.
                         </p>
                         <div class="center">
-                            <router-link to="/nodes" class="btn btn-primary">Nodes list</router-link>
+                            <router-link
+                                to="/nodes"
+                                class="btn btn-primary"
+                            >
+                                Nodes list
+                            </router-link>
                         </div>
                     </div>
                     <div class="col2">
@@ -59,7 +64,8 @@
                             <li>Posts: <strong>200000</strong></li>
                             <li>Comments: <strong>300000</strong></li>
                         </ul>
-                        <div><strong>Disclaimer:</strong> These counts do not reflect the whole network due to the
+                        <div>
+                            <strong>Disclaimer:</strong> These counts do not reflect the whole network due to the
                             opt-in nature of the statistics.
                         </div>
                     </div>
@@ -69,74 +75,27 @@
 
         <section class="tile">
             <header>
-                <h3>Discover the projects which are composing the federation</h3>
+                <h2>Projects</h2>
             </header>
             <div class="overflow-x">
                 <table>
                     <thead>
                         <tr>
                             <th>Project</th>
-                            <th><a href="/diaspora">diaspora*</a></th>
-                            <th><a href="/friendica">Friendica</a></th>
-                            <th><a href="/ganggo">GangGo</a></th>
-                            <th><a href="/hubzilla">Hubzilla</a></th>
-                            <th><a href="/socialhome">Socialhome</a></th>
+                            <th>Nodes</th>
+                            <th>Users</th>
+                            <th>First release</th>
+                            <th>Website</th>
+                            <th>Code</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>First release date</th>
-                            <td>11-2010</td>
-                            <td>07-2010</td>
-                            <td>02-2017</td>
-                            <td>08-2015</td>
-                            <td>07-2017</td>
-                        </tr>
-                        <tr>
-                            <th>Nodes</th>
-                            <td>21</td>
-                            <td>21</td>
-                            <td>23</td>
-                            <td>43</td>
-                            <td>344</td>
-                        </tr>
-                        <tr>
-                            <th>Users</th>
-                            <td>44</td>
-                            <td>243</td>
-                            <td>233</td>
-                            <td>32</td>
-                            <td>2232</td>
-                        </tr>
-                        <tr>
-                            <th>Official website</th>
-                            <td><a href="https://diasporafoundation.org"
-                                   target="_blank">diasporafoundation.org</a></td>
-                            <td><a href="http://friendi.ca"
-                                   target="_blank">friendi.ca</a></td>
-                            <td><a href="https://ganggo.github.io"
-                                   target="_blank">ganggo.github.io</a></td>
-                            <td><a href="https://hubzilla.org"
-                                   target="_blank">hubzilla.org</a></td>
-                            <td><a href="https://socialhome.network"
-                                   target="_blank">socialhome.network</a></td>
-                        </tr>
-                        <tr>
-                            <th>Source code</th>
-                            <td><a href="https://github.com" target="_blank">Github</a></td>
-                            <td><a href="https://github.com" target="_blank">Github</a></td>
-                            <td><a href="https://github.com" target="_blank">Github</a></td>
-                            <td><a href="https://github.com" target="_blank">Github</a></td>
-                            <td><a href="https://github.com" target="_blank">Github</a></td>
-                        </tr>
-                        <tr>
-                            <th>Licence</th>
-                            <td>AGPL</td>
-                            <td>AGPL</td>
-                            <td>GPLv3</td>
-                            <td>MIT</td>
-                            <td>AGPL</td>
-                        </tr>
+                        <PlatformTableRow
+                            v-for="platform in platforms"
+                            :key="platform.id"
+                            :platform="platform"
+                            :nodes="nodes"
+                        />
                     </tbody>
                 </table>
             </div>
@@ -148,24 +107,32 @@
             <div class="flex">
                 <div class="col2">
                     <h3>Host yourself</h3>
-                    <p>You want to install your own node? Awesome! Choose a project and follow an installation
-                        guide.</p>
                     <p>
-                        <a href="https://wiki.diasporafoundation.org/Installation" target="_blank">diaspora*</a>
-                        -
-                        <a href="https://github.com/friendica/friendica/blob/master/INSTALL.txt" target="_blank">Friendica</a>
-                        -
-                        <a href="https://github.com/redmatrix/hubzilla/blob/master/install/INSTALL.txt" target="_blank">Hubzilla</a>
-                        -
-                        <a href="http://socialhome.readthedocs.io/en/latest/installation.html" target="_blank">Socialhome</a>
+                        You want to install your own node? Awesome! Choose a project and follow an installation guide.
                     </p>
+                    <div id="install-guides-list">
+                        <div
+                            v-for="platform in platforms"
+                            :key="platform.id"
+                        >
+                            <div v-if="platform.installGuide">
+                                <a
+                                    :href="platform.installGuide"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {{ platform.displayName ? platform.displayName : platform.name }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col2">
                     <h3>I already have my node!</h3>
                     <p>
-                        Yay! Welcome in the crew! To see your node included in this website, please go to <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>.
-                        After some seconds, you should see your pod added. After that, daily updates happen once per 24
-                        hours (some minutes past midnight EET).
+                        Yay! Welcome in the crew! To see your node included in this website, please go to
+                        <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>.
+                        After some seconds, you should see your node added..
                     </p>
                 </div>
             </div>
@@ -176,10 +143,16 @@
 <script>
 import gql from 'graphql-tag'
 
+import PlatformTableRow from "./PlatformTableRow"
+
+
 const nodesQuery = gql`
   {
       nodes {
         id
+        platform {
+          name
+        }
       }
   }
 `
@@ -187,7 +160,14 @@ const nodesQuery = gql`
 const platformsQuery = gql`
   {
       platforms {
+        id
+        code
         name
+        displayName
+        firstRelease
+        installGuide
+        license
+        website
       }
   }
 `
@@ -207,6 +187,7 @@ export default {
         protocols: protocolsQuery,
     },
     name: "IndexContent",
+    components: {PlatformTableRow},
     data() {
         return {
             nodes: [],
@@ -218,5 +199,7 @@ export default {
 </script>
 
 <style scoped>
-
+    #install-guides-list {
+        text-align: center;
+    }
 </style>
