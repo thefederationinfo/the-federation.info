@@ -21,13 +21,6 @@ services:
     env_file:
       - .env
 
-  frontend:
-    build:
-      context: .
-      dockerfile: docker/frontend/Dockerfile
-    volumes:
-      - frontendstatics:/app/frontend
-
   nginx:
     build:
       context: .
@@ -38,8 +31,3 @@ services:
       - app
     ports:
       - "127.0.0.1:8123:80"
-    volumes:
-      - frontendstatics:/srv/frontend:ro
-
-volumes:
-  frontendstatics:
