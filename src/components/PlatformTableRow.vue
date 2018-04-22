@@ -6,7 +6,11 @@
         <td>
             {{ nodeCount }}
         </td>
-        <td></td>
+        <td>
+            <div v-if="statsPlatformToday">
+                {{ statsPlatformToday.usersTotal }}
+            </div>
+        </td>
         <td>
             <a
                 v-if="platform.website"
@@ -31,7 +35,34 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
+
+const platformStatsQuery = gql`
+    query PlatformStats($name: String!) {
+        statsPlatformToday(name: $name) {
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            usersWeekly
+            localPosts
+            localComments
+        }
+    }
+`
+
+
 export default {
+    apollo: {
+        statsPlatformToday: {
+            query: platformStatsQuery,
+            variables() {
+                return {
+                    name: this.platform.name,
+                }
+            },
+        },
+    },
     name: "PlatformTableRow",
     props: {
         platform: {
@@ -42,6 +73,11 @@ export default {
             type: Array,
             default: () => [],
         },
+    },
+    data() {
+        return {
+            statsPlatformToday: {},
+        }
     },
     computed: {
         platformUrl() {

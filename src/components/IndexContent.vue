@@ -23,7 +23,7 @@
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        {{ statsGlobalToday.length ? statsGlobalToday[0].usersTotal : 0 }} <strong>Users</strong>
+                        {{ statsGlobalToday ? statsGlobalToday.usersTotal : 0 }} <strong>Users</strong>
                     </div>
                 </div>
                 <div class="col4">
@@ -63,23 +63,23 @@
                             </li>
                             <li>
                                 Users:
-                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].usersTotal : 0 }}</strong>
+                                <strong>{{ statsGlobalToday ? statsGlobalToday.usersTotal : 0 }}</strong>
                             </li>
                             <li>
                                 Last 6 months active users:
-                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].usersHalfYear : 0 }}</strong>
+                                <strong>{{ statsGlobalToday ? statsGlobalToday.usersHalfYear : 0 }}</strong>
                             </li>
                             <li>
                                 Last month active users:
-                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].usersMonthly : 0 }}</strong>
+                                <strong>{{ statsGlobalToday ? statsGlobalToday.usersMonthly : 0 }}</strong>
                             </li>
                             <li>
                                 Posts:
-                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].localPosts : 0 }}</strong>
+                                <strong>{{ statsGlobalToday ? statsGlobalToday.localPosts : 0 }}</strong>
                             </li>
                             <li>
                                 Comments:
-                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].localComments : 0 }}</strong>
+                                <strong>{{ statsGlobalToday ? statsGlobalToday.localComments : 0 }}</strong>
                             </li>
                         </ul>
                         <div>
