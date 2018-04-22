@@ -21,9 +21,12 @@
         line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
         regexp: "^github\\.com"
       become_user: thefedrewrite
+
     - name: Get latest application code
       git: accept_hostkey=yes dest=/home/thefedrewrite/thefederation repo="https://github.com/thefederationinfo/the-federation.info.git" force=yes version="rewrite"
       become_user: thefedrewrite
+      tags:
+        - compose
 
     - name: Apache proxy module
       apache2_module: state=present name=proxy
