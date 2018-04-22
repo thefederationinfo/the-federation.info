@@ -1,19 +1,3 @@
-# --------------------
-# Build frontend first
-# --------------------
-
-FROM node:9 AS frontend
-
-COPY . /app
-
-WORKDIR /app
-
-RUN npm i && npm run build
-
-# -----------
-# Backend
-# -----------
-
 FROM python:3.6
 
 ENV PYTHONUNBUFFERED 1
@@ -25,8 +9,6 @@ RUN pip install -U pip setuptools pip-tools
 RUN pip-sync requirements.txt
 
 COPY . /app
-
-COPY --from=frontend /app/dist /app/frontend
 
 RUN mkdir -p /logs
 
