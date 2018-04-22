@@ -8,11 +8,6 @@
         </td>
         <td></td>
         <td>
-            <div v-if="platform.firstRelease">
-                {{ platform.firstRelease }}
-            </div>
-        </td>
-        <td>
             <a
                 v-if="platform.website"
                 :href="platform.website"

@@ -8,7 +8,6 @@ __all__ = ('Platform',)
 class Platform(ModelBase):
     code = models.URLField(max_length=128, blank=True)
     display_name = models.CharField(max_length=128, blank=True)
-    first_release = models.DateField(null=True)
     latest_version = models.CharField(max_length=128, blank=True)
     license = models.CharField(max_length=128, blank=True)
     icon = models.CharField(max_length=80, default='unknown')

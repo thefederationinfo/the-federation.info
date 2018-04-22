@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from django.db.models import Q
+from django.db.models import Sum
 from django.utils.timezone import now
 from django_rq import job
 from federation.hostmeta import fetchers
@@ -15,8 +15,38 @@ METHODS = ['nodeinfo2', 'nodeinfo', 'statisticsjson']
 
 
 def aggregate_daily_stats():
-    # TODO count daily stats, aggregate values, update if old values exist
-    pass
+    # Do all platforms and then global
+    totals = {
+        'users_total': 0,
+        'users_half_year': 0,
+        'users_monthly': 0,
+        'users_weekly': 0,
+        'local_posts': 0,
+        'local_comments': 0,
+    }
+    today = now().date()
+    for platform in Platform.objects.all():
+        stats = Stat.objects.exclude(
+            node__last_success__lt=now() - datetime.timedelta(days=30)
+        ).filter(
+            node__platform=platform,
+            date=today,
+        ).aggregate(
+            users_total=Sum('users_total'),
+            users_half_year=Sum('users_half_year'),
+            users_monthly=Sum('users_monthly'),
+            users_weekly=Sum('users_weekly'),
+            local_posts=Sum('local_posts'),
+            local_comments=Sum('local_comments'),
+        )
+        Stat.objects.update_or_create(
+            date=today, platform=platform, node=None, defaults=stats,
+        )
+        # Increment globals
+        for key in totals:
+            totals[key] += stats[key] if stats[key] else 0
+    # Add global stat
+    Stat.objects.update_or_create(date=today, platform=None, node=None, defaults=totals)
 
 
 def fetch_using_method(host, method):
@@ -122,8 +152,6 @@ def poll_node(host):
 
 def poll_nodes():
     logger.info(f'Queueing polling all nodes.')
-    nodes_qs = Node.objects.only('host').filter(
-        Q(last_success__isnull=True) | Q(last_success__gte=now() - datetime.timedelta(days=30))
-    )
+    nodes_qs = Node.objects.only('host').active()
     for node in nodes_qs:
         poll_node.delay(node.host)

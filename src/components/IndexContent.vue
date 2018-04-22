@@ -23,7 +23,7 @@
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        10000 <strong>Users</strong>
+                        {{ statsGlobalToday.length ? statsGlobalToday[0].usersTotal : 0 }} <strong>Users</strong>
                     </div>
                 </div>
                 <div class="col4">
@@ -57,12 +57,30 @@
                     </div>
                     <div class="col2">
                         <ul>
-                            <li>Nodes: <strong>{{ nodes.length }}</strong></li>
-                            <li>Users: <strong>10000</strong></li>
-                            <li>Last 6 months active users: <strong>6000</strong></li>
-                            <li>Last month active users: <strong>2000</strong></li>
-                            <li>Posts: <strong>200000</strong></li>
-                            <li>Comments: <strong>300000</strong></li>
+                            <li>
+                                Nodes:
+                                <strong>{{ nodes.length }}</strong>
+                            </li>
+                            <li>
+                                Users:
+                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].usersTotal : 0 }}</strong>
+                            </li>
+                            <li>
+                                Last 6 months active users:
+                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].usersHalfYear : 0 }}</strong>
+                            </li>
+                            <li>
+                                Last month active users:
+                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].usersMonthly : 0 }}</strong>
+                            </li>
+                            <li>
+                                Posts:
+                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].localPosts : 0 }}</strong>
+                            </li>
+                            <li>
+                                Comments:
+                                <strong>{{ statsGlobalToday.length ? statsGlobalToday[0].localComments : 0 }}</strong>
+                            </li>
                         </ul>
                         <div>
                             <strong>Disclaimer:</strong> These counts do not reflect the whole network due to the
@@ -84,7 +102,6 @@
                             <th>Project</th>
                             <th>Nodes</th>
                             <th>Users</th>
-                            <th>First release</th>
                             <th>Website</th>
                             <th>Code</th>
                         </tr>
@@ -164,7 +181,6 @@ const platformsQuery = gql`
         code
         name
         displayName
-        firstRelease
         installGuide
         license
         website
@@ -180,11 +196,25 @@ const protocolsQuery = gql`
   }
 `
 
+const statsGlobalTodayQuery = gql`
+  {
+      statsGlobalToday {
+        usersTotal
+        usersHalfYear
+        usersMonthly
+        usersWeekly
+        localPosts
+        localComments
+      }
+  }
+`
+
 export default {
     apollo: {
         nodes: nodesQuery,
         platforms: platformsQuery,
         protocols: protocolsQuery,
+        statsGlobalToday: statsGlobalTodayQuery,
     },
     name: "IndexContent",
     components: {PlatformTableRow},
@@ -193,6 +223,7 @@ export default {
             nodes: [],
             platforms: [],
             protocols: [],
+            statsGlobalToday: [],
         }
     },
 }
