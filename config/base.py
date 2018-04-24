@@ -207,6 +207,10 @@ THEFEDERATION_URL = "{protocol}://{domain}".format(
     protocol="https" if THEFEDERATION_HTTPS else "http",
     domain=THEFEDERATION_DOMAIN
 )
+THEFEDERATION_LEGACY_HOST = env("THEFEDERATION_LEGACY_HOST", default='localhost')
+THEFEDERATION_LEGACY_USER = env("THEFEDERATION_LEGACY_USER", default='thefederation')
+THEFEDERATION_LEGACY_PASSWORD = env("THEFEDERATION_LEGACY_PASSWORD", default=None)
+THEFEDERATION_LEGACY_DB = env("THEFEDERATION_LEGACY_DB", default='thefederation')
 
 # Graphene
 # --------

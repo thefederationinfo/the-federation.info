@@ -54,6 +54,12 @@
         regexp: '^DJANGO_SECRET_KEY='
         line: 'DJANGO_SECRET_KEY='   # SET ME TO SOMETHING
 
+    - name: Set legacy db pass
+      lineinfile:
+        path: /home/thefedrewrite/thefederation/.env
+        regexp: '^THEFEDERATION_LEGACY_PASSWORD='
+        line: 'THEFEDERATION_LEGACY_PASSWORD='
+
     - docker_service:
         project_src: /home/thefedrewrite/thefederation
         build: yes

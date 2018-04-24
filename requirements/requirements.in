@@ -9,6 +9,7 @@ django-rq
 django
 graphene_django
 ipython
+mysqlclient  # For migrating old data, remove afterwards
 psycopg2-binary
 raven
 redis
