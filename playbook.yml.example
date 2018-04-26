@@ -26,7 +26,7 @@
       git: accept_hostkey=yes dest=/home/thefedrewrite/thefederation repo="https://github.com/thefederationinfo/the-federation.info.git" force=yes version="rewrite"
       become_user: thefedrewrite
       tags:
-        - compose
+        - app
 
     - name: Apache proxy module
       apache2_module: state=present name=proxy
@@ -53,12 +53,16 @@
         path: /home/thefedrewrite/thefederation/.env
         regexp: '^DJANGO_SECRET_KEY='
         line: 'DJANGO_SECRET_KEY='   # SET ME TO SOMETHING
+      tags:
+        - app
 
     - name: Set legacy db pass
       lineinfile:
         path: /home/thefedrewrite/thefederation/.env
         regexp: '^THEFEDERATION_LEGACY_PASSWORD='
         line: 'THEFEDERATION_LEGACY_PASSWORD='
+      tags:
+        - app
 
     - docker_service:
         project_src: /home/thefedrewrite/thefederation
@@ -66,9 +70,9 @@
         restarted: yes
       register: output
       tags:
-        - compose
+        - app
 
     - debug:
         var: output
       tags:
-        - compose
+        - app
