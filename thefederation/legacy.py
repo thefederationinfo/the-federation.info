@@ -23,6 +23,7 @@ def sync_legacy_data():
     row = cursor.fetchone()
     while row:
         if Node.objects.filter(host=row['host']).exists():
+            row = cursor.fetchone()
             continue
 
         platform, _created = Platform.objects.get_or_create(name=row['network'].lower())
@@ -33,7 +34,7 @@ def sync_legacy_data():
             'open_signups': row['registrations_open'],
             'last_success': now() - datetime.timedelta(days=row['failures']),
             'ip': row['ip4'],
-            'country': row['country'],
+            'country': row['country'] or '',
             'platform': platform,
         }
         node, _created = Node.objects.get_or_create(host=row['host'], defaults=data)
