@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
@@ -45,6 +46,13 @@ class Node(ModelBase):
 
     def __str__(self):
         return f"{self.name} ({self.host})"
+
+    def save(self, *args, **kwargs):
+        clean_name = re.match(r'[a-zA-Z]*', self.name)
+        if clean_name:
+            if self.platform.name == clean_name[0].lower():
+                self.name = self.host
+        super().save(*args, **kwargs)
 
     @property
     def clean_version(self):
