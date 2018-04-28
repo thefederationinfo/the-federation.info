@@ -91,6 +91,8 @@
             </div>
         </section>
 
+        <Charts />
+
         <section class="tile">
             <header>
                 <h2>Projects</h2>
@@ -187,6 +189,7 @@ import gql from 'graphql-tag'
 
 import PlatformTableRow from "./PlatformTableRow"
 import ProtocolTableRow from "./ProtocolTableRow"
+import Charts from "./Charts"
 
 
 const nodesQuery = gql`
@@ -246,7 +249,7 @@ export default {
         statsGlobalToday: statsGlobalTodayQuery,
     },
     name: "IndexContent",
-    components: {PlatformTableRow, ProtocolTableRow},
+    components: {Charts, PlatformTableRow, ProtocolTableRow},
     data() {
         return {
             nodes: [],

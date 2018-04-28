@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
+import VueChartkick from 'vue-chartkick'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -25,6 +26,7 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.use(VueApollo)
+Vue.use(VueChartkick)
 
 Vue.config.productionTip = false
 

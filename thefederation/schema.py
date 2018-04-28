@@ -6,6 +6,17 @@ from graphene_django import DjangoObjectType
 from thefederation.models import Node, Platform, Protocol, Stat
 
 
+class DateCountType(graphene.ObjectType):
+    date = graphene.Date()
+    count = graphene.Int()
+
+    def resolve_count(self, info):
+        return self.get('count')
+
+    def resolve_date(self, info):
+        return self.get('date')
+
+
 class NodeType(DjangoObjectType):
     class Meta:
         model = Node
@@ -31,6 +42,7 @@ class Query:
     platforms = graphene.List(PlatformType)
     protocols = graphene.List(ProtocolType)
     stats = graphene.List(StatType)
+    stats_counts_nodes = graphene.List(DateCountType)
     stats_global_today = graphene.Field(StatType)
     stats_nodes = graphene.List(StatType)
     stats_platform_today = graphene.Field(
@@ -69,6 +81,11 @@ class Query:
 
     def resolve_stats(self, info, **kwargs):
         return Stat.objects.all()
+
+    def resolve_stats_counts_nodes(self, info, **kwargs):
+        return Stat.objects.filter(node__isnull=False).values('date').annotate(
+            count=Count('id')
+        ).values('date', 'count').order_by('date')
 
     def resolve_stats_global_today(self, info, **kwargs):
         return Stat.objects.filter(
