@@ -52,6 +52,7 @@ class Node(ModelBase):
         if clean_name:
             if self.platform.name == clean_name[0].lower():
                 self.name = self.host
+        self.version = self.platform.clean_version(self.version)
         super().save(*args, **kwargs)
 
     @property

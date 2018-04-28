@@ -6,6 +6,13 @@ __all__ = ('Platform',)
 
 
 class Platform(ModelBase):
+    VERSION_CLEAN_NONE = 'none'
+    VERSION_CLEAN_REMOVE_AFTER_DASH = 'remove_after_dash'
+    VERSION_CLEAN_STYLES = (
+        (VERSION_CLEAN_NONE, VERSION_CLEAN_NONE),
+        (VERSION_CLEAN_REMOVE_AFTER_DASH, VERSION_CLEAN_REMOVE_AFTER_DASH),
+    )
+
     code = models.URLField(max_length=128, blank=True)
     display_name = models.CharField(max_length=128, blank=True)
     latest_version = models.CharField(max_length=128, blank=True)
@@ -13,6 +20,7 @@ class Platform(ModelBase):
     icon = models.CharField(max_length=80, default='unknown')
     install_guide = models.URLField(max_length=256, blank=True)
     name = models.CharField(max_length=80, unique=True)
+    version_clean_Style = models.CharField(choices=VERSION_CLEAN_STYLES, default=VERSION_CLEAN_NONE, max_length=30)
     website = models.URLField(max_length=128, blank=True)
 
     def __str__(self):
@@ -22,6 +30,13 @@ class Platform(ModelBase):
         if not self.display_name:
             self.display_name = self.name
         super().save(*args, **kwargs)
+
+    def clean_version(self, version):
+        if self.version_clean_Style == Platform.VERSION_CLEAN_NONE:
+            return version
+        elif self.version_clean_Style == Platform.VERSION_CLEAN_REMOVE_AFTER_DASH:
+            return version.split('-')[0]
+        return version
 
     def get_method(self, version):
         """
