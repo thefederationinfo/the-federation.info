@@ -17,11 +17,11 @@
         </td>
         <td>{{ node.version }}</td>
         <td>{{ openSignups }}</td>
-        <td>{{ stats.usersTotal }}</td>
-        <td>{{ stats.usersHalfYear }}</td>
-        <td>{{ stats.usersMonthly }}</td>
-        <td>{{ stats.localPosts }}</td>
-        <td>{{ stats.localComments }}</td>
+        <td>{{ stats.usersTotal ? stats.usersTotal : '' }}</td>
+        <td>{{ stats.usersHalfYear ? stats.usersHalfYear : '' }}</td>
+        <td>{{ stats.usersMonthly ? stats.usersMonthly : '' }}</td>
+        <td>{{ stats.localPosts ? stats.localPosts : '' }}</td>
+        <td>{{ stats.localComments ? stats.localComments : '' }}</td>
         <!--<td>{{ node.services }}</td>-->
         <!--<td>-->
             <!--<div v-if="node.country">-->
