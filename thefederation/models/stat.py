@@ -6,7 +6,7 @@ __all__ = ('Stat',)
 
 
 class Stat(models.Model):
-    date = models.DateField(auto_now=True)
+    date = models.DateField(auto_now=True, db_index=True)
 
     # NOTE! only one or the other node or platform or protocol can be filled
     # If none filled -> global stats

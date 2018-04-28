@@ -28,7 +28,7 @@ class Node(ModelBase):
     hide_from_list = models.BooleanField(default=False)
     host = models.CharField(max_length=128, unique=True)
     ip = models.GenericIPAddressField(blank=True, null=True)
-    last_success = models.DateTimeField(null=True)
+    last_success = models.DateTimeField(null=True, db_index=True)
     name = models.CharField(max_length=300)
     open_signups = models.BooleanField()
     organization_account = models.CharField(max_length=256, blank=True)
