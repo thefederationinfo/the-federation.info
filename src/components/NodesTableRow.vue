@@ -17,11 +17,11 @@
         </td>
         <td>{{ node.version }}</td>
         <td>{{ openSignups }}</td>
-        <!--<td>{{ node.total_users }}</td>-->
-        <!--<td>{{ node.active_users_halfyear }}</td>-->
-        <!--<td>{{ node.active_users_monthly }}</td>-->
-        <!--<td>{{ node.local_posts }}</td>-->
-        <!--<td>{{ node.local_comments }}</td>-->
+        <td>{{ stats.usersTotal }}</td>
+        <td>{{ stats.usersHalfYear }}</td>
+        <td>{{ stats.usersMonthly }}</td>
+        <td>{{ stats.localPosts }}</td>
+        <td>{{ stats.localComments }}</td>
         <!--<td>{{ node.services }}</td>-->
         <!--<td>-->
             <!--<div v-if="node.country">-->
@@ -41,6 +41,10 @@ export default {
     name: "NodesTableRow",
     props: {
         node: {
+            type: Object,
+            default: null,
+        },
+        stats: {
             type: Object,
             default: null,
         },

@@ -10,7 +10,10 @@ class Stat(models.Model):
 
     # NOTE! only one or the other node or platform or protocol can be filled
     # If none filled -> global stats
-    node = models.ForeignKey('thefederation.Node', on_delete=models.CASCADE, null=True, blank=True)
+    node = models.ForeignKey(
+        'thefederation.Node', on_delete=models.CASCADE, null=True, blank=True,
+        related_name='stats',
+    )
     platform = models.ForeignKey('thefederation.Platform', on_delete=models.CASCADE, null=True, blank=True)
     protocol = models.ForeignKey('thefederation.Protocol', on_delete=models.CASCADE, null=True, blank=True)
 
