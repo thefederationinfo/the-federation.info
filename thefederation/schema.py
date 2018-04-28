@@ -1,5 +1,5 @@
 import graphene
-from django.db.models import Subquery, OuterRef, Count, Max, IntegerField
+from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F
 from django.utils.timezone import now
 from graphene_django import DjangoObjectType
 
@@ -46,9 +46,12 @@ class Query:
         stat = Stat.objects.filter(
             node=OuterRef('pk'), date=now().date()
         ).values('users_monthly').annotate(users=Max('users_monthly')).values('users')
+
         return Node.objects.active().annotate(
             users=Subquery(stat, output_field=IntegerField())
-        ).order_by('-users').select_related('platform')
+        ).order_by(
+            F('users').desc(nulls_last=True)
+        ).select_related('platform')
 
     def resolve_platforms(self, info, **kwargs):
         nodes = Node.objects.active().filter(
