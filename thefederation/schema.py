@@ -1,5 +1,5 @@
 import graphene
-from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F
+from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum
 from django.utils.timezone import now
 from graphene_django import DjangoObjectType
 
@@ -53,6 +53,7 @@ class Query:
         StatType,
         name=graphene.String(),
     )
+    stats_users_total = graphene.List(DateCountType)
 
     def resolve_nodes(self, info, **kwargs):
         stat = Stat.objects.filter(
@@ -112,3 +113,8 @@ class Query:
         return Stat.objects.filter(
             node__isnull=True, platform__isnull=True, protocol__name=name, date=now().date(),
         ).first()
+
+    def resolve_stats_users_total(self, info, **kwargs):
+        return Stat.objects.filter(node__isnull=False).values('date').annotate(
+            count=Sum('users_total')
+        ).values('date', 'count').order_by('date')

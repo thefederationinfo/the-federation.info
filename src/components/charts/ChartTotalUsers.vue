@@ -1,6 +1,6 @@
 <template>
     <line-chart
-        :data="nodes"
+        :data="totalUsers"
         :library="chartOptions"
     />
 </template>
@@ -12,7 +12,7 @@ import commonChartOptions from "./commonChartOptions"
 
 const query = gql`
     query {
-        statsCountsNodes {
+        statsUsersTotal {
             date
             count
         }
@@ -21,26 +21,26 @@ const query = gql`
 
 export default {
     apollo: {
-        statsCountsNodes: query,
+        statsUsersTotal: query,
     },
-    name: "ChartNodes",
+    name: "ChartTotalUsers",
     data() {
         return {
-            statsCountsNodes: [],
+            statsUsersTotal: [],
         }
     },
     computed: {
         chartOptions() {
             return commonChartOptions
         },
-        nodes() {
+        totalUsers() {
             const data = {}
-            for (const o of this.statsCountsNodes) {
+            for (const o of this.statsUsersTotal) {
                 data[o.date] = o.count
             }
             return [{
                 data,
-                name: 'Nodes',
+                name: 'Total users',
             }]
         },
     },
