@@ -6,7 +6,7 @@ __all__ = ('Stat',)
 
 
 class Stat(models.Model):
-    date = models.DateField(auto_now=True, db_index=True)
+    date = models.DateField(db_index=True)
 
     # NOTE! only one or the other node or platform or protocol can be filled
     # If none filled -> global stats
@@ -23,6 +23,13 @@ class Stat(models.Model):
     users_weekly = models.PositiveIntegerField(null=True)
     local_posts = models.PositiveIntegerField(null=True)
     local_comments = models.PositiveIntegerField(null=True)
+
+    class Meta:
+        unique_together = (
+            ('date', 'node'),
+            ('date', 'platform'),
+            ('date', 'protocol'),
+        )
 
     def __str__(self):
         if self.node:
