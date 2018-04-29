@@ -1,3 +1,4 @@
+dist: trusty
 sudo: false
 language: python
 python:
@@ -5,6 +6,8 @@ python:
 services:
   - redis-server
   - postgresql
+addons:
+  postgresql: "9.6"
 install:
   - pip install -U pip setuptools pip-tools
   - pip-sync dev-requirements.txt
