@@ -1,5 +1,12 @@
 <template>
-    <line-chart :data="nodes"></line-chart>
+    <line-chart
+        :data="nodes"
+        :library="{
+            interpolateNulls: true,
+            pointsVisible: false,
+            curveType: 'function',
+        }"
+    />
 </template>
 
 <script>
