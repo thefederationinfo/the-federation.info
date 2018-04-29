@@ -61,7 +61,8 @@ def sync_legacy_stats():
     while row:
         cursor2.execute("""select host from pods where id = %s""", (row['pod_id'],))
         old_node = cursor2.fetchone()
-        if Stat.objects.filter(node__host=old_node['host'], date=row['date']).exists():
+
+        if not old_node or Stat.objects.filter(node__host=old_node['host'], date=row['date']).exists():
             row = cursor.fetchone()
             continue
 
@@ -74,11 +75,13 @@ def sync_legacy_stats():
         data = {
             'node': node,
             'date': row['date'],
-            'users_total': row['total_users'] if row['total_users'] > 0 else None,
-            'users_half_year': row['active_users_halfyear'] if row['active_users_halfyear'] > 0 else None,
-            'users_monthly': row['active_users_monthly'] if row['active_users_monthly'] > 0 else None,
-            'local_posts': row['local_posts'] if row['local_posts'] > 0 else None,
-            'local_comments': row['local_comments'] if row['local_comments'] > 0 else None,
+            'users_total': row['total_users'] if row['total_users'] and row['total_users'] > 0 else None,
+            'users_half_year': row['active_users_halfyear'] if row['active_users_halfyear'] and
+                                                               row['active_users_halfyear'] > 0 else None,
+            'users_monthly': row['active_users_monthly'] if row['active_users_monthly'] and
+                                                            row['active_users_monthly'] > 0 else None,
+            'local_posts': row['local_posts'] if row['local_posts'] and row['local_posts'] > 0 else None,
+            'local_comments': row['local_comments'] if row['local_comments'] and row['local_comments'] > 0 else None,
         }
         stat = Stat.objects.create(**data)
         print('Synced!:', stat)
