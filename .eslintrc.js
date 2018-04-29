@@ -53,5 +53,6 @@ module.exports = {
       "quotes": "off",
       "vue/html-indent": ["error", 4],
       "arrow-parens": "off",
+      "no-restricted-syntax": "off",
   }
 }
