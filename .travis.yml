@@ -1,0 +1,42 @@
+sudo: false
+language: python
+python:
+  - "3.6"
+services:
+  - redis-server
+  - postgresql
+install:
+  - pip install -U pip setuptools pip-tools
+  - pip-sync dev-requirements.txt
+  - pip freeze
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - node_modules/
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  # Install custom Node via nvm
+  - rm -rf ~/.nvm
+  - git clone https://github.com/creationix/nvm.git ~/.nvm
+  - (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`)
+  - source ~/.nvm/nvm.sh && nvm install 9
+  - npm install
+  - npm run build
+  - python manage.py print_settings
+script:
+  - py.test --cov=./
+  - python manage.py migrate --noinput -v 0
+  - python manage.py collectstatic --noinput -v 0
+  - npm run unit
+after_success:
+  - codecov
+env:
+  global:
+    - DATABASE_URL=postgres://postgres@127.0.0.1:5432/travis_ci_test
+    - DJANGO_SETTINGS_MODULE=config.local
+    - DJANGO_ALLOWED_HOSTS=127.0.0.1
+    - DJANGO_SECURE_SSL_REDIRECT=False
+    - THEFEDERATION_DOMAIN=127.0.0.1:8000
+    - THEFEDERATION_HTTPS=False
+    - DJANGO_DEBUG=False
+    - DJANGO_DEBUG_TOOLBAR=False
