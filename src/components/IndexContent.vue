@@ -192,61 +192,53 @@ import ProtocolTableRow from "./ProtocolTableRow"
 import Charts from "./Charts"
 
 
-const nodesQuery = gql`
-  {
-      nodes {
-        id
-        platform {
-          name
-        }
-      }
-  }
-`
-
-const platformsQuery = gql`
-  {
-      platforms {
-        id
-        code
-        name
-        displayName
-        installGuide
-        license
-        website
-      }
-  }
-`
-
-const protocolsQuery = gql`
-  {
-      protocols {
-        id
-        name
+const query = gql`
+    query {
         nodes {
-          name
+            id
+            platform {
+                name
+            }
         }
-      }
-  }
+        platforms {
+            id
+            code
+            name
+            displayName
+            installGuide
+            license
+            website
+        }
+        protocols {
+            id
+            name
+            nodes {
+              name
+            }
+        }
+        statsGlobalToday {
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            localPosts
+            localComments
+        }
+    }
 `
 
-const statsGlobalTodayQuery = gql`
-  {
-      statsGlobalToday {
-        usersTotal
-        usersHalfYear
-        usersMonthly
-        localPosts
-        localComments
-      }
-  }
-`
 
 export default {
     apollo: {
-        nodes: nodesQuery,
-        platforms: platformsQuery,
-        protocols: protocolsQuery,
-        statsGlobalToday: statsGlobalTodayQuery,
+        allQueries: {
+            query,
+            result({data}) {
+                this.nodes = data.nodes
+                this.platforms = data.platforms
+                this.protocols = data.protocols
+                this.statsGlobalToday = data.statsGlobalToday
+            },
+            manual: true,
+        },
     },
     name: "IndexContent",
     components: {Charts, PlatformTableRow, ProtocolTableRow},
