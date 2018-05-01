@@ -1,6 +1,6 @@
 <template>
     <line-chart
-        :data="totalUsers"
+        :data="totals"
         :library="chartOptions"
     />
 </template>
@@ -23,7 +23,7 @@ export default {
     apollo: {
         statsUsersTotal: query,
     },
-    name: "ChartTotalUsers",
+    name: "ChartUsersTotal",
     data() {
         return {
             statsUsersTotal: [],
@@ -33,7 +33,7 @@ export default {
         chartOptions() {
             return commonChartOptions
         },
-        totalUsers() {
+        totals() {
             const data = {}
             for (const o of this.statsUsersTotal) {
                 data[o.date] = o.count

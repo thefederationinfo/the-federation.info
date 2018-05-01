@@ -54,6 +54,11 @@ class Query:
         name=graphene.String(),
     )
     stats_users_total = graphene.List(DateCountType)
+    stats_users_half_year = graphene.List(DateCountType)
+    stats_users_monthly = graphene.List(DateCountType)
+    stats_users_weekly = graphene.List(DateCountType)
+    stats_local_posts = graphene.List(DateCountType)
+    stats_local_comments = graphene.List(DateCountType)
 
     def resolve_nodes(self, info, **kwargs):
         stat = Stat.objects.filter(
@@ -114,7 +119,26 @@ class Query:
             node__isnull=True, platform__isnull=True, protocol__name=name, date=now().date(),
         ).first()
 
-    def resolve_stats_users_total(self, info, **kwargs):
+    @staticmethod
+    def _get_stat_date_counts(stat):
         return Stat.objects.filter(node__isnull=False).values('date').annotate(
-            count=Sum('users_total')
+            count=Sum(stat)
         ).values('date', 'count').order_by('date')
+
+    def resolve_stats_users_total(self, info, **kwargs):
+        return Query._get_stat_date_counts('users_total')
+
+    def resolve_stats_users_half_year(self, info, **kwargs):
+        return Query._get_stat_date_counts('users_half_year')
+
+    def resolve_stats_users_monthly(self, info, **kwargs):
+        return Query._get_stat_date_counts('users_monthly')
+
+    def resolve_stats_users_weekly(self, info, **kwargs):
+        return Query._get_stat_date_counts('users_weekly')
+
+    def resolve_stats_local_posts(self, info, **kwargs):
+        return Query._get_stat_date_counts('local_posts')
+
+    def resolve_stats_local_comments(self, info, **kwargs):
+        return Query._get_stat_date_counts('local_comments')
