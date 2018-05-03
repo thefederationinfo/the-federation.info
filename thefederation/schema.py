@@ -75,14 +75,14 @@ class Query:
         nodes = Node.objects.active().filter(
             platform=OuterRef('pk')).values('platform').annotate(c=Count('*')).values('c')
         return Platform.objects.prefetch_related('nodes').annotate(
-            active_nodes=Subquery(nodes)
+            active_nodes=Subquery(nodes, output_field=IntegerField())
         ).filter(active_nodes__gt=0).order_by('-active_nodes')
 
     def resolve_protocols(self, info, **kwargs):
         nodes = Node.objects.active().filter(
             protocols=OuterRef('pk')).values('protocols').annotate(c=Count('*')).values('c')
         return Protocol.objects.prefetch_related('nodes').annotate(
-            active_nodes=Subquery(nodes)
+            active_nodes=Subquery(nodes, output_field=IntegerField())
         ).filter(active_nodes__gt=0).order_by('-active_nodes')
 
     def resolve_stats(self, info, **kwargs):
