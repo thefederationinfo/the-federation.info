@@ -14,12 +14,14 @@ class Platform(ModelBase):
     )
 
     code = models.URLField(max_length=128, blank=True)
+    description = models.TextField(blank=True)
     display_name = models.CharField(max_length=128, blank=True)
     latest_version = models.CharField(max_length=128, blank=True)
     license = models.CharField(max_length=128, blank=True)
     icon = models.CharField(max_length=80, default='unknown')
     install_guide = models.URLField(max_length=256, blank=True)
     name = models.CharField(max_length=80, unique=True)
+    tagline = models.CharField(max_length=300, blank=True)
     version_clean_Style = models.CharField(choices=VERSION_CLEAN_STYLES, default=VERSION_CLEAN_NONE, max_length=30)
     website = models.URLField(max_length=128, blank=True)
 
