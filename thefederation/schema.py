@@ -39,8 +39,14 @@ class StatType(DjangoObjectType):
 
 class Query:
     nodes = graphene.List(NodeType)
-    platforms = graphene.List(PlatformType)
-    protocols = graphene.List(ProtocolType)
+    platforms = graphene.List(
+        PlatformType,
+        name=graphene.String(),
+    )
+    protocols = graphene.List(
+        ProtocolType,
+        name=graphene.String(),
+    )
     stats = graphene.List(StatType)
     stats_counts_nodes = graphene.List(DateCountType)
     stats_global_today = graphene.Field(StatType)
@@ -72,9 +78,15 @@ class Query:
         ).select_related('platform')
 
     def resolve_platforms(self, info, **kwargs):
+        name = kwargs.get('name')
+        if name:
+            qs = Platform.objects.filter(name=name.lower())
+        else:
+            qs = Platform.objects.all()
+
         nodes = Node.objects.active().filter(
             platform=OuterRef('pk')).values('platform').annotate(c=Count('*')).values('c')
-        return Platform.objects.prefetch_related('nodes').annotate(
+        return qs.prefetch_related('nodes').annotate(
             active_nodes=Subquery(nodes, output_field=IntegerField())
         ).filter(active_nodes__gt=0).order_by('-active_nodes')
 
