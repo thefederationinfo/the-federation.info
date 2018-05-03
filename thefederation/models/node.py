@@ -3,7 +3,6 @@ import re
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_countries.fields import CountryField
@@ -17,9 +16,7 @@ __all__ = ('Node',)
 
 class NodeQuerySet(models.QuerySet):
     def active(self):
-        return self.filter(
-            Q(last_success__isnull=True) | Q(last_success__gte=now() - datetime.timedelta(days=30))
-        )
+        return self.filter(last_success__gte=now() - datetime.timedelta(days=30))
 
 
 class Node(ModelBase):
