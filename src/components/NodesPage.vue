@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import Drawer from "./Drawer"
-import Footer from "./Footer"
+import Drawer from "./common/Drawer"
+import Footer from "./common/Footer"
 import NodesContent from "./NodesContent"
 
 export default {
