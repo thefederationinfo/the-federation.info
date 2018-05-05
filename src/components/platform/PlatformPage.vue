@@ -15,17 +15,17 @@
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            0 <strong>Users</strong>
+                            {{ globalStats.usersTotal || 0 }} <strong>Users</strong>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            0 <strong>Posts</strong>
+                            {{ globalStats.localPosts || 0 }} <strong>Posts</strong>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            0 <strong>Comments</strong>
+                            {{ globalStats.localComments || 0 }} <strong>Comments</strong>
                         </div>
                     </div>
                 </div>
@@ -69,12 +69,12 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>0</strong></li>
-                                <li>Users: <strong>0</strong></li>
-                                <li>Last 6 months users: <strong>0</strong></li>
-                                <li>Last month users: <strong>0</strong></li>
-                                <li>Posts: <strong>0</strong></li>
-                                <li>Comments: <strong>0</strong></li>
+                                <li>Nodes: <strong>{{ nodes.length }}</strong></li>
+                                <li>Users: <strong>{{ globalStats.usersTotal || 0 }}</strong></li>
+                                <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || 0 }}</strong></li>
+                                <li>Last month users: <strong>{{ globalStats.usersMonthly || 0 }}</strong></li>
+                                <li>Posts: <strong>{{ globalStats.localPosts || 0 }}</strong></li>
+                                <li>Comments: <strong>{{ globalStats.localComments || 0 }}</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -132,6 +132,14 @@ const query = gql`
             }
         }
 
+        statsGlobalToday(platform: $name) {
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            localPosts
+            localComments
+        }
+
         statsNodes(platform: $name) {
             node {
               id
@@ -158,6 +166,7 @@ export default {
                     stats[o.node.id] = o
                 }
                 this.stats = stats
+                this.globalStats = data.statsGlobalToday || {}
             },
             variables() {
                 return {
@@ -170,6 +179,7 @@ export default {
     components: {Charts, NodesTable, Footer, Drawer},
     data() {
         return {
+            globalStats: {},
             nodes: [],
             platform: {},
             stats: {},

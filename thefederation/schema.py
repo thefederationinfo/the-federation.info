@@ -55,7 +55,10 @@ class Query:
         DateCountType,
         platform=graphene.String(),
     )
-    stats_global_today = graphene.Field(StatType)
+    stats_global_today = graphene.Field(
+        StatType,
+        platform=graphene.String(),
+    )
     stats_nodes = graphene.List(
         StatType,
         platform=graphene.String(),
@@ -143,8 +146,13 @@ class Query:
         ).values('date', 'count').order_by('date')
 
     def resolve_stats_global_today(self, info, **kwargs):
-        return Stat.objects.filter(
-            node__isnull=True, platform__isnull=True, protocol__isnull=True, date=now().date(),
+        if kwargs.get('platform'):
+            qs = Stat.objects.filter(platform__name=kwargs.get('platform'))
+        else:
+            qs = Stat.objects.filter(platform__isnull=True)
+
+        return qs.filter(
+            node__isnull=True, protocol__isnull=True, date=now().date(),
         ).first()
 
     def resolve_stats_nodes(self, info, **kwargs):
