@@ -40,6 +40,7 @@ class StatType(DjangoObjectType):
 class Query:
     nodes = graphene.List(
         NodeType,
+        host=graphene.String(),
         platform=graphene.String(),
     )
     platforms = graphene.List(
@@ -61,6 +62,7 @@ class Query:
     )
     stats_nodes = graphene.List(
         StatType,
+        host=graphene.String(),
         platform=graphene.String(),
     )
     stats_platform_today = graphene.Field(
@@ -97,11 +99,13 @@ class Query:
     )
 
     def resolve_nodes(self, info, **kwargs):
-        platform = kwargs.get('platform')
-        if platform:
-            qs = Node.objects.filter(platform__name=platform)
+        if kwargs.get('platform'):
+            qs = Node.objects.filter(platform__name=kwargs.get('platform'))
         else:
             qs = Node.objects.all()
+
+        if kwargs.get('host'):
+            qs = qs.filter(host=kwargs.get('host'))
 
         stat = Stat.objects.filter(
             node=OuterRef('pk'), date=now().date()
@@ -114,9 +118,8 @@ class Query:
         ).select_related('platform')
 
     def resolve_platforms(self, info, **kwargs):
-        name = kwargs.get('name')
-        if name:
-            qs = Platform.objects.filter(name=name.lower())
+        if kwargs.get('name'):
+            qs = Platform.objects.filter(name=kwargs.get('name').lower())
         else:
             qs = Platform.objects.all()
 
@@ -156,11 +159,13 @@ class Query:
         ).first()
 
     def resolve_stats_nodes(self, info, **kwargs):
-        platform = kwargs.get('platform')
-        if platform:
-            qs = Stat.objects.filter(node__platform__name=platform)
+        if kwargs.get('platform'):
+            qs = Stat.objects.filter(node__platform__name=kwargs.get('platform'))
         else:
             qs = Stat.objects.all()
+
+        if kwargs.get('host'):
+            qs = qs.filter(node__host=kwargs.get('host'))
 
         return qs.filter(date=now().date(), node__isnull=False, protocol__isnull=True, platform__isnull=True)
 

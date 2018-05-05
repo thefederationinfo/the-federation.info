@@ -5,12 +5,12 @@
                 :alt="node.platform.name"
                 :title="node.platform.name"
                 :src="imageSource"
-            />
+            >
         </td>
         <td>
             <router-link
                 :title="node.name"
-                :to="nodeUrl"
+                :to="{name: 'node', params: {host: node.host}}"
             >
                 {{ node.name }}
             </router-link>
@@ -52,9 +52,6 @@ export default {
     computed: {
         imageSource()  {
             return `./static/images/${this.node.platform.name}-16.png`
-        },
-        nodeUrl() {
-            return `/node/${this.node.host}`
         },
         openSignups() {
             return this.node.openSignups ? "Yes" : "No"
