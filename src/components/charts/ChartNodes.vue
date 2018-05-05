@@ -1,49 +1,24 @@
-<template>
-    <line-chart
-        :data="nodes"
-        :library="chartOptions"
-    />
-</template>
-
 <script>
-import gql from 'graphql-tag'
-
-import commonChartOptions from "./commonChartOptions"
-
-const query = gql`
-    query {
-        statsCountsNodes {
-            date
-            count
-        }
-    }
-`
+import ChartMixin from "./ChartMixin"
+import {getQuery} from "./utils"
 
 export default {
     apollo: {
-        statsCountsNodes: query,
+        stats: {
+            query: getQuery('statsCountsNodes'),
+            manual: true,
+            result({data}) {
+                this.stats = data.statsCountsNodes
+            },
+            variables() {
+                return {
+                    platform: this.platform,
+                }
+            },
+        },
     },
     name: "ChartNodes",
-    data() {
-        return {
-            statsCountsNodes: [],
-        }
-    },
-    computed: {
-        chartOptions() {
-            return commonChartOptions
-        },
-        nodes() {
-            const data = {}
-            for (const o of this.statsCountsNodes) {
-                data[o.date] = o.count
-            }
-            return [{
-                data,
-                name: 'Nodes',
-            }]
-        },
-    },
+    mixins: [ChartMixin],
 }
 </script>
 

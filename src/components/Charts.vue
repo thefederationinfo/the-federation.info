@@ -50,21 +50,33 @@
         <div>
             <ChartNodes
                 v-if="isSelected('nodes')"
+                :platform="platform"
+                label="Nodes"
             />
             <ChartUsersTotal
                 v-if="isSelected('users_total')"
+                :platform="platform"
+                label="Total users"
             />
             <ChartUsersHalfYear
                 v-if="isSelected('users_half_year')"
+                :platform="platform"
+                label="Active users 6 months"
             />
             <ChartUsersMonthly
                 v-if="isSelected('users_monthly')"
+                :platform="platform"
+                label="Active users last month"
             />
             <ChartLocalPosts
                 v-if="isSelected('local_posts')"
+                :platform="platform"
+                label="Total local posts"
             />
             <ChartLocalComments
                 v-if="isSelected('local_comments')"
+                :platform="platform"
+                label="Total local comments"
             />
         </div>
     </section>
@@ -82,6 +94,12 @@ export default {
     name: "Charts",
     components: {
         ChartNodes, ChartUsersTotal, ChartUsersHalfYear, ChartUsersMonthly, ChartLocalPosts, ChartLocalComments,
+    },
+    props: {
+        platform: {
+            type: String,
+            default: '',
+        },
     },
     data() {
         return {

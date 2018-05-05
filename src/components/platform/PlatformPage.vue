@@ -80,7 +80,12 @@
                     </div>
                 </div>
             </section>
-            <!--charts -->
+
+            <Charts
+                v-if="platform.name"
+                :platform="platform.name"
+            />
+
             <section class="tile">
                 <header>
                     <h2>All {{ title }} nodes</h2>
@@ -100,9 +105,10 @@
 <script>
 import gql from 'graphql-tag'
 
+import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
-import NodesTable from "../NodesTable";
+import NodesTable from "../NodesTable"
 
 const query = gql`
     query Platform($name: String!) {
@@ -161,7 +167,7 @@ export default {
         },
     },
     name: 'PlatformPage',
-    components: {NodesTable, Footer, Drawer},
+    components: {Charts, NodesTable, Footer, Drawer},
     data() {
         return {
             nodes: [],

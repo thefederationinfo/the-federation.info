@@ -1,49 +1,24 @@
-<template>
-    <line-chart
-        :data="totals"
-        :library="chartOptions"
-    />
-</template>
-
 <script>
-import gql from 'graphql-tag'
-
-import commonChartOptions from "./commonChartOptions"
-
-const query = gql`
-    query {
-        statsLocalPosts {
-            date
-            count
-        }
-    }
-`
+import ChartMixin from "./ChartMixin"
+import {getQuery} from "./utils"
 
 export default {
     apollo: {
-        statsLocalPosts: query,
-    },
-    name: "ChartLocalPosts",
-    data() {
-        return {
-            statsLocalPosts: [],
-        }
-    },
-    computed: {
-        chartOptions() {
-            return commonChartOptions
-        },
-        totals() {
-            const data = {}
-            for (const o of this.statsLocalPosts) {
-                data[o.date] = o.count
-            }
-            return [{
-                data,
-                name: 'Local posts',
-            }]
+        stats: {
+            query: getQuery('statsLocalPosts'),
+            manual: true,
+            result({data}) {
+                this.stats = data.statsLocalPosts
+            },
+            variables() {
+                return {
+                    platform: this.platform,
+                }
+            },
         },
     },
+    name: "ChartNodes",
+    mixins: [ChartMixin],
 }
 </script>
 

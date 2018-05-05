@@ -51,7 +51,10 @@ class Query:
         name=graphene.String(),
     )
     stats = graphene.List(StatType)
-    stats_counts_nodes = graphene.List(DateCountType)
+    stats_counts_nodes = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
     stats_global_today = graphene.Field(StatType)
     stats_nodes = graphene.List(
         StatType,
@@ -65,12 +68,30 @@ class Query:
         StatType,
         name=graphene.String(),
     )
-    stats_users_total = graphene.List(DateCountType)
-    stats_users_half_year = graphene.List(DateCountType)
-    stats_users_monthly = graphene.List(DateCountType)
-    stats_users_weekly = graphene.List(DateCountType)
-    stats_local_posts = graphene.List(DateCountType)
-    stats_local_comments = graphene.List(DateCountType)
+    stats_users_total = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
+    stats_users_half_year = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
+    stats_users_monthly = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
+    stats_users_weekly = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
+    stats_local_posts = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
+    stats_local_comments = graphene.List(
+        DateCountType,
+        platform=graphene.String(),
+    )
 
     def resolve_nodes(self, info, **kwargs):
         platform = kwargs.get('platform')
@@ -113,7 +134,11 @@ class Query:
         return Stat.objects.all()
 
     def resolve_stats_counts_nodes(self, info, **kwargs):
-        return Stat.objects.filter(node__isnull=False).values('date').annotate(
+        if kwargs.get('platform'):
+            qs = Stat.objects.filter(node__platform__name=kwargs.get('platform'))
+        else:
+            qs = Stat.objects.filter(node__isnull=False)
+        return qs.values('date').annotate(
             count=Count('id')
         ).values('date', 'count').order_by('date')
 
@@ -150,25 +175,29 @@ class Query:
         ).first()
 
     @staticmethod
-    def _get_stat_date_counts(stat):
-        return Stat.objects.filter(node__isnull=False).values('date').annotate(
+    def _get_stat_date_counts(stat, platform=None):
+        if platform:
+            qs = Stat.objects.filter(node__platform__name=platform)
+        else:
+            qs = Stat.objects.filter(node__isnull=False)
+        return qs.values('date').annotate(
             count=Sum(stat)
         ).values('date', 'count').order_by('date')
 
     def resolve_stats_users_total(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_total')
+        return Query._get_stat_date_counts('users_total', platform=kwargs.get('platform'))
 
     def resolve_stats_users_half_year(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_half_year')
+        return Query._get_stat_date_counts('users_half_year', platform=kwargs.get('platform'))
 
     def resolve_stats_users_monthly(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_monthly')
+        return Query._get_stat_date_counts('users_monthly', platform=kwargs.get('platform'))
 
     def resolve_stats_users_weekly(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_weekly')
+        return Query._get_stat_date_counts('users_weekly', platform=kwargs.get('platform'))
 
     def resolve_stats_local_posts(self, info, **kwargs):
-        return Query._get_stat_date_counts('local_posts')
+        return Query._get_stat_date_counts('local_posts', platform=kwargs.get('platform'))
 
     def resolve_stats_local_comments(self, info, **kwargs):
-        return Query._get_stat_date_counts('local_comments')
+        return Query._get_stat_date_counts('local_comments', platform=kwargs.get('platform'))
