@@ -22,7 +22,7 @@ class Platform(ModelBase):
     install_guide = models.URLField(max_length=256, blank=True)
     name = models.CharField(max_length=80, unique=True)
     tagline = models.CharField(max_length=300, blank=True)
-    version_clean_Style = models.CharField(choices=VERSION_CLEAN_STYLES, default=VERSION_CLEAN_NONE, max_length=30)
+    version_clean_style = models.CharField(choices=VERSION_CLEAN_STYLES, default=VERSION_CLEAN_NONE, max_length=30)
     website = models.URLField(max_length=128, blank=True)
 
     def __str__(self):
@@ -34,9 +34,9 @@ class Platform(ModelBase):
         super().save(*args, **kwargs)
 
     def clean_version(self, version):
-        if self.version_clean_Style == Platform.VERSION_CLEAN_NONE:
+        if self.version_clean_style == Platform.VERSION_CLEAN_NONE:
             return version
-        elif self.version_clean_Style == Platform.VERSION_CLEAN_REMOVE_AFTER_DASH:
+        elif self.version_clean_style == Platform.VERSION_CLEAN_REMOVE_AFTER_DASH:
             return version.split('-')[0]
         return version
 
