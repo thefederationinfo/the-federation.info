@@ -5,12 +5,12 @@
             <header class="main-header">
                 <div class="main-title">
                     <h1>{{ title }}</h1>
-                    <h2 v-if="platform">{{ platform.tagline }}</h2>
+                    <h2>{{ platform.tagline }}</h2>
                 </div>
                 <div class="flex">
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            0 <strong>Nodes</strong>
+                            {{ nodes.length }} <strong>Nodes</strong>
                         </div>
                     </div>
                     <div class="col4">
@@ -37,11 +37,13 @@
                 <div>
                     <div class="flex">
                         <div class="col2">
-                            <p v-if="platform">{{ platform.description }}</p>
+                            <p>{{ platform.description }}</p>
                             <div class="flex">
-                                <div class="col2 center">
+                                <div
+                                    v-if="platform.website"
+                                    class="col2 center"
+                                >
                                     <a
-                                        v-if="platform"
                                         :href="platform.website"
                                         class="btn btn-primary"
                                         target="_blank"
@@ -50,9 +52,11 @@
                                         Official website
                                     </a>
                                 </div>
-                                <div class="col2 center">
+                                <div
+                                    v-if="platform.code"
+                                    class="col2 center"
+                                >
                                     <a
-                                        v-if="platform"
                                         :href="platform.code"
                                         class="btn"
                                         target="_blank"
@@ -82,7 +86,10 @@
                     <h2>All {{ title }} nodes</h2>
                 </header>
                 <div class="overflow-x">
-                    <!-- nodes table -->
+                    <NodesTable
+                        :nodes="nodes"
+                        :stats="stats"
+                    />
                 </div>
             </section>
         </main>
@@ -95,14 +102,39 @@ import gql from 'graphql-tag'
 
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
+import NodesTable from "../NodesTable";
 
 const query = gql`
     query Platform($name: String!) {
         platforms(name: $name) {
             name
+            code
             displayName
             description
+            tagline
             website
+        }
+
+        nodes(platform: $name) {
+            id
+            name
+            version
+            openSignups
+            host
+            platform {
+              name
+            }
+        }
+
+        statsNodes(platform: $name) {
+            node {
+              id
+            }
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            localPosts
+            localComments
         }
     }
 `
@@ -113,7 +145,13 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.platform = data.platforms[0]
+                this.nodes = data.nodes
+                this.platform = data.platforms[0] || {}
+                const stats = {}
+                for (const o of data.statsNodes) {
+                    stats[o.node.id] = o
+                }
+                this.stats = stats
             },
             variables() {
                 return {
@@ -123,18 +161,17 @@ export default {
         },
     },
     name: 'PlatformPage',
-    components: {Footer, Drawer},
+    components: {NodesTable, Footer, Drawer},
     data() {
         return {
+            nodes: [],
             platform: {},
+            stats: {},
         }
     },
     computed: {
         title() {
-            if (this.platform === undefined) {
-                return ''
-            }
-            return this.platform.displayName ? this.platform.displayName : this.platform.name
+            return this.platform.displayName ? this.platform.displayName : this.platform.name || ''
         },
     },
 }

@@ -27,66 +27,24 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-
 import NodesTableRow from "./NodesTableRow"
 
-
-const query = gql`
-  {
-      nodes {
-        id
-        name
-        version
-        openSignups
-        host
-        platform {
-          name
-        }
-      }
-  }
-`
-
-const statsQuery = gql`
-    {
-        statsNodes {
-            node {
-              id
-            }
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
-        }
-    }
-`
-
 export default {
-    apollo: {
-        nodes: query,
-        statsNodes: {
-            query: statsQuery,
-            update(data) {
-                const res = {}
-                for (const o of data.statsNodes) {
-                    res[o.node.id] = o
-                }
-                return res
-            },
-        },
-    },
     name: "NodesTable",
     components: {NodesTableRow},
-    data() {
-        return {
-            nodes: [],
-            statsNodes: {},
-        }
+    props: {
+        nodes: {
+            type: Array,
+            default: () => [],
+        },
+        stats: {
+            type: Object,
+            default: () => {},
+        },
     },
     methods: {
         statsForNode(nodeId) {
-            if (this.statsNodes[nodeId] === undefined) {
+            if (this.stats[nodeId] === undefined) {
                 return {
                     usersTotal: 0,
                     usersHalfYear: 0,
@@ -95,7 +53,7 @@ export default {
                     localComments: 0,
                 }
             }
-            return this.statsNodes[nodeId]
+            return this.stats[nodeId]
         },
     },
 }

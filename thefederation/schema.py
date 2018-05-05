@@ -38,7 +38,10 @@ class StatType(DjangoObjectType):
 
 
 class Query:
-    nodes = graphene.List(NodeType)
+    nodes = graphene.List(
+        NodeType,
+        platform=graphene.String(),
+    )
     platforms = graphene.List(
         PlatformType,
         name=graphene.String(),
@@ -50,7 +53,10 @@ class Query:
     stats = graphene.List(StatType)
     stats_counts_nodes = graphene.List(DateCountType)
     stats_global_today = graphene.Field(StatType)
-    stats_nodes = graphene.List(StatType)
+    stats_nodes = graphene.List(
+        StatType,
+        platform=graphene.String(),
+    )
     stats_platform_today = graphene.Field(
         StatType,
         name=graphene.String(),
@@ -67,11 +73,17 @@ class Query:
     stats_local_comments = graphene.List(DateCountType)
 
     def resolve_nodes(self, info, **kwargs):
+        platform = kwargs.get('platform')
+        if platform:
+            qs = Node.objects.filter(platform__name=platform)
+        else:
+            qs = Node.objects.all()
+
         stat = Stat.objects.filter(
             node=OuterRef('pk'), date=now().date()
         ).values('users_monthly').annotate(users=Max('users_monthly')).values('users')
 
-        return Node.objects.active().annotate(
+        return qs.active().annotate(
             users=Subquery(stat, output_field=IntegerField())
         ).order_by(
             F('users').desc(nulls_last=True)
@@ -111,7 +123,13 @@ class Query:
         ).first()
 
     def resolve_stats_nodes(self, info, **kwargs):
-        return Stat.objects.filter(date=now().date(), node__isnull=False, protocol__isnull=True, platform__isnull=True)
+        platform = kwargs.get('platform')
+        if platform:
+            qs = Stat.objects.filter(node__platform__name=platform)
+        else:
+            qs = Stat.objects.all()
+
+        return qs.filter(date=now().date(), node__isnull=False, protocol__isnull=True, platform__isnull=True)
 
     def resolve_stats_platform_today(self, info, **kwargs):
         name = kwargs.get('name')

@@ -12,7 +12,10 @@
             <div>
                 <p>You can also access list of nodes for each project using the global menu on the left.</p>
                 <div class="overflow-x">
-                    <NodesTable />
+                    <NodesTable
+                        :nodes="nodes"
+                        :stats="stats"
+                    />
                 </div>
             </div>
         </section>
@@ -20,11 +23,58 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
 import NodesTable from "./NodesTable"
 
+const query = gql`
+    query {
+        nodes {
+            id
+            name
+            version
+            openSignups
+            host
+            platform {
+              name
+            }
+        }
+        statsNodes {
+            node {
+              id
+            }
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            localPosts
+            localComments
+        }
+    }
+`
+
 export default {
+    apollo: {
+        allQueries: {
+            query,
+            result({data}) {
+                this.nodes = data.nodes
+                const stats = {}
+                for (const o of data.statsNodes) {
+                    stats[o.node.id] = o
+                }
+                this.stats = stats
+            },
+            manual: true,
+        },
+    },
     name: "NodesContent",
     components: {NodesTable},
+    data() {
+        return {
+            nodes: [],
+            stats: {},
+        }
+    },
 }
 </script>
 
