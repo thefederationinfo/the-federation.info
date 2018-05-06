@@ -12,7 +12,8 @@ export default {
             },
             variables() {
                 return {
-                    platform: this.platform,
+                    type: this.type,
+                    value: this.item,
                 }
             },
         },

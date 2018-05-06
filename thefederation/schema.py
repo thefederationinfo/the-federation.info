@@ -54,7 +54,8 @@ class Query:
     stats = graphene.List(StatType)
     stats_counts_nodes = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        value=graphene.String(),
+        itemType=graphene.String(),
     )
     stats_global_today = graphene.Field(
         StatType,
@@ -75,27 +76,33 @@ class Query:
     )
     stats_users_total = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        itemType=graphene.String(),
+        value=graphene.String(),
     )
     stats_users_half_year = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        itemType=graphene.String(),
+        value=graphene.String(),
     )
     stats_users_monthly = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        itemType=graphene.String(),
+        value=graphene.String(),
     )
     stats_users_weekly = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        itemType=graphene.String(),
+        value=graphene.String(),
     )
     stats_local_posts = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        itemType=graphene.String(),
+        value=graphene.String(),
     )
     stats_local_comments = graphene.List(
         DateCountType,
-        platform=graphene.String(),
+        itemType=graphene.String(),
+        value=graphene.String(),
     )
 
     def resolve_nodes(self, info, **kwargs):
@@ -140,8 +147,13 @@ class Query:
         return Stat.objects.all()
 
     def resolve_stats_counts_nodes(self, info, **kwargs):
-        if kwargs.get('platform'):
-            qs = Stat.objects.filter(node__platform__name=kwargs.get('platform'))
+        if kwargs.get('value') and kwargs.get('itemType'):
+            if kwargs.get('itemType') == 'platform':
+                qs = Stat.objects.filter(node__platform__name=kwargs.get('value'))
+            elif kwargs.get('itemType') == 'node':
+                qs = Stat.objects.filter(node__host=kwargs.get('value'))
+            else:
+                raise ValueError('itemType should be "platform" or "node"')
         else:
             qs = Stat.objects.filter(node__isnull=False)
         return qs.values('date').annotate(
@@ -188,29 +200,35 @@ class Query:
         ).first()
 
     @staticmethod
-    def _get_stat_date_counts(stat, platform=None):
-        if platform:
-            qs = Stat.objects.filter(node__platform__name=platform)
+    def _get_stat_date_counts(stat, value=None, item_type=None):
+        if value and item_type:
+            if item_type == 'platform':
+                qs = Stat.objects.filter(node__platform__name=value)
+            elif item_type == 'node':
+                qs = Stat.objects.filter(node__host=value)
+            else:
+                raise ValueError('itemType should be "platform" or "node"')
         else:
             qs = Stat.objects.filter(node__isnull=False)
+
         return qs.values('date').annotate(
             count=Sum(stat)
         ).values('date', 'count').order_by('date')
 
     def resolve_stats_users_total(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_total', platform=kwargs.get('platform'))
+        return Query._get_stat_date_counts('users_total', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_users_half_year(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_half_year', platform=kwargs.get('platform'))
+        return Query._get_stat_date_counts('users_half_year', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_users_monthly(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_monthly', platform=kwargs.get('platform'))
+        return Query._get_stat_date_counts('users_monthly', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_users_weekly(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_weekly', platform=kwargs.get('platform'))
+        return Query._get_stat_date_counts('users_weekly', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_local_posts(self, info, **kwargs):
-        return Query._get_stat_date_counts('local_posts', platform=kwargs.get('platform'))
+        return Query._get_stat_date_counts('local_posts', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_local_comments(self, info, **kwargs):
-        return Query._get_stat_date_counts('local_comments', platform=kwargs.get('platform'))
+        return Query._get_stat_date_counts('local_comments', value=kwargs.get('value'), item_type=kwargs.get('itemType'))

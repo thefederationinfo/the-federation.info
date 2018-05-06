@@ -83,7 +83,8 @@
 
             <Charts
                 v-if="platform.name"
-                :platform="platform.name"
+                :item="platform.name"
+                type="platform"
             />
 
             <section class="tile">

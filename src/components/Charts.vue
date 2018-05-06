@@ -5,6 +5,7 @@
         </header>
         <div id="charts-buttons">
             <div
+                v-if="type !== 'node'"
                 :class="{selected: isSelected('nodes')}"
                 class="btn-medium"
                 @click="selectChart('nodes')"
@@ -50,32 +51,38 @@
         <div>
             <ChartNodes
                 v-if="isSelected('nodes')"
-                :platform="platform"
+                :item="item"
+                :type="type"
                 label="Nodes"
             />
             <ChartUsersTotal
                 v-if="isSelected('users_total')"
-                :platform="platform"
+                :item="item"
+                :type="type"
                 label="Total users"
             />
             <ChartUsersHalfYear
                 v-if="isSelected('users_half_year')"
-                :platform="platform"
+                :item="item"
+                :type="type"
                 label="Active users 6 months"
             />
             <ChartUsersMonthly
                 v-if="isSelected('users_monthly')"
-                :platform="platform"
+                :item="item"
+                :type="type"
                 label="Active users last month"
             />
             <ChartLocalPosts
                 v-if="isSelected('local_posts')"
-                :platform="platform"
+                :item="item"
+                :type="type"
                 label="Total local posts"
             />
             <ChartLocalComments
                 v-if="isSelected('local_comments')"
-                :platform="platform"
+                :item="item"
+                :type="type"
                 label="Total local comments"
             />
         </div>
@@ -96,14 +103,18 @@ export default {
         ChartNodes, ChartUsersTotal, ChartUsersHalfYear, ChartUsersMonthly, ChartLocalPosts, ChartLocalComments,
     },
     props: {
-        platform: {
+        item: {
+            type: String,
+            default: '',
+        },
+        type: {
             type: String,
             default: '',
         },
     },
     data() {
         return {
-            activeChart: 'nodes',
+            activeChart: this.type === 'node' ? 'users_total' : 'nodes',
         }
     },
     methods: {

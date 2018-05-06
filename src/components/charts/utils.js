@@ -2,8 +2,8 @@ import gql from 'graphql-tag'
 
 function getQuery(name) {
     return gql`
-        query Stats($platform: String!) {
-            ${name}(platform: $platform) {
+        query Stats($type: String!, $value: String!) {
+            ${name}(itemType: $type, value: $value) {
                 date
                 count
             }

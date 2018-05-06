@@ -90,9 +90,13 @@
                     </div>
                 </div>
             </section>
-        </main>
 
-        <!-- charts -->
+            <Charts
+                v-if="node"
+                :item="node.host"
+                type="node"
+            />
+        </main>
 
         <Footer />
     </div>
@@ -101,6 +105,7 @@
 <script>
 import gql from 'graphql-tag'
 
+import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
 
@@ -144,10 +149,12 @@ export default {
         },
     },
     name: "NodePage",
-    components: {Footer, Drawer},
+    components: {Charts, Footer, Drawer},
     data() {
         return {
-            node: {},
+            node: {
+                platform: '',
+            },
             stats: {},
         }
     },

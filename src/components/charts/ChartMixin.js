@@ -7,7 +7,11 @@ export default {
             type: String,
             default: '',
         },
-        platform: {
+        item: {
+            type: String,
+            default: '',
+        },
+        type: {
             type: String,
             default: '',
         },
