@@ -41,6 +41,21 @@ class QueryResolveProtocolsTestCase(SchemaTestCase):
         self.assertTrue('protocols' in response['data'])
 
 
+class QueryResolveStatsUsersActiveRatioTestCase(SchemaTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.second_node = NodeFactory(active=True)
+        StatFactory(node=cls.node, users_monthly=1, users_total=2)
+        StatFactory(node=cls.second_node, users_monthly=1, users_total=4)
+
+    def test_contains_result(self):
+        response = self.glient.execute(
+            "query { statsUsersActiveRatio { count }}"
+        )
+        self.assertAlmostEqual(response['data']['statsUsersActiveRatio'][0]['count'], 0.33333333)
+
+
 class QueryResolveStatsUsersPerNodeTestCase(SchemaTestCase):
     @classmethod
     def setUpTestData(cls):

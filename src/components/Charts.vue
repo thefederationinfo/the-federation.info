@@ -54,6 +54,13 @@
             >
                 Users per node
             </div>
+            <div
+                :class="{selected: isSelected('users_active_ratio')}"
+                class="btn-medium"
+                @click="selectChart('users_active_ratio')"
+            >
+                Active users ratio
+            </div>
         </div>
         <div>
             <ChartNodes
@@ -98,12 +105,19 @@
                 :type="type"
                 label="Users per node"
             />
+            <ChartUsersActiveRatio
+                v-if="isSelected('users_active_ratio')"
+                :item="item"
+                :type="type"
+                label="Active users ratio"
+            />
         </div>
     </section>
 </template>
 
 <script>
 import ChartNodes from "./charts/ChartNodes"
+import ChartUsersActiveRatio from "./charts/ChartUsersActiveRatio"
 import ChartUsersHalfYear from "./charts/ChartUsersHalfYear"
 import ChartUsersMonthly from "./charts/ChartUsersMonthly"
 import ChartUsersPerNode from "./charts/ChartUsersPerNode"
@@ -115,6 +129,7 @@ export default {
     name: "Charts",
     components: {
         ChartNodes,
+        ChartUsersActiveRatio,
         ChartUsersTotal,
         ChartUsersHalfYear,
         ChartUsersMonthly,

@@ -1,5 +1,6 @@
 import graphene
-from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum, Avg
+from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum, Avg, FloatField
+from django.db.models.functions import Cast
 from django.utils.timezone import now
 from graphene_django import DjangoObjectType
 
@@ -9,6 +10,17 @@ from thefederation.models import Node, Platform, Protocol, Stat
 class DateCountType(graphene.ObjectType):
     date = graphene.Date()
     count = graphene.Int()
+
+    def resolve_count(self, info):
+        return self.get('count')
+
+    def resolve_date(self, info):
+        return self.get('date')
+
+
+class DateFloatCountType(graphene.ObjectType):
+    date = graphene.Date()
+    count = graphene.Float()
 
     def resolve_count(self, info):
         return self.get('count')
@@ -77,8 +89,8 @@ class Query:
         StatType,
         name=graphene.String(),
     )
-    stats_users_total = graphene.List(
-        DateCountType,
+    stats_users_active_ratio = graphene.List(
+        DateFloatCountType,
         itemType=graphene.String(),
         value=graphene.String(),
     )
@@ -97,6 +109,11 @@ class Query:
         itemType=graphene.String(),
         value=graphene.String(),
     )
+    stats_users_total = graphene.List(
+        DateCountType,
+        itemType=graphene.String(),
+        value=graphene.String(),
+    )
     stats_users_weekly = graphene.List(
         DateCountType,
         itemType=graphene.String(),
@@ -107,6 +124,25 @@ class Query:
         itemType=graphene.String(),
         value=graphene.String(),
     )
+
+    @staticmethod
+    def _get_stat_date_counts(stat, value=None, item_type=None):
+        if value and item_type:
+            if item_type == 'platform':
+                qs = Stat.objects.filter(node__platform__name=value)
+            elif item_type == 'protocol':
+                qs = Stat.objects.filter(node__protocols__name=value)
+            elif item_type == 'node':
+                qs = Stat.objects.filter(node__host=value)
+            else:
+                raise ValueError('itemType should be "platform", "node" or "protocol')
+        else:
+            qs = Stat.objects.filter(node__isnull=False)
+
+        return qs.values('date').annotate(
+            count=Sum(stat)
+        ).values('date', 'count').order_by('date')
+
     stats_local_comments = graphene.List(
         DateCountType,
         itemType=graphene.String(),
@@ -220,22 +256,20 @@ class Query:
             node__isnull=True, platform__isnull=True, protocol__name=name, date=now().date(),
         ).first()
 
-    @staticmethod
-    def _get_stat_date_counts(stat, value=None, item_type=None):
-        if value and item_type:
-            if item_type == 'platform':
-                qs = Stat.objects.filter(node__platform__name=value)
-            elif item_type == 'protocol':
-                qs = Stat.objects.filter(node__protocols__name=value)
-            elif item_type == 'node':
-                qs = Stat.objects.filter(node__host=value)
+    def resolve_stats_users_active_ratio(self, info, **kwargs):
+        if kwargs.get('value') and kwargs.get('itemType'):
+            if kwargs.get('itemType') == 'platform':
+                qs = Stat.objects.filter(node__platform__name=kwargs.get('value'))
+            elif kwargs.get('itemType') == 'protocol':
+                qs = Stat.objects.filter(node__protocols__name=kwargs.get('value'))
+            elif kwargs.get('itemType') == 'node':
+                qs = Stat.objects.filter(node__host=kwargs.get('value'))
             else:
                 raise ValueError('itemType should be "platform", "node" or "protocol')
         else:
             qs = Stat.objects.filter(node__isnull=False)
-
         return qs.values('date').annotate(
-            count=Sum(stat)
+            count=Cast(Sum('users_monthly'), FloatField()) / Cast(Sum('users_total'), FloatField()),
         ).values('date', 'count').order_by('date')
 
     def resolve_stats_users_total(self, info, **kwargs):
