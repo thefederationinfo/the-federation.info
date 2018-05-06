@@ -42,6 +42,7 @@ class Query:
         NodeType,
         host=graphene.String(),
         platform=graphene.String(),
+        protocol=graphene.String(),
     )
     platforms = graphene.List(
         PlatformType,
@@ -60,11 +61,13 @@ class Query:
     stats_global_today = graphene.Field(
         StatType,
         platform=graphene.String(),
+        protocol=graphene.String(),
     )
     stats_nodes = graphene.List(
         StatType,
         host=graphene.String(),
         platform=graphene.String(),
+        protocol=graphene.String(),
     )
     stats_platform_today = graphene.Field(
         StatType,
@@ -108,6 +111,8 @@ class Query:
     def resolve_nodes(self, info, **kwargs):
         if kwargs.get('platform'):
             qs = Node.objects.filter(platform__name=kwargs.get('platform'))
+        elif kwargs.get('protocol'):
+            qs = Node.objects.filter(protocols__name=kwargs.get('protocol'))
         else:
             qs = Node.objects.all()
 
@@ -137,9 +142,14 @@ class Query:
         ).filter(active_nodes__gt=0).order_by('-active_nodes')
 
     def resolve_protocols(self, info, **kwargs):
+        if kwargs.get('name'):
+            qs = Protocol.objects.filter(name=kwargs.get('name').lower())
+        else:
+            qs = Protocol.objects.all()
+
         nodes = Node.objects.active().filter(
             protocols=OuterRef('pk')).values('protocols').annotate(c=Count('*')).values('c')
-        return Protocol.objects.prefetch_related('nodes').annotate(
+        return qs.prefetch_related('nodes').annotate(
             active_nodes=Subquery(nodes, output_field=IntegerField())
         ).filter(active_nodes__gt=0).order_by('-active_nodes')
 
@@ -150,10 +160,12 @@ class Query:
         if kwargs.get('value') and kwargs.get('itemType'):
             if kwargs.get('itemType') == 'platform':
                 qs = Stat.objects.filter(node__platform__name=kwargs.get('value'))
+            elif kwargs.get('itemType') == 'protocol':
+                qs = Stat.objects.filter(node__protocols__name=kwargs.get('value'))
             elif kwargs.get('itemType') == 'node':
                 qs = Stat.objects.filter(node__host=kwargs.get('value'))
             else:
-                raise ValueError('itemType should be "platform" or "node"')
+                raise ValueError('itemType should be "platform", "node" or "protocol')
         else:
             qs = Stat.objects.filter(node__isnull=False)
         return qs.values('date').annotate(
@@ -163,6 +175,8 @@ class Query:
     def resolve_stats_global_today(self, info, **kwargs):
         if kwargs.get('platform'):
             qs = Stat.objects.filter(platform__name=kwargs.get('platform'))
+        elif kwargs.get('protocol'):
+            qs = Stat.objects.filter(protocol__name=kwargs.get('protocol'))
         else:
             qs = Stat.objects.filter(platform__isnull=True)
 
@@ -173,6 +187,8 @@ class Query:
     def resolve_stats_nodes(self, info, **kwargs):
         if kwargs.get('platform'):
             qs = Stat.objects.filter(node__platform__name=kwargs.get('platform'))
+        elif kwargs.get('protocol'):
+            qs = Stat.objects.filter(node__protocols__name=kwargs.get('protocol'))
         else:
             qs = Stat.objects.all()
 
@@ -204,10 +220,12 @@ class Query:
         if value and item_type:
             if item_type == 'platform':
                 qs = Stat.objects.filter(node__platform__name=value)
+            elif item_type == 'protocol':
+                qs = Stat.objects.filter(node__protocols__name=value)
             elif item_type == 'node':
                 qs = Stat.objects.filter(node__host=value)
             else:
-                raise ValueError('itemType should be "platform" or "node"')
+                raise ValueError('itemType should be "platform", "node" or "protocol')
         else:
             qs = Stat.objects.filter(node__isnull=False)
 
@@ -219,10 +237,14 @@ class Query:
         return Query._get_stat_date_counts('users_total', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_users_half_year(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_half_year', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
+        return Query._get_stat_date_counts(
+            'users_half_year', value=kwargs.get('value'), item_type=kwargs.get('itemType')
+        )
 
     def resolve_stats_users_monthly(self, info, **kwargs):
-        return Query._get_stat_date_counts('users_monthly', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
+        return Query._get_stat_date_counts(
+            'users_monthly', value=kwargs.get('value'), item_type=kwargs.get('itemType')
+        )
 
     def resolve_stats_users_weekly(self, info, **kwargs):
         return Query._get_stat_date_counts('users_weekly', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
@@ -231,4 +253,6 @@ class Query:
         return Query._get_stat_date_counts('local_posts', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
 
     def resolve_stats_local_comments(self, info, **kwargs):
-        return Query._get_stat_date_counts('local_comments', value=kwargs.get('value'), item_type=kwargs.get('itemType'))
+        return Query._get_stat_date_counts(
+            'local_comments', value=kwargs.get('value'), item_type=kwargs.get('itemType')
+        )
