@@ -78,8 +78,10 @@ class Query:
     stats_nodes = graphene.List(
         StatType,
         host=graphene.String(),
+        itemType=graphene.String(),
         platform=graphene.String(),
         protocol=graphene.String(),
+        value=graphene.String(),
     )
     stats_platform_today = graphene.Field(
         StatType,
@@ -226,10 +228,23 @@ class Query:
         ).first()
 
     def resolve_stats_nodes(self, info, **kwargs):
-        if kwargs.get('platform'):
-            qs = Stat.objects.filter(node__platform__name=kwargs.get('platform'))
+        if kwargs.get('itemType'):
+            item_type = kwargs.get('itemType')
+            value = kwargs.get('value')
+        elif kwargs.get('platform'):
+            item_type = 'platform'
+            value = kwargs.get('platform')
         elif kwargs.get('protocol'):
-            qs = Stat.objects.filter(node__protocols__name=kwargs.get('protocol'))
+            item_type = 'protocol'
+            value = kwargs.get('protocol')
+        else:
+            item_type = None
+            value = None
+
+        if item_type == 'platform':
+            qs = Stat.objects.filter(node__platform__name=value)
+        elif item_type == 'protocol':
+            qs = Stat.objects.filter(node__protocols__name=value)
         else:
             qs = Stat.objects.all()
 

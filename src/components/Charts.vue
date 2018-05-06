@@ -61,6 +61,14 @@
             >
                 Active users ratio
             </div>
+            <div
+                v-if="type !== 'node'"
+                :class="{selected: isSelected('users_scatter')}"
+                class="btn-medium"
+                @click="selectChart('users_scatter')"
+            >
+                User total vs monthly
+            </div>
         </div>
         <div>
             <ChartNodes
@@ -111,30 +119,38 @@
                 :type="type"
                 label="Active users ratio"
             />
+            <ChartScatterUsers
+                v-if="isSelected('users_scatter')"
+                :item="item"
+                :type="type"
+                label="User total vs monthly"
+            />
         </div>
     </section>
 </template>
 
 <script>
+import ChartLocalComments from "./charts/ChartLocalComments"
+import ChartLocalPosts from "./charts/ChartLocalPosts"
 import ChartNodes from "./charts/ChartNodes"
+import ChartScatterUsers from "./charts/ChartScatterUsers"
 import ChartUsersActiveRatio from "./charts/ChartUsersActiveRatio"
 import ChartUsersHalfYear from "./charts/ChartUsersHalfYear"
 import ChartUsersMonthly from "./charts/ChartUsersMonthly"
 import ChartUsersPerNode from "./charts/ChartUsersPerNode"
 import ChartUsersTotal from "./charts/ChartUsersTotal"
-import ChartLocalPosts from "./charts/ChartLocalPosts"
-import ChartLocalComments from "./charts/ChartLocalComments"
 
 export default {
     name: "Charts",
     components: {
+        ChartLocalComments,
+        ChartLocalPosts,
         ChartNodes,
+        ChartScatterUsers,
         ChartUsersActiveRatio,
         ChartUsersTotal,
         ChartUsersHalfYear,
         ChartUsersMonthly,
-        ChartLocalPosts,
-        ChartLocalComments,
         ChartUsersPerNode,
     },
     props: {
