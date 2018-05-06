@@ -47,6 +47,13 @@
             >
                 Local comments
             </div>
+            <div
+                :class="{selected: isSelected('users_per_node')}"
+                class="btn-medium"
+                @click="selectChart('users_per_node')"
+            >
+                Users per node
+            </div>
         </div>
         <div>
             <ChartNodes
@@ -85,22 +92,35 @@
                 :type="type"
                 label="Total local comments"
             />
+            <ChartUsersPerNode
+                v-if="isSelected('users_per_node')"
+                :item="item"
+                :type="type"
+                label="Users per node"
+            />
         </div>
     </section>
 </template>
 
 <script>
 import ChartNodes from "./charts/ChartNodes"
-import ChartUsersTotal from "./charts/ChartUsersTotal"
 import ChartUsersHalfYear from "./charts/ChartUsersHalfYear"
 import ChartUsersMonthly from "./charts/ChartUsersMonthly"
+import ChartUsersPerNode from "./charts/ChartUsersPerNode"
+import ChartUsersTotal from "./charts/ChartUsersTotal"
 import ChartLocalPosts from "./charts/ChartLocalPosts"
 import ChartLocalComments from "./charts/ChartLocalComments"
 
 export default {
     name: "Charts",
     components: {
-        ChartNodes, ChartUsersTotal, ChartUsersHalfYear, ChartUsersMonthly, ChartLocalPosts, ChartLocalComments,
+        ChartNodes,
+        ChartUsersTotal,
+        ChartUsersHalfYear,
+        ChartUsersMonthly,
+        ChartLocalPosts,
+        ChartLocalComments,
+        ChartUsersPerNode,
     },
     props: {
         item: {

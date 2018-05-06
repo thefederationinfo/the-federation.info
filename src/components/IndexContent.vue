@@ -26,11 +26,6 @@
                         {{ statsGlobalToday ? statsGlobalToday.usersTotal : 0 }} <strong>Users</strong>
                     </div>
                 </div>
-                <div class="col4">
-                    <div class="tile valign-wrapper">
-                        ONE <strong>Network</strong>
-                    </div>
-                </div>
             </div>
         </header>
 

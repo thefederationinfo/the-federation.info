@@ -1,5 +1,5 @@
 import graphene
-from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum
+from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum, Avg
 from django.utils.timezone import now
 from graphene_django import DjangoObjectType
 
@@ -88,6 +88,11 @@ class Query:
         value=graphene.String(),
     )
     stats_users_monthly = graphene.List(
+        DateCountType,
+        itemType=graphene.String(),
+        value=graphene.String(),
+    )
+    stats_users_per_node = graphene.List(
         DateCountType,
         itemType=graphene.String(),
         value=graphene.String(),
@@ -245,6 +250,22 @@ class Query:
         return Query._get_stat_date_counts(
             'users_monthly', value=kwargs.get('value'), item_type=kwargs.get('itemType')
         )
+
+    def resolve_stats_users_per_node(self, info, **kwargs):
+        if kwargs.get('value') and kwargs.get('itemType'):
+            if kwargs.get('itemType') == 'platform':
+                qs = Stat.objects.filter(node__platform__name=kwargs.get('value'))
+            elif kwargs.get('itemType') == 'protocol':
+                qs = Stat.objects.filter(node__protocols__name=kwargs.get('value'))
+            elif kwargs.get('itemType') == 'node':
+                qs = Stat.objects.filter(node__host=kwargs.get('value'))
+            else:
+                raise ValueError('itemType should be "platform", "node" or "protocol')
+        else:
+            qs = Stat.objects.filter(node__isnull=False)
+        return qs.values('date').annotate(
+            count=Avg('users_total')
+        ).values('date', 'count').order_by('date')
 
     def resolve_stats_users_weekly(self, info, **kwargs):
         return Query._get_stat_date_counts('users_weekly', value=kwargs.get('value'), item_type=kwargs.get('itemType'))

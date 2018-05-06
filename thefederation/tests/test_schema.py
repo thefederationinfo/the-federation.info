@@ -1,3 +1,4 @@
+from thefederation.tests.factories import NodeFactory, StatFactory
 from thefederation.tests.utils import SchemaTestCase
 
 
@@ -38,3 +39,18 @@ class QueryResolveProtocolsTestCase(SchemaTestCase):
     def test_resolves(self):
         response = self.glient.execute("query { protocols { id }}")
         self.assertTrue('protocols' in response['data'])
+
+
+class QueryResolveStatsUsersPerNodeTestCase(SchemaTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.second_node = NodeFactory(active=True)
+        StatFactory(node=cls.node, users_total=1)
+        StatFactory(node=cls.second_node, users_total=3)
+
+    def test_contains_result(self):
+        response = self.glient.execute(
+            "query { statsUsersPerNode { count }}"
+        )
+        self.assertEqual(response['data']['statsUsersPerNode'][0]['count'], 2)

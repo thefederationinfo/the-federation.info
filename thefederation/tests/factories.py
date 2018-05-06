@@ -1,7 +1,7 @@
 import factory
-from django.utils.timezone import utc
+from django.utils.timezone import utc, now
 
-from thefederation.models import Node, Platform, Protocol
+from thefederation.models import Node, Platform, Protocol, Stat
 
 
 class PlatformFactory(factory.DjangoModelFactory):
@@ -42,3 +42,12 @@ class NodeFactory(factory.DjangoModelFactory):
             return
 
         self.protocols.add(ProtocolFactory())
+
+
+class StatFactory(factory.DjangoModelFactory):
+    date = now().date()
+    node = factory.SubFactory(NodeFactory)
+    users_total = factory.Faker('pyint')
+
+    class Meta:
+        model = Stat
