@@ -5,7 +5,7 @@
         <main>
             <header class="main-header">
                 <div class="main-title">
-                    <h1>{{ protocol.name }}</h1>
+                    <h1>{{ title }}</h1>
                 </div>
                 <div class="flex">
                     <div class="col4">
@@ -32,12 +32,12 @@
             </header>
             <section class="tile">
                 <header>
-                    <h2>Protocol {{ protocol.name }}</h2>
+                    <h2>Info</h2>
                 </header>
                 <div>
                     <div class="flex">
                         <div class="col2">
-                            <p>{{ protocol.description || '' }}</p>
+                            <p>{{ protocol.description }}</p>
                             <div class="flex">
                                 <div
                                     v-if="protocol.website"
@@ -49,20 +49,7 @@
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        Official website
-                                    </a>
-                                </div>
-                                <div
-                                    v-if="protocol.code"
-                                    class="col2 center"
-                                >
-                                    <a
-                                        :href="protocol.code"
-                                        class="btn"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Source code
+                                        Website
                                     </a>
                                 </div>
                             </div>
@@ -82,14 +69,14 @@
             </section>
 
             <Charts
-                v-if="protocol.name"
+                v-if="protocol"
                 :item="protocol.name"
                 type="protocol"
             />
 
             <section class="tile">
                 <header>
-                    <h2>All {{ protocol.name }} nodes</h2>
+                    <h2>All {{ title }} nodes</h2>
                 </header>
                 <div class="overflow-x">
                     <NodesTable
@@ -181,6 +168,11 @@ export default {
             protocol: {},
             stats: {},
         }
+    },
+    computed: {
+        title() {
+            return this.protocol.displayName ? this.protocol.displayName : this.protocol.name || ''
+        },
     },
 }
 </script>

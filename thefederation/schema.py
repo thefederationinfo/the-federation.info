@@ -178,10 +178,10 @@ class Query:
         elif kwargs.get('protocol'):
             qs = Stat.objects.filter(protocol__name=kwargs.get('protocol'))
         else:
-            qs = Stat.objects.filter(platform__isnull=True)
+            qs = Stat.objects.filter(platform__isnull=True, protocol__isnull=True)
 
         return qs.filter(
-            node__isnull=True, protocol__isnull=True, date=now().date(),
+            node__isnull=True, date=now().date(),
         ).first()
 
     def resolve_stats_nodes(self, info, **kwargs):
