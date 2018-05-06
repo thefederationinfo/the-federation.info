@@ -1,7 +1,11 @@
 <template>
     <tr>
         <th>
-            {{ protocol.name }}
+            <router-link
+                :to="{name: 'protocol', params: {protocol: protocol.name}}"
+            >
+                {{ protocol.name }}
+            </router-link>
         </th>
         <td>
             {{ protocol.nodes.length }}

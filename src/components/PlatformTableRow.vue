@@ -1,7 +1,11 @@
 <template>
     <tr>
         <th>
-            {{ platform.displayName ? platform.displayName : platform.name }}
+            <router-link
+                :to="{name: 'platform', params: {platform: platform.name}}"
+            >
+                {{ platform.displayName ? platform.displayName : platform.name }}
+            </router-link>
         </th>
         <td>
             {{ nodeCount }}
