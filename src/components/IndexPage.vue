@@ -9,7 +9,7 @@
 <script>
 import Drawer from "./common/Drawer"
 import Footer from "./common/Footer"
-import IndexContent from "./IndexContent";
+import IndexContent from "./IndexContent"
 
 export default {
     name: 'IndexPage',

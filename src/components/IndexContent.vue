@@ -93,6 +93,7 @@
 
         <Charts />
 
+        <div id="projects"></div>
         <section class="tile">
             <header>
                 <h2>Projects</h2>
@@ -120,6 +121,7 @@
             </div>
         </section>
 
+        <div id="protocols"></div>
         <section class="tile">
             <header>
                 <h2>Protocols</h2>

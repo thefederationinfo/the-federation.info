@@ -1,17 +1,25 @@
 <template>
     <div>
-        <a id="drawer-icon" href="#drawer-opened"></a>
-        <nav id="menu" class="tile">
-            <a class="close-drawer" href="#">x</a>
+        <a
+            id="drawer-icon"
+            href="#drawer-opened"
+        />
+        <nav
+            id="menu"
+            class="tile"
+        >
+            <a
+                class="close-drawer"
+                href="#"
+            >
+                x
+            </a>
             <ul>
                 <li><router-link to="/">Home</router-link></li>
                 <li><router-link to="/nodes">Nodes list</router-link></li>
-                <li><a href="/diaspora">diaspora*</a></li>
-                <li><a href="/friendica">Friendica</a></li>
-                <li><a href="/ganggo">GangGo</a></li>
-                <li><a href="/hubzilla">Hubzilla</a></li>
-                <li><a href="/socialhome">Socialhome</a></li>
-                <li><a href="/info">About</a></li>
+                <li><router-link to="/#projects">Projects</router-link></li>
+                <li><router-link to="/#protocols">Protocols</router-link></li>
+                <li><router-link to="/info">Info</router-link></li>
             </ul>
         </nav>
     </div>
