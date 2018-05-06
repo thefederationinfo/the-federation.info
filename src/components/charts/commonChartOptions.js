@@ -1,7 +1,9 @@
 export default {
-    interpolateNulls: true,
-    pointsVisible: false,
-    curveType: 'function',
+    elements: {
+        point: {
+            radius: 0.1,
+        },
+    },
     legend: {
         position: 'bottom',
     },

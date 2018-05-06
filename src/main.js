@@ -1,3 +1,4 @@
+import Chart from 'chart.js'
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import VueChartkick from 'vue-chartkick'
@@ -26,7 +27,7 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.use(VueApollo)
-Vue.use(VueChartkick)
+Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.config.productionTip = false
 
