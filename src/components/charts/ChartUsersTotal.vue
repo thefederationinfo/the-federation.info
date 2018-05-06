@@ -17,7 +17,7 @@ export default {
             },
         },
     },
-    name: "ChartNodes",
+    name: "ChartUsersTotal",
     mixins: [ChartMixin],
 }
 </script>
