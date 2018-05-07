@@ -30,8 +30,21 @@ class DateFloatCountType(graphene.ObjectType):
 
 
 class NodeType(DjangoObjectType):
+    country_code = graphene.String()
+    country_flag = graphene.String()
+    country_name = graphene.String()
+
     class Meta:
         model = Node
+
+    def resolve_country_code(self, info):
+        return self.country.code
+
+    def resolve_country_flag(self, info):
+        return self.country.unicode_flag
+
+    def resolve_country_name(self, info):
+        return self.country.name
 
 
 class PlatformType(DjangoObjectType):

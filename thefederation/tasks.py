@@ -124,6 +124,7 @@ def poll_node(host):
             'server_meta': result.get('server_meta', {}),
             'version': result.get('version', ''),
             'platform': platform,
+            'country': result.get('country', ''),
         }
     )
 

@@ -22,17 +22,18 @@
         <td>{{ stats.usersMonthly ? stats.usersMonthly : '' }}</td>
         <td>{{ stats.localPosts ? stats.localPosts : '' }}</td>
         <td>{{ stats.localComments ? stats.localComments : '' }}</td>
-        <!--<td>{{ node.services }}</td>-->
-        <!--<td>-->
-            <!--<div v-if="node.country">-->
-                <!--<a href="http://countrycode.org/{{ node.country }}" target="_blank">-->
-                    <!--<img src="flags/{{ node.country|lower }}.png">-->
-                <!--</a>-->
-            <!--</div>-->
-            <!--<div v-else>-->
-                <!--&nbsp;-->
-            <!--</div>-->
-        <!--</td>-->
+        <td>&nbsp;<!--{{ node.services }}--></td>
+        <td>
+            <div
+                v-if="node.countryCode"
+                :title="node.countryName"
+            >
+                {{ node.countryFlag }}
+            </div>
+            <div v-else>
+                &nbsp;
+            </div>
+        </td>
     </tr>
 </template>
 
