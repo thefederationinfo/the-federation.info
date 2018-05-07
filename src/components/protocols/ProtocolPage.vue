@@ -114,6 +114,9 @@ const query = gql`
             platform {
               name
             }
+            countryCode
+            countryFlag
+            countryName
         }
 
         statsGlobalToday(protocol: $name) {
