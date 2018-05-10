@@ -18,7 +18,10 @@ export default {
     name: "ApolloLoader",
     components: {Spinner},
     props: {
-        loading: Boolean,
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
 }
 </script>
