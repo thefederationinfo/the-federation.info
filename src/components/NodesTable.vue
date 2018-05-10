@@ -42,6 +42,10 @@ export default {
             default: () => {},
         },
     },
+    mounted() {
+        // eslint-disable-next-line no-undef
+        makeSortable(document.getElementById("nodes-table"))
+    },
     methods: {
         statsForNode(nodeId) {
             if (this.stats[nodeId] === undefined) {
@@ -58,7 +62,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-
-</style>

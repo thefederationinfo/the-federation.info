@@ -30,7 +30,3 @@ export default {
     name: "Drawer",
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -16,7 +16,3 @@ export default {
     components: {NodesContent, Footer, Drawer},
 }
 </script>
-
-<style scoped>
-
-</style>

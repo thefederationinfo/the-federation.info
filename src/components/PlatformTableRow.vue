@@ -50,7 +50,6 @@ const platformStatsQuery = gql`
     }
 `
 
-
 export default {
     apollo: {
         statsPlatformToday: {
@@ -88,7 +87,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-
-</style>

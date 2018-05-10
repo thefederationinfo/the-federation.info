@@ -22,7 +22,3 @@ export default {
     mixins: [ChartMixin],
 }
 </script>
-
-<style scoped>
-
-</style>
