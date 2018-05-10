@@ -51,7 +51,7 @@ export default {
         },
     },
     computed: {
-        imageSource()  {
+        imageSource() {
             return `/static/images/${this.node.platform.name}-16.png`
         },
         openSignups() {

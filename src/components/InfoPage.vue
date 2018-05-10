@@ -53,7 +53,10 @@
                     <h3>Follow on The Federation</h3>
                     <p>
                         You can follow the
-                        <a href="https://socialhome.network/u/thefederation" title="thefederation@socialhome.network">
+                        <a
+                            href="https://socialhome.network/u/thefederation"
+                            title="thefederation@socialhome.network"
+                        >
                         official account</a> on The Federation to receive daily or weekly statistics. The posts will be
                         tagged according to frequency, so instead of following the account you can also subscribe to
                         the hashtags. The following hashtags will be used:
