@@ -84,6 +84,7 @@
                                 <!-- <li>Services: <strong>{{ node.services }}</strong></li> -->
                                 <!-- <li>Protocols: <strong>{{ node.protocols }}</strong></li> -->
                                 <li>Country: <strong>{{ node.country }}</strong></li>
+                                <li>Services: <strong>{{ services }}</strong></li>
                             </ul>
                         </div>
                         <div class="col2">
@@ -112,6 +113,7 @@
 
 <script>
 import gql from 'graphql-tag'
+import _ from "lodash/collection"
 
 import ApolloLoader from "../common/ApolloLoader"
 import Charts from "../Charts"
@@ -128,6 +130,9 @@ const query = gql`
             platform {
               name
               displayName
+            }
+            services {
+                name
             }
         }
 
@@ -182,6 +187,13 @@ export default {
         },
         platformTitle() {
             return this.node.platform.displayName ? this.node.platform.displayName : this.node.platform.name
+        },
+        services() {
+            const services = []
+            for (const o of this.node.services) {
+                services.push(o.name)
+            }
+            return _.sortBy(services).join(', ')
         },
     },
 }

@@ -38,15 +38,18 @@ const query = gql`
             openSignups
             host
             platform {
-              name
+                name
             }
             countryCode
             countryFlag
             countryName
+            services {
+                name
+            }
         }
         statsNodes {
             node {
-              id
+                id
             }
             usersTotal
             usersHalfYear

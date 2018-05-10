@@ -2,10 +2,12 @@
     <tr>
         <td>
             <img
+                v-if="node.platform.name !== 'unknown'"
                 :alt="node.platform.name"
                 :title="node.platform.name"
                 :src="imageSource"
             >
+            <div v-else>&nbsp;</div>
         </td>
         <td>
             <router-link
@@ -22,7 +24,14 @@
         <td>{{ stats.usersMonthly ? stats.usersMonthly : '' }}</td>
         <td>{{ stats.localPosts ? stats.localPosts : '' }}</td>
         <td>{{ stats.localComments ? stats.localComments : '' }}</td>
-        <td>&nbsp;<!--{{ node.services }}--></td>
+        <td>
+            <span
+                v-tooltip="services"
+                v-if="services"
+            >
+                {{ node.services.length }}
+            </span>
+        </td>
         <td>
             <div
                 v-if="node.countryCode"
@@ -38,6 +47,8 @@
 </template>
 
 <script>
+import _ from "lodash/collection"
+
 export default {
     name: "NodesTableRow",
     props: {
@@ -57,10 +68,13 @@ export default {
         openSignups() {
             return this.node.openSignups ? "Yes" : "No"
         },
+        services() {
+            const services = []
+            for (const o of this.node.services) {
+                services.push(o.name)
+            }
+            return _.sortBy(services).join(', ')
+        },
     },
 }
 </script>
-
-<style scoped>
-
-</style>

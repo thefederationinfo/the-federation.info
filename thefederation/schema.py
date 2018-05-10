@@ -4,7 +4,7 @@ from django.db.models.functions import Cast
 from django.utils.timezone import now
 from graphene_django import DjangoObjectType
 
-from thefederation.models import Node, Platform, Protocol, Stat
+from thefederation.models import Node, Platform, Protocol, Stat, Service
 
 
 class DateCountType(graphene.ObjectType):
@@ -57,6 +57,11 @@ class ProtocolType(DjangoObjectType):
         model = Protocol
 
 
+class ServiceType(DjangoObjectType):
+    class Meta:
+        model = Service
+
+
 class StatType(DjangoObjectType):
     class Meta:
         model = Stat
@@ -75,6 +80,10 @@ class Query:
     )
     protocols = graphene.List(
         ProtocolType,
+        name=graphene.String(),
+    )
+    services = graphene.List(
+        ServiceType,
         name=graphene.String(),
     )
     stats = graphene.List(StatType)
@@ -183,7 +192,7 @@ class Query:
             users=Subquery(stat, output_field=IntegerField())
         ).order_by(
             F('users').desc(nulls_last=True)
-        ).select_related('platform')
+        ).select_related('platform').prefetch_related('services')
 
     def resolve_platforms(self, info, **kwargs):
         if kwargs.get('name'):
