@@ -8,22 +8,30 @@
             <div class="flex">
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        {{ protocols.length }} <strong>Protocols</strong>
+                        <ApolloLoader>
+                            {{ protocols.length || '' }} <strong>Protocols</strong>
+                        </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        {{ platforms.length }} <strong>Projects</strong>
+                        <ApolloLoader>
+                            {{ platforms.length || '' }} <strong>Projects</strong>
+                        </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        {{ nodes.length }} <strong>Nodes</strong>
+                        <ApolloLoader>
+                            {{ nodes.length || '' }} <strong>Nodes</strong>
+                        </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        {{ statsGlobalToday ? statsGlobalToday.usersTotal : 0 }} <strong>Users</strong>
+                        <ApolloLoader>
+                            {{ statsGlobalToday ? statsGlobalToday.usersTotal : '' }} <strong>Users</strong>
+                        </ApolloLoader>
                     </div>
                 </div>
             </div>
@@ -51,32 +59,34 @@
                         </div>
                     </div>
                     <div class="col2">
-                        <ul>
-                            <li>
-                                Nodes:
-                                <strong>{{ nodes.length }}</strong>
-                            </li>
-                            <li>
-                                Users:
-                                <strong>{{ statsGlobalToday ? statsGlobalToday.usersTotal : 0 }}</strong>
-                            </li>
-                            <li>
-                                Last 6 months active users:
-                                <strong>{{ statsGlobalToday ? statsGlobalToday.usersHalfYear : 0 }}</strong>
-                            </li>
-                            <li>
-                                Last month active users:
-                                <strong>{{ statsGlobalToday ? statsGlobalToday.usersMonthly : 0 }}</strong>
-                            </li>
-                            <li>
-                                Posts:
-                                <strong>{{ statsGlobalToday ? statsGlobalToday.localPosts : 0 }}</strong>
-                            </li>
-                            <li>
-                                Comments:
-                                <strong>{{ statsGlobalToday ? statsGlobalToday.localComments : 0 }}</strong>
-                            </li>
-                        </ul>
+                        <ApolloLoader>
+                            <ul>
+                                <li>
+                                    Nodes:
+                                    <strong>{{ nodes.length || '' }}</strong>
+                                </li>
+                                <li>
+                                    Users:
+                                    <strong>{{ statsGlobalToday ? statsGlobalToday.usersTotal : '' }}</strong>
+                                </li>
+                                <li>
+                                    Last 6 months active users:
+                                    <strong>{{ statsGlobalToday ? statsGlobalToday.usersHalfYear : '' }}</strong>
+                                </li>
+                                <li>
+                                    Last month active users:
+                                    <strong>{{ statsGlobalToday ? statsGlobalToday.usersMonthly : '' }}</strong>
+                                </li>
+                                <li>
+                                    Posts:
+                                    <strong>{{ statsGlobalToday ? statsGlobalToday.localPosts : '' }}</strong>
+                                </li>
+                                <li>
+                                    Comments:
+                                    <strong>{{ statsGlobalToday ? statsGlobalToday.localComments : '' }}</strong>
+                                </li>
+                            </ul>
+                        </ApolloLoader>
                         <div>
                             <strong>Disclaimer:</strong> These counts do not reflect the whole network due to the
                             opt-in nature of the statistics.
@@ -113,6 +123,7 @@
                         />
                     </tbody>
                 </table>
+                <ApolloLoader />
             </div>
         </section>
 
@@ -138,6 +149,7 @@
                         />
                     </tbody>
                 </table>
+                <ApolloLoader />
             </div>
         </section>
 
@@ -184,10 +196,10 @@
 <script>
 import gql from 'graphql-tag'
 
+import ApolloLoader from "./common/ApolloLoader"
+import Charts from "./Charts"
 import PlatformTableRow from "./PlatformTableRow"
 import ProtocolTableRow from "./ProtocolTableRow"
-import Charts from "./Charts"
-
 
 const query = gql`
     query {
@@ -238,7 +250,7 @@ export default {
         },
     },
     name: "IndexContent",
-    components: {Charts, PlatformTableRow, ProtocolTableRow},
+    components: {ApolloLoader, Charts, PlatformTableRow, ProtocolTableRow},
     data() {
         return {
             nodes: [],

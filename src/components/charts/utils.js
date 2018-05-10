@@ -11,10 +11,12 @@ function getQuery(name) {
 }
 
 const lineChartTemplate = `
-    <line-chart
-        :data="statsData"
-        :library="chartOptions"
-    />    
+    <ApolloLoader>
+        <line-chart
+            :data="statsData"
+            :library="chartOptions"
+        />
+    </ApolloLoader>
 `
 
 // eslint-disable-next-line import/prefer-default-export

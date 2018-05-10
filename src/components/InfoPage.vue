@@ -138,7 +138,3 @@ export default {
     components: {Drawer, Footer},
 }
 </script>
-
-<style scoped>
-
-</style>

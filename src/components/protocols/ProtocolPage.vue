@@ -10,22 +10,30 @@
                 <div class="flex">
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ nodes.length }} <strong>Nodes</strong>
+                            <ApolloLoader>
+                                {{ nodes.length || '' }} <strong>Nodes</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ globalStats.usersTotal || 0 }} <strong>Users</strong>
+                            <ApolloLoader>
+                                {{ globalStats.usersTotal || '' }} <strong>Users</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ globalStats.localPosts || 0 }} <strong>Posts</strong>
+                            <ApolloLoader>
+                                {{ globalStats.localPosts || '' }} <strong>Posts</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ globalStats.localComments || 0 }} <strong>Comments</strong>
+                            <ApolloLoader>
+                                {{ globalStats.localComments || '' }} <strong>Comments</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                 </div>
@@ -56,12 +64,12 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodes.length }}</strong></li>
-                                <li>Users: <strong>{{ globalStats.usersTotal || 0 }}</strong></li>
-                                <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || 0 }}</strong></li>
-                                <li>Last month users: <strong>{{ globalStats.usersMonthly || 0 }}</strong></li>
-                                <li>Posts: <strong>{{ globalStats.localPosts || 0 }}</strong></li>
-                                <li>Comments: <strong>{{ globalStats.localComments || 0 }}</strong></li>
+                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
+                                <li>Users: <strong>{{ globalStats.usersTotal || '' }}</strong></li>
+                                <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || '' }}</strong></li>
+                                <li>Last month users: <strong>{{ globalStats.usersMonthly || '' }}</strong></li>
+                                <li>Posts: <strong>{{ globalStats.localPosts || '' }}</strong></li>
+                                <li>Comments: <strong>{{ globalStats.localComments || '' }}</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -88,6 +96,7 @@
                         :nodes="nodes"
                         :stats="stats"
                     />
+                    <ApolloLoader />
                 </div>
             </section>
         </main>
@@ -99,6 +108,7 @@
 <script>
 import gql from 'graphql-tag'
 
+import ApolloLoader from "../common/ApolloLoader"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
 import NodesTable from "../NodesTable"
@@ -167,7 +177,7 @@ export default {
         },
     },
     name: "ProtocolPage",
-    components: {NodesTable, Footer, Drawer},
+    components: {ApolloLoader, NodesTable, Footer, Drawer},
     data() {
         return {
             globalStats: {},

@@ -1,3 +1,4 @@
+import ApolloLoader from "../common/ApolloLoader"
 import commonChartOptions from "./commonChartOptions"
 import {lineChartTemplate} from "./utils"
 
@@ -16,6 +17,7 @@ export default {
             default: '',
         },
     },
+    components: {ApolloLoader},
     data() {
         return {
             stats: [],

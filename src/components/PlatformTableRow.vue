@@ -79,9 +79,6 @@ export default {
         }
     },
     computed: {
-        platformUrl() {
-            return `/platform/${this.platform.name}`
-        },
         nodeCount() {
             return this.nodes.filter(node => node.platform.name === this.platform.name).length
         },

@@ -19,22 +19,30 @@
                 <div class="flex">
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ stats.usersTotal }} <strong>Users</strong>
+                            <ApolloLoader>
+                                {{ stats.usersTotal }} <strong>Users</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ stats.usersMonthly }} <strong>Monthly users</strong>
+                            <ApolloLoader>
+                                {{ stats.usersMonthly }} <strong>Monthly users</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ stats.localPosts }} <strong>Posts</strong>
+                            <ApolloLoader>
+                                {{ stats.localPosts }} <strong>Posts</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            {{ stats.localComments }} <strong>Comments</strong>
+                            <ApolloLoader>
+                                {{ stats.localComments }} <strong>Comments</strong>
+                            </ApolloLoader>
                         </div>
                     </div>
                 </div>
@@ -105,6 +113,7 @@
 <script>
 import gql from 'graphql-tag'
 
+import ApolloLoader from "../common/ApolloLoader"
 import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
@@ -149,7 +158,7 @@ export default {
         },
     },
     name: "NodePage",
-    components: {Charts, Footer, Drawer},
+    components: {ApolloLoader, Charts, Footer, Drawer},
     data() {
         return {
             node: {

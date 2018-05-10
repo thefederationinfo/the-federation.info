@@ -16,6 +16,7 @@
                         :nodes="nodes"
                         :stats="stats"
                     />
+                    <ApolloLoader />
                 </div>
             </div>
         </section>
@@ -25,6 +26,7 @@
 <script>
 import gql from 'graphql-tag'
 
+import ApolloLoader from "./common/ApolloLoader"
 import NodesTable from "./NodesTable"
 
 const query = gql`
@@ -71,7 +73,7 @@ export default {
         },
     },
     name: "NodesContent",
-    components: {NodesTable},
+    components: {ApolloLoader, NodesTable},
     data() {
         return {
             nodes: [],
@@ -80,7 +82,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-
-</style>
