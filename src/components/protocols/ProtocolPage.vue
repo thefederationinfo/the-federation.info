@@ -68,11 +68,16 @@
                 </div>
             </section>
 
-            <Charts
+            <!-- Disable charts for now on protocol page. Reason is that protocol is changing over time
+                 thing. We can't for example count all mastodon servers towards activitypub since the
+                 support for that is recent and even not landing on all servers at the same time. Some
+                 platforms allow turning protocols on and off. If we want to show history charts, we
+                 must store protocol history per node first. -->
+            <!--<Charts
                 v-if="protocol"
                 :item="protocol.name"
                 type="protocol"
-            />
+            />-->
 
             <section class="tile">
                 <header>
@@ -94,7 +99,6 @@
 <script>
 import gql from 'graphql-tag'
 
-import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
 import NodesTable from "../NodesTable"
@@ -163,7 +167,7 @@ export default {
         },
     },
     name: "ProtocolPage",
-    components: {Charts, NodesTable, Footer, Drawer},
+    components: {NodesTable, Footer, Drawer},
     data() {
         return {
             globalStats: {},
