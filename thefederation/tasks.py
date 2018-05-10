@@ -1,3 +1,5 @@
+import random
+
 import datetime
 import logging
 
@@ -5,6 +7,7 @@ from django.db.models import Sum
 from django.utils.timezone import now
 from django_rq import job
 from federation.hostmeta import fetchers
+from federation.utils.network import fetch_host_ip_and_country
 
 from thefederation.enums import Relay
 from thefederation.models import Node, Platform, Protocol, Service, Stat
@@ -113,7 +116,6 @@ def poll_node(host):
         host=host,
         defaults={
             'features': result.get('features', {}),
-            'ip': result.get('ip'),
             'last_success': now(),
             'name': result.get('name') or host,
             'open_signups': result.get('open_signups', False),
@@ -124,9 +126,20 @@ def poll_node(host):
             'server_meta': result.get('server_meta', {}),
             'version': result.get('version', ''),
             'platform': platform,
-            'country': result.get('country', ''),
         }
     )
+
+    if not node.ip or not node.country:
+        node.ip, node.country = fetch_host_ip_and_country(node.host)
+        node.save(update_fields=['ip', 'country'])
+    else:
+        # Refresh periodically
+        if random.randint(1, 100) < 15:
+            ip, country = fetch_host_ip_and_country(node.host)
+            if ip != node.ip or country != node.country.code:
+                node.ip = ip
+                node.country = country
+                node.save(update_fields=['ip', 'country'])
 
     protocols = set()
     for protocol in result.get('protocols', []):
