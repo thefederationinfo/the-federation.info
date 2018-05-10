@@ -15,5 +15,11 @@
 <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script src="/static/javascript/table-sort.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function() {
+            makeSortable(document.getElementById("nodes-table"));
+        });
+    </script>
 </body>
 </html>
