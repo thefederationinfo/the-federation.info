@@ -8,28 +8,28 @@
             <div class="flex">
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader>
+                        <ApolloLoader :loading="$apollo.loading">
                             {{ protocols.length || '' }} <strong>Protocols</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader>
+                        <ApolloLoader :loading="$apollo.loading">
                             {{ platforms.length || '' }} <strong>Projects</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader>
+                        <ApolloLoader :loading="$apollo.loading">
                             {{ nodes.length || '' }} <strong>Nodes</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader>
+                        <ApolloLoader :loading="$apollo.loading">
                             {{ statsGlobalToday ? statsGlobalToday.usersTotal : '' }} <strong>Users</strong>
                         </ApolloLoader>
                     </div>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="col2">
-                        <ApolloLoader>
+                        <ApolloLoader :loading="$apollo.loading">
                             <ul>
                                 <li>
                                     Nodes:
@@ -123,7 +123,7 @@
                         />
                     </tbody>
                 </table>
-                <ApolloLoader />
+                <ApolloLoader :loading="$apollo.loading" />
             </div>
         </section>
 
@@ -149,7 +149,7 @@
                         />
                     </tbody>
                 </table>
-                <ApolloLoader />
+                <ApolloLoader :loading="$apollo.loading" />
             </div>
         </section>
 

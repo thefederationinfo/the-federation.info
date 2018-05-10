@@ -16,7 +16,7 @@
                         :nodes="nodes"
                         :stats="stats"
                     />
-                    <ApolloLoader />
+                    <ApolloLoader :loading="$apollo.loading" />
                 </div>
             </div>
         </section>

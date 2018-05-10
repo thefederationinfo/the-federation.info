@@ -11,7 +11,7 @@ function getQuery(name) {
 }
 
 const lineChartTemplate = `
-    <ApolloLoader>
+    <ApolloLoader :loading="$apollo.loading">
         <line-chart
             :data="statsData"
             :library="chartOptions"

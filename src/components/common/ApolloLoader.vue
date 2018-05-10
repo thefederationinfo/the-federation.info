@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="$apollo.loading">
+        <div v-if="loading">
             <div class="spinner">
                 <Spinner color="#dddddd" />
             </div>
@@ -17,6 +17,9 @@ import Spinner from 'vue-spinner-component/src/Spinner'
 export default {
     name: "ApolloLoader",
     components: {Spinner},
+    props: {
+        loading: Boolean,
+    },
 }
 </script>
 

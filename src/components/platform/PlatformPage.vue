@@ -10,28 +10,28 @@
                 <div class="flex">
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ nodes.length || '' }} <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ globalStats.usersTotal || 0 }} <strong>Users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ globalStats.localPosts || 0 }} <strong>Posts</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ globalStats.localComments || 0 }} <strong>Comments</strong>
                             </ApolloLoader>
                         </div>
@@ -104,7 +104,7 @@
                         :nodes="nodes"
                         :stats="stats"
                     />
-                    <ApolloLoader />
+                    <ApolloLoader :loading="$apollo.loading" />
                 </div>
             </section>
         </main>

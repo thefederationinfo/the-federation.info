@@ -19,28 +19,28 @@
                 <div class="flex">
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ stats.usersTotal }} <strong>Users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ stats.usersMonthly }} <strong>Monthly users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ stats.localPosts }} <strong>Posts</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
-                            <ApolloLoader>
+                            <ApolloLoader :loading="$apollo.loading">
                                 {{ stats.localComments }} <strong>Comments</strong>
                             </ApolloLoader>
                         </div>
