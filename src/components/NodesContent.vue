@@ -10,7 +10,7 @@
                 <h2>List of nodes composing The Federation</h2>
             </header>
             <div>
-                <p>You can also access list of nodes for each project using the global menu on the left.</p>
+                <p>You can also access a list of nodes for each project using the global menu on the left.</p>
                 <div class="overflow-x">
                     <NodesTable
                         :nodes="nodes"

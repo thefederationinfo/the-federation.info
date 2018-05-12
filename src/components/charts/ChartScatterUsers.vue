@@ -40,7 +40,7 @@ export default {
             },
         },
     },
-    name: "ChartScatteUsers",
+    name: "ChartScatterUsers",
     mixins: [ChartMixin],
     data() {
         return {

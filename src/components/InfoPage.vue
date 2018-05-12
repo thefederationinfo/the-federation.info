@@ -16,8 +16,8 @@
                 <div>
                     <p>
                         This site is for gathering statistics about nodes in the fediverse. Depending on the project,
-                        exposed statistics might have to be separately activated. To appear on this list, the node
-                        needs to be separately registered on this site, either manually or extracted from
+                        exposed statistics might have to be activated separately. To appear on this list, the node
+                        needs to be registered on this site separately, either manually or extracted from
                         another list of nodes.
                     </p>
                     <p>
@@ -26,15 +26,15 @@
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            in GitHub
+                            on GitHub
                         </a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull
-                        request are welcome too.
+                        requests are welcome too.
                     </p>
 
                     <h3>Can I get a copy of the data?</h3>
                     <p>
                         It's all available as JSON, feel free to use any data you want! We cannot guarantee the
-                        JSON will not change over time, though it should mostly stay stable. You can always let us
+                        JSON will not change over time, though it should stay mostly stable. You can always let us
                         know if you depend on some JSON feed and we'll make sure not to break it.
                     </p>
                     <p>

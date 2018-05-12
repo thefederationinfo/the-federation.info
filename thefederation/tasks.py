@@ -77,7 +77,7 @@ def fetch_using_method(host, method):
 
 def fetch_node(host):
     """
-    Fetch differet documents in order
+    Fetch different documents in order
 
     If host exists, use preferred document, falling back to all.
 

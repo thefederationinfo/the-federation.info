@@ -45,7 +45,7 @@
                 <div class="flex">
                     <div class="col2">
                         <p>
-                            The Federation refers to a global social network composed of nodes talking together.
+                            The Federation refers to a global social network composed of nodes that talk to each other.
                             Each of them is an installation of software which supports one of the federated social web
                             protocols.
                         </p>
@@ -183,7 +183,7 @@
                 <div class="col2">
                     <h3>I already have my node!</h3>
                     <p>
-                        Yay! Welcome in the crew! To see your node included in this website, please go to
+                        Yay! Welcome to the crew! To include your node on this website, please go to
                         <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>.
                         After some seconds, you should see your node added..
                     </p>
