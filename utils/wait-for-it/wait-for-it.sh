@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#   Use this script to test if a given TCP host/port are available
+# Use this script to test if a given TCP host/port is available
 
 cmdname=$(basename $0)
 
@@ -12,7 +12,7 @@ Usage:
     $cmdname host:port [-s] [-t timeout] [-- command args]
     -h HOST | --host=HOST       Host or IP under test
     -p PORT | --port=PORT       TCP port under test
-                                Alternatively, you specify the host and port as host:port
+                                Alternatively, you can specify the host and port as host:port
     -s | --strict               Only execute subcommand if the test succeeds
     -q | --quiet                Don't output any status messages
     -t TIMEOUT | --timeout=TIMEOUT
@@ -141,7 +141,6 @@ STRICT=${STRICT:-0}
 CHILD=${CHILD:-0}
 QUIET=${QUIET:-0}
 
-# check to see if timeout is from busybox?
 # check to see if timeout is from busybox?
 TIMEOUT_PATH=$(realpath $(which timeout))
 if [[ $TIMEOUT_PATH =~ "busybox" ]]; then
