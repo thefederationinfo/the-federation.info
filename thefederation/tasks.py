@@ -71,6 +71,8 @@ def aggregate_daily_stats(date=None):
 
 
 def fetch_using_method(host, method):
+    if method is None:
+        return
     logger.debug(f'Fetching {host} using method {method}')
     func = getattr(fetchers, f"fetch_{method}_document")
     return func(host)

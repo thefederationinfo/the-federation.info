@@ -4,8 +4,13 @@ from django.utils.timezone import now
 from test_plus import TestCase
 
 from thefederation.models import Stat
-from thefederation.tasks import poll_node
+from thefederation.tasks import poll_node, fetch_using_method
 from thefederation.tests.fixtures import FETCH_NODE_RESPONSE
+
+
+class FetchUsingMethodTestCase(TestCase):
+    def test_returns_none_on_none_method(self):
+        self.assertIsNone(fetch_using_method("foo.bar", None))
 
 
 @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
