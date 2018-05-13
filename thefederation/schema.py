@@ -149,6 +149,12 @@ class Query:
         value=graphene.String(),
     )
 
+    stats_local_comments = graphene.List(
+        DateCountType,
+        itemType=graphene.String(),
+        value=graphene.String(),
+    )
+
     @staticmethod
     def _get_stat_date_counts(stat, value=None, item_type=None):
         if value and item_type:
@@ -167,19 +173,13 @@ class Query:
             count=Sum(stat)
         ).values('date', 'count').order_by('date')
 
-    stats_local_comments = graphene.List(
-        DateCountType,
-        itemType=graphene.String(),
-        value=graphene.String(),
-    )
-
     def resolve_nodes(self, info, **kwargs):
         if kwargs.get('platform'):
-            qs = Node.objects.filter(platform__name=kwargs.get('platform'))
+            qs = Node.objects.active().filter(platform__name=kwargs.get('platform'))
         elif kwargs.get('protocol'):
-            qs = Node.objects.filter(protocols__name=kwargs.get('protocol'))
+            qs = Node.objects.active().filter(protocols__name=kwargs.get('protocol'))
         else:
-            qs = Node.objects.all()
+            qs = Node.objects.active()
 
         if kwargs.get('host'):
             qs = qs.filter(host=kwargs.get('host'))
@@ -222,32 +222,10 @@ class Query:
         return Stat.objects.all()
 
     def resolve_stats_counts_nodes(self, info, **kwargs):
-        if kwargs.get('value') and kwargs.get('itemType'):
-            if kwargs.get('itemType') == 'platform':
-                qs = Stat.objects.filter(node__platform__name=kwargs.get('value'))
-            elif kwargs.get('itemType') == 'protocol':
-                qs = Stat.objects.filter(node__protocols__name=kwargs.get('value'))
-            elif kwargs.get('itemType') == 'node':
-                qs = Stat.objects.filter(node__host=kwargs.get('value'))
-            else:
-                raise ValueError('itemType should be "platform", "node" or "protocol')
-        else:
-            qs = Stat.objects.filter(node__isnull=False)
-        return qs.values('date').annotate(
-            count=Count('id')
-        ).values('date', 'count').order_by('date')
+        return Stat.objects.node_counts(item_type=kwargs.get('itemType'), value=kwargs.get('value'))
 
     def resolve_stats_global_today(self, info, **kwargs):
-        if kwargs.get('platform'):
-            qs = Stat.objects.filter(platform__name=kwargs.get('platform'))
-        elif kwargs.get('protocol'):
-            qs = Stat.objects.filter(protocol__name=kwargs.get('protocol'))
-        else:
-            qs = Stat.objects.filter(platform__isnull=True, protocol__isnull=True)
-
-        return qs.filter(
-            node__isnull=True, date=now().date(),
-        ).first()
+        return Stat.objects.for_days(platform=kwargs.get('platform'), protocol=kwargs.get('protocol')).first()
 
     def resolve_stats_nodes(self, info, **kwargs):
         if kwargs.get('itemType'):
