@@ -64,6 +64,14 @@
       tags:
         - app
 
+    - name: Set socialhome api key
+      lineinfile:
+        path: /home/thefedrewrite/thefederation/.env
+        regexp: '^THEFEDERATION_SOCIALHOME_KEY='
+        line: 'THEFEDERATION_SOCIALHOME_KEY='
+      tags:
+        - app
+
     - docker_service:
         project_src: /home/thefedrewrite/thefederation
         build: yes
