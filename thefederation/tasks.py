@@ -17,7 +17,9 @@ logger = logging.getLogger(__name__)
 METHODS = ['nodeinfo2', 'nodeinfo', 'statisticsjson']
 
 
-def aggregate_daily_stats():
+def aggregate_daily_stats(date=None):
+    if not date:
+        date = now().date()
     # Do all platforms, protocols and then global
     totals = {
         'users_total': 0,
@@ -27,13 +29,12 @@ def aggregate_daily_stats():
         'local_posts': 0,
         'local_comments': 0,
     }
-    today = now().date()
     for platform in Platform.objects.all():
         stats = Stat.objects.exclude(
             node__last_success__lt=now() - datetime.timedelta(days=30)
         ).filter(
             node__platform=platform,
-            date=today,
+            date=date,
         ).aggregate(
             users_total=Sum('users_total'),
             users_half_year=Sum('users_half_year'),
@@ -43,7 +44,7 @@ def aggregate_daily_stats():
             local_comments=Sum('local_comments'),
         )
         Stat.objects.update_or_create(
-            date=today, protocol=None, platform=platform, node=None, defaults=stats,
+            date=date, protocol=None, platform=platform, node=None, defaults=stats,
         )
         # Increment globals
         for key in totals:
@@ -53,7 +54,7 @@ def aggregate_daily_stats():
             node__last_success__lt=now() - datetime.timedelta(days=30)
         ).filter(
             node__protocols=protocol,
-            date=today,
+            date=date,
         ).aggregate(
             users_total=Sum('users_total'),
             users_half_year=Sum('users_half_year'),
@@ -63,10 +64,10 @@ def aggregate_daily_stats():
             local_comments=Sum('local_comments'),
         )
         Stat.objects.update_or_create(
-            date=today, protocol=protocol, platform=None, node=None, defaults=stats,
+            date=date, protocol=protocol, platform=None, node=None, defaults=stats,
         )
     # Add global stat
-    Stat.objects.update_or_create(date=today, protocol=None, platform=None, node=None, defaults=totals)
+    Stat.objects.update_or_create(date=date, protocol=None, platform=None, node=None, defaults=totals)
 
 
 def fetch_using_method(host, method):
