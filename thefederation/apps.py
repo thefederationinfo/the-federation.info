@@ -9,6 +9,7 @@ class TheFederationConfig(AppConfig):
     verbose_name = "The Federation"
 
     def ready(self):
+        from thefederation.social import make_daily_post
         from thefederation.legacy import sync_legacy_data
         from thefederation.tasks import aggregate_daily_stats
         from thefederation.tasks import poll_nodes
@@ -27,6 +28,11 @@ class TheFederationConfig(AppConfig):
             scheduled_time=datetime.datetime.utcnow(),
             func=sync_legacy_data,
             interval=43200,
+        )
+        scheduler.cron(
+            '0 13 * * *',
+            func=make_daily_post,
+            queue_name='high',
         )
 
         scheduler = django_rq.get_scheduler('medium')

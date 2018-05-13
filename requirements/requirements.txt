@@ -9,7 +9,7 @@ aniso8601==3.0.0          # via graphene
 certifi==2018.1.18        # via requests
 chardet==3.0.4            # via requests
 circus==0.14.0
-click==6.7                # via rq
+click==6.7                # via rq, shcli
 croniter==0.3.20          # via rq-scheduler
 cssselect==1.0.3
 decorator==4.2.1          # via ipython, traitlets
@@ -53,10 +53,11 @@ pytz==2018.3              # via django
 pyzmq==17.0.0             # via circus
 raven==6.6.0
 redis==2.10.6
-requests==2.18.4
+requests==2.18.4          # via shcli
 rq-scheduler==0.8.2
 rq==0.10.0
 rx==1.6.1                 # via graphql-core
+shcli==0.1.4
 simplegeneric==0.8.1      # via ipython
 singledispatch==3.4.0.3   # via graphene-django
 six==1.11.0               # via django-environ, django-extensions, graphene, graphene-django, graphql-core, graphql-relay, isodate, promise, prompt-toolkit, python-dateutil, singledispatch, traitlets
