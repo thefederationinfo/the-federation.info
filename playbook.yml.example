@@ -23,7 +23,7 @@
       become_user: thefederation
 
     - name: Get latest application code
-      git: accept_hostkey=yes dest=/home/thefederation/thefederation repo="https://github.com/thefederationinfo/the-federation.info.git" force=yes version="rewrite"
+      git: accept_hostkey=yes dest=/home/thefederation/thefederation repo="https://github.com/thefederationinfo/the-federation.info.git" force=yes version="master"
       become_user: thefederation
       tags:
         - app
