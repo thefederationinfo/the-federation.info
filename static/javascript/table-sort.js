@@ -1,5 +1,8 @@
 // From http://stackoverflow.com/questions/14267781/sorting-html-table-with-javascript
 function makeSortable(table) {
+    if (!table) {
+        return;
+    }
     var th = table.tHead, i;
     th && (th = th.rows[0]) && (th = th.cells);
     if (th) i = th.length;

@@ -1,20 +1,76 @@
-lib-cov
-*.seed
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### SublimeText ###
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+# *.sublime-project
+
+# sftp configuration file
+sftp-config.json
+
+# Basics
+*.py[cod]
+__pycache__
+
+# Logs
 *.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
+pip-log.txt
 
-pids
-logs
-results
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+htmlcov
+.pytest_cache/
 
-npm-debug.log
-node_modules
+# Translations
+*.mo
+*.pot
 
-config.js
+# Pycharm
+.idea
 
-*.pyc
-.idea/
+# Vim
+
+*~
+*.swp
+*.swo
+
+# npm
+node_modules/
+
+# Compass
+.sass-cache
+
+# env file
+.env
+
+# User-uploaded media
+/media/
+
+# MailHog binary
+mailhog
+
+# Pytest
+.cache
+
+# Docs
+/docs/_build/
+/yarn.lock
+/staticfiles/
+
+
+dist/
+
+playbook.yml

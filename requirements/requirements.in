@@ -1,0 +1,24 @@
+circus
+django-countries
+django-cors-headers
+django-enumfields
+django-environ
+django-extensions
+django-redis
+django-rq
+django
+graphene_django
+ipython
+mysqlclient  # For migrating old data, remove afterwards
+psycopg2-binary
+raven
+redis
+rq
+rq-scheduler
+shcli
+tornado<5.0  # Not a direct requirement but we need to lock due to circus not working with 5.0
+             # Remove from this file once circus works with this
+gunicorn
+whitenoise
+
+-e git+https://github.com/jaywink/federation.git@a42fd1631d6cc6e22b1a21a8dd47162a70d20aac#egg=federation==0.15.0.1
