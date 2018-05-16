@@ -84,6 +84,14 @@
       tags:
         - app
 
+    - name: Set posts visibility
+      lineinfile:
+        path: /home/thefederation/thefederation/.env
+        regexp: '^THEFEDERATION_SOCIALHOME_VISIBILITY='
+        line: 'THEFEDERATION_SOCIALHOME_VISIBILITY=public'
+      tags:
+        - app
+
     - docker_service:
         project_src: /home/thefederation/thefederation
         build: yes
