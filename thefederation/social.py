@@ -1,3 +1,5 @@
+import time
+
 import shcli
 from django.conf import settings
 
@@ -12,3 +14,7 @@ def make_daily_post():
         content,
         settings.THEFEDERATION_SOCIALHOME_VISIBILITY,
     )
+
+    # Sleep for 60 seconds. This might stop duplicate posts due to possibly
+    # https://github.com/rq/rq-scheduler/issues/173
+    time.sleep(60)

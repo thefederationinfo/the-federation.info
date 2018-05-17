@@ -24,7 +24,7 @@ class TheFederationConfig(AppConfig):
             interval=1500,
         )
         scheduler.cron(
-            '0 13 * * *',
+            '0 10 * * *',
             func=make_daily_post,
             queue_name='high',
         )
