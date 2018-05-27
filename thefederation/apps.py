@@ -21,7 +21,7 @@ class TheFederationConfig(AppConfig):
         scheduler.schedule(
             scheduled_time=datetime.datetime.utcnow(),
             func=aggregate_daily_stats,
-            interval=1500,
+            interval=5500,
         )
         scheduler.cron(
             '0 10 * * *',
@@ -34,5 +34,5 @@ class TheFederationConfig(AppConfig):
         scheduler.schedule(
             scheduled_time=datetime.datetime.utcnow(),
             func=poll_nodes,
-            interval=3600,
+            interval=10800,
         )
