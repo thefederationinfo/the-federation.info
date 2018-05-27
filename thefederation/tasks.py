@@ -14,7 +14,7 @@ from thefederation.models import Node, Platform, Protocol, Service, Stat
 
 logger = logging.getLogger(__name__)
 
-METHODS = ['nodeinfo2', 'nodeinfo', 'statisticsjson']
+METHODS = ['nodeinfo2', 'nodeinfo', 'mastodon', 'statisticsjson']
 
 
 def aggregate_daily_stats(date=None):
