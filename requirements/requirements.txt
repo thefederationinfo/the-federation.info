@@ -4,7 +4,7 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://github.com/jaywink/federation.git@6353e47a85ca7360af716ff5214746c9923c1c33#egg=federation==0.15.0.1
+-e git+https://github.com/jaywink/federation.git@7a328459ba575f3a7f54f8cc47e56c66eb3974f2#egg=federation==0.15.0.1
 aniso8601==3.0.0          # via graphene
 certifi==2018.1.18        # via requests
 chardet==3.0.4            # via requests
@@ -29,6 +29,7 @@ graphql-relay==0.4.5      # via graphene
 gunicorn==19.7.1
 idna==2.6                 # via requests
 iowait==0.2               # via circus
+ipdata==2.6
 ipython-genutils==0.2.0   # via traitlets
 ipython==6.2.1
 iso8601==0.1.12           # via graphene-django
