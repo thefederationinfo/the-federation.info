@@ -14,7 +14,7 @@ from thefederation.models import Node, Platform, Protocol, Service, Stat
 
 logger = logging.getLogger(__name__)
 
-METHODS = ['nodeinfo2', 'nodeinfo', 'statisticsjson']
+METHODS = ['nodeinfo2', 'nodeinfo', 'mastodon', 'statisticsjson']
 
 
 def aggregate_daily_stats(date=None):
@@ -138,7 +138,7 @@ def poll_node(host):
         node.save(update_fields=['ip', 'country'])
     else:
         # Refresh periodically
-        if random.randint(1, 100) < 15:
+        if random.randint(1, 100) < 50:
             ip, country = fetch_host_ip_and_country(node.host)
             if ip != node.ip or country != node.country.code:
                 node.ip = ip
@@ -168,8 +168,6 @@ def poll_node(host):
         node=node,
         date=now().date(),
         defaults={
-            # TODO should we guess some missing stats, like guess weekly from monthly
-            # or monthly from weekly?
             'users_total': users.get('total'),
             'users_half_year': users.get('half_year'),
             'users_monthly': users.get('monthly'),

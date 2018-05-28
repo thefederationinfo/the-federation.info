@@ -54,5 +54,6 @@ class Platform(ModelBase):
             'friendica': 'nodeinfo' if version >= (3, 4, 2) else "statisticsjson",
             'ganggo': 'nodeinfo',
             'hubzilla': 'nodeinfo' if version >= (1, 6) else "statisticsjson",
+            'mastodon': 'mastodon',
             'socialhome': 'nodeinfo2' if version > (0, 8) else "nodeinfo",
         }.get(self.name)
