@@ -2,7 +2,7 @@ FROM python:3.6
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install python-dev python3-dev libmysqlclient-dev -y
+RUN apt-get update && apt-get install python-dev python3-dev -y
 
 COPY requirements/requirements.txt ./
 
