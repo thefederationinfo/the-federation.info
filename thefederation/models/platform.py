@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 
 from thefederation.models.base import ModelBase
@@ -8,9 +10,11 @@ __all__ = ('Platform',)
 class Platform(ModelBase):
     VERSION_CLEAN_NONE = 'none'
     VERSION_CLEAN_REMOVE_AFTER_DASH = 'remove_after_dash'
+    VERSION_CLEAN_REMOVE_COMMIT_HASH = 'remove_commit_hash'
     VERSION_CLEAN_STYLES = (
         (VERSION_CLEAN_NONE, VERSION_CLEAN_NONE),
         (VERSION_CLEAN_REMOVE_AFTER_DASH, VERSION_CLEAN_REMOVE_AFTER_DASH),
+        (VERSION_CLEAN_REMOVE_COMMIT_HASH, VERSION_CLEAN_REMOVE_COMMIT_HASH),
     )
 
     code = models.URLField(max_length=128, blank=True)
@@ -38,6 +42,8 @@ class Platform(ModelBase):
             return version
         elif self.version_clean_style == Platform.VERSION_CLEAN_REMOVE_AFTER_DASH:
             return version.split('-')[0]
+        elif self.version_clean_style == Platform.VERSION_CLEAN_REMOVE_COMMIT_HASH:
+            return re.sub(r'[a-z0-9]{40}', '', version).strip()
         return version
 
     def get_method(self, version):
