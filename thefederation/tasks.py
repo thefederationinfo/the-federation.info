@@ -140,7 +140,7 @@ def poll_node(host):
         # Refresh periodically
         if random.randint(1, 100) < 50:
             ip, country = fetch_host_ip_and_country(node.host)
-            if ip != node.ip or country != node.country.code:
+            if ip and country and (ip != node.ip or country != node.country.code):
                 node.ip = ip
                 node.country = country
                 node.save(update_fields=['ip', 'country'])
