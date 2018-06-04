@@ -20,4 +20,4 @@ tornado<5.0  # Not a direct requirement but we need to lock due to circus not wo
 gunicorn
 whitenoise
 
--e git+https://github.com/jaywink/federation.git@8111f2d4e4be930c34518bbd02d3a7d61d95d184#egg=federation==0.15.0.1
+-e git+https://github.com/jaywink/federation.git@907d1d60db79001b2457c9de87f4a7e2c06dd214#egg=federation==0.15.0.1
