@@ -17,7 +17,7 @@
                 {{ node.name }}
             </router-link>
         </td>
-        <td>{{ node.version }}</td>
+        <td class="version-column">{{ node.version }}</td>
         <td>{{ openSignups }}</td>
         <td>{{ stats.usersTotal ? stats.usersTotal : '' }}</td>
         <td>{{ stats.usersHalfYear ? stats.usersHalfYear : '' }}</td>
@@ -78,3 +78,10 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    .version-column {
+        max-width: 150px;
+        overflow: hidden;
+    }
+</style>

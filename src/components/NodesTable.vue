@@ -4,7 +4,7 @@
             <tr>
                 <th>Software</th>
                 <th>Name</th>
-                <th>Version</th>
+                <th class="version-column">Version</th>
                 <th>Open signups</th>
                 <th>Total users</th>
                 <th>Active users half year</th>
@@ -62,3 +62,10 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    .version-column {
+        max-width: 150px;
+        overflow: hidden;
+    }
+</style>
