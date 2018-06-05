@@ -4,7 +4,7 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://github.com/jaywink/federation.git@b28661b86afe4550d2be3d0658d5f907f521f4d7#egg=federation==0.15.0.1
+-e git+https://github.com/jaywink/federation.git@8c7b1206c6a2b10a3a447d5a94ca393f79e0c550#egg=federation==0.15.0.1
 aniso8601==3.0.0          # via graphene
 certifi==2018.1.18        # via requests
 chardet==3.0.4            # via requests
