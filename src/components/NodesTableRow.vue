@@ -63,7 +63,7 @@ export default {
     },
     computed: {
         imageSource() {
-            return `/static/images/${this.node.platform.name}-16.png`
+            return `/static/images/${this.node.platform.icon}-16.png`
         },
         openSignups() {
             return this.node.openSignups ? "Yes" : "No"
