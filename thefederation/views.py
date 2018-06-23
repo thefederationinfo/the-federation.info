@@ -1,5 +1,3 @@
-import time
-
 from django.shortcuts import redirect
 
 from thefederation.tasks import poll_node
@@ -12,7 +10,7 @@ def register_view(request, host):
         return redirect("/")
     if poll_node(host):
         # Success!
-        return redirect(f"/nodes/{host}")
+        return redirect(f"/node/{host}")
     # TODO show an error or something
     return redirect("/")
 
