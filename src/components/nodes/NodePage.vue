@@ -129,6 +129,7 @@ const query = gql`
             host
             platform {
               name
+              icon
               displayName
             }
             services {

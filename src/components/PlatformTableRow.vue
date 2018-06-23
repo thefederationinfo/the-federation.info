@@ -1,6 +1,15 @@
 <template>
     <tr>
-        <th>
+        <td style="width: 20px;">
+            <img
+                v-if="platform.name !== 'unknown'"
+                :alt="platform.name"
+                :title="platform.name"
+                :src="imageSource"
+            >
+            <div v-else>&nbsp;</div>
+        </td>
+        <th style="text-align: left;">
             <router-link
                 :to="{name: 'platform', params: {platform: platform.name}}"
             >
@@ -78,6 +87,9 @@ export default {
         }
     },
     computed: {
+        imageSource() {
+            return `/static/images/${this.platform.icon}-16.png`
+        },
         nodeCount() {
             return this.nodes.filter(node => node.platform.name === this.platform.name).length
         },

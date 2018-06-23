@@ -107,7 +107,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Project</th>
+                            <th style="width: 20px;" />
+                            <th style="text-align: left;">Project</th>
                             <th>Nodes</th>
                             <th>Users</th>
                             <th>Website</th>
@@ -207,12 +208,14 @@ const query = gql`
             id
             platform {
                 name
+                icon
             }
         }
         platforms {
             id
             code
             name
+            icon
             displayName
             installGuide
             license

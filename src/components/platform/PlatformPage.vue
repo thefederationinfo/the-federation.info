@@ -130,6 +130,7 @@ const query = gql`
             description
             tagline
             website
+            icon
         }
 
         nodes(platform: $name) {
@@ -140,6 +141,7 @@ const query = gql`
             host
             platform {
               name
+              icon
             }
             countryCode
             countryFlag
