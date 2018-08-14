@@ -1,0 +1,15 @@
+{% extends "admin/app_index.html" %}
+
+{% block sidebar %}
+    <h2>Domain register tool</h2>
+    <form method="post" action="{% url "massregister" %}">
+        {% csrf_token %}
+        <label for="domain-list">Paste a list of domains and trigger a register for them. Separate by line or comma.</label>
+        <br>
+        <textarea id="domain-list" name="domain-list" cols="50" rows="20">
+
+        </textarea>
+        <input type="submit" value="Register those domains!">
+    </form>
+
+{% endblock %}
