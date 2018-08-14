@@ -6,7 +6,7 @@ django-environ
 django-extensions
 django-redis
 django-rq
-django
+django<2.1
 graphene_django
 ipython
 psycopg2-binary
