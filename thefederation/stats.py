@@ -1,7 +1,6 @@
-import datetime
+import random
 
 from django.template.loader import render_to_string
-from django.utils.timezone import now
 
 from thefederation.models import Stat, Platform
 
@@ -17,40 +16,24 @@ def daily_stats():
 
     platform_users = []
     for platform in Platform.objects.all():
-        stats = Stat.objects.for_days(days=30, later_than=now() - datetime.timedelta(days=30), platform=platform.name)
-        if not stats or not stats[0].users_monthly:
+        stat = Stat.objects.for_days(days=1, platform=platform.name).first()
+        if not stat or not stat.users_half_year:
             continue
         platform_stat = {
             'name': platform.display_name,
-            'percentage': (stats[0].users_monthly / global_stats[0].users_monthly) * 100,
+            'percentage': (stat.users_half_year / global_stats[0].users_half_year) * 100,
         }
-        if len(stats) > 1 and stats[len(stats)-1].users_monthly:
-            platform_stat['change'] = (
-                platform_stat['percentage'] -
-                (stats[len(stats)-1].users_monthly / global_stats[len(stats)-1].users_monthly) * 100
-            )
-        else:
-            platform_stat['change'] = 0
         platform_users.append(platform_stat)
 
     platform_nodes = []
     for platform in Platform.objects.all():
-        stats = Stat.objects.node_counts(
-            later_than=now() - datetime.timedelta(days=30), item_type='platform', value=platform.name,
-        )[:30]
-        if not stats:
+        stat = Stat.objects.node_counts(item_type='platform', value=platform.name).order_by('-date').first()
+        if not stat:
             continue
         platform_stat = {
             'name': platform.display_name,
-            'percentage': (stats[0]['count'] / node_counts[0]['count']) * 100,
+            'percentage': (stat['count'] / node_counts[0]['count']) * 100,
         }
-        if len(stats) > 1:
-            platform_stat['change'] = (
-                platform_stat['percentage'] -
-                (stats[len(stats)-1]['count'] / node_counts[len(stats)-1]['count']) * 100
-            )
-        else:
-            platform_stat['change'] = 0
         platform_nodes.append(platform_stat)
 
     context = {
@@ -62,4 +45,11 @@ def daily_stats():
         'platform_nodes': platform_nodes,
     }
 
-    return render_to_string('thefederation/social/daily_stats.md', context)
+    posts = {
+        1: "global_counts",
+        2: "platform_nodes",
+        3: "platform_users",
+    }
+    post = random.randint(1, 3)
+
+    return render_to_string(f'thefederation/social/{posts[post]}.md', context)
