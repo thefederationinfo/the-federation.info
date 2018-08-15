@@ -16,23 +16,27 @@ def daily_stats():
 
     platform_users = []
     for platform in Platform.objects.all():
-        stat = Stat.objects.for_days(days=1, platform=platform.name).first()
-        if not stat or not stat.users_half_year:
+        stats = Stat.objects.for_days(days=30, platform=platform.name)
+        if not stats or not stats[0].users_half_year:
             continue
         platform_stat = {
-            'name': platform.display_name,
-            'percentage': (stat.users_half_year / global_stats[0].users_half_year) * 100,
+            'name': platform.display_name.replace('.', '．'),
+            'percentage': (stats[0].users_half_year / global_stats[0].users_half_year) * 100,
+            'value': stats[0].users_half_year,
+            'old_value': stats[0].users_half_year - stats[len(stats)-1].users_half_year,
         }
         platform_users.append(platform_stat)
 
     platform_nodes = []
     for platform in Platform.objects.all():
-        stat = Stat.objects.node_counts(item_type='platform', value=platform.name).order_by('-date').first()
-        if not stat:
+        stats = Stat.objects.node_counts(item_type='platform', value=platform.name).order_by('-date')[:30]
+        if not stats:
             continue
         platform_stat = {
-            'name': platform.display_name,
-            'percentage': (stat['count'] / node_counts[0]['count']) * 100,
+            'name': platform.display_name.replace('.', '．'),
+            'percentage': (stats[0]['count'] / node_counts[0]['count']) * 100,
+            'value': stats[0]['count'],
+            'old_value': stats[0]['count'] - stats[len(stats)-1]['count'],
         }
         platform_nodes.append(platform_stat)
 
