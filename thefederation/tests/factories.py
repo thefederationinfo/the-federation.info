@@ -48,6 +48,9 @@ class StatFactory(factory.DjangoModelFactory):
     date = now().date()
     node = factory.SubFactory(NodeFactory)
     users_total = factory.Faker('pyint')
+    users_half_year = factory.Faker('pyint')
+    users_monthly = factory.Faker('pyint')
+    users_weekly = factory.Faker('pyint')
 
     class Meta:
         model = Stat
