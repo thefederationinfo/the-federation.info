@@ -1,5 +1,8 @@
+import datetime
+
 from django.db import models
 from django.db.models import Count
+from django.utils.timezone import now
 
 from thefederation.utils import single_true
 
@@ -7,8 +10,10 @@ __all__ = ('Stat',)
 
 
 class StatQuerySet(models.QuerySet):
-    def for_days(self, days=1, later_than=None, platform=None, protocol=None, node=None):
+    def for_days(self, from_date=None, platform=None, protocol=None, node=None):
         assert not all([platform, protocol, node])
+        if not from_date:
+            from_date = now().date() - datetime.timedelta(days=1)
         if platform:
             qs = Stat.objects.filter(platform__name=platform)
         elif protocol:
@@ -18,12 +23,16 @@ class StatQuerySet(models.QuerySet):
         else:
             qs = Stat.objects.filter(platform__isnull=True, protocol__isnull=True, node__isnull=True)
 
-        if later_than:
-            qs = qs.filter(date__gte=later_than)
+        qs = qs.filter(date__gte=from_date)
 
-        return qs.order_by('-date')[:days]
+        return qs.order_by('-date')
 
-    def node_counts(self, later_than=None, item_type=None, value=None):
+    def for_global(self):
+        return self.filter(node__isnull=True, protocol__isnull=True, platform__isnull=True)
+
+    def node_counts(self, from_date=None, item_type=None, value=None):
+        if not from_date:
+            from_date = now().date() - datetime.timedelta(days=1)
         if value and item_type:
             if item_type == 'platform':
                 qs = self.filter(node__platform__name=value)
@@ -36,8 +45,7 @@ class StatQuerySet(models.QuerySet):
         else:
             qs = self.filter(node__isnull=False)
 
-        if later_than:
-            qs = qs.filter(date__gte=later_than)
+        qs = qs.filter(date__gte=from_date)
 
         return qs.values('date').annotate(
             count=Count('id')
