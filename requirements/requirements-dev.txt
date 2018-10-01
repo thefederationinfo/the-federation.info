@@ -4,46 +4,46 @@
 #
 #    ./compile-requirements.sh
 #
-atomicwrites==1.1.5       # via pytest
-attrs==18.1.0             # via pytest
+atomicwrites==1.2.1       # via pytest
+attrs==18.2.0             # via pytest
 backcall==0.1.0           # via ipython
-certifi==2018.8.13        # via requests
+certifi==2018.8.24        # via requests
 chardet==3.0.4            # via requests
 codecov==2.0.15
 coverage==4.5.1
 decorator==4.3.0          # via ipython, traitlets
-django-coverage-plugin==1.5.0
+django-coverage-plugin==1.6.0
 django-debug-toolbar-user-panel==1.1.1
-django-debug-toolbar==1.9.1
+django-debug-toolbar==1.10.1
 django-querycount==0.7.0
 django-test-plus==1.1.1
-django==2.0.8
+django==2.0.9
 factory-boy==2.11.1
-faker==0.9.0
+faker==0.9.1
 flake8==3.5.0
 freezegun==0.3.10
 idna==2.7                 # via requests
 ipdb==0.11
 ipython-genutils==0.2.0   # via traitlets
-ipython==6.5.0            # via ipdb
+ipython==7.0.1            # via ipdb
 jedi==0.12.1              # via ipython
 mccabe==0.6.1             # via flake8
 more-itertools==4.3.0     # via pytest
 parso==0.3.1              # via jedi
 pexpect==4.6.0            # via ipython
-pickleshare==0.7.4        # via ipython
+pickleshare==0.7.5        # via ipython
 pluggy==0.7.1             # via pytest
-prompt-toolkit==1.0.15    # via ipython
+prompt-toolkit==2.0.5     # via ipython
 ptyprocess==0.6.0         # via pexpect
-py==1.5.4                 # via pytest
+py==1.6.0                 # via pytest
 pycodestyle==2.3.1        # via flake8
 pyflakes==1.6.0           # via flake8
 pygments==2.2.0           # via ipython
-pytest-cov==2.5.1
-pytest-django==3.3.3
+pytest-cov==2.6.0
+pytest-django==3.4.3
 pytest-env==0.6.2
 pytest-sugar==0.9.1
-pytest==3.7.1
+pytest==3.8.1
 python-dateutil==2.7.3    # via faker, freezegun
 pytz==2018.5              # via django
 requests==2.19.1          # via codecov
