@@ -223,6 +223,11 @@ GRAPHENE = {
     'SCHEMA': 'config.schema.schema'
 }
 
+# CORS
+# ----
+# Allow from all
+CORS_ORIGIN_ALLOW_ALL = True
+
 # LOGGING CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#logging

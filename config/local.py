@@ -82,10 +82,3 @@ MIDDLEWARE += ("querycount.middleware.QueryCountMiddleware",)
 if testing:
     # Possibly wont conflict with anything..
     REDIS_DB = 15
-
-# CORS
-# ----
-CORS_ORIGIN_WHITELIST = (
-    "localhost:8080",
-    "127.0.0.1:8080",
-)
