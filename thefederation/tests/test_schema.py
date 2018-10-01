@@ -1,3 +1,7 @@
+import datetime
+
+from django.utils.timezone import now
+
 from thefederation.tests.factories import NodeFactory, StatFactory
 from thefederation.tests.utils import SchemaTestCase
 
@@ -39,6 +43,38 @@ class QueryResolveProtocolsTestCase(SchemaTestCase):
     def test_resolves(self):
         response = self.glient.execute("query { protocols { id }}")
         self.assertTrue('protocols' in response['data'])
+
+
+class QueryResolveStatsCountsNodes(SchemaTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.second_node = NodeFactory(active=True)
+        for i in range(35):
+            date = now() - datetime.timedelta(days=i)
+            StatFactory(node=cls.node, users_monthly=1, users_total=2, date=date.date())
+            StatFactory(node=cls.second_node, users_monthly=1, users_total=4, date=date.date())
+
+    def test_contains_result(self):
+        response = self.glient.execute(
+            "query { statsCountsNodes { count }}"
+        )
+        self.assertEqual(response['data']['statsCountsNodes'][0]['count'], 2)
+
+    def test_contains_result__approx_30_days(self):
+        response = self.glient.execute(
+            "query { statsCountsNodes { count }}"
+        )
+        self.assertEqual(len(response['data']['statsCountsNodes']), 31)
+
+    def test_contains_result__descending_order(self):
+        response = self.glient.execute(
+            "query { statsCountsNodes { count, date }}"
+        )
+        self.assertEqual(response['data']['statsCountsNodes'][0]['date'], now().date().isoformat())
+        self.assertEqual(
+            response['data']['statsCountsNodes'][30]['date'], (now() - datetime.timedelta(days=30)).date().isoformat()
+        )
 
 
 class QueryResolveStatsUsersActiveRatioTestCase(SchemaTestCase):

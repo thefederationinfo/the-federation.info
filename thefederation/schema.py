@@ -1,3 +1,5 @@
+import datetime
+
 import graphene
 from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum, Avg, FloatField
 from django.db.models.functions import Cast
@@ -222,7 +224,11 @@ class Query:
         return Stat.objects.all()
 
     def resolve_stats_counts_nodes(self, info, **kwargs):
-        return Stat.objects.node_counts(item_type=kwargs.get('itemType'), value=kwargs.get('value'))
+        return Stat.objects.node_counts(
+            from_date=now() - datetime.timedelta(days=30),
+            item_type=kwargs.get('itemType'),
+            value=kwargs.get('value'),
+        ).order_by('-date')
 
     def resolve_stats_global_today(self, info, **kwargs):
         return Stat.objects.for_days(platform=kwargs.get('platform'), protocol=kwargs.get('protocol')).first()
