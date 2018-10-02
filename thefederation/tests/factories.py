@@ -5,14 +5,14 @@ from thefederation.models import Node, Platform, Protocol, Stat
 
 
 class PlatformFactory(factory.DjangoModelFactory):
-    name = factory.Faker('word')
+    name = factory.Faker('pystr')
 
     class Meta:
         model = Platform
 
 
 class ProtocolFactory(factory.DjangoModelFactory):
-    name = factory.Faker('word')
+    name = factory.Faker('pystr')
 
     class Meta:
         model = Protocol
