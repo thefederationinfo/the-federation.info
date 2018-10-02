@@ -63,13 +63,13 @@ class QueryResolveStatsCountsNodes(SchemaTestCase):
 
     def test_contains_result__approx_30_days(self):
         response = self.glient.execute(
-            "query { statsCountsNodes { count }}"
+            'query { statsCountsNodes(period: "30d") { count }}'
         )
         self.assertEqual(len(response['data']['statsCountsNodes']), 31)
 
     def test_contains_result__descending_order(self):
         response = self.glient.execute(
-            "query { statsCountsNodes { count, date }}"
+            'query { statsCountsNodes(period: "30d") { count, date }}'
         )
         self.assertEqual(response['data']['statsCountsNodes'][0]['date'], now().date().isoformat())
         self.assertEqual(
