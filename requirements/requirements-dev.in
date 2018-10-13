@@ -1,3 +1,5 @@
+-r requirements.txt
+
 codecov
 coverage
 django-debug-toolbar
@@ -5,7 +7,6 @@ django-debug-toolbar-user-panel
 django-querycount
 django-test-plus
 django_coverage_plugin
-django<2.1
 factory_boy
 Faker
 flake8
@@ -16,6 +17,4 @@ pytest-cov
 pytest-django
 pytest-env
 pytest-sugar
-tornado<5.0  # Not a direct requirement but we need to lock due to circus not working with 5.0
-             # Remove from this file once circus works with this
 Werkzeug

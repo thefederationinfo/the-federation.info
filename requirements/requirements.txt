@@ -33,14 +33,14 @@ ipdata==2.6
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.0.1
 isodate==0.6.0            # via python-xrd
-jedi==0.12.1              # via ipython
+jedi==0.13.1              # via ipython
 jsonschema==2.6.0
 lxml==4.2.5
 parso==0.3.1              # via jedi
 pexpect==4.6.0            # via ipython
 pickleshare==0.7.5        # via ipython
-promise==2.1              # via graphene, graphene-django, graphql-core, graphql-relay
-prompt-toolkit==2.0.5     # via ipython
+promise==2.2.1            # via graphene, graphene-django, graphql-core, graphql-relay
+prompt-toolkit==2.0.6     # via ipython
 psutil==5.4.7             # via circus
 psycopg2-binary==2.7.5
 ptyprocess==0.6.0         # via pexpect
@@ -62,7 +62,6 @@ singledispatch==3.4.0.3   # via graphene-django
 six==1.11.0               # via circus, django-extensions, graphene, graphene-django, graphql-core, graphql-relay, isodate, promise, prompt-toolkit, python-dateutil, singledispatch, traitlets
 tornado==4.5.3
 traitlets==4.3.2          # via ipython
-typing==3.6.6             # via promise
 urllib3==1.23             # via requests
 wcwidth==0.1.7            # via prompt-toolkit
 whitenoise==4.1
