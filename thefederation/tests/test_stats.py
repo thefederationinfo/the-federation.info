@@ -1,4 +1,5 @@
 import datetime
+from unittest.mock import patch
 
 from django.utils.timezone import now
 from freezegun import freeze_time
@@ -25,7 +26,21 @@ class DailyStatsDataSingleNodeTest(TestCase):
             cls.stat3 = StatFactory(node=cls.node, date=now().date())
             aggregate_daily_stats()
 
-    def test_renders(self):
+    @patch('thefederation.stats.daily_stats_data', return_value={
+        'platform_users': [{
+            'name': "foobar",
+            'percentage': 100.0,
+            'value': 20,
+            'change': 10,
+        }],
+        'platform_nodes': [{
+            'name': "barfoo",
+            'percentage': 100.0,
+            'value': 1,
+            'change': 0,
+        }],
+    })
+    def test_renders(self, mock_daily_stats_data):
         daily_stats()
 
     def test_results(self):
