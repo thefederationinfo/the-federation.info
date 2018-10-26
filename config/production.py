@@ -97,8 +97,9 @@ RQ_QUEUES["default"]["USE_REDIS_CACHE"] = "default"
 if env('SENTRY_DSN', default=None):
     import raven
     INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
+    SENTRY_DSN = env('SENTRY_DSN')
     RAVEN_CONFIG = {
-        'dsn': env('SENTRY_DSN'),
+        'dsn': SENTRY_DSN,
         'release': raven.fetch_git_sha(os.path.abspath(os.curdir)),
         'site': THEFEDERATION_DOMAIN,
 
