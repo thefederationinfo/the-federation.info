@@ -224,9 +224,7 @@ const query = gql`
         protocols {
             id
             name
-            nodes {
-              name
-            }
+            activeNodes
         }
         statsGlobalToday {
             usersTotal

@@ -55,8 +55,13 @@ class PlatformType(DjangoObjectType):
 
 
 class ProtocolType(DjangoObjectType):
+    active_nodes = graphene.Int()
+
     class Meta:
         model = Protocol
+
+    def resolve_active_nodes(self, info):
+        return self.active_nodes
 
 
 class ServiceType(DjangoObjectType):
@@ -85,6 +90,7 @@ class Query:
     protocols = graphene.List(
         ProtocolType,
         name=graphene.String(),
+        activeNodes=graphene.Int(),
     )
     services = graphene.List(
         ServiceType,

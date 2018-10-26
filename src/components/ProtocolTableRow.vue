@@ -8,7 +8,7 @@
             </router-link>
         </th>
         <td>
-            {{ protocol.nodes.length }}
+            {{ protocol.activeNodes }}
         </td>
         <td>
             <div v-if="statsProtocolToday">
