@@ -95,14 +95,11 @@ RQ_QUEUES["default"]["USE_REDIS_CACHE"] = "default"
 # If you wish to configure Sentry for error reporting, first create your
 # Sentry account and then place the DSN in `.env` as `SENTRY_DSN=dsnhere`.
 if env('SENTRY_DSN', default=None):
-    import raven
     INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
     SENTRY_DSN = env('SENTRY_DSN')
     RAVEN_CONFIG = {
         'dsn': SENTRY_DSN,
-        'release': raven.fetch_git_sha(os.path.abspath(os.curdir)),
         'site': THEFEDERATION_DOMAIN,
-
     }
     LOGGING['handlers']['sentry'] = {
         'level': env('SENTRY_LEVEL', default='ERROR'),
