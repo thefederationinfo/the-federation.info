@@ -27,3 +27,24 @@ FETCH_NODE_RESPONSE = {
         'local_comments': 6,
     },
 }
+
+FETCH_NODE_RESPONSE__NO_STATS = {
+    'organization': {
+        'account': '',
+        'contact': '',
+        'name': '',
+    },
+    'host': 'example.com',
+    'ip': '127.0.0.1',
+    'name': 'Example',
+    'open_signups': False,
+    'protocols': ["foobar"],
+    'relay': 'all',
+    'server_meta': {},
+    'services': [],
+    'platform': 'barfoo',
+    'version': '1.2.3',
+    'features': {},
+    'country': 'FI',
+    'activity': {},
+}
