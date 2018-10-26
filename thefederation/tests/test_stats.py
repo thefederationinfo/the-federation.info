@@ -39,6 +39,30 @@ class DailyStatsDataSingleNodeTest(TestCase):
             'value': 1,
             'change': 0,
         }],
+        'nodes': {
+            'date': now().date().isoformat(),
+            'count': 20,
+        },
+        'prevnodes': {
+            'date': (now() - datetime.timedelta(days=1)).date().isoformat(),
+            'count': 10,
+        },
+        'stat': {
+            'users_total': 20,
+            'users_half_year': 10,
+            'users_monthly': 5,
+            'users:weekly': 1,
+            'local_posts': 100,
+            'local_comments': 200,
+        },
+        'prevstat': {
+            'users_total': 20,
+            'users_half_year': 10,
+            'users_monthly': 5,
+            'users:weekly': 1,
+            'local_posts': 100,
+            'local_comments': 200,
+        },
     })
     def test_renders(self, mock_daily_stats_data):
         daily_stats()
