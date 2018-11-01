@@ -4,9 +4,10 @@
 #
 #    ./compile-requirements.sh
 #
+-e git+https://git.feneas.org/jaywink/federation.git@ddfb82fb8862f26682ac01a82428ea675c2a7fc5#egg=federation==0.18.0.1
 aniso8601==3.0.2
 atomicwrites==1.2.1       # via pytest
-attrs==18.2.0             # via pytest
+attrs==18.2.0
 backcall==0.1.0
 certifi==2018.10.15
 chardet==3.0.4
@@ -33,7 +34,6 @@ django-test-plus==1.1.1
 django==2.0.9
 factory-boy==2.11.1
 faker==0.9.2
-federation==0.17.0
 flake8==3.6.0
 freezegun==0.3.11
 graphene-django==2.2.0
