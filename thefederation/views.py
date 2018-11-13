@@ -9,12 +9,14 @@ from thefederation.utils import is_valid_hostname
 
 
 def register_view(request, host):
+    json = True if request.content_type == "application/json" else False
     # TODO rate limit this view per caller ip?
-    if not is_valid_hostname:
-        return redirect("/")
-    if poll_node(host):
-        # Success!
+    if is_valid_hostname and poll_node(host):
+        if json:
+            return JsonResponse({'error': None})
         return redirect(f"/node/{host}")
+    if json:
+        return JsonResponse({'error': 'Invalid hostname or broken nodeinfo!'})
     # TODO show an error or something
     return redirect("/")
 
