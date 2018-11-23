@@ -55,11 +55,22 @@ class Platform(ModelBase):
         :param version: tuple of version, numeric only
         :return:
         """
+        if self.name.startswith('matrix'):
+            return 'matrix'
         return {
             'diaspora': 'nodeinfo' if version >= (0, 5, 3, 0) else "statisticsjson",
             'friendica': 'nodeinfo' if version >= (3, 4, 2) else "statisticsjson",
+            'funkwhale': 'nodeinfo',
             'ganggo': 'nodeinfo',
+            'gnusocial': 'nodeinfo',
             'hubzilla': 'nodeinfo' if version >= (1, 6) else "statisticsjson",
             'mastodon': 'mastodon',
+            'osada': 'nodeinfo',
+            'peertube': 'nodeinfo',
+            'pixelfed': 'nodeinfo',
+            'pleroma': 'nodeinfo',
+            'plume': 'nodeinfo',
+            'prismo': 'nodeinfo2',
             'socialhome': 'nodeinfo2' if version > (0, 8) else "nodeinfo",
+            'writefreely': 'nodeinfo',
         }.get(self.name)
