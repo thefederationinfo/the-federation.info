@@ -35,6 +35,8 @@ class Platform(ModelBase):
     def save(self, *args, **kwargs):
         if not self.display_name:
             self.display_name = self.name
+        if self.icon == 'unknown':
+            self.icon = self.name
         super().save(*args, **kwargs)
 
     def clean_version(self, version):
