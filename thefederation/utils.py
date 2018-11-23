@@ -1,7 +1,17 @@
 import re
 
 
-def is_valid_hostname(hostname):
+def clean_hostname(hostname: str) -> str:
+    """
+    Some basic cleaning of a hostname.
+    """
+    hostname = hostname.strip().lower()
+    # Strip protocol
+    hostname = re.sub(r'https?://', '', hostname)
+    return hostname
+
+
+def is_valid_hostname(hostname: str) -> bool:
     """
     Validate is a hostname
 
