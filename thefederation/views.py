@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 
 from thefederation.models import Node
 from thefederation.tasks import poll_node
-from thefederation.utils import is_valid_hostname
+from thefederation.utils import is_valid_hostname, clean_hostname
 
 
 def register_view(request, host):
@@ -33,7 +33,8 @@ def mass_register_view(request):
     for line in lines:
         domains += line.split(',')
 
-    domains = {domain.strip() for domain in domains}
+    domains = {clean_hostname(domain) for domain in domains}
+    domains = {domain for domain in domains if is_valid_hostname(domain)}
 
     for domain in domains:
         poll_node.delay(domain)

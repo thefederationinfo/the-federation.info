@@ -10,6 +10,7 @@ from enumfields import EnumField
 
 from thefederation.enums import Relay
 from thefederation.models.base import ModelBase
+from thefederation.utils import clean_hostname
 
 __all__ = ('Node',)
 
@@ -45,6 +46,7 @@ class Node(ModelBase):
         return f"{self.name} ({self.host})"
 
     def save(self, *args, **kwargs):
+        self.host = clean_hostname(self.host)
         clean_name = re.match(r'[a-zA-Z]*', self.name)
         if clean_name:
             if self.platform.name == clean_name[0].lower():
