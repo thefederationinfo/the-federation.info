@@ -3,6 +3,7 @@ import random
 import datetime
 import logging
 
+from django.core.management import call_command
 from django.db.models import Sum
 from django.utils.timezone import now
 from django_rq import job
@@ -68,6 +69,16 @@ def aggregate_daily_stats(date=None):
         )
     # Add global stat
     Stat.objects.update_or_create(date=date, protocol=None, platform=None, node=None, defaults=totals)
+
+
+def clean_duplicate_nodes():
+    """
+    Call the clean dupe nodes command.
+    """
+    call_command('clean_dupe_nodes')
+    # Also re-aggregate stats from a few days
+    for single_date in (now().date() - datetime.timedelta(n) for n in range(2)):
+        aggregate_daily_stats(single_date)
 
 
 def fetch_using_method(host, method):
