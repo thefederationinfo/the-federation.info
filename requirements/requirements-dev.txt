@@ -4,7 +4,7 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://git.feneas.org/jaywink/federation.git@bc389eef8d7c4e82788341a16f02ec5d042e7419#egg=federation==0.18.0.1
+-e git+https://git.feneas.org/jaywink/federation.git@1687fdb59a27338cc908d7a61b3460dae47bdaca#egg=federation==0.18.0.1
 aniso8601==3.0.2
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0
