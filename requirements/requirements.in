@@ -21,4 +21,4 @@ gunicorn
 whitenoise
 
 #federation
--e git+https://git.feneas.org/jaywink/federation.git@4bef9b6c8ea90b807411eccf5a1d9f21db50967b#egg=federation==0.18.0.1
+-e git+https://git.feneas.org/jaywink/federation.git@402e72d48895ecc79dcaffa289fc96ac46a92367#egg=federation==0.18.0.1

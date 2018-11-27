@@ -67,6 +67,7 @@ class Platform(ModelBase):
             'gnusocial': 'nodeinfo',
             'hubzilla': 'nodeinfo' if version >= (1, 6) else "statisticsjson",
             'mastodon': 'mastodon',
+            'misskey': 'misskey',
             'osada': 'nodeinfo',
             'peertube': 'nodeinfo',
             'pixelfed': 'nodeinfo',
