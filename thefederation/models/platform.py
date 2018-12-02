@@ -57,6 +57,8 @@ class Platform(ModelBase):
         :param version: tuple of version, numeric only
         :return:
         """
+        if self.name == 'unknown' or not version:
+            return
         if self.name.startswith('matrix'):
             return 'matrix'
         return {
