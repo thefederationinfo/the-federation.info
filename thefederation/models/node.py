@@ -62,7 +62,7 @@ class Node(ModelBase):
         if not self.version:
             return
         # Strip all non-numbers
-        cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."])
+        cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."]).strip('.')
         # Split into tuple
         return tuple([int(i) for i in cleaned_str.split(".")])
 
