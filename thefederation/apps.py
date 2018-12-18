@@ -39,6 +39,7 @@ class TheFederationConfig(AppConfig):
             '18 4 * * *',
             func=clean_duplicate_nodes,
             queue_name='medium',
+            timeout=3600,
         )
         scheduler.schedule(
             scheduled_time=datetime.datetime.utcnow(),
