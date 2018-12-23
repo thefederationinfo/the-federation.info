@@ -77,5 +77,6 @@ class Platform(ModelBase):
             'plume': 'nodeinfo',
             'prismo': 'nodeinfo2',
             'socialhome': 'nodeinfo2' if version > (0, 8) else "nodeinfo",
+            'wordpress': 'nodeinfo',
             'writefreely': 'nodeinfo',
         }.get(self.name)
