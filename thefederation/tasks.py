@@ -125,18 +125,22 @@ def fill_country_information():
     ipdb = geoip2.database.Reader(settings.MAXMIND_DB_PATH)
     updates = 0
     for node in Node.objects.only('host', 'ip', 'country').active():
-        save = False
-        ip = fetch_host_ip(node.host)
-        if node.ip != ip:
-            node.ip = ip
-            save = True
-        response = ipdb.country(ip)
-        if response.country and (not node.country or node.country.code != response.country.iso_code):
-            node.country = response.country.iso_code or ''
-            save = True
-        if save:
-            node.save()
-            updates += 1
+        try:
+            save = False
+            ip = fetch_host_ip(node.host)
+            if node.ip != ip:
+                node.ip = ip
+                save = True
+            if ip:
+                response = ipdb.country(ip)
+                if response.country and (not node.country or node.country.code != response.country.iso_code):
+                    node.country = response.country.iso_code or ''
+                    save = True
+            if save:
+                node.save()
+                updates += 1
+        except Exception as ex:
+            logger.warning(f"Error trying to fill country info: {ex}")
     logger.info(f'Update of country and IP information done, updated {updates} nodes.')
 
 
