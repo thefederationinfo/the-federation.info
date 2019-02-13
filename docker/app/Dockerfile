@@ -12,6 +12,10 @@ RUN pip-sync requirements.txt
 
 COPY . /app
 
+# Get Maxmind GeoIP2 database
+RUN curl https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz -o /tmp/geoip.tar.gz
+RUN tar xva -C /app/utils/maxmind --overwrite --strip-components 1 -f /tmp/geoip.tar.gz
+
 RUN mkdir -p /logs
 
 RUN groupadd -r django \
