@@ -17,6 +17,7 @@ class TheFederationConfig(AppConfig):
         from thefederation.social import make_daily_post
         from thefederation.tasks import aggregate_daily_stats
         from thefederation.tasks import clean_duplicate_nodes
+        from thefederation.tasks import fill_country_information
         from thefederation.tasks import poll_nodes
 
         scheduler = django_rq.get_scheduler()
@@ -39,6 +40,12 @@ class TheFederationConfig(AppConfig):
             '18 4 * * *',
             func=clean_duplicate_nodes,
             queue_name='medium',
+            timeout=3600,
+        )
+        scheduler.cron(
+            '23 6 * * *',
+            func=fill_country_information,
+            queue_name='low',
             timeout=3600,
         )
         scheduler.schedule(

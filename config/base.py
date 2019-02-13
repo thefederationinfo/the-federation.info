@@ -228,6 +228,10 @@ GRAPHENE = {
 # Allow from all
 CORS_ORIGIN_ALLOW_ALL = True
 
+# MAXMIND GEOIP2
+# --------------
+MAXMIND_DB_PATH = os.path.join(str(ROOT_DIR("utils")), "maxmind", "GeoLite2-Country.mmdb")
+
 # LOGGING CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#logging

@@ -89,4 +89,8 @@ See [other awesome contributors](https://github.com/thefederationinfo/the-federa
 
 ## License
 
-AGPLv3
+Source code: AGPLv3
+
+### Third party
+
+This product includes GeoLite2 data created by MaxMind, available from https://www.maxmind.com.
