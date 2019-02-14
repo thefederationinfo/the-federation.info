@@ -1,6 +1,6 @@
 import datetime
 import random
-from typing import Dict
+from typing import Dict, List
 
 from django.template.loader import render_to_string
 from django.utils.timezone import now
@@ -42,7 +42,7 @@ def daily_stats_data() -> Dict:
             'name': platform.display_name.replace('.', '．'),
             'percentage': (stats[0].users_half_year / global_stats[0].users_half_year) * 100,
             'value': stats[0].users_half_year,
-            'change': stats[0].users_half_year - stats[len(stats) - 1].users_half_year,
+            'change': stats[0].users_half_year - get_last_stat(stats, 'users_half_year'),
         }
         platform_users.append(platform_stat)
     platform_nodes = []
@@ -56,7 +56,7 @@ def daily_stats_data() -> Dict:
             'name': platform.display_name.replace('.', '．'),
             'percentage': (stats[0]['count'] / node_counts[0]['count']) * 100,
             'value': stats[0]['count'],
-            'change': stats[0]['count'] - stats[len(stats) - 1]['count'],
+            'change': stats[0]['count'] - get_last_stat(stats, 'count'),
         }
         platform_nodes.append(platform_stat)
     context = {
@@ -68,3 +68,21 @@ def daily_stats_data() -> Dict:
         'platform_nodes': platform_nodes,
     }
     return context
+
+
+def get_last_stat(stats: List[Dict[str, int]], stat: str) -> int:
+    count = len(stats) - 1
+    while count >= 0:
+        try:
+            if hasattr(stats[count], stat):
+                value = getattr(stats[count], stat)
+            elif isinstance(stats[count], dict):
+                value = stats[count].get(stat)
+            else:
+                count -= 1
+                continue
+            if value is not None:
+                return value
+            count -= 1
+        except AttributeError:
+            return 0

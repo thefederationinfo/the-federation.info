@@ -1,12 +1,12 @@
 import datetime
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 from django.utils.timezone import now
 from freezegun import freeze_time
 from test_plus import TestCase
 
 from thefederation.models import Stat
-from thefederation.stats import daily_stats, daily_stats_data
+from thefederation.stats import daily_stats, daily_stats_data, get_last_stat
 from thefederation.tasks import aggregate_daily_stats
 from thefederation.tests.factories import NodeFactory, StatFactory
 
@@ -131,3 +131,12 @@ class DailyStatsDataSingleNodeTest(TestCase):
                 'change': 0,
             },
         )
+
+
+def test_get_last_stat():
+    assert get_last_stat([{'foo': 1}, {'foo': 2}], 'foo') == 2
+    assert get_last_stat([{'foo': 1}], 'foo') == 1
+    assert get_last_stat([{'foo': 1}, {'bar': 3}], 'foo') == 1
+    assert get_last_stat([Mock(foo=1), Mock(foo=2)], 'foo') == 2
+    assert get_last_stat([Mock(foo=1)], 'foo') == 1
+    assert get_last_stat([Mock(foo=1), Mock(bar=3, spec=['bar'])], 'foo') == 1
