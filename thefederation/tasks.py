@@ -1,14 +1,14 @@
-import random
-
 import datetime
 import logging
 
+import geoip2.database
+from django.conf import settings
 from django.core.management import call_command
 from django.db.models import Sum
 from django.utils.timezone import now
 from django_rq import job
 from federation.hostmeta import fetchers
-from federation.utils.network import fetch_host_ip_and_country
+from federation.utils.network import fetch_host_ip
 
 from thefederation.enums import Relay
 from thefederation.models import Node, Platform, Protocol, Service, Stat
@@ -118,6 +118,30 @@ def fetch_node(host):
             return result
 
 
+def fill_country_information():
+    logger.info('Updating country and IP information for all nodes.')
+    ipdb = geoip2.database.Reader(settings.MAXMIND_DB_PATH)
+    updates = 0
+    for node in Node.objects.only('host', 'ip', 'country').active():
+        try:
+            save = False
+            ip = fetch_host_ip(node.host)
+            if node.ip != ip:
+                node.ip = ip
+                save = True
+            if ip:
+                response = ipdb.country(ip)
+                if response.country and (not node.country or node.country.code != response.country.iso_code):
+                    node.country = response.country.iso_code or ''
+                    save = True
+            if save:
+                node.save()
+                updates += 1
+        except Exception as ex:
+            logger.warning(f"Error trying to fill country info: {ex}")
+    logger.info(f'Update of country and IP information done, updated {updates} nodes.')
+
+
 @job('medium')
 def poll_node(host):
     result = fetch_node(host)
@@ -143,18 +167,6 @@ def poll_node(host):
             'platform': platform,
         }
     )
-
-    if not node.ip or not node.country:
-        node.ip, node.country = fetch_host_ip_and_country(node.host)
-        node.save(update_fields=['ip', 'country'])
-    else:
-        # Refresh periodically
-        if random.randint(1, 100) < 50:
-            ip, country = fetch_host_ip_and_country(node.host)
-            if ip and country and (ip != node.ip or country != node.country.code):
-                node.ip = ip
-                node.country = country
-                node.save(update_fields=['ip', 'country'])
 
     protocols = set()
     for protocol in result.get('protocols', []):

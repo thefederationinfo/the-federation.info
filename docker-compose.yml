@@ -5,9 +5,7 @@ services:
     image: redis
 
   app:
-    build:
-      context: .
-      dockerfile: docker/app/Dockerfile
+    image: jaywink/the-federation.info:latest
     depends_on:
       - redis
     env_file:

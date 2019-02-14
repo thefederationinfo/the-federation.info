@@ -4,7 +4,7 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://git.feneas.org/jaywink/federation.git@6985a49a9a7c0e3edbd44adc7568bd51fac7eb6c#egg=federation==0.18.0.1
+-e git+https://git.feneas.org/jaywink/federation.git@5baa0b5fe6c30c7fd344bec9709eb3f20f97c8a1#egg=federation==0.18.0.1
 aniso8601==3.0.2          # via graphene
 attrs==18.2.0
 backcall==0.1.0           # via ipython
@@ -24,6 +24,7 @@ django-extensions==2.1.3
 django-redis==4.9.0
 django-rq==1.2.0
 django==2.0.9
+geoip2==2.9.0
 graphene-django==2.2.0
 graphene==2.1.3           # via graphene-django
 graphql-core==2.1         # via graphene, graphene-django, graphql-relay
@@ -37,6 +38,7 @@ isodate==0.6.0            # via python-xrd
 jedi==0.13.1              # via ipython
 jsonschema==2.6.0
 lxml==4.2.5
+maxminddb==1.4.1          # via geoip2
 parso==0.3.1              # via jedi
 pexpect==4.6.0            # via ipython
 pickleshare==0.7.5        # via ipython
@@ -53,7 +55,7 @@ pytz==2018.6              # via django
 pyzmq==16.0.4             # via circus
 raven==6.9.0
 redis==2.10.6
-requests==2.20.0          # via shcli
+requests==2.20.0          # via geoip2, shcli
 rq-scheduler==0.8.3
 rq==0.12.0
 rx==1.6.1                 # via graphql-core

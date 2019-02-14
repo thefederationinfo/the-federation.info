@@ -7,6 +7,7 @@ django-extensions
 django-redis
 django-rq
 django<2.1
+geoip2
 graphene_django
 ipython
 psycopg2-binary
@@ -21,4 +22,4 @@ gunicorn
 whitenoise
 
 #federation
--e git+https://git.feneas.org/jaywink/federation.git@6985a49a9a7c0e3edbd44adc7568bd51fac7eb6c#egg=federation==0.18.0.1
+-e git+https://git.feneas.org/jaywink/federation.git@5baa0b5fe6c30c7fd344bec9709eb3f20f97c8a1#egg=federation==0.18.0.1

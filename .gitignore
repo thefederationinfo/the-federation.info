@@ -74,3 +74,5 @@ mailhog
 dist/
 
 playbook.yml
+
+/utils/maxmind/GeoLite2-Country.mmdb
