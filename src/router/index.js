@@ -7,6 +7,7 @@ import NodePage from '@/components/nodes/NodePage'
 import NodesPage from '@/components/NodesPage'
 import PlatformPage from '@/components/platform/PlatformPage'
 import ProtocolPage from '@/components/protocols/ProtocolPage'
+import HostingReport from "../components/HostingReportPage"
 
 Vue.use(Router)
 
@@ -14,6 +15,11 @@ export default new Router({
     mode: 'history',
     base: '/',
     routes: [
+        {
+            path: '/hostingreport',
+            component: HostingReport,
+            name: 'hostingreport',
+        },
         {
             path: '/',
             component: IndexPage,
