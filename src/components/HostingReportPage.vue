@@ -13,43 +13,43 @@
                     <h2>Where are the nodes at?</h2>
                 </header>
                 <div>
-                    <table>
+                    <SortedTable :values="values">
                         <thead>
                             <tr>
                                 <th>
-                                    Country
+                                    <SortLink name="name">Country</SortLink>
                                 </th>
                                 <th>
-                                    Nodes
+                                    <SortLink name="nodes">Nodes</SortLink>
                                 </th>
                                 <th>
-                                    Total users
+                                    <SortLink name="total">Total users</SortLink>
                                 </th>
                                 <th>
-                                    Active users
+                                    <SortLink name="active">Active users</SortLink>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody slot="body" slot-scope="sort">
                             <tr
-                                v-for="country in stats"
-                                :key="country.name"
+                                v-for="value in sort.values"
+                                :key="value.name"
                             >
                                 <td>
-                                    {{ country.name }}
+                                    {{ value.name }}
                                 </td>
                                 <td>
-                                    {{ country.nodes }}
+                                    {{ value.nodes }}
                                 </td>
                                 <td>
-                                    {{ country.total }}
+                                    {{ value.total }}
                                 </td>
                                 <td>
-                                    {{ country.active }}
+                                    {{ value.active }}
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </SortedTable>
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
             </section>
@@ -103,7 +103,11 @@ export default {
                     stats[countries[o.node.id]].total += o.usersTotal
                     stats[countries[o.node.id]].active += o.usersHalfYear
                 }
-                this.stats = stats
+                const values = []
+                for (const idx in stats) {
+                    values.push(stats[idx])
+                }
+                this.values = values
             },
             manual: true,
         },
@@ -113,7 +117,7 @@ export default {
 
     data: () => {
         return {
-            stats: {},
+            values: [],
         }
     },
 }

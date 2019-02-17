@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-sorted-table": "^1.0.1"
   },
   "devDependencies": {
     "apollo-cache-inmemory": "^1.3.7",

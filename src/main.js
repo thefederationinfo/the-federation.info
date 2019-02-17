@@ -1,5 +1,6 @@
 import Chart from 'chart.js'
 import Tooltip from 'vue-directive-tooltip'
+import SortedTablePlugin from "vue-sorted-table"
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import VueChartkick from 'vue-chartkick'
@@ -35,6 +36,7 @@ Vue.use(Tooltip, {
 })
 Vue.use(VueApollo)
 Vue.use(VueChartkick, {adapter: Chart})
+Vue.use(SortedTablePlugin)
 
 Vue.config.productionTip = false
 
