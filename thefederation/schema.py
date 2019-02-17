@@ -4,9 +4,45 @@ import graphene
 from django.db.models import Subquery, OuterRef, Count, Max, IntegerField, F, Sum, Avg, FloatField
 from django.db.models.functions import Cast
 from django.utils.timezone import now
+from django_countries.data import COUNTRIES
+from django_countries.fields import Country
 from graphene_django import DjangoObjectType
 
 from thefederation.models import Node, Platform, Protocol, Stat, Service
+
+
+class CountryStatType(graphene.ObjectType):
+    country = graphene.String()
+    country_flag = graphene.String()
+    country_name = graphene.String()
+    count = graphene.Int()
+    actives = graphene.Int()
+    total = graphene.Int()
+
+    def resolve_country(self, info):
+        return self.get('country')
+
+    def resolve_count(self, info):
+        return self.get('count')
+
+    def resolve_actives(self, info):
+        return self.get('actives')
+
+    def resolve_total(self, info):
+        return self.get('total')
+
+    def resolve_country_flag(self, info):
+        country = self.get('country')
+        if not country:
+            return ''
+        country = Country(code=country)
+        return country.unicode_flag
+
+    def resolve_country_name(self, info):
+        country = self.get('country')
+        if not country:
+            return ''
+        return COUNTRIES[country]
 
 
 class DateCountType(graphene.ObjectType):
@@ -77,6 +113,9 @@ class StatType(DjangoObjectType):
 class Query:
     DEFAULT_PERIOD = '1y'
 
+    country_stats = graphene.List(
+        CountryStatType,
+    )
     nodes = graphene.List(
         NodeType,
         host=graphene.String(),
@@ -207,6 +246,17 @@ class Query:
         return qs.values('date').annotate(
             count=Sum(stat)
         ).values('date', 'count').order_by('date')
+
+    def resolve_country_stats(self, info, **kwargs):
+        """
+        - nodes per country
+        - active users per country
+        - total users per country
+        """
+        qs = Node.objects.values('country').filter(stats__date=datetime.date.today()).annotate(
+            total=Sum('stats__users_total'), count=Count('id'), actives=Sum('stats__users_half_year'),
+        )
+        return qs
 
     def resolve_nodes(self, info, **kwargs):
         if kwargs.get('platform'):

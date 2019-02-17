@@ -13,20 +13,24 @@
                     <h2>Where are the nodes at?</h2>
                 </header>
                 <div>
-                    <SortedTable :values="values">
+                    <SortedTable
+                        :values="values"
+                        dir="desc"
+                        sort="count"
+                    >
                         <thead>
                             <tr>
-                                <th>
-                                    <SortLink name="name">Country</SortLink>
+                                <th class="center">
+                                    <SortLink name="countryName">Country</SortLink>
                                 </th>
                                 <th>
-                                    <SortLink name="nodes">Nodes</SortLink>
+                                    <SortLink name="count">Nodes</SortLink>
                                 </th>
                                 <th>
                                     <SortLink name="total">Total users</SortLink>
                                 </th>
                                 <th>
-                                    <SortLink name="active">Active users</SortLink>
+                                    <SortLink name="actives">Active users</SortLink>
                                 </th>
                             </tr>
                         </thead>
@@ -36,16 +40,16 @@
                                 :key="value.name"
                             >
                                 <td>
-                                    {{ value.name }}
+                                    {{ value.countryName }} {{ value.countryFlag }}
                                 </td>
                                 <td>
-                                    {{ value.nodes }}
+                                    {{ value.count }}
                                 </td>
                                 <td>
                                     {{ value.total }}
                                 </td>
                                 <td>
-                                    {{ value.active }}
+                                    {{ value.actives }}
                                 </td>
                             </tr>
                         </tbody>
@@ -66,16 +70,12 @@ import Footer from "./common/Footer"
 
 const query = gql`
     query {
-        nodes {
-            id
+        countryStats {
+            actives
+            total
+            count
+            countryFlag
             countryName
-        }
-        statsNodes {
-            node {
-                id
-            }
-            usersTotal
-            usersHalfYear
         }
     }
 `
@@ -85,29 +85,7 @@ export default {
         allQueries: {
             query,
             result({data}) {
-                const countries = {}
-                const stats = {}
-                for (const o of data.nodes) {
-                    countries[o.id] = o.countryName
-                    if (stats[o.countryName] === undefined) {
-                        stats[o.countryName] = {
-                            name: o.countryName,
-                            total: 0,
-                            active: 0,
-                            nodes: 0,
-                        }
-                    }
-                }
-                for (const o of data.statsNodes) {
-                    stats[countries[o.node.id]].nodes += 1
-                    stats[countries[o.node.id]].total += o.usersTotal
-                    stats[countries[o.node.id]].active += o.usersHalfYear
-                }
-                const values = []
-                for (const idx in stats) {
-                    values.push(stats[idx])
-                }
-                this.values = values
+                this.values = data.countryStats
             },
             manual: true,
         },
@@ -124,5 +102,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .center {
+        text-align: center;
+    }
 </style>
