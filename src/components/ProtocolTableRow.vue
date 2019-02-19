@@ -7,12 +7,12 @@
                 {{ protocol.name }}
             </router-link>
         </th>
-        <td>
-            {{ protocol.activeNodes }}
+        <td class="nodes">
+            <Number :number="protocol.activeNodes" />
         </td>
-        <td>
+        <td class="users">
             <div v-if="statsProtocolToday">
-                {{ statsProtocolToday.usersTotal }}
+                <Number :number="statsProtocolToday.usersTotal" />
             </div>
         </td>
     </tr>
@@ -20,6 +20,7 @@
 
 <script>
 import gql from 'graphql-tag'
+import Number from './common/Number'
 
 
 const statsQuery = gql`
@@ -42,6 +43,7 @@ export default {
         },
     },
     name: "ProtocolTableRow",
+    components: {Number},
     props: {
         protocol: {
             type: Object,
@@ -55,3 +57,10 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    .nodes,
+    .users {
+        text-align: right;
+    }
+</style>
