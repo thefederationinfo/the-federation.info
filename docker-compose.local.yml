@@ -21,7 +21,7 @@ services:
     env_file:
       - .env
 
-  nginx:
+  web:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
