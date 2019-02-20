@@ -9,28 +9,32 @@
                 <div class="col4">
                     <div class="tile valign-wrapper">
                         <ApolloLoader :loading="$apollo.loading">
-                            {{ protocols.length || '' }} <strong>Protocols</strong>
+                            <Number :number="protocols.length" />
+                            <strong>Protocols</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
                         <ApolloLoader :loading="$apollo.loading">
-                            {{ platforms.length || '' }} <strong>Projects</strong>
+                            <Number :number="platforms.length" />
+                            <strong>Projects</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
                         <ApolloLoader :loading="$apollo.loading">
-                            {{ nodes.length || '' }} <strong>Nodes</strong>
+                            <Number :number="nodes.length" />
+                            <strong>Nodes</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
                         <ApolloLoader :loading="$apollo.loading">
-                            {{ statsGlobalToday ? statsGlobalToday.usersTotal : '' }} <strong>Users</strong>
+                            <Number :number="statsGlobalToday ? statsGlobalToday.usersTotal : null" />
+                            <strong>Users</strong>
                         </ApolloLoader>
                     </div>
                 </div>
@@ -63,27 +67,37 @@
                             <ul>
                                 <li>
                                     Nodes:
-                                    <strong>{{ nodes.length || '' }}</strong>
+                                    <strong><Number :number="nodes.length" /></strong>
                                 </li>
                                 <li>
                                     Users:
-                                    <strong>{{ statsGlobalToday ? statsGlobalToday.usersTotal : '' }}</strong>
+                                    <strong>
+                                        <Number :number="statsGlobalToday ? statsGlobalToday.usersTotal : null" />
+                                    </strong>
                                 </li>
                                 <li>
                                     Last 6 months active users:
-                                    <strong>{{ statsGlobalToday ? statsGlobalToday.usersHalfYear : '' }}</strong>
+                                    <strong>
+                                        <Number :number="statsGlobalToday ? statsGlobalToday.usersHalfYear : null" />
+                                    </strong>
                                 </li>
                                 <li>
                                     Last month active users:
-                                    <strong>{{ statsGlobalToday ? statsGlobalToday.usersMonthly : '' }}</strong>
+                                    <strong>
+                                        <Number :number="statsGlobalToday ? statsGlobalToday.usersMonthly : null" />
+                                    </strong>
                                 </li>
                                 <li>
                                     Posts:
-                                    <strong>{{ statsGlobalToday ? statsGlobalToday.localPosts : '' }}</strong>
+                                    <strong>
+                                        <Number :number="statsGlobalToday ? statsGlobalToday.localPosts : null" />
+                                    </strong>
                                 </li>
                                 <li>
                                     Comments:
-                                    <strong>{{ statsGlobalToday ? statsGlobalToday.localComments : '' }}</strong>
+                                    <strong>
+                                        <Number :number="statsGlobalToday ? statsGlobalToday.localComments : null" />
+                                    </strong>
                                 </li>
                             </ul>
                         </ApolloLoader>
@@ -199,6 +213,7 @@ import gql from 'graphql-tag'
 
 import ApolloLoader from "./common/ApolloLoader"
 import Charts from "./Charts"
+import Number from "./common/Number"
 import PlatformTableRow from "./PlatformTableRow"
 import ProtocolTableRow from "./ProtocolTableRow"
 
@@ -251,7 +266,7 @@ export default {
         },
     },
     name: "IndexContent",
-    components: {ApolloLoader, Charts, PlatformTableRow, ProtocolTableRow},
+    components: {ApolloLoader, Charts, PlatformTableRow, ProtocolTableRow, Number},
     data() {
         return {
             nodes: [],

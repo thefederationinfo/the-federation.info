@@ -16,12 +16,12 @@
                 {{ platform.displayName ? platform.displayName : platform.name }}
             </router-link>
         </th>
-        <td>
-            {{ nodeCount }}
+        <td class="nodes">
+            <Number :number="nodeCount" />
         </td>
-        <td>
+        <td class="users">
             <div v-if="statsPlatformToday">
-                {{ statsPlatformToday.usersTotal }}
+                <Number :number="statsPlatformToday.usersTotal" />
             </div>
         </td>
         <td>
@@ -49,6 +49,7 @@
 
 <script>
 import gql from 'graphql-tag'
+import Number from './common/Number'
 
 
 const platformStatsQuery = gql`
@@ -71,6 +72,7 @@ export default {
         },
     },
     name: "PlatformTableRow",
+    components: {Number},
     props: {
         platform: {
             type: Object,
@@ -99,3 +101,10 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    .nodes,
+    .users {
+        text-align: right;
+    }
+</style>

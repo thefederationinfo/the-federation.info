@@ -34,7 +34,10 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody slot="body" slot-scope="sort">
+                        <tbody
+                            slot="body"
+                            slot-scope="sort"
+                        >
                             <tr
                                 v-for="value in sort.values"
                                 :key="value.name"
@@ -93,11 +96,7 @@ export default {
     name: "HostingReportPage",
     components: {ApolloLoader, Drawer, Footer},
 
-    data: () => {
-        return {
-            values: [],
-        }
-    },
+    data: () => ({values: []}),
 }
 </script>
 
