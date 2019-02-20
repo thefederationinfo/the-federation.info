@@ -9,7 +9,6 @@ node_modules
 dist
 test
 .pytest_cache
-/build
 /utils/maxmind/GeoLite2-Country.mmdb
 .env
 venv
