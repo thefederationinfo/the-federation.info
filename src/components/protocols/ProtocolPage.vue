@@ -127,6 +127,7 @@ const query = gql`
             host
             platform {
               name
+              icon
             }
             countryCode
             countryFlag

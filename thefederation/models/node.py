@@ -17,7 +17,10 @@ __all__ = ('Node',)
 
 class NodeQuerySet(models.QuerySet):
     def active(self):
-        return self.filter(last_success__gte=now() - datetime.timedelta(days=30))
+        return self.filter(
+            blocked=False,
+            last_success__gte=now() - datetime.timedelta(days=30),
+        )
 
 
 class Node(ModelBase):
