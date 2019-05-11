@@ -50,6 +50,19 @@
                         wrong when checking the node for data. Please contact us using the GitHub issue tracker.
                     </p>
 
+                    <h3>Code of Conduct</h3>
+                    <p>
+                        While interactions on our site is not possible, we expect sites we list to have a humane code
+                        of conduct in place. Should sites who fail to ban content that can be found generally harmful,
+                        that node will be blocked from listing here.
+                    </p>
+                    <p>
+                        Harmful content can be, but not limited to, malware, graphical material of minorities, abusive
+                        images, hateful content, racist content and climate denialism. The admins of this site reserve
+                        the right to decide case by case on blocking of nodes. Please report any nodes violating our
+                        terms to the admins.
+                    </p>
+
                     <h3>Follow on The Federation</h3>
                     <p>
                         You can follow the
