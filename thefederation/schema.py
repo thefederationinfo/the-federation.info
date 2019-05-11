@@ -253,7 +253,7 @@ class Query:
         - active users per country
         - total users per country
         """
-        qs = Node.objects.values('country').filter(stats__date=datetime.date.today()).annotate(
+        qs = Node.objects.active().values('country').filter(stats__date=datetime.date.today()).annotate(
             total=Sum('stats__users_total'), count=Count('id'), actives=Sum('stats__users_half_year'),
         )
         return qs
