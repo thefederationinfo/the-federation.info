@@ -2,13 +2,17 @@
 
 # The-Federation.info
 
-Tracking various projects using the Diaspora, ActivityPub, OStatus and other protocols.
+Tracking various projects using the ActivityPub, Matrix, Diaspora, OStatus and other protocols.
 
 Site found at: https://the-federation.info
 
 ## How to get your platform listed
 
-Implement NodeInfo, NodeInfo2, Statistics.json or Mastodon stats API endpoint.
+The recommended metadata to implement is [NodeInfo2](https://git.feneas.org/jaywink/nodeinfo2).
+
+Failing that, [NodeInfo](http://nodeinfo.diaspora.software/) works too.
+
+Mastodon and Matrix instances are scraped with a dedicated scraper since they don't (yet) provide generic metadata.
 
 ### OK, I've done that, what now?
 
@@ -33,7 +37,7 @@ Harmful content can be, but not limited to, malware, graphical material of minor
 
 ## Tech stack
 
-* Node 9
+* Node 10
 * Python 3.6
 * Django 2.0
 * PostgreSQL
@@ -41,7 +45,7 @@ Harmful content can be, but not limited to, malware, graphical material of minor
 * Webpack
 * GraphQL
 
-## Backend
+## Development
 
 ### Dependencies
 
@@ -73,18 +77,7 @@ npm run dev
 
 # build for production with minification
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ## Authors
 
