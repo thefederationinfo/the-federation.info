@@ -5,7 +5,8 @@ django-enumfields
 django-environ
 django-extensions
 django-redis
-django-rq
+# Some refactoring of settings at least needed for 2.0
+django-rq<2.0
 django<2.1
 geoip2
 graphene_django
@@ -13,7 +14,8 @@ ipython
 psycopg2-binary
 raven
 redis
-rq
+# Django-RQ needs bumping to 2.0 for rq 1.0 support
+rq<1.0
 rq-scheduler
 shcli
 tornado<5.0  # Not a direct requirement but we need to lock due to circus not working with 5.0
