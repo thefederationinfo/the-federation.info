@@ -19,6 +19,8 @@ urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     url(r"^django-rq/", include("django_rq.urls")),
 
+    url(r'^_silk/', include('silk.urls', namespace='silk')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

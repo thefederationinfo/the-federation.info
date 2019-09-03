@@ -24,7 +24,8 @@ THIRD_PARTY_APPS = (
     "corsheaders",
     "django_extensions",
     "django_rq",
-    'graphene_django',
+    "graphene_django",
+    "silk",
 )
 LOCAL_APPS = (
     "thefederation",
@@ -35,8 +36,9 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 MIDDLEWARE = (
+    "silk.middleware.SilkyMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -231,6 +233,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 # MAXMIND GEOIP2
 # --------------
 MAXMIND_DB_PATH = os.path.join(str(ROOT_DIR("utils")), "maxmind", "GeoLite2-Country.mmdb")
+
+# SILK
+# ----
+def is_silky_request(request):
+    return not request.path.strip('/').startswith('_')
+
+SILKY_AUTHENTICATION = True
+SILKY_AUTHORISATION = True
+SILKY_INTERCEPT_FUNC = is_silky_request
 
 # LOGGING CONFIGURATION
 # ------------------------------------------------------------------------------

@@ -9,6 +9,7 @@ aniso8601==6.0.0
 asn1crypto==0.24.0
 atomicwrites==1.3.0       # via pytest
 attrs==19.1.0
+autopep8==1.4.4
 backcall==0.1.0
 certifi==2019.6.16
 cffi==1.12.3
@@ -34,6 +35,7 @@ django-extensions==2.1.9
 django-querycount==0.7.0
 django-redis==4.10.0
 django-rq==1.3.1
+django-silk==3.0.2
 django-test-plus==1.2.1
 django==2.0.13
 entrypoints==0.3          # via flake8
@@ -43,6 +45,7 @@ flake8==3.7.7
 freezegun==0.3.12
 future==0.17.1
 geoip2==2.9.0
+gprof2dot==2017.9.19
 graphene-django==2.3.2
 graphene==2.1.6
 graphql-core==2.2
@@ -58,8 +61,10 @@ ipython==7.6.1
 isodate==0.6.0
 iteration-utilities==0.7.0
 jedi==0.14.0
+jinja2==2.10.1
 jsonschema==3.0.1
 lxml==4.3.4
+markupsafe==1.1.1
 maxminddb==1.4.1
 mccabe==0.6.1             # via flake8
 more-itertools==7.1.0     # via pytest
@@ -74,7 +79,7 @@ psutil==5.6.3
 psycopg2-binary==2.8.3
 ptyprocess==0.6.0
 py==1.8.0                 # via pytest
-pycodestyle==2.5.0        # via flake8
+pycodestyle==2.5.0
 pycparser==2.19
 pycryptodome==3.8.2
 pyflakes==2.1.1           # via flake8
@@ -100,7 +105,7 @@ rx==1.6.1
 shcli==0.1.4
 singledispatch==3.4.0.3
 six==1.12.0
-sqlparse==0.3.0           # via django-debug-toolbar
+sqlparse==0.3.0
 termcolor==1.1.0          # via pytest-sugar
 text-unidecode==1.2       # via faker
 tornado==4.5.3
