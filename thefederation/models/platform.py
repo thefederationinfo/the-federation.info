@@ -79,4 +79,5 @@ class Platform(ModelBase):
             'socialhome': 'nodeinfo2' if version > (0, 8) else "nodeinfo",
             'wordpress': 'nodeinfo',
             'writefreely': 'nodeinfo',
+            'zap': 'nodeinfo',
         }.get(self.name)
