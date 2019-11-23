@@ -125,6 +125,7 @@ const query = gql`
         nodes(host: $host) {
             name
             version
+            country
             openSignups
             host
             platform {
