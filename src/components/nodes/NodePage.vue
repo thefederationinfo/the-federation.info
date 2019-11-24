@@ -165,7 +165,9 @@ export default {
         },
     },
     name: "NodePage",
-    components: {ApolloLoader, Charts, Footer, Drawer},
+    components: {
+        ApolloLoader, Charts, Footer, Drawer,
+    },
     data() {
         return {
             node: {

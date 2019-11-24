@@ -195,7 +195,9 @@ export default {
         },
     },
     name: 'PlatformPage',
-    components: {ApolloLoader, Charts, NodesTable, Footer, Drawer},
+    components: {
+        ApolloLoader, Charts, NodesTable, Footer, Drawer,
+    },
     data() {
         return {
             globalStats: {},

@@ -7,7 +7,7 @@ import VueChartkick from 'vue-chartkick'
 import {ApolloClient} from 'apollo-client'
 import {HttpLink} from 'apollo-link-http'
 import {InMemoryCache} from 'apollo-cache-inmemory'
-import 'vue-directive-tooltip/css/index.css'
+import 'vue-directive-tooltip/dist/vueDirectiveTooltip.css'
 
 import App from './App'
 import router from './router'

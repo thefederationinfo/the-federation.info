@@ -70,21 +70,26 @@
                             href="https://socialhome.network/u/thefederation"
                             title="thefederation@socialhome.network"
                         >
-                        official account</a> on The Federation to receive daily or weekly statistics. The posts will be
-                        tagged according to frequency, so instead of following the account you can also subscribe to
-                        the hashtags. The following hashtags will be used:
+                            official account</a> on The Federation to receive daily or weekly statistics. The posts
+                        will be tagged according to frequency, so instead of following the account you can also
+                        subscribe to the hashtags. The following hashtags will be used:
                     </p>
                     <blockquote>
-                        <p><a href="https://socialhome.network/tags/thefederationstatsdaily/">
-                            #thefederationstatsdaily
-                        </a></p>
-                        <p><a href="https://socialhome.network/tags/thefederationstatsweekly/">
-                            #thefederationstatsweekly
-                        </a></p>
+                        <p>
+                            <a href="https://socialhome.network/tags/thefederationstatsdaily/">
+                                #thefederationstatsdaily
+                            </a>
+                        </p>
+                        <p>
+                            <a href="https://socialhome.network/tags/thefederationstatsweekly/">
+                                #thefederationstatsweekly
+                            </a>
+                        </p>
                     </blockquote>
                     <h3>Licence</h3>
                     <ul>
-                        <li>The Federation website code
+                        <li>
+                            The Federation website code
                             <a
                                 href="https://github.com/thefederationinfo/the-federation.info"
                                 target="_blank"
@@ -97,7 +102,8 @@
                                 rel="noopener noreferrer"
                             >AGPLv3</a>)
                         </li>
-                        <li>Blur background image
+                        <li>
+                            Blur background image
                             <a
                                 href="https://www.flickr.com/photos/voidobjects/6204459845/"
                                 target="_blank"
@@ -110,7 +116,8 @@
                                 rel="noopener noreferrer"
                             >CC-BY</a>)
                         </li>
-                        <li>The font used is
+                        <li>
+                            The font used is
                             <a
                                 href="http://www.latofonts.com/lato-free-fonts/"
                                 target="_blank"
@@ -125,7 +132,8 @@
                         </li>
                     </ul>
 
-                    <p class="center">Hosted with &lt;3 by
+                    <p class="center">
+                        Hosted with &lt;3 by
                         <a
                             href="https://jasonrobinson.me"
                             target="_blank"

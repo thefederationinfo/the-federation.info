@@ -181,7 +181,9 @@ export default {
         },
     },
     name: "ProtocolPage",
-    components: {ApolloLoader, NodesTable, Footer, Drawer},
+    components: {
+        ApolloLoader, NodesTable, Footer, Drawer,
+    },
     data() {
         return {
             globalStats: {},

@@ -21,16 +21,24 @@
                         <thead>
                             <tr>
                                 <th class="center">
-                                    <SortLink name="countryName">Country</SortLink>
+                                    <SortLink name="countryName">
+                                        Country
+                                    </SortLink>
                                 </th>
                                 <th>
-                                    <SortLink name="count">Nodes</SortLink>
+                                    <SortLink name="count">
+                                        Nodes
+                                    </SortLink>
                                 </th>
                                 <th>
-                                    <SortLink name="total">Total users</SortLink>
+                                    <SortLink name="total">
+                                        Total users
+                                    </SortLink>
                                 </th>
                                 <th>
-                                    <SortLink name="actives">Active users</SortLink>
+                                    <SortLink name="actives">
+                                        Active users
+                                    </SortLink>
                                 </th>
                             </tr>
                         </thead>
@@ -69,7 +77,6 @@ import gql from "graphql-tag"
 
 import ApolloLoader from "./common/ApolloLoader"
 import Drawer from "./common/Drawer"
-import Footer from "./common/Footer"
 
 const query = gql`
     query {
@@ -94,7 +101,7 @@ export default {
         },
     },
     name: "HostingReportPage",
-    components: {ApolloLoader, Drawer, Footer},
+    components: {ApolloLoader, Drawer},
 
     data: () => ({values: []}),
 }

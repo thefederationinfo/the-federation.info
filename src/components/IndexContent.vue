@@ -2,7 +2,11 @@
     <main>
         <header class="main-header">
             <div class="main-title">
-                <h1><router-link to="/">The Federation</router-link></h1>
+                <h1>
+                    <router-link to="/">
+                        The Federation
+                    </router-link>
+                </h1>
                 <h2>Welcome to the new social web</h2>
             </div>
             <div class="flex">
@@ -122,7 +126,9 @@
                     <thead>
                         <tr>
                             <th style="width: 20px;" />
-                            <th style="text-align: left;">Project</th>
+                            <th style="text-align: left;">
+                                Project
+                            </th>
                             <th>Nodes</th>
                             <th>Users</th>
                             <th>Website</th>
@@ -266,7 +272,9 @@ export default {
         },
     },
     name: "IndexContent",
-    components: {ApolloLoader, Charts, PlatformTableRow, ProtocolTableRow, Number},
+    components: {
+        ApolloLoader, Charts, PlatformTableRow, ProtocolTableRow, Number,
+    },
     data() {
         return {
             nodes: [],

@@ -7,7 +7,9 @@
                 :title="platform.name"
                 :src="imageSource"
             >
-            <div v-else>&nbsp;</div>
+            <div v-else>
+&nbsp;
+            </div>
         </td>
         <th style="text-align: left;">
             <router-link

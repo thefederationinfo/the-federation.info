@@ -7,7 +7,9 @@
                 :title="node.platform.name"
                 :src="imageSource"
             >
-            <div v-else>&nbsp;</div>
+            <div v-else>
+&nbsp;
+            </div>
         </td>
         <td>
             <router-link
@@ -17,7 +19,9 @@
                 {{ node.name }}
             </router-link>
         </td>
-        <td class="version-column">{{ node.version }}</td>
+        <td class="version-column">
+            {{ node.version }}
+        </td>
         <td>{{ openSignups }}</td>
         <td>{{ stats.usersTotal ? stats.usersTotal : '' }}</td>
         <td>{{ stats.usersHalfYear ? stats.usersHalfYear : '' }}</td>
@@ -26,8 +30,8 @@
         <td>{{ stats.localComments ? stats.localComments : '' }}</td>
         <td>
             <span
-                v-tooltip="services"
                 v-if="services"
+                v-tooltip="services"
             >
                 {{ node.services.length }}
             </span>
