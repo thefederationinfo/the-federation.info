@@ -1,4 +1,5 @@
 circus
+django-cachalot
 django-countries
 django-cors-headers
 django-enumfields

@@ -22,6 +22,7 @@ cryptography==2.8
 cssselect==1.1.0
 decorator==4.4.1
 dirty-validators==0.5.2
+django-cachalot==2.1.0
 django-cors-headers==3.2.0
 django-countries==5.5
 django-coverage-plugin==1.6.0
@@ -114,4 +115,4 @@ whitenoise==4.1.4
 zipp==0.6.0
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.6.0        # via gunicorn, ipdb, ipython, jsonschema
+# setuptools==42.0.1        # via gunicorn, ipdb, ipython, jsonschema
