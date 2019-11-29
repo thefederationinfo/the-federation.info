@@ -57,7 +57,7 @@
                         that node will be blocked from listing here.
                     </p>
                     <p>
-                        Harmful content can be, but not limited to, malware, graphical material of minorities, abusive
+                        Harmful content can be, but not limited to, malware, graphical material of minors, abusive
                         images, hateful content, racist content and climate denialism. The admins of this site reserve
                         the right to decide case by case on blocking of nodes. Please report any nodes violating our
                         terms to the admins.
