@@ -63,7 +63,7 @@
                         terms to the admins.
                     </p>
 
-                    <h3>Follow on The Federation</h3>
+                    <h3>Follow on The Federation / Fediverse</h3>
                     <p>
                         You can follow the
                         <a

@@ -53,9 +53,13 @@
                 <div class="flex">
                     <div class="col2">
                         <p>
-                            The Federation refers to a global social network composed of nodes that talk to each other.
-                            Each of them is an installation of software which supports one of the federated social web
-                            protocols.
+                            The Federation, or as often called the "Fediverse", refers to a global social network
+                            composed of nodes that talk to each other. Each of them is an installation of software
+                            which supports one of the federated social web protocols.
+                        </p>
+                        <p>
+                            These social hubs create a decentralized and federated social network of millions
+                            of users all around the globe. This is how the internet was supposed to be.
                         </p>
                         <div class="center">
                             <router-link

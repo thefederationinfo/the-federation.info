@@ -81,7 +81,7 @@ npm run build
 
 ## Authors
 
-* Jason Robinson / @jaywink / https://jasonrobinson.me
+* Jason Robinson / @jaywink / https://jasonrobinson.me / `@jaywink:federator.dev`
 * Flaburgan / @Flaburgan
 
 See [other awesome contributors](https://github.com/thefederationinfo/the-federation.info/graphs/contributors)!
