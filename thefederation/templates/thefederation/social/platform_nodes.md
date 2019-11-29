@@ -1,4 +1,4 @@
-{% load math %}#### Daily statistics from The Federation
+{% load math %}#### Daily statistics from The Federation / Fediverse
 
 ##### Count of nodes
 
@@ -9,4 +9,4 @@ Total count of nodes per platform and change from 30 days.
 
 For more statistics visit [the-federation.info](https://the-federation.info)
 
-#thefederationstatsdaily
+#fediversestats #fediversestatsdaily #thefederationstatsdaily

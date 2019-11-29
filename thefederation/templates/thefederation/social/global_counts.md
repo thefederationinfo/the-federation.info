@@ -1,4 +1,4 @@
-{% load math %}#### Daily statistics from The Federation
+{% load math %}#### Daily statistics from The Federation / Fediverse
 
 ##### Global network counts for all platforms
 
@@ -11,4 +11,4 @@ Current values and change from 30 days ago.
 
 For more statistics visit [the-federation.info](https://the-federation.info)
 
-#thefederationstatsdaily
+#fediversestats #fediversestatsdaily #thefederationstatsdaily

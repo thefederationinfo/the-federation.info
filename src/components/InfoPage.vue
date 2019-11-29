@@ -76,6 +76,21 @@
                     </p>
                     <blockquote>
                         <p>
+                            <a href="https://socialhome.network/tags/fediversestats/">
+                                #fediversestats
+                            </a>
+                        </p>
+                        <p>
+                            <a href="https://socialhome.network/tags/fediversestatsdaily/">
+                                #fediversestatsdaily
+                            </a>
+                        </p>
+                        <p>
+                            <a href="https://socialhome.network/tags/fediversestatsweekly/">
+                                #fediversestatsweekly
+                            </a>
+                        </p>
+                        <p>
                             <a href="https://socialhome.network/tags/thefederationstatsdaily/">
                                 #thefederationstatsdaily
                             </a>
