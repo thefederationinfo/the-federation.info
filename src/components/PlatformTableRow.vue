@@ -2,7 +2,7 @@
     <tr>
         <td style="width: 20px;">
             <img
-                v-if="platform.name !== 'unknown'"
+                v-if="platform.name !== 'unknown' && platform.icon !== 'unknown'"
                 :alt="platform.name"
                 :title="platform.name"
                 :src="imageSource"

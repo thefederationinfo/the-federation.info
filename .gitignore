@@ -76,3 +76,5 @@ dist/
 playbook.yml
 
 /utils/maxmind/GeoLite2-Country.mmdb
+
+test/unit/coverage

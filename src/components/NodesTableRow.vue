@@ -2,7 +2,7 @@
     <tr>
         <td>
             <img
-                v-if="node.platform.name !== 'unknown'"
+                v-if="node.platform.name !== 'unknown' && node.platform.icon !== 'unknown'"
                 :alt="node.platform.name"
                 :title="node.platform.name"
                 :src="imageSource"
