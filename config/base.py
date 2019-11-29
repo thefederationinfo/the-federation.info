@@ -236,7 +236,10 @@ MAXMIND_DB_PATH = os.path.join(str(ROOT_DIR("utils")), "maxmind", "GeoLite2-Coun
 # SILK
 # ----
 def is_silky_request(request):
-    return not request.path.strip('/').startswith('_')
+    path = request.path.strip('/')
+    if path.startswith('_') or path.startswith('admin') or path.startswith('static'):
+        return False
+    return True
 
 SILKY_AUTHENTICATION = True
 SILKY_AUTHORISATION = True
