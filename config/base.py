@@ -21,7 +21,6 @@ DJANGO_APPS = (
     "django.contrib.admin",
 )
 THIRD_PARTY_APPS = (
-    "cachalot",
     "corsheaders",
     "django_extensions",
     "django_rq",

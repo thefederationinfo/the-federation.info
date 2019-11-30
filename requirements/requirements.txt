@@ -20,7 +20,6 @@ cryptography==2.8
 cssselect==1.1.0
 decorator==4.4.1          # via ipython, traitlets
 dirty-validators==0.5.2
-django-cachalot==2.1.0
 django-cors-headers==3.2.0
 django-countries==5.5
 django-enumfields==1.0.0
@@ -88,4 +87,4 @@ whitenoise==4.1.4
 zipp==0.6.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==42.0.1        # via gunicorn, ipython, jsonschema
+# setuptools==41.6.0        # via gunicorn, ipython, jsonschema

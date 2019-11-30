@@ -65,7 +65,6 @@ if env.bool("DJANGO_DEBUG_TOOLBAR", default=True):
         "debug_toolbar.panels.signals.SignalsPanel",
         "debug_toolbar.panels.logging.LoggingPanel",
         "debug_toolbar.panels.redirects.RedirectsPanel",
-        "cachalot.panels.CachalotPanel",
     ]
 
 # RQ
