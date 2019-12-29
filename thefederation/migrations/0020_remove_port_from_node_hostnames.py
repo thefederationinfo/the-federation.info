@@ -6,7 +6,8 @@ from django.db.migrations import RunPython
 
 def forward(apps, schema):
     Node = apps.get_model("thefederation", "Node")
-    for node in Node.objects.filter(host__contains=":"):
+    Platform = apps.get_model("thefederation", "Platform")
+    for node in Node.objects.filter(host__contains=":").exclude(platform__name__startswith="matrix"):
         node.host = node.host.split(":")[0]
         if node.name.split(':')[0] == node.host:
             node.name = node.host
