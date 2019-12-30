@@ -172,6 +172,7 @@ export default {
         return {
             node: {
                 platform: '',
+                services: [],
             },
             stats: {},
         }
