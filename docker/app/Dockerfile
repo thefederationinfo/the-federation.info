@@ -1,20 +1,23 @@
 FROM python:3.7
 
 ENV PYTHONUNBUFFERED 1
+ARG MAXMIND_LICENSE_KEY
 
 COPY requirements/requirements.txt /requirements.txt
 
 RUN apt-get update -qq && apt-get install python-dev python3-dev -qqy \
     && pip install --no-cache-dir -U pip setuptools pip-tools \
-    && pip-sync requirements.txt \
-    && curl https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz -o /tmp/geoip.tar.gz \
-    && groupadd -r django \
+    && pip-sync requirements.txt
+
+RUN curl "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${MAXMIND_LICENSE_KEY}&suffix=tar.gz" -o /tmp/geoip.tar.gz
+
+RUN groupadd -r django \
     && useradd -r -g django django
 
 COPY --chown=django:django . /app
 COPY --chown=django:django docker/app/gunicorn.sh /gunicorn.sh
 
-RUN tar xva -C /app/utils/maxmind --overwrite --strip-components 1 -f /tmp/geoip.tar.gz 
+RUN tar xva -C /app/utils/maxmind --overwrite --strip-components 1 -f /tmp/geoip.tar.gz
 
 ENV POSTGRES_PASSWORD postgres
 ENV RQWORKER_NUM 5
