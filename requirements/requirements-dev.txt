@@ -4,12 +4,13 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://git.feneas.org/jaywink/federation.git@dd559169782f6ff2672a34897c5995e25a4b9a16#egg=federation==0.20.0-dev.1
+-e git+https://git.feneas.org/jaywink/federation.git@50a3e376ddc91876449aedb745f2fc6228e7549d#egg=federation==0.20.0-dev.1
 aniso8601==7.0.0
 attrs==19.3.0
 autopep8==1.5
 backcall==0.1.0
 beautifulsoup4==4.8.2
+bleach==3.1.0
 certifi==2019.11.28
 cffi==1.14.0
 chardet==3.0.4
@@ -112,6 +113,7 @@ tornado==4.5.3
 traitlets==4.3.3
 urllib3==1.25.8
 wcwidth==0.1.8
+webencodings==0.5.1
 werkzeug==1.0.0
 whitenoise==5.0.1
 zipp==2.2.0

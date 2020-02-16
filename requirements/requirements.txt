@@ -4,12 +4,13 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://git.feneas.org/jaywink/federation.git@dd559169782f6ff2672a34897c5995e25a4b9a16#egg=federation==0.20.0-dev.1
+-e git+https://git.feneas.org/jaywink/federation.git@50a3e376ddc91876449aedb745f2fc6228e7549d#egg=federation==0.20.0-dev.1
 aniso8601==7.0.0          # via graphene
 attrs==19.3.0             # via jsonschema
 autopep8==1.5             # via django-silk
 backcall==0.1.0           # via ipython
 beautifulsoup4==4.8.2     # via markdownify
+bleach==3.1.0
 certifi==2019.11.28       # via requests
 cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
@@ -78,13 +79,14 @@ rq==0.13.0
 rx==1.6.1                 # via graphql-core
 shcli==0.2.0
 singledispatch==3.4.0.3   # via graphene-django
-six==1.14.0               # via circus, cryptography, django-countries, django-extensions, graphene, graphene-django, graphql-core, graphql-relay, isodate, jsonschema, markdownify, promise, pyrsistent, python-dateutil, singledispatch, traitlets
+six==1.14.0               # via bleach, circus, cryptography, django-countries, django-extensions, graphene, graphene-django, graphql-core, graphql-relay, isodate, jsonschema, markdownify, promise, pyrsistent, python-dateutil, singledispatch, traitlets
 soupsieve==1.9.5          # via beautifulsoup4
 sqlparse==0.3.0           # via django, django-silk
 tornado==4.5.3
 traitlets==4.3.3          # via ipython
 urllib3==1.25.8           # via geoip2, requests
 wcwidth==0.1.8            # via prompt-toolkit
+webencodings==0.5.1       # via bleach
 whitenoise==5.0.1
 zipp==2.2.0               # via importlib-metadata
 
