@@ -4,6 +4,7 @@ set -e
 
 if [[ -z "${MAXMIND_LICENSE_KEY}" ]]; then
   echo Define MAXMIND_LICENSE_KEY!
+  exit 1
 fi
 
 docker login
