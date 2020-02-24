@@ -10,7 +10,7 @@ attrs==19.3.0             # via jsonschema
 autopep8==1.5             # via django-silk
 backcall==0.1.0           # via ipython
 beautifulsoup4==4.8.2     # via markdownify
-bleach==3.1.0
+bleach==3.1.1
 certifi==2019.11.28       # via requests
 cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
@@ -39,7 +39,6 @@ graphql-core==2.3.1       # via graphene, graphene-django, graphql-relay
 graphql-relay==2.0.1      # via graphene
 gunicorn==20.0.4
 idna==2.8                 # via requests
-importlib-metadata==1.5.0  # via jsonschema
 ipaddress==1.0.23         # via ipdata
 ipdata==3.2
 ipython-genutils==0.2.0   # via traitlets
@@ -88,7 +87,6 @@ urllib3==1.25.8           # via geoip2, requests
 wcwidth==0.1.8            # via prompt-toolkit
 webencodings==0.5.1       # via bleach
 whitenoise==5.0.1
-zipp==2.2.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
