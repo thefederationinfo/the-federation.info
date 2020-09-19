@@ -80,10 +80,6 @@ export default {
             type: Object,
             default: null,
         },
-        nodes: {
-            type: Array,
-            default: () => [],
-        },
     },
     data() {
         return {
@@ -95,7 +91,7 @@ export default {
             return `/static/images/${this.platform.icon}-16.png`
         },
         nodeCount() {
-            return this.nodes.filter(node => node.platform.name === this.platform.name).length
+            return this.platform.nodes.length
         },
         websiteWithoutProtocol() {
             return this.platform.website.replace('https://', '').replace('http://', '')
