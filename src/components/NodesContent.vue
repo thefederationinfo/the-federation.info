@@ -13,8 +13,16 @@
                 <p>You can also access a list of nodes for each project using the global menu on the left.</p>
                 <div class="overflow-x">
                     <NodesTable
-                        :nodes="nodes"
+                        :edges="nodes"
                         :stats="stats"
+                        :pages="pages"
+                        :page="page"
+                        :rows="rows"
+                        :total="total"
+                        @search="search"
+                        @next-page="getNextPage"
+                        @prev-page="getPreviosuPage"
+                        @get-page="getPage"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
@@ -30,22 +38,33 @@ import ApolloLoader from "./common/ApolloLoader"
 import NodesTable from "./NodesTable"
 
 const query = gql`
-    query {
-        nodes {
-            id
-            name
-            version
-            openSignups
-            host
-            platform {
-                name
-                icon
+    query NodeStatus($first: Int!, $after: String!, $last: Int!, $before: String!, $search: String!) {
+        nodes(first: $first, after: $after, last: $last, before: $before, search: $search) {
+            totalCount
+            edges {
+                node {
+                    id
+                    name
+                    version
+                    openSignups
+                    host
+                    platform {
+                        name
+                        icon
+                    }
+                    countryCode
+                    countryFlag
+                    countryName
+                    services {
+                        name
+                    }
+                }
             }
-            countryCode
-            countryFlag
-            countryName
-            services {
-                name
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
             }
         }
         statsNodes {
@@ -59,6 +78,7 @@ const query = gql`
             localComments
         }
     }
+
 `
 
 export default {
@@ -66,7 +86,10 @@ export default {
         allQueries: {
             query,
             result({data}) {
-                this.nodes = data.nodes
+                this.nodes = data.nodes.edges
+                this.total = data.nodes.totalCount
+                this.pageInfo = data.nodes.pageInfo
+                this.pages = Array(...{length: this.total / this.rows}).map(Number.call, Number)
                 const stats = {}
                 for (const o of data.statsNodes) {
                     stats[o.node.id] = o
@@ -74,15 +97,73 @@ export default {
                 this.stats = stats
             },
             manual: true,
+            variables() {
+                return {
+                    first: this.rows,
+                    after: "",
+                    before: "",
+                    last: this.rows,
+                    search: "",
+                }
+            },
         },
     },
     name: "NodesContent",
     components: {ApolloLoader, NodesTable},
     data() {
         return {
+            pageInfo: {},
             nodes: [],
             stats: {},
+            pages: [],
+            rows: 50,
+            total: 1,
+            page: 1,
+            variables: {},
+            search_val: "",
         }
+    },
+    methods: {
+        search(value) {
+            this.search_val = value
+            this.variables.search = this.search_val
+            this.getPage(1)
+        },
+        getNextPage() {
+            this.variables = {
+                first: this.rows,
+                after: this.pageInfo.endCursor,
+                before: "",
+                last: this.rows,
+                search: this.search_val,
+            }
+            this.getPage(this.page + 1)
+        },
+        getPreviosuPage() {
+            // I don't know why this works, if you have a better way (I bet you do) please do a PR
+            this.variables = {
+                first: this.rows * this.page,
+                after: "",
+                before: this.pageInfo.startCursor,
+                last: this.rows,
+                name: this.search_val,
+            }
+            this.getPage(this.page - 1)
+        },
+        getPage(page) {
+            this.page = page
+            this.nodes = []
+            // Fetch more data and transform the original result
+            this.$apollo.queries.allQueries.fetchMore({
+                // New variables
+                variables: this.variables,
+                // Transform the previous result with new data
+                updateQuery: (previousResult, {fetchMoreResult}) => {
+                    this.pageInfo = fetchMoreResult.nodes.pageInfo
+                    return fetchMoreResult
+                },
+            })
+        },
     },
 }
 </script>

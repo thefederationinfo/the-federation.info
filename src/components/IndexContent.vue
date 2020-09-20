@@ -29,7 +29,7 @@
                 <div class="col4">
                     <div class="tile valign-wrapper">
                         <ApolloLoader :loading="$apollo.queries.nodes.loading">
-                            <Number :number="nodes.length" />
+                            <Number :number="nodes.totalCount" />
                             <strong>Nodes</strong>
                         </ApolloLoader>
                     </div>
@@ -229,7 +229,7 @@ import ProtocolTableRow from "./ProtocolTableRow"
 const nodeQuery = gql`
     query {
         nodes {
-            id
+            totalCount
         }
     }
 `
@@ -245,7 +245,9 @@ const platformQuery = gql`
             license
             website
             nodes {
-                id
+                edges {
+                    cursor
+                }
             }
         }
     }
@@ -275,10 +277,11 @@ const statsGlobalTodayQuery = gql`
 
 export default {
     apollo: {
-        protocols: protocolsQuery,
-        platforms: platformQuery,
-        statsGlobalToday: statsGlobalTodayQuery,
+
         nodes: nodeQuery,
+        protocols: protocolsQuery,
+        statsGlobalToday: statsGlobalTodayQuery,
+        platforms: platformQuery,
     },
     name: "IndexContent",
     components: {
@@ -286,7 +289,7 @@ export default {
     },
     data() {
         return {
-            nodes: [],
+            nodes: {},
             platforms: [],
             protocols: [],
             statsGlobalToday: [],

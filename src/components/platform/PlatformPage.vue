@@ -11,7 +11,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ nodes.length || '' }} <strong>Nodes</strong>
+                                {{ total || '' }} <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
+                                <li>Nodes: <strong>{{ total || '' }}</strong></li>
                                 <li>Users: <strong>{{ globalStats.usersTotal || '' }}</strong></li>
                                 <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || '' }}</strong></li>
                                 <li>Last month users: <strong>{{ globalStats.usersMonthly || '' }}</strong></li>
@@ -101,8 +101,16 @@
                 </header>
                 <div class="overflow-x">
                     <NodesTable
-                        :nodes="nodes"
+                        :edges="nodes"
                         :stats="stats"
+                        :pages="pages"
+                        :page="page"
+                        :rows="rows"
+                        :total="total"
+                        @search="search"
+                        @next-page="getNextPage"
+                        @prev-page="getPreviosuPage"
+                        @get-page="getPage"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
@@ -122,7 +130,7 @@ import Footer from "../common/Footer"
 import NodesTable from "../NodesTable"
 
 const query = gql`
-    query Platform($name: String!) {
+    query Platform($name: String!, $first: Int!, $after: String!, $last: Int!, $before: String!, $search: String!) {
         platforms(name: $name) {
             name
             code
@@ -133,21 +141,32 @@ const query = gql`
             icon
         }
 
-        nodes(platform: $name) {
-            id
-            name
-            version
-            openSignups
-            host
-            platform {
-              name
-              icon
-            }
-            countryCode
-            countryFlag
-            countryName
-            services {
+        nodes(platform: $name, first: $first, after: $after, last: $last, before: $before, search: $search) {
+            totalCount
+            edges {
+              node {
+                id
                 name
+                version
+                openSignups
+                host
+                platform {
+                  name
+                  icon
+                }
+                countryCode
+                countryFlag
+                countryName
+                services {
+                    name
+                }
+              }
+            }
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
             }
         }
 
@@ -178,7 +197,10 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.nodes = data.nodes
+                this.nodes = data.nodes.edges
+                this.total = data.nodes.totalCount
+                this.pageInfo = data.nodes.pageInfo
+                this.pages = Array(...{length: this.total / this.rows}).map(Number.call, Number)
                 this.platform = data.platforms[0] || {}
                 const stats = {}
                 for (const o of data.statsNodes) {
@@ -190,6 +212,11 @@ export default {
             variables() {
                 return {
                     name: this.$route.params.platform,
+                    first: this.rows,
+                    after: "",
+                    before: "",
+                    last: this.rows,
+                    search: "",
                 }
             },
         },
@@ -204,11 +231,60 @@ export default {
             nodes: [],
             platform: {},
             stats: {},
+            pageInfo: {},
+            pages: [],
+            rows: 50,
+            total: 1,
+            page: 1,
+            variables: {},
+            search_val: "",
         }
     },
     computed: {
         title() {
             return this.platform.displayName ? this.platform.displayName : this.platform.name || ''
+        },
+    },
+    methods: {
+        search(value) {
+            this.search_val = value
+            this.variables.search = this.search_val
+            this.getPage(1)
+        },
+        getNextPage() {
+            this.variables = {
+                first: this.rows,
+                after: this.pageInfo.endCursor,
+                before: "",
+                last: this.rows,
+                search: this.search_val,
+            }
+            this.getPage(this.page + 1)
+        },
+        getPreviosuPage() {
+            // I don't know why this works, if you have a better way (I bet you do) please do a PR
+            this.variables = {
+                first: this.rows * this.page,
+                after: "",
+                before: this.pageInfo.startCursor,
+                last: this.rows,
+                search: this.search_val,
+            }
+            this.getPage(this.page - 1)
+        },
+        getPage(page) {
+            this.page = page
+            this.nodes = []
+            // Fetch more data and transform the original result
+            this.$apollo.queries.queries.fetchMore({
+                // New variables
+                variables: this.variables,
+                // Transform the previous result with new data
+                updateQuery: (previousResult, {fetchMoreResult}) => {
+                    this.pageInfo = fetchMoreResult.nodes.pageInfo
+                    return fetchMoreResult
+                },
+            })
         },
     },
 }

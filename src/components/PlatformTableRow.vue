@@ -91,7 +91,7 @@ export default {
             return `/static/images/${this.platform.icon}-16.png`
         },
         nodeCount() {
-            return this.platform.nodes.length
+            return this.platform.nodes.edges.length
         },
         websiteWithoutProtocol() {
             return this.platform.website.replace('https://', '').replace('http://', '')
