@@ -7,6 +7,7 @@
                 type="text"
                 placeholder="Search node name"
                 class="search-bar"
+                @keyup.enter="search"
             >
             <button
                 aria-label="Search Button"
@@ -44,6 +45,7 @@
                 </button>
             </span>
         </nav>
+        <ApolloLoader :loading="$apollo.loading" />
         <table
             id="nodes-table"
             aria-label="Node list table"
@@ -80,6 +82,7 @@
 <script>
 import gql from 'graphql-tag'
 import NodesTableRow from "./NodesTableRow"
+import ApolloLoader from "./common/ApolloLoader"
 
 const query = gql`
     query NodesTable($platformName: String!, $protocolName: String!,
@@ -166,7 +169,7 @@ export default {
         },
     },
     name: "NodesTable",
-    components: {NodesTableRow},
+    components: {NodesTableRow, ApolloLoader},
     props: {
         platform: {
             type: String,
