@@ -11,7 +11,7 @@
             <button
                 aria-label="Search Button"
                 class="nav-btn"
-                @click="$emit('search', searchVal)"
+                @click="search"
             >
                 Search
             </button>
@@ -25,7 +25,7 @@
                     :disabled="page === 1"
                     class="nav-btn prev"
                     type="button"
-                    @click="$emit('prev-page')"
+                    @click="previousPage"
                 >
                     &lt;Previous
                 </button>
@@ -38,7 +38,7 @@
                     :disabled="page === pages.length + 1"
                     type="button"
                     class="nav-btn next"
-                    @click="$emit('next-page')"
+                    @click="nextPage"
                 >
                     Next&gt;
                 </button>
@@ -78,40 +78,115 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 import NodesTableRow from "./NodesTableRow"
 
+const query = gql`
+    query NodesTable($platformName: String!, $protocolName: String!,
+        $first: Int!, $after: String!, $last: Int!, $before: String!, $search: String!) {
+
+        nodes(platform:$platformName, protocol:$protocolName,
+            first: $first, after: $after, last: $last, before: $before, search: $search) {
+            totalCount
+            edges {
+                node {
+                    id
+                    name
+                    version
+                    openSignups
+                    host
+                    platform {
+                        name
+                        icon
+                    }
+                    countryCode
+                    countryFlag
+                    countryName
+                    services {
+                        name
+                    }
+                }
+            }
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+            }
+        },
+        statsGlobalToday(platform: $platformName, protocol: $protocolName) {
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            localPosts
+            localComments
+        }
+
+        statsNodes(platform: $platformName, protocol: $protocolName) {
+            node {
+              id
+            }
+            usersTotal
+            usersHalfYear
+            usersMonthly
+            localPosts
+            localComments
+        }
+    }
+`
+
 export default {
+    apollo: {
+        queries: {
+            query,
+            manual: true,
+            result({data}) {
+                this.edges = data.nodes.edges
+                this.total = data.nodes.totalCount
+                this.pageInfo = data.nodes.pageInfo
+                this.pages = Array(...{length: this.total / this.rows}).map(Number.call, Number)
+                const stats = {}
+                for (const o of data.statsNodes) {
+                    stats[o.node.id] = o
+                }
+                this.stats = stats
+                this.globalStats = data.statsGlobalToday || {}
+            },
+            variables() {
+                return {
+                    platformName: this.platform,
+                    protocolName: this.protocol,
+                    first: this.rows,
+                    after: "",
+                    before: "",
+                    last: this.rows,
+                    search: "",
+                }
+            },
+        },
+    },
     name: "NodesTable",
     components: {NodesTableRow},
     props: {
-        edges: {
-            type: Array,
-            default: () => [],
+        platform: {
+            type: String,
+            default: () => "",
         },
-        stats: {
-            type: Object,
-            default: () => {},
-        },
-        pages: {
-            type: Array,
-            default: () => [1],
-        },
-        page: {
-            type: Number,
-            default: () => 1,
-        },
-        rows: {
-            type: Number,
-            default: () => 50,
-        },
-        total: {
-            type: Number,
-            default: () => 1,
+        protocol: {
+            type: String,
+            default: () => "",
         },
     },
     data() {
         return {
             searchVal: "",
+            stats: {},
+            variables: {},
+            edges: [],
+            pages: [],
+            page: 1,
+            rows: 50,
+            total: 0,
         }
     },
     mounted() {
@@ -130,6 +205,45 @@ export default {
                 }
             }
             return this.stats[nodeId]
+        },
+        search() {
+            this.variables.search = this.searchVal
+            this.getPage(1)
+        },
+        nextPage() {
+            this.variables = {
+                first: this.rows,
+                after: this.pageInfo.endCursor,
+                before: "",
+                last: this.rows,
+                search: this.searchVal,
+            }
+            this.getPage(this.page + 1)
+        },
+        previousPage() {
+            // I don't know why this works, if you have a better way (I bet you do) please do a PR
+            this.variables = {
+                first: this.rows * this.page,
+                after: "",
+                before: this.pageInfo.startCursor,
+                last: this.rows,
+                search: this.searchVal,
+            }
+            this.getPage(this.page - 1)
+        },
+        getPage(page) {
+            this.page = page
+            this.edges = []
+            // Fetch more data and transform the original result
+            this.$apollo.queries.queries.fetchMore({
+                // New variables
+                variables: this.variables,
+                // Transform the previous result with new data
+                updateQuery: (previousResult, {fetchMoreResult}) => {
+                    this.pageInfo = fetchMoreResult.nodes.pageInfo
+                    return fetchMoreResult
+                },
+            })
         },
     },
 }

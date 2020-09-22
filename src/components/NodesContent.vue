@@ -12,18 +12,7 @@
             <div>
                 <p>You can also access a list of nodes for each project using the global menu on the left.</p>
                 <div class="overflow-x">
-                    <NodesTable
-                        :edges="nodes"
-                        :stats="stats"
-                        :pages="pages"
-                        :page="page"
-                        :rows="rows"
-                        :total="total"
-                        @search="search"
-                        @next-page="getNextPage"
-                        @prev-page="getPreviousPage"
-                        @get-page="getPage"
-                    />
+                    <NodesTable />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
             </div>
@@ -38,34 +27,9 @@ import ApolloLoader from "./common/ApolloLoader"
 import NodesTable from "./NodesTable"
 
 const query = gql`
-    query NodeStatus($first: Int!, $after: String!, $last: Int!, $before: String!, $search: String!) {
-        nodes(first: $first, after: $after, last: $last, before: $before, search: $search) {
+    query NodeStatus {
+        nodes {
             totalCount
-            edges {
-                node {
-                    id
-                    name
-                    version
-                    openSignups
-                    host
-                    platform {
-                        name
-                        icon
-                    }
-                    countryCode
-                    countryFlag
-                    countryName
-                    services {
-                        name
-                    }
-                }
-            }
-            pageInfo {
-                hasNextPage
-                hasPreviousPage
-                startCursor
-                endCursor
-            }
         }
         statsNodes {
             node {
@@ -86,9 +50,7 @@ export default {
         allQueries: {
             query,
             result({data}) {
-                this.nodes = data.nodes.edges
                 this.total = data.nodes.totalCount
-                this.pageInfo = data.nodes.pageInfo
                 this.pages = Array(...{length: this.total / this.rows}).map(Number.call, Number)
                 const stats = {}
                 for (const o of data.statsNodes) {
