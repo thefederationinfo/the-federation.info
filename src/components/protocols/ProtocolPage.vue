@@ -101,7 +101,7 @@
                         :total="total"
                         @search="search"
                         @next-page="getNextPage"
-                        @prev-page="getPreviosuPage"
+                        @prev-page="getPreviousPage"
                         @get-page="getPage"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
@@ -247,7 +247,7 @@ export default {
             }
             this.getPage(this.page + 1)
         },
-        getPreviosuPage() {
+        getPreviousPage() {
             // I don't know why this works, if you have a better way (I bet you do) please do a PR
             this.variables = {
                 first: this.rows * this.page,
