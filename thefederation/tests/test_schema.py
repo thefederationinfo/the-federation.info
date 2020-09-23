@@ -8,14 +8,14 @@ from thefederation.tests.utils import SchemaTestCase
 
 class QueryResolveNodesTestCase(SchemaTestCase):
     def test_contains_only_active(self):
-        response = self.glient.execute("query { nodes { id }}")
+        response = self.glient.execute("query { nodes { edges { node { uuid }} }}")
         nodes = [node for node in response['data']['nodes']]
         if self.inactive_node in nodes:
             self.fail('Should not contain inactive node')
-        self.assertEqual(response['data']['nodes'][0]['id'], str(self.node.id))
+        self.assertEqual(response['data']['nodes']['edges'][0]['node']['uuid'], str(self.node.uuid))
 
     def test_resolves(self):
-        response = self.glient.execute("query { nodes { id }}")
+        response = self.glient.execute("query { nodes { edges { node { id }} }}")
         self.assertTrue('nodes' in response['data'])
 
 
