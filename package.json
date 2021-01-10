@@ -64,7 +64,7 @@
     "karma-webpack": "^4.0.2",
     "lodash": "^4.17.15",
     "mocha": "^6.2.2",
-    "node-notifier": "^6.0.0",
+    "node-notifier": "^8.0.1",
     "node-sass": "^4.13.0",
     "optimize-css-assets-webpack-plugin": "<4",
     "ora": "^4.0.3",
