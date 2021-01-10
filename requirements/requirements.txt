@@ -18,7 +18,7 @@ circus==0.16.1            # via -r requirements.in
 click==7.1.1              # via rq, shcli
 commonmark==0.9.1         # via federation
 croniter==0.3.31          # via rq-scheduler
-cryptography==2.9         # via federation
+cryptography==3.2         # via federation
 cssselect==1.1.0          # via federation
 decorator==4.4.2          # via ipython, traitlets
 dirty-validators==0.5.4   # via federation
