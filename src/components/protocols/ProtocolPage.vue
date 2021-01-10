@@ -11,7 +11,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ nodes.length || '' }} <strong>Nodes</strong>
+                                {{ total || '' }} <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
+                                <li>Nodes: <strong>{{ total || '' }}</strong></li>
                                 <li>Users: <strong>{{ globalStats.usersTotal || '' }}</strong></li>
                                 <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || '' }}</strong></li>
                                 <li>Last month users: <strong>{{ globalStats.usersMonthly || '' }}</strong></li>
@@ -93,8 +93,7 @@
                 </header>
                 <div class="overflow-x">
                     <NodesTable
-                        :nodes="nodes"
-                        :stats="stats"
+                        :protocol="$route.params.protocol"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
@@ -120,35 +119,10 @@ const query = gql`
         }
 
         nodes(protocol: $name) {
-            id
-            name
-            version
-            openSignups
-            host
-            platform {
-              name
-              icon
-            }
-            countryCode
-            countryFlag
-            countryName
-            services {
-                name
-            }
+            totalCount
         }
 
         statsGlobalToday(protocol: $name) {
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
-        }
-
-        statsNodes(protocol: $name) {
-            node {
-              id
-            }
             usersTotal
             usersHalfYear
             usersMonthly
@@ -164,18 +138,18 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.nodes = data.nodes
+                this.total = data.nodes.totalCount
                 this.protocol = data.protocols[0] || {}
-                const stats = {}
-                for (const o of data.statsNodes) {
-                    stats[o.node.id] = o
-                }
-                this.stats = stats
                 this.globalStats = data.statsGlobalToday || {}
             },
             variables() {
                 return {
                     name: this.$route.params.protocol,
+                    first: this.rows,
+                    after: "",
+                    before: "",
+                    last: this.rows,
+                    search: "",
                 }
             },
         },
@@ -186,10 +160,9 @@ export default {
     },
     data() {
         return {
+            total: 0,
             globalStats: {},
-            nodes: [],
             protocol: {},
-            stats: {},
         }
     },
     computed: {

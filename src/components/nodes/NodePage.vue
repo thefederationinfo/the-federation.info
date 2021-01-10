@@ -123,21 +123,24 @@ import Footer from "../common/Footer"
 const query = gql`
     query Node($host: String!) {
         nodes(host: $host) {
-            name
-            version
-            country
-            openSignups
-            host
-            platform {
-              name
-              icon
-              displayName
-            }
-            services {
-                name
+            edges {
+                node {
+                    name
+                    version
+                    country
+                    openSignups
+                    host
+                    platform {
+                    name
+                    icon
+                    displayName
+                    }
+                    services {
+                    name
+                    }
+                }
             }
         }
-
         statsNodes(host: $host) {
             usersTotal
             usersHalfYear
@@ -154,7 +157,7 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.node = data.nodes[0] || {}
+                this.node = data.nodes.edges[0].node || {}
                 this.stats = data.statsNodes[0] || {}
             },
             variables() {

@@ -74,6 +74,7 @@ class NodeType(DjangoObjectType):
 
     class Meta:
         model = Node
+        interfaces = (graphene.Node, )
 
     def resolve_country_code(self, info):
         return self.country.code
@@ -83,6 +84,21 @@ class NodeType(DjangoObjectType):
 
     def resolve_country_name(self, info):
         return self.country.name
+
+
+
+class NodeConnection(graphene.Connection):
+    count = graphene.Int()
+    total_count = graphene.Int()
+    class Meta:
+        node = NodeType
+
+
+    def resolve_count(root, info):
+        return len(root.edges)
+
+    def resolve_total_count(self, info, **kwargs):
+        return self.iterable.count()
 
 
 class PlatformType(DjangoObjectType):
@@ -116,8 +132,9 @@ class Query:
     country_stats = graphene.List(
         CountryStatType,
     )
-    nodes = graphene.List(
-        NodeType,
+    nodes = graphene.ConnectionField(
+        NodeConnection,
+        search=graphene.String(),
         host=graphene.String(),
         platform=graphene.String(),
         protocol=graphene.String(),
@@ -265,6 +282,9 @@ class Query:
             qs = Node.objects.active().filter(protocols__name=kwargs.get('protocol'))
         else:
             qs = Node.objects.active()
+        
+        if kwargs.get('search'):
+            qs = qs.filter(name__lower__contains=kwargs.get('search').lower())
 
         if kwargs.get('host'):
             qs = qs.filter(host=kwargs.get('host'))

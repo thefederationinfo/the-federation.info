@@ -12,7 +12,7 @@
             <div class="flex">
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader :loading="$apollo.loading">
+                        <ApolloLoader :loading="$apollo.queries.protocols.loading">
                             <Number :number="protocols.length" />
                             <strong>Protocols</strong>
                         </ApolloLoader>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader :loading="$apollo.loading">
+                        <ApolloLoader :loading="$apollo.queries.platforms.loading">
                             <Number :number="platforms.length" />
                             <strong>Projects</strong>
                         </ApolloLoader>
@@ -28,15 +28,15 @@
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader :loading="$apollo.loading">
-                            <Number :number="nodes.length" />
+                        <ApolloLoader :loading="$apollo.queries.nodes.loading">
+                            <Number :number="nodes.totalCount" />
                             <strong>Nodes</strong>
                         </ApolloLoader>
                     </div>
                 </div>
                 <div class="col4">
                     <div class="tile valign-wrapper">
-                        <ApolloLoader :loading="$apollo.loading">
+                        <ApolloLoader :loading="$apollo.queries.statsGlobalToday.loading">
                             <Number :number="statsGlobalToday ? statsGlobalToday.usersTotal : null" />
                             <strong>Users</strong>
                         </ApolloLoader>
@@ -144,11 +144,10 @@
                             v-for="platform in platforms"
                             :key="platform.id"
                             :platform="platform"
-                            :nodes="nodes"
                         />
                     </tbody>
                 </table>
-                <ApolloLoader :loading="$apollo.loading" />
+                <ApolloLoader :loading="$apollo.queries.platforms.loading" />
             </div>
         </section>
 
@@ -174,7 +173,7 @@
                         />
                     </tbody>
                 </table>
-                <ApolloLoader :loading="$apollo.loading" />
+                <ApolloLoader :loading="$apollo.queries.protocols.loading" />
             </div>
         </section>
 
@@ -227,15 +226,15 @@ import Number from "./common/Number"
 import PlatformTableRow from "./PlatformTableRow"
 import ProtocolTableRow from "./ProtocolTableRow"
 
-const query = gql`
+const nodeQuery = gql`
     query {
         nodes {
-            id
-            platform {
-                name
-                icon
-            }
+            totalCount
         }
+    }
+`
+const platformQuery = gql`
+    query {
         platforms {
             id
             code
@@ -245,12 +244,26 @@ const query = gql`
             installGuide
             license
             website
+            nodes {
+                edges {
+                    cursor
+                }
+            }
         }
+    }
+`
+
+const protocolsQuery = gql`
+    query {
         protocols {
             id
             name
             activeNodes
         }
+    }
+`
+const statsGlobalTodayQuery = gql`
+    query {
         statsGlobalToday {
             usersTotal
             usersHalfYear
@@ -264,16 +277,11 @@ const query = gql`
 
 export default {
     apollo: {
-        allQueries: {
-            query,
-            result({data}) {
-                this.nodes = data.nodes
-                this.platforms = data.platforms
-                this.protocols = data.protocols
-                this.statsGlobalToday = data.statsGlobalToday
-            },
-            manual: true,
-        },
+
+        nodes: nodeQuery,
+        protocols: protocolsQuery,
+        statsGlobalToday: statsGlobalTodayQuery,
+        platforms: platformQuery,
     },
     name: "IndexContent",
     components: {
@@ -281,7 +289,7 @@ export default {
     },
     data() {
         return {
-            nodes: [],
+            nodes: {},
             platforms: [],
             protocols: [],
             statsGlobalToday: [],

@@ -3,6 +3,7 @@ import re
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models.functions import Lower
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_countries.fields import CountryField
@@ -14,7 +15,7 @@ from thefederation.utils import clean_hostname
 
 __all__ = ('Node',)
 
-
+models.CharField.register_lookup(Lower)
 class NodeQuerySet(models.QuerySet):
     def active(self):
         return self.filter(
