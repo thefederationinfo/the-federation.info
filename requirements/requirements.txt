@@ -48,7 +48,7 @@ iteration-utilities==0.10.1  # via federation
 jedi==0.16.0              # via ipython
 jinja2==2.11.1            # via django-silk
 jsonschema==3.2.0         # via federation
-lxml==4.5.0               # via federation
+lxml==4.6.2               # via federation
 markdownify==0.4.1        # via federation
 markupsafe==1.1.1         # via jinja2
 maxminddb==1.5.2          # via geoip2
