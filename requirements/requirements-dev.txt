@@ -5,116 +5,425 @@
 #    ./compile-requirements.sh
 #
 -e git+https://git.feneas.org/jaywink/federation.git@50a3e376ddc91876449aedb745f2fc6228e7549d#egg=federation==0.20.0-dev.1
-aniso8601==7.0.0          # via -r requirements.txt, graphene
-attrs==19.3.0             # via -r requirements.txt, federation, jsonschema, pytest
-autopep8==1.5             # via -r requirements.txt, django-silk
-backcall==0.1.0           # via -r requirements.txt, ipython
-beautifulsoup4==4.8.2     # via -r requirements.txt, markdownify
-bleach==3.1.4             # via -r requirements.txt, federation
-certifi==2019.11.28       # via -r requirements.txt, requests
-cffi==1.14.0              # via -r requirements.txt, cryptography
-chardet==3.0.4            # via -r requirements.txt, requests
-circus==0.16.1            # via -r requirements.txt
-click==7.1.1              # via -r requirements.txt, rq, shcli
-codecov==2.0.22           # via -r requirements-dev.in
-commonmark==0.9.1         # via -r requirements.txt, federation
-coverage==5.0.4           # via -r requirements-dev.in, codecov, django-coverage-plugin, pytest-cov
-croniter==0.3.31          # via -r requirements.txt, rq-scheduler
-cryptography==3.2         # via -r requirements.txt, federation
-cssselect==1.1.0          # via -r requirements.txt, federation
-decorator==4.4.2          # via -r requirements.txt, ipython, traitlets
-dirty-validators==0.5.4   # via -r requirements.txt, federation
-django-cors-headers==3.2.1  # via -r requirements.txt
-django-countries==6.1.2   # via -r requirements.txt
-django-coverage-plugin==1.8.0  # via -r requirements-dev.in
-django-debug-toolbar-user-panel==1.1.1  # via -r requirements-dev.in
-django-debug-toolbar==1.11  # via -r requirements-dev.in
-django-enumfields==2.0.0  # via -r requirements.txt
-django-environ==0.4.5     # via -r requirements.txt
-django-extensions==2.2.9  # via -r requirements.txt
-django-querycount==0.7.0  # via -r requirements-dev.in
-django-redis==4.11.0      # via -r requirements.txt
-django-rq==1.3.1          # via -r requirements.txt
-django-silk==4.0.1        # via -r requirements.txt
-django-test-plus==1.4.0   # via -r requirements-dev.in
-django==2.2.13            # via -r requirements.txt, django-cors-headers, django-debug-toolbar, django-redis, django-rq, django-silk, graphene-django
-entrypoints==0.3          # via flake8
-factory-boy==2.12.0       # via -r requirements-dev.in
-faker==4.0.2              # via -r requirements-dev.in, factory-boy
-flake8==3.7.9             # via -r requirements-dev.in
-freezegun==0.3.15         # via -r requirements-dev.in
-geoip2==3.0.0             # via -r requirements.txt
-gprof2dot==2019.11.30     # via -r requirements.txt, django-silk
-graphene-django==2.9.0    # via -r requirements.txt
-graphene==2.1.8           # via -r requirements.txt, graphene-django
-graphql-core==2.3.1       # via -r requirements.txt, graphene, graphene-django, graphql-relay
-graphql-relay==2.0.1      # via -r requirements.txt, graphene
-gunicorn==20.0.4          # via -r requirements.txt
-idna==2.9                 # via -r requirements.txt, requests
-ipaddress==1.0.23         # via -r requirements.txt, ipdata
-ipdata==3.2               # via -r requirements.txt, federation
-ipdb==0.13.2              # via -r requirements-dev.in
-ipython-genutils==0.2.0   # via -r requirements.txt, traitlets
-ipython==7.13.0           # via -r requirements.txt, ipdb
-isodate==0.6.0            # via -r requirements.txt, python-xrd
-iteration-utilities==0.10.1  # via -r requirements.txt, federation
-jedi==0.16.0              # via -r requirements.txt, ipython
-jinja2==2.11.1            # via -r requirements.txt, django-silk
-jsonschema==3.2.0         # via -r requirements.txt, federation
-lxml==4.6.2               # via -r requirements.txt, federation
-markdownify==0.4.1        # via -r requirements.txt, federation
-markupsafe==1.1.1         # via -r requirements.txt, jinja2
-maxminddb==1.5.2          # via -r requirements.txt, geoip2
-mccabe==0.6.1             # via flake8
-more-itertools==8.2.0     # via pytest
-packaging==20.3           # via pytest, pytest-sugar
-parso==0.6.2              # via -r requirements.txt, jedi
-pexpect==4.8.0            # via -r requirements.txt, ipython
-pickleshare==0.7.5        # via -r requirements.txt, ipython
-pluggy==0.13.1            # via pytest
-promise==2.3              # via -r requirements.txt, graphene-django, graphql-core, graphql-relay
-prompt-toolkit==3.0.5     # via -r requirements.txt, ipython
-psutil==5.7.0             # via -r requirements.txt, circus
-psycopg2-binary==2.8.4    # via -r requirements.txt
-ptyprocess==0.6.0         # via -r requirements.txt, pexpect
-py==1.8.1                 # via pytest
-pycodestyle==2.5.0        # via -r requirements.txt, autopep8, flake8
-pycparser==2.20           # via -r requirements.txt, cffi
-pycryptodome==3.9.7       # via -r requirements.txt, federation
-pyflakes==2.1.1           # via flake8
-pygments==2.6.1           # via -r requirements.txt, django-silk, ipython
-pyparsing==2.4.6          # via packaging
-pyrsistent==0.16.0        # via -r requirements.txt, jsonschema
-pytest-cov==2.8.1         # via -r requirements-dev.in
-pytest-django==3.9.0      # via -r requirements-dev.in
-pytest-env==0.6.2         # via -r requirements-dev.in
-pytest-sugar==0.9.2       # via -r requirements-dev.in
-pytest==5.3.5             # via -r requirements-dev.in, pytest-cov, pytest-django, pytest-env, pytest-sugar
-python-dateutil==2.8.1    # via -r requirements.txt, croniter, django-silk, faker, federation, freezegun
-python-xrd==0.1           # via -r requirements.txt, federation
-pytz==2019.3              # via -r requirements.txt, django, django-silk, federation
-pyzmq==19.0.0             # via -r requirements.txt, circus
-raven==6.10.0             # via -r requirements.txt
-redis==3.4.1              # via -r requirements.txt, django-redis, django-rq, rq
-requests-http-signature-jaywink==0.1.0.dev0  # via -r requirements.txt, federation
-requests==2.23.0          # via -r requirements.txt, codecov, django-silk, federation, geoip2, ipdata, requests-http-signature-jaywink, shcli
-rq-scheduler==0.9.1       # via -r requirements.txt
-rq==0.13.0                # via -r requirements.txt, django-rq, rq-scheduler
-rx==1.6.1                 # via -r requirements.txt, graphql-core
-shcli==0.2.0              # via -r requirements.txt
-singledispatch==3.4.0.3   # via -r requirements.txt, graphene-django
-six==1.14.0               # via -r requirements.txt, bleach, circus, cryptography, django-coverage-plugin, django-extensions, freezegun, graphene, graphene-django, graphql-core, graphql-relay, isodate, jsonschema, markdownify, packaging, promise, pyrsistent, python-dateutil, singledispatch, traitlets
-soupsieve==2.0            # via -r requirements.txt, beautifulsoup4
-sqlparse==0.3.1           # via -r requirements.txt, django, django-debug-toolbar, django-silk
-termcolor==1.1.0          # via pytest-sugar
-text-unidecode==1.3       # via faker
-tornado==4.5.3            # via -r requirements.txt, circus
-traitlets==4.3.3          # via -r requirements.txt, ipython
-urllib3==1.25.8           # via -r requirements.txt, geoip2, requests
-wcwidth==0.1.9            # via -r requirements.txt, prompt-toolkit, pytest
-webencodings==0.5.1       # via -r requirements.txt, bleach
-werkzeug==1.0.1           # via -r requirements-dev.in
-whitenoise==5.0.1         # via -r requirements.txt
+    # via -r requirements.txt
+aniso8601==7.0.0
+    # via
+    #   -r requirements.txt
+    #   graphene
+attrs==19.3.0
+    # via
+    #   -r requirements.txt
+    #   federation
+    #   jsonschema
+    #   pytest
+autopep8==1.5
+    # via
+    #   -r requirements.txt
+    #   django-silk
+backcall==0.1.0
+    # via
+    #   -r requirements.txt
+    #   ipython
+beautifulsoup4==4.8.2
+    # via
+    #   -r requirements.txt
+    #   markdownify
+bleach==3.3.0
+    # via
+    #   -r requirements.txt
+    #   federation
+certifi==2019.11.28
+    # via
+    #   -r requirements.txt
+    #   requests
+cffi==1.14.0
+    # via
+    #   -r requirements.txt
+    #   cryptography
+chardet==3.0.4
+    # via
+    #   -r requirements.txt
+    #   requests
+circus==0.16.1
+    # via -r requirements.txt
+click==7.1.1
+    # via
+    #   -r requirements.txt
+    #   rq
+    #   shcli
+codecov==2.0.22
+    # via -r requirements-dev.in
+commonmark==0.9.1
+    # via
+    #   -r requirements.txt
+    #   federation
+coverage==5.0.4
+    # via
+    #   -r requirements-dev.in
+    #   codecov
+    #   django-coverage-plugin
+    #   pytest-cov
+croniter==0.3.31
+    # via
+    #   -r requirements.txt
+    #   rq-scheduler
+cryptography==3.2
+    # via
+    #   -r requirements.txt
+    #   federation
+cssselect==1.1.0
+    # via
+    #   -r requirements.txt
+    #   federation
+decorator==4.4.2
+    # via
+    #   -r requirements.txt
+    #   ipython
+    #   traitlets
+dirty-validators==0.5.4
+    # via
+    #   -r requirements.txt
+    #   federation
+django-cors-headers==3.2.1
+    # via -r requirements.txt
+django-countries==6.1.2
+    # via -r requirements.txt
+django-coverage-plugin==1.8.0
+    # via -r requirements-dev.in
+django-debug-toolbar-user-panel==1.1.1
+    # via -r requirements-dev.in
+django-debug-toolbar==1.11
+    # via -r requirements-dev.in
+django-enumfields==2.0.0
+    # via -r requirements.txt
+django-environ==0.4.5
+    # via -r requirements.txt
+django-extensions==2.2.9
+    # via -r requirements.txt
+django-querycount==0.7.0
+    # via -r requirements-dev.in
+django-redis==4.11.0
+    # via -r requirements.txt
+django-rq==1.3.1
+    # via -r requirements.txt
+django-silk==4.0.1
+    # via -r requirements.txt
+django-test-plus==1.4.0
+    # via -r requirements-dev.in
+django==2.2.13
+    # via
+    #   -r requirements.txt
+    #   django-cors-headers
+    #   django-debug-toolbar
+    #   django-redis
+    #   django-rq
+    #   django-silk
+    #   graphene-django
+entrypoints==0.3
+    # via flake8
+factory-boy==2.12.0
+    # via -r requirements-dev.in
+faker==4.0.2
+    # via
+    #   -r requirements-dev.in
+    #   factory-boy
+flake8==3.7.9
+    # via -r requirements-dev.in
+freezegun==0.3.15
+    # via -r requirements-dev.in
+geoip2==3.0.0
+    # via -r requirements.txt
+gprof2dot==2019.11.30
+    # via
+    #   -r requirements.txt
+    #   django-silk
+graphene-django==2.9.0
+    # via -r requirements.txt
+graphene==2.1.8
+    # via
+    #   -r requirements.txt
+    #   graphene-django
+graphql-core==2.3.1
+    # via
+    #   -r requirements.txt
+    #   graphene
+    #   graphene-django
+    #   graphql-relay
+graphql-relay==2.0.1
+    # via
+    #   -r requirements.txt
+    #   graphene
+gunicorn==20.0.4
+    # via -r requirements.txt
+idna==2.9
+    # via
+    #   -r requirements.txt
+    #   requests
+ipaddress==1.0.23
+    # via
+    #   -r requirements.txt
+    #   ipdata
+ipdata==3.2
+    # via
+    #   -r requirements.txt
+    #   federation
+ipdb==0.13.2
+    # via -r requirements-dev.in
+ipython-genutils==0.2.0
+    # via
+    #   -r requirements.txt
+    #   traitlets
+ipython==7.13.0
+    # via
+    #   -r requirements.txt
+    #   ipdb
+isodate==0.6.0
+    # via
+    #   -r requirements.txt
+    #   python-xrd
+iteration-utilities==0.10.1
+    # via
+    #   -r requirements.txt
+    #   federation
+jedi==0.16.0
+    # via
+    #   -r requirements.txt
+    #   ipython
+jinja2==2.11.1
+    # via
+    #   -r requirements.txt
+    #   django-silk
+jsonschema==3.2.0
+    # via
+    #   -r requirements.txt
+    #   federation
+lxml==4.6.2
+    # via
+    #   -r requirements.txt
+    #   federation
+markdownify==0.4.1
+    # via
+    #   -r requirements.txt
+    #   federation
+markupsafe==1.1.1
+    # via
+    #   -r requirements.txt
+    #   jinja2
+maxminddb==1.5.2
+    # via
+    #   -r requirements.txt
+    #   geoip2
+mccabe==0.6.1
+    # via flake8
+more-itertools==8.2.0
+    # via pytest
+packaging==20.9
+    # via
+    #   -r requirements.txt
+    #   bleach
+    #   pytest
+    #   pytest-sugar
+parso==0.6.2
+    # via
+    #   -r requirements.txt
+    #   jedi
+pexpect==4.8.0
+    # via
+    #   -r requirements.txt
+    #   ipython
+pickleshare==0.7.5
+    # via
+    #   -r requirements.txt
+    #   ipython
+pluggy==0.13.1
+    # via pytest
+promise==2.3
+    # via
+    #   -r requirements.txt
+    #   graphene-django
+    #   graphql-core
+    #   graphql-relay
+prompt-toolkit==3.0.5
+    # via
+    #   -r requirements.txt
+    #   ipython
+psutil==5.7.0
+    # via
+    #   -r requirements.txt
+    #   circus
+psycopg2-binary==2.8.4
+    # via -r requirements.txt
+ptyprocess==0.6.0
+    # via
+    #   -r requirements.txt
+    #   pexpect
+py==1.8.1
+    # via pytest
+pycodestyle==2.5.0
+    # via
+    #   -r requirements.txt
+    #   autopep8
+    #   flake8
+pycparser==2.20
+    # via
+    #   -r requirements.txt
+    #   cffi
+pycryptodome==3.9.7
+    # via
+    #   -r requirements.txt
+    #   federation
+pyflakes==2.1.1
+    # via flake8
+pygments==2.6.1
+    # via
+    #   -r requirements.txt
+    #   django-silk
+    #   ipython
+pyparsing==2.4.7
+    # via
+    #   -r requirements.txt
+    #   packaging
+pyrsistent==0.16.0
+    # via
+    #   -r requirements.txt
+    #   jsonschema
+pytest-cov==2.8.1
+    # via -r requirements-dev.in
+pytest-django==3.9.0
+    # via -r requirements-dev.in
+pytest-env==0.6.2
+    # via -r requirements-dev.in
+pytest-sugar==0.9.2
+    # via -r requirements-dev.in
+pytest==5.3.5
+    # via
+    #   -r requirements-dev.in
+    #   pytest-cov
+    #   pytest-django
+    #   pytest-env
+    #   pytest-sugar
+python-dateutil==2.8.1
+    # via
+    #   -r requirements.txt
+    #   croniter
+    #   django-silk
+    #   faker
+    #   federation
+    #   freezegun
+python-xrd==0.1
+    # via
+    #   -r requirements.txt
+    #   federation
+pytz==2019.3
+    # via
+    #   -r requirements.txt
+    #   django
+    #   django-silk
+    #   federation
+pyzmq==19.0.0
+    # via
+    #   -r requirements.txt
+    #   circus
+raven==6.10.0
+    # via -r requirements.txt
+redis==3.4.1
+    # via
+    #   -r requirements.txt
+    #   django-redis
+    #   django-rq
+    #   rq
+requests-http-signature-jaywink==0.1.0.dev0
+    # via
+    #   -r requirements.txt
+    #   federation
+requests==2.23.0
+    # via
+    #   -r requirements.txt
+    #   codecov
+    #   django-silk
+    #   federation
+    #   geoip2
+    #   ipdata
+    #   requests-http-signature-jaywink
+    #   shcli
+rq-scheduler==0.9.1
+    # via -r requirements.txt
+rq==0.13.0
+    # via
+    #   -r requirements.txt
+    #   django-rq
+    #   rq-scheduler
+rx==1.6.1
+    # via
+    #   -r requirements.txt
+    #   graphql-core
+shcli==0.2.0
+    # via -r requirements.txt
+singledispatch==3.4.0.3
+    # via
+    #   -r requirements.txt
+    #   graphene-django
+six==1.14.0
+    # via
+    #   -r requirements.txt
+    #   bleach
+    #   circus
+    #   cryptography
+    #   django-coverage-plugin
+    #   django-extensions
+    #   freezegun
+    #   graphene
+    #   graphene-django
+    #   graphql-core
+    #   graphql-relay
+    #   isodate
+    #   jsonschema
+    #   markdownify
+    #   promise
+    #   pyrsistent
+    #   python-dateutil
+    #   singledispatch
+    #   traitlets
+soupsieve==2.0
+    # via
+    #   -r requirements.txt
+    #   beautifulsoup4
+sqlparse==0.3.1
+    # via
+    #   -r requirements.txt
+    #   django
+    #   django-debug-toolbar
+    #   django-silk
+termcolor==1.1.0
+    # via pytest-sugar
+text-unidecode==1.3
+    # via faker
+tornado==4.5.3
+    # via
+    #   -r requirements.txt
+    #   circus
+traitlets==4.3.3
+    # via
+    #   -r requirements.txt
+    #   ipython
+urllib3==1.25.8
+    # via
+    #   -r requirements.txt
+    #   geoip2
+    #   requests
+wcwidth==0.1.9
+    # via
+    #   -r requirements.txt
+    #   prompt-toolkit
+    #   pytest
+webencodings==0.5.1
+    # via
+    #   -r requirements.txt
+    #   bleach
+werkzeug==1.0.1
+    # via -r requirements-dev.in
+whitenoise==5.0.1
+    # via -r requirements.txt
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
