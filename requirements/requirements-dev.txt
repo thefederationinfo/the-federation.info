@@ -67,7 +67,7 @@ croniter==0.3.31
     # via
     #   -r requirements.txt
     #   rq-scheduler
-cryptography==3.2
+cryptography==3.3.2
     # via
     #   -r requirements.txt
     #   federation

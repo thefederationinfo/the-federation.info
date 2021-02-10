@@ -36,7 +36,7 @@ commonmark==0.9.1
     # via federation
 croniter==0.3.31
     # via rq-scheduler
-cryptography==3.2
+cryptography==3.3.2
     # via federation
 cssselect==1.1.0
     # via federation
