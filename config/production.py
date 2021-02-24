@@ -110,15 +110,15 @@ if env('SENTRY_DSN', default=None):
     LOGGING['loggers']['rq_scheduler.scheduler']['handlers'].append('sentry')
     LOGGING['root'] = {
         'level': 'WARNING',
-        'handlers': ['sentry', 'console'],
+        'handlers': ['sentry', 'file'],
     }
     LOGGING['loggers']['raven'] = {
         'level': 'DEBUG',
-        'handlers': ['console'],
+        'handlers': ['file'],
         'propagate': False,
     }
     LOGGING['loggers']['sentry.errors'] = {
         'level': 'DEBUG',
-        'handlers': ['console'],
+        'handlers': ['file'],
         'propagate': False,
     }
