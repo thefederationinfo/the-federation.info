@@ -110,7 +110,7 @@ django-silk==4.0.1
     # via -r requirements.txt
 django-test-plus==1.4.0
     # via -r requirements-dev.in
-django==2.2.13
+django==2.2.18
     # via
     #   -r requirements.txt
     #   django-cors-headers
