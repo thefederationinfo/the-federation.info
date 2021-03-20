@@ -12,9 +12,9 @@ factory_boy
 Faker
 flake8
 freezegun
-ipdb
-# Locked due to https://github.com/Teemu/pytest-sugar/issues/187
-pytest<5.4
+# https://github.com/gotcha/ipdb/blob/master/HISTORY.txt#L24
+ipdb<0.13.5
+pytest
 pytest-cov
 pytest-django
 pytest-env

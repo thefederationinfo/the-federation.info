@@ -19,8 +19,6 @@ redis
 rq<1.0
 rq-scheduler
 shcli
-tornado<5.0  # Not a direct requirement but we need to lock due to circus not working with 5.0
-             # Remove from this file once circus works with this
 gunicorn
 whitenoise
 
