@@ -103,7 +103,7 @@ iteration-utilities==0.10.1
     # via federation
 jedi==0.16.0
     # via ipython
-jinja2==2.11.1
+jinja2==2.11.3
     # via django-silk
 jsonschema==3.2.0
     # via federation

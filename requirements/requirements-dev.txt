@@ -189,7 +189,7 @@ jedi==0.16.0
     # via
     #   -r requirements.txt
     #   ipython
-jinja2==2.11.1
+jinja2==2.11.3
     # via
     #   -r requirements.txt
     #   django-silk
