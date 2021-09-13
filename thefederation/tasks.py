@@ -187,6 +187,13 @@ def poll_node(host):
 
     activity = result.get('activity', {})
     users = activity.get('users', {})
+
+    # check bounds for Django's PositiveIntegerField
+    for metric in ['total', 'half_year', 'monthly', 'weekly', 'local_posts', 'local_comments']:
+        if users.get(metric) and (users.get(metric) > 2147483647 or users.get(metric) < 0):
+            logger.info(f'Updated {host} failed out of range value for {metric}')
+            return False
+
     Stat.objects.update_or_create(
         node=node,
         date=now().date(),
@@ -204,8 +211,14 @@ def poll_node(host):
     return True
 
 
-def poll_nodes():
-    logger.info(f'Queueing polling all nodes.')
+def poll_nodes(skip = 0):
+    logger.info(f'Queueing polling all nodes (skipping {skip}).')
     nodes_qs = Node.objects.only('host').active()
+    total = count = len(nodes_qs)
     for node in nodes_qs:
+        if total - count < skip:
+            count -= 1
+            continue
         poll_node.delay(node.host)
+        count -= 1
+        logger.info(f'{count} nodes left')
