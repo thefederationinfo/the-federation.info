@@ -144,6 +144,7 @@ def fill_country_information():
 
 @job('medium')
 def poll_node(host):
+    logger.info(f'Start processing {host}')
     result = fetch_node(host)
     if not result:
         logger.info(f'No result for {host}.')
