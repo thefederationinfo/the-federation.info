@@ -94,15 +94,24 @@ dirty-validators==0.5.4
     # via
     #   -r requirements.txt
     #   federation
+django==2.2.27
+    # via
+    #   -r requirements.txt
+    #   django-cors-headers
+    #   django-debug-toolbar
+    #   django-redis
+    #   django-rq
+    #   django-silk
+    #   graphene-django
 django-cors-headers==3.7.0
     # via -r requirements.txt
 django-countries==7.1
     # via -r requirements.txt
 django-coverage-plugin==1.8.0
     # via -r requirements-dev.in
-django-debug-toolbar-user-panel==1.1.1
-    # via -r requirements-dev.in
 django-debug-toolbar==1.11
+    # via -r requirements-dev.in
+django-debug-toolbar-user-panel==1.1.1
     # via -r requirements-dev.in
 django-enumfields==2.1.1
     # via -r requirements.txt
@@ -120,15 +129,6 @@ django-silk==4.1.0
     # via -r requirements.txt
 django-test-plus==1.4.0
     # via -r requirements-dev.in
-django==2.2.24
-    # via
-    #   -r requirements.txt
-    #   django-cors-headers
-    #   django-debug-toolbar
-    #   django-redis
-    #   django-rq
-    #   django-silk
-    #   graphene-django
 factory-boy==3.2.0
     # via -r requirements-dev.in
 faker==6.6.2
@@ -149,12 +149,12 @@ gprof2dot==2021.2.21
     # via
     #   -r requirements.txt
     #   django-silk
-graphene-django==2.15.0
-    # via -r requirements.txt
 graphene==2.1.8
     # via
     #   -r requirements.txt
     #   graphene-django
+graphene-django==2.15.0
+    # via -r requirements.txt
 graphql-core==2.3.2
     # via
     #   -r requirements.txt
@@ -184,14 +184,14 @@ ipdata==3.4.3
     #   federation
 ipdb==0.13.4
     # via -r requirements-dev.in
-ipython-genutils==0.2.0
-    # via
-    #   -r requirements.txt
-    #   traitlets
 ipython==7.21.0
     # via
     #   -r requirements.txt
     #   ipdb
+ipython-genutils==0.2.0
+    # via
+    #   -r requirements.txt
+    #   traitlets
 isodate==0.6.0
     # via
     #   -r requirements.txt
@@ -309,6 +309,13 @@ pyrsistent==0.17.3
     # via
     #   -r requirements.txt
     #   jsonschema
+pytest==6.2.2
+    # via
+    #   -r requirements-dev.in
+    #   pytest-cov
+    #   pytest-django
+    #   pytest-env
+    #   pytest-sugar
 pytest-cov==2.11.1
     # via -r requirements-dev.in
 pytest-django==4.1.0
@@ -317,13 +324,6 @@ pytest-env==0.6.2
     # via -r requirements-dev.in
 pytest-sugar==0.9.4
     # via -r requirements-dev.in
-pytest==6.2.2
-    # via
-    #   -r requirements-dev.in
-    #   pytest-cov
-    #   pytest-django
-    #   pytest-env
-    #   pytest-sugar
 python-dateutil==2.8.1
     # via
     #   -r requirements.txt
@@ -355,10 +355,6 @@ redis==3.5.3
     #   django-redis
     #   django-rq
     #   rq
-requests-http-signature-jaywink==0.1.0.dev0
-    # via
-    #   -r requirements.txt
-    #   federation
 requests==2.25.1
     # via
     #   -r requirements.txt
@@ -369,13 +365,17 @@ requests==2.25.1
     #   ipdata
     #   requests-http-signature-jaywink
     #   shcli
-rq-scheduler==0.11.0
-    # via -r requirements.txt
+requests-http-signature-jaywink==0.1.0.dev0
+    # via
+    #   -r requirements.txt
+    #   federation
 rq==0.13.0
     # via
     #   -r requirements.txt
     #   django-rq
     #   rq-scheduler
+rq-scheduler==0.11.0
+    # via -r requirements.txt
 rx==1.6.1
     # via
     #   -r requirements.txt
