@@ -278,7 +278,6 @@ const query = gql`
     }
 `
 
-
 export default {
     apollo: {
         allQueries: {
