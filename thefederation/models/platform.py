@@ -64,6 +64,7 @@ class Platform(ModelBase):
             'friendica': 'nodeinfo' if version >= (3, 4, 2) else "statisticsjson",
             'funkwhale': 'nodeinfo',
             'ganggo': 'nodeinfo',
+            'gitea': 'nodeinfo2',
             'gnusocial': 'nodeinfo',
             'hubzilla': 'nodeinfo' if version >= (1, 6) else "statisticsjson",
             'mastodon': 'mastodon',
