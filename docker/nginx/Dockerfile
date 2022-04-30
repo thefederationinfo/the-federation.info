@@ -1,15 +1,15 @@
 # Build bundle
-FROM node:9 as build-stage
+FROM node:16 as build-stage
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm i
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 WORKDIR /app
 
