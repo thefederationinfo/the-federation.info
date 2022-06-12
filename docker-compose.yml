@@ -5,14 +5,14 @@ services:
     image: redis
 
   app:
-    image: jaywink/the-federation.info:latest
+    image: a6543/the-federation_backend:latest
     depends_on:
       - redis
     env_file:
       - .env
 
   web:
-    image: jaywink/the-federation.info-web:latest
+    image: a6543/the-federation_frontend:latest
     depends_on:
       - app
     ports:

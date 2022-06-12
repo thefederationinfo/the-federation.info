@@ -9,8 +9,8 @@ fi
 
 docker login
 
-docker build -f docker/app/Dockerfile -t jaywink/the-federation.info --build-arg "MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}" .
-docker push jaywink/the-federation.info:latest
+docker build -f docker/app/Dockerfile -t a6543/the-federation_backend --build-arg "MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}" .
+docker push a6543/the-federation_backend:latest
 
-docker build -f docker/nginx/Dockerfile -t jaywink/the-federation.info-web .
-docker push jaywink/the-federation.info-web:latest
+docker build -f docker/nginx/Dockerfile -t a6543/the-federation_frontend .
+docker push a6543/the-federation_frontend:latest
