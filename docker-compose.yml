@@ -8,8 +8,9 @@ services:
     image: a6543/the-federation_backend:latest
     depends_on:
       - redis
-    env_file:
-      - .env
+      - db
+    environment:
+      DATABASE_URL: postgres://thefederation:thefederation@db:5432/thefederation
 
   web:
     image: a6543/the-federation_frontend:latest
@@ -17,3 +18,10 @@ services:
       - app
     ports:
       - "127.0.0.1:8123:80"
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
