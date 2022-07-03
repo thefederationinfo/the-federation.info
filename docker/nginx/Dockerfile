@@ -18,4 +18,4 @@ FROM nginx
 
 COPY --from=build-stage /app/dist /srv/frontend
 
-COPY docker/nginx/nginx.conf /etc/nginx/conf.d/thefederation.conf
+COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
