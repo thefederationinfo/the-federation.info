@@ -199,6 +199,7 @@ ADMIN_URL = r"^admin/"
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
+CSRF_TRUSTED_ORIGINS = env.list("THEFEDERATION_DOMAIN", default=['localhost'])
 
 # The Federation
 # ------------------------------------------------------------------------------

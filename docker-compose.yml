@@ -16,6 +16,7 @@ services:
       DJANGO_SECURE_SSL_REDIRECT: "False"
       THEFEDERATION_HTTPS: "False"
       TARGET_ENV: local
+      THEFEDERATION_DOMAIN: ${THEFEDERATION_DOMAIN}
 
   web:
     image: a6543/the-federation_frontend:latest
