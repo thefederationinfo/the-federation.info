@@ -45,7 +45,7 @@ Harmful content can be, but not limited to, malware, graphical material of minor
 
 ## Tech stack
 
-* Node 14
+* Node 16
 * Python 3.6
 * Django 2.0
 * PostgreSQL
