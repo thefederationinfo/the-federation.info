@@ -66,6 +66,11 @@ class Node(ModelBase):
             return
         # Strip all non-numbers
         cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."]).strip('.')
+
+        # Handle completely non-numeric version
+        if not cleaned_str:
+            return None
+
         # Split into tuple
         return tuple([int(i) for i in cleaned_str.split(".")])
 
