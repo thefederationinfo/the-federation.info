@@ -22,7 +22,6 @@
 import gql from 'graphql-tag'
 import Number from './common/Number'
 
-
 const statsQuery = gql`
     query ProtocolStats($name: String!) {
         statsProtocolToday(name: $name) {

@@ -53,7 +53,6 @@
 import gql from 'graphql-tag'
 import Number from './common/Number'
 
-
 const platformStatsQuery = gql`
     query PlatformStats($name: String!) {
         statsPlatformToday(name: $name) {

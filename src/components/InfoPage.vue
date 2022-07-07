@@ -41,7 +41,6 @@
                         All the data is available via a <a href="/graphql">GraphQL</a> endpoint.
                     </p>
 
-
                     <h3>How do I get my node listed?</h3>
                     <p>
                         For registering your node with this site, go to

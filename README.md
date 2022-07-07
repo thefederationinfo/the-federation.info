@@ -41,11 +41,11 @@ If it's closed source, leave out link to code and install guide. Icon can be any
 
 While interactions on our site is not possible, we expect sites we list to have a humane code of conduct in place. Should sites who fail to ban content that can be found generally harmful, that node will be blocked from listing here.
 
-Harmful content can be, but not limited to, malware, graphical material of minorities, abusive images, hateful content, racist content and climate denialism. The admins of this site reserve the right to decide case by case on blocking of nodes. Please report any nodes violating our terms to the admins. 
+Harmful content can be, but not limited to, malware, graphical material of minorities, abusive images, hateful content, racist content and climate denialism. The admins of this site reserve the right to decide case by case on blocking of nodes. Please report any nodes violating our terms to the admins.
 
 ## Tech stack
 
-* Node 10
+* Node 16
 * Python 3.6
 * Django 2.0
 * PostgreSQL
@@ -78,13 +78,13 @@ python manage.py migrate
 
 ``` bash
 # install dependencies
-npm i
+yarn
 
 # serve with hot reload at localhost:8080
-npm run dev
+yarn dev
 
 # build for production with minification
-npm run build
+yarn build
 ```
 
 ## Authors

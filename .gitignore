@@ -67,7 +67,6 @@ mailhog
 
 # Docs
 /docs/_build/
-/yarn.lock
 /staticfiles/
 
 
