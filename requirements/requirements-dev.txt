@@ -184,7 +184,7 @@ ipdata==3.4.3
     #   federation
 ipdb==0.13.4
     # via -r requirements-dev.in
-ipython==7.21.0
+ipython==7.31.1
     # via
     #   -r requirements.txt
     #   ipdb
@@ -224,6 +224,10 @@ markupsafe==1.1.1
     # via
     #   -r requirements.txt
     #   jinja2
+matplotlib-inline==0.1.3
+    # via
+    #   -r requirements.txt
+    #   ipython
 maxminddb==2.0.3
     # via
     #   -r requirements.txt
@@ -435,6 +439,7 @@ traitlets==5.0.5
     # via
     #   -r requirements.txt
     #   ipython
+    #   matplotlib-inline
 typing-extensions==3.7.4.3
     # via
     #   -r requirements.txt
