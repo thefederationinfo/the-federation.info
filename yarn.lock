@@ -5321,11 +5321,6 @@ karma-phantomjs-shim@^1.5.0:
   resolved "https://registry.yarnpkg.com/karma-phantomjs-shim/-/karma-phantomjs-shim-1.5.0.tgz#e8db65883480f0dbd184cc961d39c64511742200"
   integrity sha512-t0h1x7btXROaGElv36TLpuoWqTnVZ/f+GJHH/qVerjbX6AENoM5brQoB9ISO3hQ6zO1k9rDSRLrY5ZZb83ANdg==
 
-karma-sinon-chai@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/karma-sinon-chai/-/karma-sinon-chai-2.0.2.tgz#e28c109b989973abafc28a7c9f09ef24a05e07c2"
-  integrity sha512-SDgh6V0CUd+7ruL1d3yG6lFzmJNGRNQuEuCYXLaorruNP9nwQfA7hpsp4clx4CbOo5Gsajh3qUOT7CrVStUKMw==
-
 karma-sourcemap-loader@^0.3.7:
   version "0.3.8"
   resolved "https://registry.yarnpkg.com/karma-sourcemap-loader/-/karma-sourcemap-loader-0.3.8.tgz#d4bae72fb7a8397328a62b75013d2df937bdcf9c"

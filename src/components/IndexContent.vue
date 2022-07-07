@@ -1,15 +1,5 @@
 <template>
     <div>
-        <div class="maintenance-mode">
-            <strong>
-                This project is in low maintenance mode. Consider <a
-                    href="https://github.com/thefederationinfo/the-federation.info"
-                    target="_blank"
-                    rel="noopener"
-                >becoming a contributor</a> to help change this!
-                Potential ownership transfer possible.
-            </strong>
-        </div>
         <main>
             <header class="main-header">
                 <div class="main-title">
