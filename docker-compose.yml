@@ -17,6 +17,7 @@ services:
       THEFEDERATION_HTTPS: "False"
       TARGET_ENV: local
       THEFEDERATION_DOMAIN: ${THEFEDERATION_DOMAIN}
+      RQWORKER_NUM: ${RQWORKER_NUM}
 
   web:
     image: a6543/the-federation_frontend:latest
