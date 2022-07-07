@@ -212,7 +212,7 @@ jsonschema==3.2.0
     # via
     #   -r requirements.txt
     #   federation
-lxml==4.6.3
+lxml==4.9.1
     # via
     #   -r requirements.txt
     #   federation

@@ -117,7 +117,7 @@ jinja2==2.11.3
     # via django-silk
 jsonschema==3.2.0
     # via federation
-lxml==4.6.3
+lxml==4.9.1
     # via federation
 markdownify==0.6.5
     # via federation
