@@ -4,7 +4,7 @@
 #
 #    ./compile-requirements.sh
 #
--e git+https://git.feneas.org/jaywink/federation.git@50a3e376ddc91876449aedb745f2fc6228e7549d#egg=federation==0.20.0-dev.1
+-e git+https://github.com/jaywink/federation.git@50a3e376ddc91876449aedb745f2fc6228e7549d#egg=federation==0.20.0-dev.1
     # via -r requirements.txt
 aiohttp==3.7.4.post0
     # via
