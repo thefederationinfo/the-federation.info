@@ -109,7 +109,7 @@ django-countries==7.1
     # via -r requirements.txt
 django-coverage-plugin==1.8.0
     # via -r requirements-dev.in
-django-debug-toolbar==1.11
+django-debug-toolbar==1.11.1
     # via -r requirements-dev.in
 django-debug-toolbar-user-panel==1.1.1
     # via -r requirements-dev.in
