@@ -1,12 +1,5 @@
-[![](https://img.shields.io/matrix/thefederation:feneas.org.svg?server_fqdn=feneas.org)](https://matrix.to/#/#thefederation:feneas.org) [![](https://img.shields.io/badge/license-AGPLv3-green.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))
-
-# IMPORTANT: This project is largely in low maintenance mode
-
-If you wish to change that, **please become a contributor**. Active contributors will be awarded
-full ownership of the code repository and if wanted, ownership of the domain too.
-As original author and maintainer, I don't intend to work on this project much at all
-in the future. I would however like it to live and pass on to other more enthusiastic
-maintainers.
+[![Join the Matrix room](https://img.shields.io/matrix/the-federation:matrix.org?label=matrix)](https://matrix.to/#/#the-federation:matrix.org)
+[![](https://img.shields.io/badge/license-AGPLv3-green.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))
 
 # The-Federation.info
 
