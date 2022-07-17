@@ -1,7 +1,13 @@
+# The-Federation.info
+
 [![Join the Matrix room](https://img.shields.io/matrix/the-federation:matrix.org?label=matrix)](https://matrix.to/#/#the-federation:matrix.org)
 [![](https://img.shields.io/badge/license-AGPLv3-green.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0))
 
-# The-Federation.info
+<a href="https://codeberg.org/thefederationinfo/the-federation.info">
+    <img alt="Get it on Codeberg" src="https://codeberg.org/Codeberg/GetItOnCodeberg/media/branch/main/get-it-on-neon-blue.png" height="60">
+</a>
+
+---
 
 Tracking various projects using the ActivityPub, Matrix, Diaspora, OStatus and other protocols.
 
