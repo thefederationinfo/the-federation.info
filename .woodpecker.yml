@@ -1,0 +1,65 @@
+branches: main
+
+variables:
+  - &platforms 'linux/amd64'
+
+pipeline:
+  frontend-dryrun:
+    group: docker
+    image: plugins/kaniko
+    settings:
+      dockerfile: docker/nginx/Dockerfile
+      platforms: *platforms
+      no_push: true
+      repo: a6543/the-federation_frontend
+      tags: test
+    when:
+      event: pull_request
+
+  frontend-publish:
+    group: docker
+    image: plugins/kaniko
+    settings:
+      dockerfile: docker/nginx/Dockerfile
+      platforms: *platforms
+      repo: a6543/the-federation_frontend
+      tags: latest,v1-${CI_COMMIT_SHA:0:8}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      event: ["push", "tag"]
+
+  backend-dryrun:
+    group: docker
+    image: woodpeckerci/plugin-docker-buildx
+    secrets:
+      - MAXMIND_LICENSE_KEY
+    settings:
+      dockerfile: docker/app/Dockerfile
+      platforms: *platforms
+      dry_run: true
+      repo: a6543/the-federation_backend
+      tags: test
+      build_args_from_env: MAXMIND_LICENSE_KEY
+    when:
+      event: pull_request
+
+  backend-publish:
+    group: docker
+    image: woodpeckerci/plugin-docker-buildx
+    secrets:
+      - MAXMIND_LICENSE_KEY
+    settings:
+      dockerfile: docker/app/Dockerfile
+      platforms: *platforms
+      repo: a6543/the-federation_backend
+      tags: latest,v1-${CI_COMMIT_SHA:0:8}
+      build_args_from_env: MAXMIND_LICENSE_KEY
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      event: ["push", "tag"]
