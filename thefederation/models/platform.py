@@ -66,6 +66,7 @@ class Platform(ModelBase):
             'ganggo': 'nodeinfo',
             'gitea': 'nodeinfo2',
             'gnusocial': 'nodeinfo',
+            'fedimint': 'misskey',
             'hubzilla': 'nodeinfo' if version >= (1, 6) else "statisticsjson",
             'mastodon': 'mastodon',
             'misskey': 'misskey',
