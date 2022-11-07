@@ -22,11 +22,11 @@
                     </p>
                     <p>
                         The code is <a
-                            href="https://github.com/thefederationinfo/the-federation.info"
+                            href="https://codeberg.org/thefederationinfo/the-federation.info"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            on GitHub
+                            on Codeberg
                         </a> under AGPLv3. Please file bugs and ideas there if you want to - and of course pull
                         requests are welcome too.
                     </p>
@@ -105,11 +105,11 @@
                         <li>
                             The Federation website code
                             <a
-                                href="https://github.com/thefederationinfo/the-federation.info"
+                                href="https://codeberg.org/thefederationinfo/the-federation.info"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                on GitHub
+                                on Codeberg
                             </a> (<a
                                 href="https://www.gnu.org/licenses/agpl-3.0.en.html"
                                 target="_blank"
@@ -149,11 +149,19 @@
                     <p class="center">
                         Hosted with &lt;3 by
                         <a
-                            href="https://jasonrobinson.me"
+                            href="https://codeberg.org/6543"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Jason Robinson
+                            6543
+                        </a>
+                        &amp;
+                        <a
+                            href="https://codeberg.org/crapStone"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            crapStone
                         </a>
                     </p>
                 </div>
