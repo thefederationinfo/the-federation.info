@@ -127,6 +127,7 @@ query MyQuery($id: Int!, $yesterday: date!) {
         thefederation_node_protocols {
             thefederation_node {
                 id
+                name
                 version
                 open_signups
                 host
