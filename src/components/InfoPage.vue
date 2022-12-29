@@ -159,8 +159,7 @@
                             rel="noopener noreferrer"
                         >
                             6543
-                        </a>
-                        &amp;
+                        </a>,
                         <a
                             href="https://codeberg.org/crapStone"
                             target="_blank"
@@ -168,6 +167,12 @@
                         >
                             crapStone
                         </a>
+                        &amp;
+                        <a
+                            href="https://codeberg.org/Epsilon_02"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >Epsilon_02</a>
                     </p>
                 </div>
             </section>
