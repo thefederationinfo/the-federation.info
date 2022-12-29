@@ -13,17 +13,17 @@
         </td>
         <th style="text-align: left;">
             <router-link
-                :to="{name: 'platform', params: {platform: platform.name}}"
+                :to="{name: 'platform', params: {platform: platform.id}}"
             >
-                {{ platform.displayName ? platform.displayName : platform.name }}
+                {{ platform.display_name ? platform.display_name : platform.name }}
             </router-link>
         </th>
         <td class="nodes">
-            <Number :number="nodeCount" />
+            <Number :number="platform.thefederation_nodes_aggregate.aggregate.count" />
         </td>
         <td class="users">
             <div v-if="statsPlatformToday">
-                <Number :number="statsPlatformToday.usersTotal" />
+                <Number :number="platform.thefederation_stats[0].users_total" />
             </div>
         </td>
         <td>
@@ -50,38 +50,15 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 import Number from './common/Number'
 
-const platformStatsQuery = gql`
-    query PlatformStats($name: String!) {
-        statsPlatformToday(name: $name) {
-            usersTotal
-        }
-    }
-`
-
 export default {
-    apollo: {
-        statsPlatformToday: {
-            query: platformStatsQuery,
-            variables() {
-                return {
-                    name: this.platform.name,
-                }
-            },
-        },
-    },
     name: "PlatformTableRow",
     components: {Number},
     props: {
         platform: {
             type: Object,
             default: null,
-        },
-        nodes: {
-            type: Array,
-            default: () => [],
         },
     },
     data() {
@@ -92,9 +69,6 @@ export default {
     computed: {
         imageSource() {
             return `/static/images/${this.platform.icon}-16.png`
-        },
-        nodeCount() {
-            return this.nodes.filter(node => node.platform.name === this.platform.name).length
         },
         websiteWithoutProtocol() {
             return this.platform.website.replace('https://', '').replace('http://', '')

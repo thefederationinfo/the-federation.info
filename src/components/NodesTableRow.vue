@@ -2,9 +2,9 @@
     <tr>
         <td>
             <img
-                v-if="node.platform.name !== 'unknown' && node.platform.icon !== 'unknown'"
-                :alt="node.platform.name"
-                :title="node.platform.name"
+                v-if="node.thefederation_platform.name !== 'unknown' && node.thefederation_platform.icon !== 'unknown'"
+                :alt="node.thefederation_platform.name"
+                :title="node.thefederation_platform.name"
                 :src="imageSource"
             >
             <div v-else>
@@ -14,7 +14,7 @@
         <td>
             <router-link
                 :title="node.name"
-                :to="{name: 'node', params: {host: node.host}}"
+                :to="{name: 'node', params: {id: node.id}}"
             >
                 {{ node.name }}
             </router-link>
@@ -23,25 +23,26 @@
             {{ node.version }}
         </td>
         <td>{{ openSignups }}</td>
-        <td>{{ stats.usersTotal ? stats.usersTotal : '' }}</td>
-        <td>{{ stats.usersHalfYear ? stats.usersHalfYear : '' }}</td>
-        <td>{{ stats.usersMonthly ? stats.usersMonthly : '' }}</td>
-        <td>{{ stats.localPosts ? stats.localPosts : '' }}</td>
-        <td>{{ stats.localComments ? stats.localComments : '' }}</td>
+        <td>{{ stats.users_total ? Math.ceil(stats.users_total) : '-' }}</td>
+        <td>{{ stats.users_half_year ? Math.ceil(stats.users_half_year) : '-' }}</td>
+        <td>{{ stats.users_monthly ? Math.ceil(stats.users_monthly) : '-' }}</td>
+        <td>{{ stats.local_posts ? Math.ceil(stats.local_posts) : '-' }}</td>
+        <td>{{ stats.local_comments ? Math.ceil(stats.local_comments) : '-' }}</td>
         <td>
             <span
                 v-if="services"
                 v-tooltip="services"
             >
-                {{ node.services.length }}
+                {{ node.thefederation_node_services.length }}
             </span>
+            <span v-else>-</span>
         </td>
         <td>
             <div
-                v-if="node.countryCode"
-                :title="node.countryName"
+                v-if="node.country"
+                :title="node.country"
             >
-                {{ node.countryFlag }}
+                {{ resolveCountryFlag }}
             </div>
             <div v-else>
                 &nbsp;
@@ -52,6 +53,7 @@
 
 <script>
 import _ from "lodash/collection"
+import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 
 export default {
     name: "NodesTableRow",
@@ -60,24 +62,28 @@ export default {
             type: Object,
             default: null,
         },
-        stats: {
-            type: Object,
-            default: null,
-        },
+    },
+    data() {
+        return {
+            stats: this.node.thefederation_stats_aggregate.aggregate.avg,
+        }
     },
     computed: {
         imageSource() {
-            return `/static/images/${this.node.platform.icon}-16.png`
+            return `/static/images/${this.node.thefederation_platform.icon}-16.png`
         },
         openSignups() {
-            return this.node.openSignups ? "Yes" : "No"
+            return this.node.open_signups ? "Yes" : "No"
         },
         services() {
             const services = []
-            for (const o of this.node.services) {
-                services.push(o.name)
+            for (const o of this.node.thefederation_node_services) {
+                services.push(o.thefederation_service.name)
             }
             return _.sortBy(services).join(', ')
+        },
+        resolveCountryFlag() {
+            return getUnicodeFlagIcon(this.node.country)
         },
     },
 }

@@ -1,0 +1,39 @@
+table:
+  name: thefederation_platform
+  schema: public
+array_relationships:
+  - name: thefederation_nodes
+    using:
+      foreign_key_constraint_on:
+        column: platform_id
+        table:
+          name: thefederation_node
+          schema: public
+  - name: thefederation_stats
+    using:
+      foreign_key_constraint_on:
+        column: platform_id
+        table:
+          name: thefederation_stat
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - code
+        - display_name
+        - icon
+        - install_guide
+        - latest_version
+        - license
+        - name
+        - tagline
+        - version_clean_style
+        - website
+        - id
+        - description
+        - created
+        - updated
+        - uuid
+      filter: {}
+      allow_aggregations: true

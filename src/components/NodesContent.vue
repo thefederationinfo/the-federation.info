@@ -12,11 +12,7 @@
             <div>
                 <p>You can also access a list of nodes for each project using the global menu on the left.</p>
                 <div class="overflow-x">
-                    <NodesTable
-                        :nodes="nodes"
-                        :stats="stats"
-                    />
-                    <ApolloLoader :loading="$apollo.loading" />
+                    <p><b>Currently unavailable!</b></p>
                 </div>
             </div>
         </section>
@@ -26,39 +22,27 @@
 <script>
 import gql from 'graphql-tag'
 
-import ApolloLoader from "./common/ApolloLoader"
-import NodesTable from "./NodesTable"
-
+// The Node Table is just too big to create a query without pagination
 const query = gql`
-    query {
-        nodes {
+    query NodeContent {
+        thefederation_node {
             id
             name
             version
-            openSignups
+            open_signups
             host
-            platform {
+            country
+            thefederation_platform {
                 name
                 icon
             }
-            countryCode
-            countryFlag
-            countryName
-            services {
-                name
+            thefederation_node_services {
+                thefederation_service {
+                    name
+                }
             }
         }
-        statsNodes {
-            node {
-                id
-            }
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
-        }
-    }
+}
 `
 
 export default {
@@ -66,10 +50,12 @@ export default {
         allQueries: {
             query,
             result({data}) {
-                this.nodes = data.nodes
+                this.nodes = data.thefederation_node
                 const stats = {}
-                for (const o of data.statsNodes) {
-                    stats[o.node.id] = o
+                for (const o of data.thefederation_stat) {
+                    if (o.thefederation_node) {
+                        stats[o.thefederation_node.id] = o
+                    }
                 }
                 this.stats = stats
             },
@@ -77,7 +63,6 @@ export default {
         },
     },
     name: "NodesContent",
-    components: {ApolloLoader, NodesTable},
     data() {
         return {
             nodes: [],

@@ -1,0 +1,10 @@
+table:
+  name: users_per_node
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - date
+        - median
+      filter: {}

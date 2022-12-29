@@ -20,28 +20,32 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ stats.usersTotal }} <strong>Users</strong>
+                                <Number :number="stats.users_total" />
+                                <strong>Users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ stats.usersMonthly }} <strong>Monthly users</strong>
+                                <Number :number="stats.users_monthly" />
+                                <strong>Monthly users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ stats.localPosts }} <strong>Posts</strong>
+                                <Number :number="stats.local_posts" />
+                                <strong>Posts</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ stats.localComments }} <strong>Comments</strong>
+                                <Number :number="stats.local_comments" />
+                                <strong>Comments</strong>
                             </ApolloLoader>
                         </div>
                     </div>
@@ -51,7 +55,7 @@
                 <header>
                     <h2>Info</h2>
                     <div
-                        v-if="node.platform.name === 'diaspora'"
+                        v-if="node.thefederation_platform.name === 'diaspora'"
                         class="center right-action"
                     >
                         Access
@@ -71,7 +75,8 @@
                                 <li>
                                     Software:
                                     <router-link
-                                        :to="{name: 'platform', params: {platform: node.platform.name}}"
+                                        v-if="node.thefederation_platform"
+                                        :to="{name: 'platform', params: {platform: node.thefederation_platform.id}}"
                                         :title="platformTitle"
                                     >
                                         <strong>
@@ -80,7 +85,7 @@
                                     </router-link>
                                 </li>
                                 <li>Version: <strong>{{ node.version }}</strong></li>
-                                <li>Open signups: <strong>{{ node.openSignups ? 'Yes' : 'No' }}</strong></li>
+                                <li>Open signups: <strong>{{ node.open_signups ? 'Yes' : 'No' }}</strong></li>
                                 <!-- <li>Services: <strong>{{ node.services }}</strong></li> -->
                                 <!-- <li>Protocols: <strong>{{ node.protocols }}</strong></li> -->
                                 <li>Country: <strong>{{ node.country }}</strong></li>
@@ -89,11 +94,11 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Users: <strong>{{ stats.usersTotal }}</strong></li>
-                                <li>Last 6 months active users: <strong>{{ stats.usersHalfYear }}</strong></li>
-                                <li>Last month active users: <strong>{{ stats.usersMonthly }}</strong></li>
-                                <li>Posts: <strong>{{ stats.localPosts }}</strong></li>
-                                <li>Comments: <strong>{{ stats.localComments }}</strong></li>
+                                <li>Users: <strong><Number :number="stats.users_total" /></strong></li>
+                                <li>Last 6 months active users: <strong><Number :number="stats.users_half_year" /></strong></li>
+                                <li>Last month active users: <strong><Number :number="stats.users_monthly" /></strong></li>
+                                <li>Posts: <strong><Number :number="stats.local_posts" /></strong></li>
+                                <li>Comments: <strong><Number :number="stats.local_comments" /></strong></li>
                             </ul>
                         </div>
                     </div>
@@ -103,6 +108,7 @@
             <Charts
                 v-if="node"
                 :item="node.host"
+                :node-id="node.id"
                 type="node"
             />
         </main>
@@ -119,33 +125,38 @@ import ApolloLoader from "../common/ApolloLoader"
 import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
+import Number from "../common/Number"
 
 const query = gql`
-    query Node($host: String!) {
-        nodes(host: $host) {
+query Node($id: Int!, $today: date!) {
+    thefederation_node_by_pk(id: $id) {
+        id
+        name
+        version
+        open_signups
+        host
+        country
+        thefederation_platform {
+            id
             name
-            version
-            country
-            openSignups
-            host
-            platform {
-              name
-              icon
-              displayName
-            }
-            services {
+            icon
+            display_name
+        }
+        thefederation_node_services {
+            thefederation_service {
                 name
             }
         }
-
-        statsNodes(host: $host) {
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
+        thefederation_stats(where: {date: {_eq: $today}}) {
+            users_total
+            users_half_year
+            users_monthly
+            users_weekly
+            local_posts
+            local_comments
         }
     }
+}
 `
 
 export default {
@@ -154,32 +165,36 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.node = data.nodes[0] || {}
-                this.stats = data.statsNodes[0] || {}
+                this.node = data.thefederation_node_by_pk || {}
+                this.stats = this.node.thefederation_stats[0] || {}
             },
             variables() {
                 return {
-                    host: this.$route.params.host,
+                    id: this.$route.params.id,
+                    today: new Date(),
                 }
             },
         },
     },
     name: "NodePage",
     components: {
-        ApolloLoader, Charts, Footer, Drawer,
+        ApolloLoader, Charts, Footer, Drawer, Number,
     },
     data() {
         return {
             node: {
-                platform: '',
-                services: [],
+                thefederation_platform: '',
+                thefederation_node_services: {
+                    thefederation_service: [],
+                },
+                thefederation_stats: {},
             },
             stats: {},
         }
     },
     computed: {
         diasporaStatisticsUrl() {
-            if (this.node.platform.name === 'diaspora' && this.node.host) {
+            if (this.node.thefederation_platform.name === 'diaspora' && this.node.host) {
                 return `https://${this.node.host}/statistics`
             }
             return ''
@@ -191,12 +206,15 @@ export default {
             return ''
         },
         platformTitle() {
-            return this.node.platform.displayName ? this.node.platform.displayName : this.node.platform.name
+            return this.node.thefederation_platform.display_name ? this.node.thefederation_platform.display_name : this.node.thefederation_platform.name
         },
         services() {
             const services = []
-            for (const o of this.node.services) {
-                services.push(o.name)
+            for (const o of Object.assign([], this.node.thefederation_node_services)) {
+                services.push(o.thefederation_service.name)
+            }
+            if (services.length === 0) {
+                return '-'
             }
             return _.sortBy(services).join(', ')
         },

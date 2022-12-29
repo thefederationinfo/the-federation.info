@@ -1,0 +1,1 @@
+CREATE TABLE "public"."count_by_date" ("date" date NOT NULL, "count" integer NOT NULL, PRIMARY KEY ("date") );COMMENT ON TABLE "public"."count_by_date" IS E'just a helper table for functions to get data for the graphs';

@@ -1,6 +1,6 @@
 <template>
     <span>
-        {{ number ? number.toLocaleString() : ' ' }}
+        {{ number ? Math.ceil(number).toLocaleString() : '-' }}
     </span>
 </template>
 

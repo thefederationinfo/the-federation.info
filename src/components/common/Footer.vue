@@ -4,7 +4,7 @@
             <a href="/info">
                 About
             </a> -
-            <a href="https://github.com/thefederationinfo/the-federation.info">
+            <a href="https://codeberg.org/thefederationinfo/the-federation.info">
                 Source code
             </a> -
             <a href="https://socialhome.network/u/thefederation/">

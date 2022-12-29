@@ -22,7 +22,6 @@
                 v-for="node in nodes"
                 :key="node.id"
                 :node="node"
-                :stats="statsForNode(node.id)"
             />
         </tbody>
     </table>
@@ -39,28 +38,10 @@ export default {
             type: Array,
             default: () => [],
         },
-        stats: {
-            type: Object,
-            default: () => {},
-        },
     },
     mounted() {
         // eslint-disable-next-line no-undef
         makeSortable(document.getElementById("nodes-table"))
-    },
-    methods: {
-        statsForNode(nodeId) {
-            if (this.stats[nodeId] === undefined) {
-                return {
-                    usersTotal: 0,
-                    usersHalfYear: 0,
-                    usersMonthly: 0,
-                    localPosts: 0,
-                    localComments: 0,
-                }
-            }
-            return this.stats[nodeId]
-        },
     },
 }
 </script>

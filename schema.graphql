@@ -1,0 +1,6348 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+input active_users_ratio_by_node_args {
+  nodeid: Int
+}
+
+input active_users_ratio_by_platform_args {
+  platformid: Int
+}
+
+"""just a helper table for functions to get data for the graphs"""
+type count_by_date {
+  count: float8!
+  date: date!
+}
+
+type count_by_date_aggregate {
+  aggregate: count_by_date_aggregate_fields
+  nodes: [count_by_date!]!
+}
+
+"""
+aggregate fields of "count_by_date"
+"""
+type count_by_date_aggregate_fields {
+  avg: count_by_date_avg_fields
+  count(columns: [count_by_date_select_column!], distinct: Boolean): Int!
+  max: count_by_date_max_fields
+  min: count_by_date_min_fields
+  stddev: count_by_date_stddev_fields
+  stddev_pop: count_by_date_stddev_pop_fields
+  stddev_samp: count_by_date_stddev_samp_fields
+  sum: count_by_date_sum_fields
+  var_pop: count_by_date_var_pop_fields
+  var_samp: count_by_date_var_samp_fields
+  variance: count_by_date_variance_fields
+}
+
+"""aggregate avg on columns"""
+type count_by_date_avg_fields {
+  count: Float
+}
+
+"""
+Boolean expression to filter rows from the table "count_by_date". All fields are combined with a logical 'AND'.
+"""
+input count_by_date_bool_exp {
+  _and: [count_by_date_bool_exp!]
+  _not: count_by_date_bool_exp
+  _or: [count_by_date_bool_exp!]
+  count: float8_comparison_exp
+  date: date_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "count_by_date"
+"""
+enum count_by_date_constraint {
+  """
+  unique or primary key constraint on columns "date"
+  """
+  count_by_date_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "count_by_date"
+"""
+input count_by_date_inc_input {
+  count: float8
+}
+
+"""
+input type for inserting data into table "count_by_date"
+"""
+input count_by_date_insert_input {
+  count: float8
+  date: date
+}
+
+"""aggregate max on columns"""
+type count_by_date_max_fields {
+  count: float8
+  date: date
+}
+
+"""aggregate min on columns"""
+type count_by_date_min_fields {
+  count: float8
+  date: date
+}
+
+"""
+response of any mutation on the table "count_by_date"
+"""
+type count_by_date_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [count_by_date!]!
+}
+
+"""
+on_conflict condition type for table "count_by_date"
+"""
+input count_by_date_on_conflict {
+  constraint: count_by_date_constraint!
+  update_columns: [count_by_date_update_column!]! = []
+  where: count_by_date_bool_exp
+}
+
+"""Ordering options when selecting data from "count_by_date"."""
+input count_by_date_order_by {
+  count: order_by
+  date: order_by
+}
+
+"""primary key columns input for table: count_by_date"""
+input count_by_date_pk_columns_input {
+  date: date!
+}
+
+"""
+select columns of table "count_by_date"
+"""
+enum count_by_date_select_column {
+  """column name"""
+  count
+
+  """column name"""
+  date
+}
+
+"""
+input type for updating data in table "count_by_date"
+"""
+input count_by_date_set_input {
+  count: float8
+  date: date
+}
+
+"""aggregate stddev on columns"""
+type count_by_date_stddev_fields {
+  count: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type count_by_date_stddev_pop_fields {
+  count: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type count_by_date_stddev_samp_fields {
+  count: Float
+}
+
+"""
+Streaming cursor of the table "count_by_date"
+"""
+input count_by_date_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: count_by_date_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input count_by_date_stream_cursor_value_input {
+  count: float8
+  date: date
+}
+
+"""aggregate sum on columns"""
+type count_by_date_sum_fields {
+  count: float8
+}
+
+"""
+update columns of table "count_by_date"
+"""
+enum count_by_date_update_column {
+  """column name"""
+  count
+
+  """column name"""
+  date
+}
+
+input count_by_date_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: count_by_date_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: count_by_date_set_input
+  where: count_by_date_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type count_by_date_var_pop_fields {
+  count: Float
+}
+
+"""aggregate var_samp on columns"""
+type count_by_date_var_samp_fields {
+  count: Float
+}
+
+"""aggregate variance on columns"""
+type count_by_date_variance_fields {
+  count: Float
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+scalar date
+
+"""
+Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'.
+"""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+scalar float8
+
+"""
+Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'.
+"""
+input float8_comparison_exp {
+  _eq: float8
+  _gt: float8
+  _gte: float8
+  _in: [float8!]
+  _is_null: Boolean
+  _lt: float8
+  _lte: float8
+  _neq: float8
+  _nin: [float8!]
+}
+
+"""just a placeholder table for the hosting report function"""
+type hosting_report_t {
+  actives: Int!
+  count: Int!
+  country: String!
+  total: Int!
+}
+
+type hosting_report_t_aggregate {
+  aggregate: hosting_report_t_aggregate_fields
+  nodes: [hosting_report_t!]!
+}
+
+"""
+aggregate fields of "hosting_report_t"
+"""
+type hosting_report_t_aggregate_fields {
+  avg: hosting_report_t_avg_fields
+  count(columns: [hosting_report_t_select_column!], distinct: Boolean): Int!
+  max: hosting_report_t_max_fields
+  min: hosting_report_t_min_fields
+  stddev: hosting_report_t_stddev_fields
+  stddev_pop: hosting_report_t_stddev_pop_fields
+  stddev_samp: hosting_report_t_stddev_samp_fields
+  sum: hosting_report_t_sum_fields
+  var_pop: hosting_report_t_var_pop_fields
+  var_samp: hosting_report_t_var_samp_fields
+  variance: hosting_report_t_variance_fields
+}
+
+"""aggregate avg on columns"""
+type hosting_report_t_avg_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+"""
+Boolean expression to filter rows from the table "hosting_report_t". All fields are combined with a logical 'AND'.
+"""
+input hosting_report_t_bool_exp {
+  _and: [hosting_report_t_bool_exp!]
+  _not: hosting_report_t_bool_exp
+  _or: [hosting_report_t_bool_exp!]
+  actives: Int_comparison_exp
+  count: Int_comparison_exp
+  country: String_comparison_exp
+  total: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "hosting_report_t"
+"""
+enum hosting_report_t_constraint {
+  """
+  unique or primary key constraint on columns "country"
+  """
+  hosting_report_t_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "hosting_report_t"
+"""
+input hosting_report_t_inc_input {
+  actives: Int
+  count: Int
+  total: Int
+}
+
+"""
+input type for inserting data into table "hosting_report_t"
+"""
+input hosting_report_t_insert_input {
+  actives: Int
+  count: Int
+  country: String
+  total: Int
+}
+
+"""aggregate max on columns"""
+type hosting_report_t_max_fields {
+  actives: Int
+  count: Int
+  country: String
+  total: Int
+}
+
+"""aggregate min on columns"""
+type hosting_report_t_min_fields {
+  actives: Int
+  count: Int
+  country: String
+  total: Int
+}
+
+"""
+response of any mutation on the table "hosting_report_t"
+"""
+type hosting_report_t_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [hosting_report_t!]!
+}
+
+"""
+on_conflict condition type for table "hosting_report_t"
+"""
+input hosting_report_t_on_conflict {
+  constraint: hosting_report_t_constraint!
+  update_columns: [hosting_report_t_update_column!]! = []
+  where: hosting_report_t_bool_exp
+}
+
+"""Ordering options when selecting data from "hosting_report_t"."""
+input hosting_report_t_order_by {
+  actives: order_by
+  count: order_by
+  country: order_by
+  total: order_by
+}
+
+"""primary key columns input for table: hosting_report_t"""
+input hosting_report_t_pk_columns_input {
+  country: String!
+}
+
+"""
+select columns of table "hosting_report_t"
+"""
+enum hosting_report_t_select_column {
+  """column name"""
+  actives
+
+  """column name"""
+  count
+
+  """column name"""
+  country
+
+  """column name"""
+  total
+}
+
+"""
+input type for updating data in table "hosting_report_t"
+"""
+input hosting_report_t_set_input {
+  actives: Int
+  count: Int
+  country: String
+  total: Int
+}
+
+"""aggregate stddev on columns"""
+type hosting_report_t_stddev_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type hosting_report_t_stddev_pop_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type hosting_report_t_stddev_samp_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+"""
+Streaming cursor of the table "hosting_report_t"
+"""
+input hosting_report_t_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: hosting_report_t_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input hosting_report_t_stream_cursor_value_input {
+  actives: Int
+  count: Int
+  country: String
+  total: Int
+}
+
+"""aggregate sum on columns"""
+type hosting_report_t_sum_fields {
+  actives: Int
+  count: Int
+  total: Int
+}
+
+"""
+update columns of table "hosting_report_t"
+"""
+enum hosting_report_t_update_column {
+  """column name"""
+  actives
+
+  """column name"""
+  count
+
+  """column name"""
+  country
+
+  """column name"""
+  total
+}
+
+input hosting_report_t_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: hosting_report_t_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: hosting_report_t_set_input
+  where: hosting_report_t_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type hosting_report_t_var_pop_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+"""aggregate var_samp on columns"""
+type hosting_report_t_var_samp_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+"""aggregate variance on columns"""
+type hosting_report_t_variance_fields {
+  actives: Float
+  count: Float
+  total: Float
+}
+
+scalar inet
+
+"""
+Boolean expression to compare columns of type "inet". All fields are combined with logical 'AND'.
+"""
+input inet_comparison_exp {
+  _eq: inet
+  _gt: inet
+  _gte: inet
+  _in: [inet!]
+  _is_null: Boolean
+  _lt: inet
+  _lte: inet
+  _neq: inet
+  _nin: [inet!]
+}
+
+scalar jsonb
+
+input jsonb_cast_exp {
+  String: String_comparison_exp
+}
+
+"""
+Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'.
+"""
+input jsonb_comparison_exp {
+  _cast: jsonb_cast_exp
+
+  """is the column contained in the given json value"""
+  _contained_in: jsonb
+
+  """does the column contain the given json value at the top level"""
+  _contains: jsonb
+  _eq: jsonb
+  _gt: jsonb
+  _gte: jsonb
+
+  """does the string exist as a top-level key in the column"""
+  _has_key: String
+
+  """do all of these strings exist as top-level keys in the column"""
+  _has_keys_all: [String!]
+
+  """do any of these strings exist as top-level keys in the column"""
+  _has_keys_any: [String!]
+  _in: [jsonb!]
+  _is_null: Boolean
+  _lt: jsonb
+  _lte: jsonb
+  _neq: jsonb
+  _nin: [jsonb!]
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "count_by_date"
+  """
+  delete_count_by_date(
+    """filter the rows which have to be deleted"""
+    where: count_by_date_bool_exp!
+  ): count_by_date_mutation_response
+
+  """
+  delete single row from the table: "count_by_date"
+  """
+  delete_count_by_date_by_pk(date: date!): count_by_date
+
+  """
+  delete data from the table: "hosting_report_t"
+  """
+  delete_hosting_report_t(
+    """filter the rows which have to be deleted"""
+    where: hosting_report_t_bool_exp!
+  ): hosting_report_t_mutation_response
+
+  """
+  delete single row from the table: "hosting_report_t"
+  """
+  delete_hosting_report_t_by_pk(country: String!): hosting_report_t
+
+  """
+  delete data from the table: "thefederation_node"
+  """
+  delete_thefederation_node(
+    """filter the rows which have to be deleted"""
+    where: thefederation_node_bool_exp!
+  ): thefederation_node_mutation_response
+
+  """
+  delete single row from the table: "thefederation_node"
+  """
+  delete_thefederation_node_by_pk(id: Int!): thefederation_node
+
+  """
+  delete data from the table: "thefederation_node_protocols"
+  """
+  delete_thefederation_node_protocols(
+    """filter the rows which have to be deleted"""
+    where: thefederation_node_protocols_bool_exp!
+  ): thefederation_node_protocols_mutation_response
+
+  """
+  delete single row from the table: "thefederation_node_protocols"
+  """
+  delete_thefederation_node_protocols_by_pk(id: Int!): thefederation_node_protocols
+
+  """
+  delete data from the table: "thefederation_node_services"
+  """
+  delete_thefederation_node_services(
+    """filter the rows which have to be deleted"""
+    where: thefederation_node_services_bool_exp!
+  ): thefederation_node_services_mutation_response
+
+  """
+  delete single row from the table: "thefederation_node_services"
+  """
+  delete_thefederation_node_services_by_pk(id: Int!): thefederation_node_services
+
+  """
+  delete data from the table: "thefederation_platform"
+  """
+  delete_thefederation_platform(
+    """filter the rows which have to be deleted"""
+    where: thefederation_platform_bool_exp!
+  ): thefederation_platform_mutation_response
+
+  """
+  delete single row from the table: "thefederation_platform"
+  """
+  delete_thefederation_platform_by_pk(id: Int!): thefederation_platform
+
+  """
+  delete data from the table: "thefederation_protocol"
+  """
+  delete_thefederation_protocol(
+    """filter the rows which have to be deleted"""
+    where: thefederation_protocol_bool_exp!
+  ): thefederation_protocol_mutation_response
+
+  """
+  delete single row from the table: "thefederation_protocol"
+  """
+  delete_thefederation_protocol_by_pk(id: Int!): thefederation_protocol
+
+  """
+  delete data from the table: "thefederation_service"
+  """
+  delete_thefederation_service(
+    """filter the rows which have to be deleted"""
+    where: thefederation_service_bool_exp!
+  ): thefederation_service_mutation_response
+
+  """
+  delete single row from the table: "thefederation_service"
+  """
+  delete_thefederation_service_by_pk(id: Int!): thefederation_service
+
+  """
+  delete data from the table: "thefederation_stat"
+  """
+  delete_thefederation_stat(
+    """filter the rows which have to be deleted"""
+    where: thefederation_stat_bool_exp!
+  ): thefederation_stat_mutation_response
+
+  """
+  delete single row from the table: "thefederation_stat"
+  """
+  delete_thefederation_stat_by_pk(id: Int!): thefederation_stat
+
+  """
+  insert data into the table: "count_by_date"
+  """
+  insert_count_by_date(
+    """the rows to be inserted"""
+    objects: [count_by_date_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: count_by_date_on_conflict
+  ): count_by_date_mutation_response
+
+  """
+  insert a single row into the table: "count_by_date"
+  """
+  insert_count_by_date_one(
+    """the row to be inserted"""
+    object: count_by_date_insert_input!
+
+    """upsert condition"""
+    on_conflict: count_by_date_on_conflict
+  ): count_by_date
+
+  """
+  insert data into the table: "hosting_report_t"
+  """
+  insert_hosting_report_t(
+    """the rows to be inserted"""
+    objects: [hosting_report_t_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: hosting_report_t_on_conflict
+  ): hosting_report_t_mutation_response
+
+  """
+  insert a single row into the table: "hosting_report_t"
+  """
+  insert_hosting_report_t_one(
+    """the row to be inserted"""
+    object: hosting_report_t_insert_input!
+
+    """upsert condition"""
+    on_conflict: hosting_report_t_on_conflict
+  ): hosting_report_t
+
+  """
+  insert data into the table: "thefederation_node"
+  """
+  insert_thefederation_node(
+    """the rows to be inserted"""
+    objects: [thefederation_node_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_node_on_conflict
+  ): thefederation_node_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_node"
+  """
+  insert_thefederation_node_one(
+    """the row to be inserted"""
+    object: thefederation_node_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_node_on_conflict
+  ): thefederation_node
+
+  """
+  insert data into the table: "thefederation_node_protocols"
+  """
+  insert_thefederation_node_protocols(
+    """the rows to be inserted"""
+    objects: [thefederation_node_protocols_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_node_protocols_on_conflict
+  ): thefederation_node_protocols_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_node_protocols"
+  """
+  insert_thefederation_node_protocols_one(
+    """the row to be inserted"""
+    object: thefederation_node_protocols_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_node_protocols_on_conflict
+  ): thefederation_node_protocols
+
+  """
+  insert data into the table: "thefederation_node_services"
+  """
+  insert_thefederation_node_services(
+    """the rows to be inserted"""
+    objects: [thefederation_node_services_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_node_services_on_conflict
+  ): thefederation_node_services_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_node_services"
+  """
+  insert_thefederation_node_services_one(
+    """the row to be inserted"""
+    object: thefederation_node_services_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_node_services_on_conflict
+  ): thefederation_node_services
+
+  """
+  insert data into the table: "thefederation_platform"
+  """
+  insert_thefederation_platform(
+    """the rows to be inserted"""
+    objects: [thefederation_platform_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_platform_on_conflict
+  ): thefederation_platform_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_platform"
+  """
+  insert_thefederation_platform_one(
+    """the row to be inserted"""
+    object: thefederation_platform_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_platform_on_conflict
+  ): thefederation_platform
+
+  """
+  insert data into the table: "thefederation_protocol"
+  """
+  insert_thefederation_protocol(
+    """the rows to be inserted"""
+    objects: [thefederation_protocol_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_protocol_on_conflict
+  ): thefederation_protocol_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_protocol"
+  """
+  insert_thefederation_protocol_one(
+    """the row to be inserted"""
+    object: thefederation_protocol_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_protocol_on_conflict
+  ): thefederation_protocol
+
+  """
+  insert data into the table: "thefederation_service"
+  """
+  insert_thefederation_service(
+    """the rows to be inserted"""
+    objects: [thefederation_service_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_service_on_conflict
+  ): thefederation_service_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_service"
+  """
+  insert_thefederation_service_one(
+    """the row to be inserted"""
+    object: thefederation_service_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_service_on_conflict
+  ): thefederation_service
+
+  """
+  insert data into the table: "thefederation_stat"
+  """
+  insert_thefederation_stat(
+    """the rows to be inserted"""
+    objects: [thefederation_stat_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: thefederation_stat_on_conflict
+  ): thefederation_stat_mutation_response
+
+  """
+  insert a single row into the table: "thefederation_stat"
+  """
+  insert_thefederation_stat_one(
+    """the row to be inserted"""
+    object: thefederation_stat_insert_input!
+
+    """upsert condition"""
+    on_conflict: thefederation_stat_on_conflict
+  ): thefederation_stat
+
+  """
+  update data of the table: "count_by_date"
+  """
+  update_count_by_date(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: count_by_date_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: count_by_date_set_input
+
+    """filter the rows which have to be updated"""
+    where: count_by_date_bool_exp!
+  ): count_by_date_mutation_response
+
+  """
+  update single row of the table: "count_by_date"
+  """
+  update_count_by_date_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: count_by_date_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: count_by_date_set_input
+    pk_columns: count_by_date_pk_columns_input!
+  ): count_by_date
+
+  """
+  update multiples rows of table: "count_by_date"
+  """
+  update_count_by_date_many(
+    """updates to execute, in order"""
+    updates: [count_by_date_updates!]!
+  ): [count_by_date_mutation_response]
+
+  """
+  update data of the table: "hosting_report_t"
+  """
+  update_hosting_report_t(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: hosting_report_t_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: hosting_report_t_set_input
+
+    """filter the rows which have to be updated"""
+    where: hosting_report_t_bool_exp!
+  ): hosting_report_t_mutation_response
+
+  """
+  update single row of the table: "hosting_report_t"
+  """
+  update_hosting_report_t_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: hosting_report_t_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: hosting_report_t_set_input
+    pk_columns: hosting_report_t_pk_columns_input!
+  ): hosting_report_t
+
+  """
+  update multiples rows of table: "hosting_report_t"
+  """
+  update_hosting_report_t_many(
+    """updates to execute, in order"""
+    updates: [hosting_report_t_updates!]!
+  ): [hosting_report_t_mutation_response]
+
+  """
+  update data of the table: "thefederation_node"
+  """
+  update_thefederation_node(
+    """append existing jsonb value of filtered columns with new jsonb value"""
+    _append: thefederation_node_append_input
+
+    """
+    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+    """
+    _delete_at_path: thefederation_node_delete_at_path_input
+
+    """
+    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+    """
+    _delete_elem: thefederation_node_delete_elem_input
+
+    """
+    delete key/value pair or string element. key/value pairs are matched based on their key value
+    """
+    _delete_key: thefederation_node_delete_key_input
+
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_node_inc_input
+
+    """prepend existing jsonb value of filtered columns with new jsonb value"""
+    _prepend: thefederation_node_prepend_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_node_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_node_bool_exp!
+  ): thefederation_node_mutation_response
+
+  """
+  update single row of the table: "thefederation_node"
+  """
+  update_thefederation_node_by_pk(
+    """append existing jsonb value of filtered columns with new jsonb value"""
+    _append: thefederation_node_append_input
+
+    """
+    delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+    """
+    _delete_at_path: thefederation_node_delete_at_path_input
+
+    """
+    delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+    """
+    _delete_elem: thefederation_node_delete_elem_input
+
+    """
+    delete key/value pair or string element. key/value pairs are matched based on their key value
+    """
+    _delete_key: thefederation_node_delete_key_input
+
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_node_inc_input
+
+    """prepend existing jsonb value of filtered columns with new jsonb value"""
+    _prepend: thefederation_node_prepend_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_node_set_input
+    pk_columns: thefederation_node_pk_columns_input!
+  ): thefederation_node
+
+  """
+  update multiples rows of table: "thefederation_node"
+  """
+  update_thefederation_node_many(
+    """updates to execute, in order"""
+    updates: [thefederation_node_updates!]!
+  ): [thefederation_node_mutation_response]
+
+  """
+  update data of the table: "thefederation_node_protocols"
+  """
+  update_thefederation_node_protocols(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_node_protocols_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_node_protocols_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_node_protocols_bool_exp!
+  ): thefederation_node_protocols_mutation_response
+
+  """
+  update single row of the table: "thefederation_node_protocols"
+  """
+  update_thefederation_node_protocols_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_node_protocols_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_node_protocols_set_input
+    pk_columns: thefederation_node_protocols_pk_columns_input!
+  ): thefederation_node_protocols
+
+  """
+  update multiples rows of table: "thefederation_node_protocols"
+  """
+  update_thefederation_node_protocols_many(
+    """updates to execute, in order"""
+    updates: [thefederation_node_protocols_updates!]!
+  ): [thefederation_node_protocols_mutation_response]
+
+  """
+  update data of the table: "thefederation_node_services"
+  """
+  update_thefederation_node_services(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_node_services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_node_services_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_node_services_bool_exp!
+  ): thefederation_node_services_mutation_response
+
+  """
+  update single row of the table: "thefederation_node_services"
+  """
+  update_thefederation_node_services_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_node_services_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_node_services_set_input
+    pk_columns: thefederation_node_services_pk_columns_input!
+  ): thefederation_node_services
+
+  """
+  update multiples rows of table: "thefederation_node_services"
+  """
+  update_thefederation_node_services_many(
+    """updates to execute, in order"""
+    updates: [thefederation_node_services_updates!]!
+  ): [thefederation_node_services_mutation_response]
+
+  """
+  update data of the table: "thefederation_platform"
+  """
+  update_thefederation_platform(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_platform_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_platform_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_platform_bool_exp!
+  ): thefederation_platform_mutation_response
+
+  """
+  update single row of the table: "thefederation_platform"
+  """
+  update_thefederation_platform_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_platform_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_platform_set_input
+    pk_columns: thefederation_platform_pk_columns_input!
+  ): thefederation_platform
+
+  """
+  update multiples rows of table: "thefederation_platform"
+  """
+  update_thefederation_platform_many(
+    """updates to execute, in order"""
+    updates: [thefederation_platform_updates!]!
+  ): [thefederation_platform_mutation_response]
+
+  """
+  update data of the table: "thefederation_protocol"
+  """
+  update_thefederation_protocol(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_protocol_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_protocol_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_protocol_bool_exp!
+  ): thefederation_protocol_mutation_response
+
+  """
+  update single row of the table: "thefederation_protocol"
+  """
+  update_thefederation_protocol_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_protocol_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_protocol_set_input
+    pk_columns: thefederation_protocol_pk_columns_input!
+  ): thefederation_protocol
+
+  """
+  update multiples rows of table: "thefederation_protocol"
+  """
+  update_thefederation_protocol_many(
+    """updates to execute, in order"""
+    updates: [thefederation_protocol_updates!]!
+  ): [thefederation_protocol_mutation_response]
+
+  """
+  update data of the table: "thefederation_service"
+  """
+  update_thefederation_service(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_service_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_service_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_service_bool_exp!
+  ): thefederation_service_mutation_response
+
+  """
+  update single row of the table: "thefederation_service"
+  """
+  update_thefederation_service_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_service_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_service_set_input
+    pk_columns: thefederation_service_pk_columns_input!
+  ): thefederation_service
+
+  """
+  update multiples rows of table: "thefederation_service"
+  """
+  update_thefederation_service_many(
+    """updates to execute, in order"""
+    updates: [thefederation_service_updates!]!
+  ): [thefederation_service_mutation_response]
+
+  """
+  update data of the table: "thefederation_stat"
+  """
+  update_thefederation_stat(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_stat_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_stat_set_input
+
+    """filter the rows which have to be updated"""
+    where: thefederation_stat_bool_exp!
+  ): thefederation_stat_mutation_response
+
+  """
+  update single row of the table: "thefederation_stat"
+  """
+  update_thefederation_stat_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: thefederation_stat_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: thefederation_stat_set_input
+    pk_columns: thefederation_stat_pk_columns_input!
+  ): thefederation_stat
+
+  """
+  update multiples rows of table: "thefederation_stat"
+  """
+  update_thefederation_stat_many(
+    """updates to execute, in order"""
+    updates: [thefederation_stat_updates!]!
+  ): [thefederation_stat_mutation_response]
+}
+
+input node_count_per_date_by_platform_id_args {
+  platformid: Int
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  execute function "active_users_ratio" which returns "count_by_date"
+  """
+  active_users_ratio(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "active_users_ratio" and query aggregates on result of table type "count_by_date"
+  """
+  active_users_ratio_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "active_users_ratio_by_node" which returns "count_by_date"
+  """
+  active_users_ratio_by_node(
+    """
+    input parameters for function "active_users_ratio_by_node"
+    """
+    args: active_users_ratio_by_node_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "active_users_ratio_by_node" and query aggregates on result of table type "count_by_date"
+  """
+  active_users_ratio_by_node_aggregate(
+    """
+    input parameters for function "active_users_ratio_by_node_aggregate"
+    """
+    args: active_users_ratio_by_node_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "active_users_ratio_by_platform" which returns "count_by_date"
+  """
+  active_users_ratio_by_platform(
+    """
+    input parameters for function "active_users_ratio_by_platform"
+    """
+    args: active_users_ratio_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "active_users_ratio_by_platform" and query aggregates on result of table type "count_by_date"
+  """
+  active_users_ratio_by_platform_aggregate(
+    """
+    input parameters for function "active_users_ratio_by_platform_aggregate"
+    """
+    args: active_users_ratio_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  fetch data from the table: "count_by_date"
+  """
+  count_by_date(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  fetch aggregated fields from the table: "count_by_date"
+  """
+  count_by_date_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """fetch data from the table: "count_by_date" using primary key columns"""
+  count_by_date_by_pk(date: date!): count_by_date
+
+  """
+  execute function "hosting_report" which returns "hosting_report_t"
+  """
+  hosting_report(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): [hosting_report_t!]!
+
+  """
+  execute function "hosting_report" and query aggregates on result of table type "hosting_report_t"
+  """
+  hosting_report_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): hosting_report_t_aggregate!
+
+  """
+  fetch data from the table: "hosting_report_t"
+  """
+  hosting_report_t(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): [hosting_report_t!]!
+
+  """
+  fetch aggregated fields from the table: "hosting_report_t"
+  """
+  hosting_report_t_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): hosting_report_t_aggregate!
+
+  """
+  fetch data from the table: "hosting_report_t" using primary key columns
+  """
+  hosting_report_t_by_pk(country: String!): hosting_report_t
+
+  """
+  execute function "node_count_per_date" which returns "count_by_date"
+  """
+  node_count_per_date(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "node_count_per_date" and query aggregates on result of table type "count_by_date"
+  """
+  node_count_per_date_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "node_count_per_date_by_platform_id" which returns "count_by_date"
+  """
+  node_count_per_date_by_platform_id(
+    """
+    input parameters for function "node_count_per_date_by_platform_id"
+    """
+    args: node_count_per_date_by_platform_id_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "node_count_per_date_by_platform_id" and query aggregates on result of table type "count_by_date"
+  """
+  node_count_per_date_by_platform_id_aggregate(
+    """
+    input parameters for function "node_count_per_date_by_platform_id_aggregate"
+    """
+    args: node_count_per_date_by_platform_id_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node"
+  """
+  thefederation_node(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): [thefederation_node!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_node"
+  """
+  thefederation_node_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): thefederation_node_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node" using primary key columns
+  """
+  thefederation_node_by_pk(id: Int!): thefederation_node
+
+  """An array relationship"""
+  thefederation_node_protocols(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_protocols_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_protocols_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): [thefederation_node_protocols!]!
+
+  """An aggregate relationship"""
+  thefederation_node_protocols_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_protocols_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_protocols_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): thefederation_node_protocols_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node_protocols" using primary key columns
+  """
+  thefederation_node_protocols_by_pk(id: Int!): thefederation_node_protocols
+
+  """An array relationship"""
+  thefederation_node_services(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): [thefederation_node_services!]!
+
+  """An aggregate relationship"""
+  thefederation_node_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): thefederation_node_services_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node_services" using primary key columns
+  """
+  thefederation_node_services_by_pk(id: Int!): thefederation_node_services
+
+  """
+  fetch data from the table: "thefederation_platform"
+  """
+  thefederation_platform(
+    """distinct select on columns"""
+    distinct_on: [thefederation_platform_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_platform_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_platform_bool_exp
+  ): [thefederation_platform!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_platform"
+  """
+  thefederation_platform_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_platform_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_platform_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_platform_bool_exp
+  ): thefederation_platform_aggregate!
+
+  """
+  fetch data from the table: "thefederation_platform" using primary key columns
+  """
+  thefederation_platform_by_pk(id: Int!): thefederation_platform
+
+  """
+  fetch data from the table: "thefederation_protocol"
+  """
+  thefederation_protocol(
+    """distinct select on columns"""
+    distinct_on: [thefederation_protocol_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_protocol_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_protocol_bool_exp
+  ): [thefederation_protocol!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_protocol"
+  """
+  thefederation_protocol_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_protocol_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_protocol_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_protocol_bool_exp
+  ): thefederation_protocol_aggregate!
+
+  """
+  fetch data from the table: "thefederation_protocol" using primary key columns
+  """
+  thefederation_protocol_by_pk(id: Int!): thefederation_protocol
+
+  """
+  fetch data from the table: "thefederation_service"
+  """
+  thefederation_service(
+    """distinct select on columns"""
+    distinct_on: [thefederation_service_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_service_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_service_bool_exp
+  ): [thefederation_service!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_service"
+  """
+  thefederation_service_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_service_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_service_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_service_bool_exp
+  ): thefederation_service_aggregate!
+
+  """
+  fetch data from the table: "thefederation_service" using primary key columns
+  """
+  thefederation_service_by_pk(id: Int!): thefederation_service
+
+  """
+  fetch data from the table: "thefederation_stat"
+  """
+  thefederation_stat(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): [thefederation_stat!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_stat"
+  """
+  thefederation_stat_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): thefederation_stat_aggregate!
+
+  """
+  fetch data from the table: "thefederation_stat" using primary key columns
+  """
+  thefederation_stat_by_pk(id: Int!): thefederation_stat
+
+  """
+  execute function "users_per_node" which returns "count_by_date"
+  """
+  users_per_node(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "users_per_node" and query aggregates on result of table type "count_by_date"
+  """
+  users_per_node_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "users_per_node_by_platform" which returns "count_by_date"
+  """
+  users_per_node_by_platform(
+    """
+    input parameters for function "users_per_node_by_platform"
+    """
+    args: users_per_node_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "users_per_node_by_platform" and query aggregates on result of table type "count_by_date"
+  """
+  users_per_node_by_platform_aggregate(
+    """
+    input parameters for function "users_per_node_by_platform_aggregate"
+    """
+    args: users_per_node_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+}
+
+type subscription_root {
+  """
+  execute function "active_users_ratio" which returns "count_by_date"
+  """
+  active_users_ratio(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "active_users_ratio" and query aggregates on result of table type "count_by_date"
+  """
+  active_users_ratio_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "active_users_ratio_by_node" which returns "count_by_date"
+  """
+  active_users_ratio_by_node(
+    """
+    input parameters for function "active_users_ratio_by_node"
+    """
+    args: active_users_ratio_by_node_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "active_users_ratio_by_node" and query aggregates on result of table type "count_by_date"
+  """
+  active_users_ratio_by_node_aggregate(
+    """
+    input parameters for function "active_users_ratio_by_node_aggregate"
+    """
+    args: active_users_ratio_by_node_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "active_users_ratio_by_platform" which returns "count_by_date"
+  """
+  active_users_ratio_by_platform(
+    """
+    input parameters for function "active_users_ratio_by_platform"
+    """
+    args: active_users_ratio_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "active_users_ratio_by_platform" and query aggregates on result of table type "count_by_date"
+  """
+  active_users_ratio_by_platform_aggregate(
+    """
+    input parameters for function "active_users_ratio_by_platform_aggregate"
+    """
+    args: active_users_ratio_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  fetch data from the table: "count_by_date"
+  """
+  count_by_date(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  fetch aggregated fields from the table: "count_by_date"
+  """
+  count_by_date_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """fetch data from the table: "count_by_date" using primary key columns"""
+  count_by_date_by_pk(date: date!): count_by_date
+
+  """
+  fetch data from the table in a streaming manner : "count_by_date"
+  """
+  count_by_date_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [count_by_date_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "hosting_report" which returns "hosting_report_t"
+  """
+  hosting_report(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): [hosting_report_t!]!
+
+  """
+  execute function "hosting_report" and query aggregates on result of table type "hosting_report_t"
+  """
+  hosting_report_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): hosting_report_t_aggregate!
+
+  """
+  fetch data from the table: "hosting_report_t"
+  """
+  hosting_report_t(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): [hosting_report_t!]!
+
+  """
+  fetch aggregated fields from the table: "hosting_report_t"
+  """
+  hosting_report_t_aggregate(
+    """distinct select on columns"""
+    distinct_on: [hosting_report_t_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [hosting_report_t_order_by!]
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): hosting_report_t_aggregate!
+
+  """
+  fetch data from the table: "hosting_report_t" using primary key columns
+  """
+  hosting_report_t_by_pk(country: String!): hosting_report_t
+
+  """
+  fetch data from the table in a streaming manner : "hosting_report_t"
+  """
+  hosting_report_t_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [hosting_report_t_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: hosting_report_t_bool_exp
+  ): [hosting_report_t!]!
+
+  """
+  execute function "node_count_per_date" which returns "count_by_date"
+  """
+  node_count_per_date(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "node_count_per_date" and query aggregates on result of table type "count_by_date"
+  """
+  node_count_per_date_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "node_count_per_date_by_platform_id" which returns "count_by_date"
+  """
+  node_count_per_date_by_platform_id(
+    """
+    input parameters for function "node_count_per_date_by_platform_id"
+    """
+    args: node_count_per_date_by_platform_id_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "node_count_per_date_by_platform_id" and query aggregates on result of table type "count_by_date"
+  """
+  node_count_per_date_by_platform_id_aggregate(
+    """
+    input parameters for function "node_count_per_date_by_platform_id_aggregate"
+    """
+    args: node_count_per_date_by_platform_id_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node"
+  """
+  thefederation_node(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): [thefederation_node!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_node"
+  """
+  thefederation_node_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): thefederation_node_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node" using primary key columns
+  """
+  thefederation_node_by_pk(id: Int!): thefederation_node
+
+  """An array relationship"""
+  thefederation_node_protocols(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_protocols_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_protocols_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): [thefederation_node_protocols!]!
+
+  """An aggregate relationship"""
+  thefederation_node_protocols_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_protocols_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_protocols_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): thefederation_node_protocols_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node_protocols" using primary key columns
+  """
+  thefederation_node_protocols_by_pk(id: Int!): thefederation_node_protocols
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_node_protocols"
+  """
+  thefederation_node_protocols_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_node_protocols_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): [thefederation_node_protocols!]!
+
+  """An array relationship"""
+  thefederation_node_services(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): [thefederation_node_services!]!
+
+  """An aggregate relationship"""
+  thefederation_node_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): thefederation_node_services_aggregate!
+
+  """
+  fetch data from the table: "thefederation_node_services" using primary key columns
+  """
+  thefederation_node_services_by_pk(id: Int!): thefederation_node_services
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_node_services"
+  """
+  thefederation_node_services_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_node_services_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): [thefederation_node_services!]!
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_node"
+  """
+  thefederation_node_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_node_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): [thefederation_node!]!
+
+  """
+  fetch data from the table: "thefederation_platform"
+  """
+  thefederation_platform(
+    """distinct select on columns"""
+    distinct_on: [thefederation_platform_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_platform_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_platform_bool_exp
+  ): [thefederation_platform!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_platform"
+  """
+  thefederation_platform_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_platform_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_platform_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_platform_bool_exp
+  ): thefederation_platform_aggregate!
+
+  """
+  fetch data from the table: "thefederation_platform" using primary key columns
+  """
+  thefederation_platform_by_pk(id: Int!): thefederation_platform
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_platform"
+  """
+  thefederation_platform_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_platform_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_platform_bool_exp
+  ): [thefederation_platform!]!
+
+  """
+  fetch data from the table: "thefederation_protocol"
+  """
+  thefederation_protocol(
+    """distinct select on columns"""
+    distinct_on: [thefederation_protocol_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_protocol_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_protocol_bool_exp
+  ): [thefederation_protocol!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_protocol"
+  """
+  thefederation_protocol_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_protocol_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_protocol_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_protocol_bool_exp
+  ): thefederation_protocol_aggregate!
+
+  """
+  fetch data from the table: "thefederation_protocol" using primary key columns
+  """
+  thefederation_protocol_by_pk(id: Int!): thefederation_protocol
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_protocol"
+  """
+  thefederation_protocol_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_protocol_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_protocol_bool_exp
+  ): [thefederation_protocol!]!
+
+  """
+  fetch data from the table: "thefederation_service"
+  """
+  thefederation_service(
+    """distinct select on columns"""
+    distinct_on: [thefederation_service_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_service_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_service_bool_exp
+  ): [thefederation_service!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_service"
+  """
+  thefederation_service_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_service_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_service_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_service_bool_exp
+  ): thefederation_service_aggregate!
+
+  """
+  fetch data from the table: "thefederation_service" using primary key columns
+  """
+  thefederation_service_by_pk(id: Int!): thefederation_service
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_service"
+  """
+  thefederation_service_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_service_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_service_bool_exp
+  ): [thefederation_service!]!
+
+  """
+  fetch data from the table: "thefederation_stat"
+  """
+  thefederation_stat(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): [thefederation_stat!]!
+
+  """
+  fetch aggregated fields from the table: "thefederation_stat"
+  """
+  thefederation_stat_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): thefederation_stat_aggregate!
+
+  """
+  fetch data from the table: "thefederation_stat" using primary key columns
+  """
+  thefederation_stat_by_pk(id: Int!): thefederation_stat
+
+  """
+  fetch data from the table in a streaming manner : "thefederation_stat"
+  """
+  thefederation_stat_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [thefederation_stat_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): [thefederation_stat!]!
+
+  """
+  execute function "users_per_node" which returns "count_by_date"
+  """
+  users_per_node(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "users_per_node" and query aggregates on result of table type "count_by_date"
+  """
+  users_per_node_aggregate(
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+
+  """
+  execute function "users_per_node_by_platform" which returns "count_by_date"
+  """
+  users_per_node_by_platform(
+    """
+    input parameters for function "users_per_node_by_platform"
+    """
+    args: users_per_node_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): [count_by_date!]!
+
+  """
+  execute function "users_per_node_by_platform" and query aggregates on result of table type "count_by_date"
+  """
+  users_per_node_by_platform_aggregate(
+    """
+    input parameters for function "users_per_node_by_platform_aggregate"
+    """
+    args: users_per_node_by_platform_args!
+
+    """distinct select on columns"""
+    distinct_on: [count_by_date_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [count_by_date_order_by!]
+
+    """filter the rows returned"""
+    where: count_by_date_bool_exp
+  ): count_by_date_aggregate!
+}
+
+"""
+columns and relationships of "thefederation_node"
+"""
+type thefederation_node {
+  blocked: Boolean!
+  country: String!
+  created: timestamptz!
+  features(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  hide_from_list: Boolean!
+  host: String!
+  id: Int!
+  ip: inet
+  last_success: timestamptz
+  name: String!
+  open_signups: Boolean!
+  organization_account: String!
+  organization_contact: String!
+  organization_name: String!
+  platform_id: Int!
+  relay: String!
+  server_meta(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+
+  """An array relationship"""
+  thefederation_node_services(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): [thefederation_node_services!]!
+
+  """An aggregate relationship"""
+  thefederation_node_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): thefederation_node_services_aggregate!
+
+  """An object relationship"""
+  thefederation_platform: thefederation_platform!
+
+  """An array relationship"""
+  thefederation_stats(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): [thefederation_stat!]!
+
+  """An aggregate relationship"""
+  thefederation_stats_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): thefederation_stat_aggregate!
+  updated: timestamptz!
+  uuid: uuid!
+  version: String!
+}
+
+"""
+aggregated selection of "thefederation_node"
+"""
+type thefederation_node_aggregate {
+  aggregate: thefederation_node_aggregate_fields
+  nodes: [thefederation_node!]!
+}
+
+"""
+aggregate fields of "thefederation_node"
+"""
+type thefederation_node_aggregate_fields {
+  avg: thefederation_node_avg_fields
+  count(columns: [thefederation_node_select_column!], distinct: Boolean): Int!
+  max: thefederation_node_max_fields
+  min: thefederation_node_min_fields
+  stddev: thefederation_node_stddev_fields
+  stddev_pop: thefederation_node_stddev_pop_fields
+  stddev_samp: thefederation_node_stddev_samp_fields
+  sum: thefederation_node_sum_fields
+  var_pop: thefederation_node_var_pop_fields
+  var_samp: thefederation_node_var_samp_fields
+  variance: thefederation_node_variance_fields
+}
+
+"""
+order by aggregate values of table "thefederation_node"
+"""
+input thefederation_node_aggregate_order_by {
+  avg: thefederation_node_avg_order_by
+  count: order_by
+  max: thefederation_node_max_order_by
+  min: thefederation_node_min_order_by
+  stddev: thefederation_node_stddev_order_by
+  stddev_pop: thefederation_node_stddev_pop_order_by
+  stddev_samp: thefederation_node_stddev_samp_order_by
+  sum: thefederation_node_sum_order_by
+  var_pop: thefederation_node_var_pop_order_by
+  var_samp: thefederation_node_var_samp_order_by
+  variance: thefederation_node_variance_order_by
+}
+
+"""append existing jsonb value of filtered columns with new jsonb value"""
+input thefederation_node_append_input {
+  features: jsonb
+  server_meta: jsonb
+}
+
+"""
+input type for inserting array relation for remote table "thefederation_node"
+"""
+input thefederation_node_arr_rel_insert_input {
+  data: [thefederation_node_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: thefederation_node_on_conflict
+}
+
+"""aggregate avg on columns"""
+type thefederation_node_avg_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by avg() on columns of table "thefederation_node"
+"""
+input thefederation_node_avg_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_node". All fields are combined with a logical 'AND'.
+"""
+input thefederation_node_bool_exp {
+  _and: [thefederation_node_bool_exp!]
+  _not: thefederation_node_bool_exp
+  _or: [thefederation_node_bool_exp!]
+  blocked: Boolean_comparison_exp
+  country: String_comparison_exp
+  created: timestamptz_comparison_exp
+  features: jsonb_comparison_exp
+  hide_from_list: Boolean_comparison_exp
+  host: String_comparison_exp
+  id: Int_comparison_exp
+  ip: inet_comparison_exp
+  last_success: timestamptz_comparison_exp
+  name: String_comparison_exp
+  open_signups: Boolean_comparison_exp
+  organization_account: String_comparison_exp
+  organization_contact: String_comparison_exp
+  organization_name: String_comparison_exp
+  platform_id: Int_comparison_exp
+  relay: String_comparison_exp
+  server_meta: jsonb_comparison_exp
+  thefederation_node_services: thefederation_node_services_bool_exp
+  thefederation_platform: thefederation_platform_bool_exp
+  thefederation_stats: thefederation_stat_bool_exp
+  updated: timestamptz_comparison_exp
+  uuid: uuid_comparison_exp
+  version: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_node"
+"""
+enum thefederation_node_constraint {
+  """
+  unique or primary key constraint on columns "host"
+  """
+  thefederation_node_host_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_node_pkey
+
+  """
+  unique or primary key constraint on columns "uuid"
+  """
+  thefederation_node_uuid_key
+}
+
+"""
+delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+"""
+input thefederation_node_delete_at_path_input {
+  features: [String!]
+  server_meta: [String!]
+}
+
+"""
+delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+"""
+input thefederation_node_delete_elem_input {
+  features: Int
+  server_meta: Int
+}
+
+"""
+delete key/value pair or string element. key/value pairs are matched based on their key value
+"""
+input thefederation_node_delete_key_input {
+  features: String
+  server_meta: String
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_node"
+"""
+input thefederation_node_inc_input {
+  id: Int
+  platform_id: Int
+}
+
+"""
+input type for inserting data into table "thefederation_node"
+"""
+input thefederation_node_insert_input {
+  blocked: Boolean
+  country: String
+  created: timestamptz
+  features: jsonb
+  hide_from_list: Boolean
+  host: String
+  id: Int
+  ip: inet
+  last_success: timestamptz
+  name: String
+  open_signups: Boolean
+  organization_account: String
+  organization_contact: String
+  organization_name: String
+  platform_id: Int
+  relay: String
+  server_meta: jsonb
+  thefederation_node_services: thefederation_node_services_arr_rel_insert_input
+  thefederation_platform: thefederation_platform_obj_rel_insert_input
+  thefederation_stats: thefederation_stat_arr_rel_insert_input
+  updated: timestamptz
+  uuid: uuid
+  version: String
+}
+
+"""aggregate max on columns"""
+type thefederation_node_max_fields {
+  country: String
+  created: timestamptz
+  host: String
+  id: Int
+  last_success: timestamptz
+  name: String
+  organization_account: String
+  organization_contact: String
+  organization_name: String
+  platform_id: Int
+  relay: String
+  updated: timestamptz
+  uuid: uuid
+  version: String
+}
+
+"""
+order by max() on columns of table "thefederation_node"
+"""
+input thefederation_node_max_order_by {
+  country: order_by
+  created: order_by
+  host: order_by
+  id: order_by
+  last_success: order_by
+  name: order_by
+  organization_account: order_by
+  organization_contact: order_by
+  organization_name: order_by
+  platform_id: order_by
+  relay: order_by
+  updated: order_by
+  uuid: order_by
+  version: order_by
+}
+
+"""aggregate min on columns"""
+type thefederation_node_min_fields {
+  country: String
+  created: timestamptz
+  host: String
+  id: Int
+  last_success: timestamptz
+  name: String
+  organization_account: String
+  organization_contact: String
+  organization_name: String
+  platform_id: Int
+  relay: String
+  updated: timestamptz
+  uuid: uuid
+  version: String
+}
+
+"""
+order by min() on columns of table "thefederation_node"
+"""
+input thefederation_node_min_order_by {
+  country: order_by
+  created: order_by
+  host: order_by
+  id: order_by
+  last_success: order_by
+  name: order_by
+  organization_account: order_by
+  organization_contact: order_by
+  organization_name: order_by
+  platform_id: order_by
+  relay: order_by
+  updated: order_by
+  uuid: order_by
+  version: order_by
+}
+
+"""
+response of any mutation on the table "thefederation_node"
+"""
+type thefederation_node_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_node!]!
+}
+
+"""
+input type for inserting object relation for remote table "thefederation_node"
+"""
+input thefederation_node_obj_rel_insert_input {
+  data: thefederation_node_insert_input!
+
+  """upsert condition"""
+  on_conflict: thefederation_node_on_conflict
+}
+
+"""
+on_conflict condition type for table "thefederation_node"
+"""
+input thefederation_node_on_conflict {
+  constraint: thefederation_node_constraint!
+  update_columns: [thefederation_node_update_column!]! = []
+  where: thefederation_node_bool_exp
+}
+
+"""Ordering options when selecting data from "thefederation_node"."""
+input thefederation_node_order_by {
+  blocked: order_by
+  country: order_by
+  created: order_by
+  features: order_by
+  hide_from_list: order_by
+  host: order_by
+  id: order_by
+  ip: order_by
+  last_success: order_by
+  name: order_by
+  open_signups: order_by
+  organization_account: order_by
+  organization_contact: order_by
+  organization_name: order_by
+  platform_id: order_by
+  relay: order_by
+  server_meta: order_by
+  thefederation_node_services_aggregate: thefederation_node_services_aggregate_order_by
+  thefederation_platform: thefederation_platform_order_by
+  thefederation_stats_aggregate: thefederation_stat_aggregate_order_by
+  updated: order_by
+  uuid: order_by
+  version: order_by
+}
+
+"""primary key columns input for table: thefederation_node"""
+input thefederation_node_pk_columns_input {
+  id: Int!
+}
+
+"""prepend existing jsonb value of filtered columns with new jsonb value"""
+input thefederation_node_prepend_input {
+  features: jsonb
+  server_meta: jsonb
+}
+
+"""
+columns and relationships of "thefederation_node_protocols"
+"""
+type thefederation_node_protocols {
+  id: Int!
+  node_id: Int!
+  protocol_id: Int!
+
+  """An object relationship"""
+  thefederation_node: thefederation_node!
+}
+
+"""
+aggregated selection of "thefederation_node_protocols"
+"""
+type thefederation_node_protocols_aggregate {
+  aggregate: thefederation_node_protocols_aggregate_fields
+  nodes: [thefederation_node_protocols!]!
+}
+
+"""
+aggregate fields of "thefederation_node_protocols"
+"""
+type thefederation_node_protocols_aggregate_fields {
+  avg: thefederation_node_protocols_avg_fields
+  count(columns: [thefederation_node_protocols_select_column!], distinct: Boolean): Int!
+  max: thefederation_node_protocols_max_fields
+  min: thefederation_node_protocols_min_fields
+  stddev: thefederation_node_protocols_stddev_fields
+  stddev_pop: thefederation_node_protocols_stddev_pop_fields
+  stddev_samp: thefederation_node_protocols_stddev_samp_fields
+  sum: thefederation_node_protocols_sum_fields
+  var_pop: thefederation_node_protocols_var_pop_fields
+  var_samp: thefederation_node_protocols_var_samp_fields
+  variance: thefederation_node_protocols_variance_fields
+}
+
+"""
+order by aggregate values of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_aggregate_order_by {
+  avg: thefederation_node_protocols_avg_order_by
+  count: order_by
+  max: thefederation_node_protocols_max_order_by
+  min: thefederation_node_protocols_min_order_by
+  stddev: thefederation_node_protocols_stddev_order_by
+  stddev_pop: thefederation_node_protocols_stddev_pop_order_by
+  stddev_samp: thefederation_node_protocols_stddev_samp_order_by
+  sum: thefederation_node_protocols_sum_order_by
+  var_pop: thefederation_node_protocols_var_pop_order_by
+  var_samp: thefederation_node_protocols_var_samp_order_by
+  variance: thefederation_node_protocols_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_arr_rel_insert_input {
+  data: [thefederation_node_protocols_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: thefederation_node_protocols_on_conflict
+}
+
+"""aggregate avg on columns"""
+type thefederation_node_protocols_avg_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by avg() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_avg_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_node_protocols". All fields are combined with a logical 'AND'.
+"""
+input thefederation_node_protocols_bool_exp {
+  _and: [thefederation_node_protocols_bool_exp!]
+  _not: thefederation_node_protocols_bool_exp
+  _or: [thefederation_node_protocols_bool_exp!]
+  id: Int_comparison_exp
+  node_id: Int_comparison_exp
+  protocol_id: Int_comparison_exp
+  thefederation_node: thefederation_node_bool_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_node_protocols"
+"""
+enum thefederation_node_protocols_constraint {
+  """
+  unique or primary key constraint on columns "node_id", "protocol_id"
+  """
+  thefederation_node_protocols_node_id_protocol_id_c15d3880_uniq
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_node_protocols_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_inc_input {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+}
+
+"""
+input type for inserting data into table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_insert_input {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+  thefederation_node: thefederation_node_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type thefederation_node_protocols_max_fields {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+}
+
+"""
+order by max() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_max_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""aggregate min on columns"""
+type thefederation_node_protocols_min_fields {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+}
+
+"""
+order by min() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_min_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""
+response of any mutation on the table "thefederation_node_protocols"
+"""
+type thefederation_node_protocols_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_node_protocols!]!
+}
+
+"""
+on_conflict condition type for table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_on_conflict {
+  constraint: thefederation_node_protocols_constraint!
+  update_columns: [thefederation_node_protocols_update_column!]! = []
+  where: thefederation_node_protocols_bool_exp
+}
+
+"""
+Ordering options when selecting data from "thefederation_node_protocols".
+"""
+input thefederation_node_protocols_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+  thefederation_node: thefederation_node_order_by
+}
+
+"""primary key columns input for table: thefederation_node_protocols"""
+input thefederation_node_protocols_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "thefederation_node_protocols"
+"""
+enum thefederation_node_protocols_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  node_id
+
+  """column name"""
+  protocol_id
+}
+
+"""
+input type for updating data in table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_set_input {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+}
+
+"""aggregate stddev on columns"""
+type thefederation_node_protocols_stddev_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by stddev() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_stddev_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_node_protocols_stddev_pop_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_stddev_pop_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_node_protocols_stddev_samp_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_stddev_samp_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""
+Streaming cursor of the table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_node_protocols_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_node_protocols_stream_cursor_value_input {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+}
+
+"""aggregate sum on columns"""
+type thefederation_node_protocols_sum_fields {
+  id: Int
+  node_id: Int
+  protocol_id: Int
+}
+
+"""
+order by sum() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_sum_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""
+update columns of table "thefederation_node_protocols"
+"""
+enum thefederation_node_protocols_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  node_id
+
+  """column name"""
+  protocol_id
+}
+
+input thefederation_node_protocols_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_node_protocols_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_node_protocols_set_input
+  where: thefederation_node_protocols_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_node_protocols_var_pop_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by var_pop() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_var_pop_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_node_protocols_var_samp_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by var_samp() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_var_samp_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""aggregate variance on columns"""
+type thefederation_node_protocols_variance_fields {
+  id: Float
+  node_id: Float
+  protocol_id: Float
+}
+
+"""
+order by variance() on columns of table "thefederation_node_protocols"
+"""
+input thefederation_node_protocols_variance_order_by {
+  id: order_by
+  node_id: order_by
+  protocol_id: order_by
+}
+
+"""
+select columns of table "thefederation_node"
+"""
+enum thefederation_node_select_column {
+  """column name"""
+  blocked
+
+  """column name"""
+  country
+
+  """column name"""
+  created
+
+  """column name"""
+  features
+
+  """column name"""
+  hide_from_list
+
+  """column name"""
+  host
+
+  """column name"""
+  id
+
+  """column name"""
+  ip
+
+  """column name"""
+  last_success
+
+  """column name"""
+  name
+
+  """column name"""
+  open_signups
+
+  """column name"""
+  organization_account
+
+  """column name"""
+  organization_contact
+
+  """column name"""
+  organization_name
+
+  """column name"""
+  platform_id
+
+  """column name"""
+  relay
+
+  """column name"""
+  server_meta
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+
+  """column name"""
+  version
+}
+
+"""
+columns and relationships of "thefederation_node_services"
+"""
+type thefederation_node_services {
+  id: Int!
+  node_id: Int!
+  service_id: Int!
+
+  """An object relationship"""
+  thefederation_node: thefederation_node!
+
+  """An object relationship"""
+  thefederation_service: thefederation_service!
+}
+
+"""
+aggregated selection of "thefederation_node_services"
+"""
+type thefederation_node_services_aggregate {
+  aggregate: thefederation_node_services_aggregate_fields
+  nodes: [thefederation_node_services!]!
+}
+
+"""
+aggregate fields of "thefederation_node_services"
+"""
+type thefederation_node_services_aggregate_fields {
+  avg: thefederation_node_services_avg_fields
+  count(columns: [thefederation_node_services_select_column!], distinct: Boolean): Int!
+  max: thefederation_node_services_max_fields
+  min: thefederation_node_services_min_fields
+  stddev: thefederation_node_services_stddev_fields
+  stddev_pop: thefederation_node_services_stddev_pop_fields
+  stddev_samp: thefederation_node_services_stddev_samp_fields
+  sum: thefederation_node_services_sum_fields
+  var_pop: thefederation_node_services_var_pop_fields
+  var_samp: thefederation_node_services_var_samp_fields
+  variance: thefederation_node_services_variance_fields
+}
+
+"""
+order by aggregate values of table "thefederation_node_services"
+"""
+input thefederation_node_services_aggregate_order_by {
+  avg: thefederation_node_services_avg_order_by
+  count: order_by
+  max: thefederation_node_services_max_order_by
+  min: thefederation_node_services_min_order_by
+  stddev: thefederation_node_services_stddev_order_by
+  stddev_pop: thefederation_node_services_stddev_pop_order_by
+  stddev_samp: thefederation_node_services_stddev_samp_order_by
+  sum: thefederation_node_services_sum_order_by
+  var_pop: thefederation_node_services_var_pop_order_by
+  var_samp: thefederation_node_services_var_samp_order_by
+  variance: thefederation_node_services_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "thefederation_node_services"
+"""
+input thefederation_node_services_arr_rel_insert_input {
+  data: [thefederation_node_services_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: thefederation_node_services_on_conflict
+}
+
+"""aggregate avg on columns"""
+type thefederation_node_services_avg_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by avg() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_avg_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_node_services". All fields are combined with a logical 'AND'.
+"""
+input thefederation_node_services_bool_exp {
+  _and: [thefederation_node_services_bool_exp!]
+  _not: thefederation_node_services_bool_exp
+  _or: [thefederation_node_services_bool_exp!]
+  id: Int_comparison_exp
+  node_id: Int_comparison_exp
+  service_id: Int_comparison_exp
+  thefederation_node: thefederation_node_bool_exp
+  thefederation_service: thefederation_service_bool_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_node_services"
+"""
+enum thefederation_node_services_constraint {
+  """
+  unique or primary key constraint on columns "service_id", "node_id"
+  """
+  thefederation_node_services_node_id_service_id_529f5b56_uniq
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_node_services_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_node_services"
+"""
+input thefederation_node_services_inc_input {
+  id: Int
+  node_id: Int
+  service_id: Int
+}
+
+"""
+input type for inserting data into table "thefederation_node_services"
+"""
+input thefederation_node_services_insert_input {
+  id: Int
+  node_id: Int
+  service_id: Int
+  thefederation_node: thefederation_node_obj_rel_insert_input
+  thefederation_service: thefederation_service_obj_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type thefederation_node_services_max_fields {
+  id: Int
+  node_id: Int
+  service_id: Int
+}
+
+"""
+order by max() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_max_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""aggregate min on columns"""
+type thefederation_node_services_min_fields {
+  id: Int
+  node_id: Int
+  service_id: Int
+}
+
+"""
+order by min() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_min_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""
+response of any mutation on the table "thefederation_node_services"
+"""
+type thefederation_node_services_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_node_services!]!
+}
+
+"""
+on_conflict condition type for table "thefederation_node_services"
+"""
+input thefederation_node_services_on_conflict {
+  constraint: thefederation_node_services_constraint!
+  update_columns: [thefederation_node_services_update_column!]! = []
+  where: thefederation_node_services_bool_exp
+}
+
+"""
+Ordering options when selecting data from "thefederation_node_services".
+"""
+input thefederation_node_services_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+  thefederation_node: thefederation_node_order_by
+  thefederation_service: thefederation_service_order_by
+}
+
+"""primary key columns input for table: thefederation_node_services"""
+input thefederation_node_services_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "thefederation_node_services"
+"""
+enum thefederation_node_services_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  node_id
+
+  """column name"""
+  service_id
+}
+
+"""
+input type for updating data in table "thefederation_node_services"
+"""
+input thefederation_node_services_set_input {
+  id: Int
+  node_id: Int
+  service_id: Int
+}
+
+"""aggregate stddev on columns"""
+type thefederation_node_services_stddev_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_stddev_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_node_services_stddev_pop_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_stddev_pop_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_node_services_stddev_samp_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_stddev_samp_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""
+Streaming cursor of the table "thefederation_node_services"
+"""
+input thefederation_node_services_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_node_services_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_node_services_stream_cursor_value_input {
+  id: Int
+  node_id: Int
+  service_id: Int
+}
+
+"""aggregate sum on columns"""
+type thefederation_node_services_sum_fields {
+  id: Int
+  node_id: Int
+  service_id: Int
+}
+
+"""
+order by sum() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_sum_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""
+update columns of table "thefederation_node_services"
+"""
+enum thefederation_node_services_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  node_id
+
+  """column name"""
+  service_id
+}
+
+input thefederation_node_services_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_node_services_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_node_services_set_input
+  where: thefederation_node_services_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_node_services_var_pop_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by var_pop() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_var_pop_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_node_services_var_samp_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by var_samp() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_var_samp_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""aggregate variance on columns"""
+type thefederation_node_services_variance_fields {
+  id: Float
+  node_id: Float
+  service_id: Float
+}
+
+"""
+order by variance() on columns of table "thefederation_node_services"
+"""
+input thefederation_node_services_variance_order_by {
+  id: order_by
+  node_id: order_by
+  service_id: order_by
+}
+
+"""
+input type for updating data in table "thefederation_node"
+"""
+input thefederation_node_set_input {
+  blocked: Boolean
+  country: String
+  created: timestamptz
+  features: jsonb
+  hide_from_list: Boolean
+  host: String
+  id: Int
+  ip: inet
+  last_success: timestamptz
+  name: String
+  open_signups: Boolean
+  organization_account: String
+  organization_contact: String
+  organization_name: String
+  platform_id: Int
+  relay: String
+  server_meta: jsonb
+  updated: timestamptz
+  uuid: uuid
+  version: String
+}
+
+"""aggregate stddev on columns"""
+type thefederation_node_stddev_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by stddev() on columns of table "thefederation_node"
+"""
+input thefederation_node_stddev_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_node_stddev_pop_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "thefederation_node"
+"""
+input thefederation_node_stddev_pop_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_node_stddev_samp_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "thefederation_node"
+"""
+input thefederation_node_stddev_samp_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""
+Streaming cursor of the table "thefederation_node"
+"""
+input thefederation_node_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_node_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_node_stream_cursor_value_input {
+  blocked: Boolean
+  country: String
+  created: timestamptz
+  features: jsonb
+  hide_from_list: Boolean
+  host: String
+  id: Int
+  ip: inet
+  last_success: timestamptz
+  name: String
+  open_signups: Boolean
+  organization_account: String
+  organization_contact: String
+  organization_name: String
+  platform_id: Int
+  relay: String
+  server_meta: jsonb
+  updated: timestamptz
+  uuid: uuid
+  version: String
+}
+
+"""aggregate sum on columns"""
+type thefederation_node_sum_fields {
+  id: Int
+  platform_id: Int
+}
+
+"""
+order by sum() on columns of table "thefederation_node"
+"""
+input thefederation_node_sum_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""
+update columns of table "thefederation_node"
+"""
+enum thefederation_node_update_column {
+  """column name"""
+  blocked
+
+  """column name"""
+  country
+
+  """column name"""
+  created
+
+  """column name"""
+  features
+
+  """column name"""
+  hide_from_list
+
+  """column name"""
+  host
+
+  """column name"""
+  id
+
+  """column name"""
+  ip
+
+  """column name"""
+  last_success
+
+  """column name"""
+  name
+
+  """column name"""
+  open_signups
+
+  """column name"""
+  organization_account
+
+  """column name"""
+  organization_contact
+
+  """column name"""
+  organization_name
+
+  """column name"""
+  platform_id
+
+  """column name"""
+  relay
+
+  """column name"""
+  server_meta
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+
+  """column name"""
+  version
+}
+
+input thefederation_node_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: thefederation_node_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: thefederation_node_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: thefederation_node_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: thefederation_node_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_node_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: thefederation_node_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_node_set_input
+  where: thefederation_node_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_node_var_pop_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by var_pop() on columns of table "thefederation_node"
+"""
+input thefederation_node_var_pop_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_node_var_samp_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by var_samp() on columns of table "thefederation_node"
+"""
+input thefederation_node_var_samp_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""aggregate variance on columns"""
+type thefederation_node_variance_fields {
+  id: Float
+  platform_id: Float
+}
+
+"""
+order by variance() on columns of table "thefederation_node"
+"""
+input thefederation_node_variance_order_by {
+  id: order_by
+  platform_id: order_by
+}
+
+"""
+columns and relationships of "thefederation_platform"
+"""
+type thefederation_platform {
+  code: String!
+  created: timestamptz!
+  description: String!
+  display_name: String!
+  icon: String!
+  id: Int!
+  install_guide: String!
+  latest_version: String!
+  license: String!
+  name: String!
+  tagline: String!
+
+  """An array relationship"""
+  thefederation_nodes(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): [thefederation_node!]!
+
+  """An aggregate relationship"""
+  thefederation_nodes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_bool_exp
+  ): thefederation_node_aggregate!
+
+  """An array relationship"""
+  thefederation_stats(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): [thefederation_stat!]!
+
+  """An aggregate relationship"""
+  thefederation_stats_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): thefederation_stat_aggregate!
+  updated: timestamptz!
+  uuid: uuid!
+  version_clean_style: String!
+  website: String!
+}
+
+"""
+aggregated selection of "thefederation_platform"
+"""
+type thefederation_platform_aggregate {
+  aggregate: thefederation_platform_aggregate_fields
+  nodes: [thefederation_platform!]!
+}
+
+"""
+aggregate fields of "thefederation_platform"
+"""
+type thefederation_platform_aggregate_fields {
+  avg: thefederation_platform_avg_fields
+  count(columns: [thefederation_platform_select_column!], distinct: Boolean): Int!
+  max: thefederation_platform_max_fields
+  min: thefederation_platform_min_fields
+  stddev: thefederation_platform_stddev_fields
+  stddev_pop: thefederation_platform_stddev_pop_fields
+  stddev_samp: thefederation_platform_stddev_samp_fields
+  sum: thefederation_platform_sum_fields
+  var_pop: thefederation_platform_var_pop_fields
+  var_samp: thefederation_platform_var_samp_fields
+  variance: thefederation_platform_variance_fields
+}
+
+"""aggregate avg on columns"""
+type thefederation_platform_avg_fields {
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_platform". All fields are combined with a logical 'AND'.
+"""
+input thefederation_platform_bool_exp {
+  _and: [thefederation_platform_bool_exp!]
+  _not: thefederation_platform_bool_exp
+  _or: [thefederation_platform_bool_exp!]
+  code: String_comparison_exp
+  created: timestamptz_comparison_exp
+  description: String_comparison_exp
+  display_name: String_comparison_exp
+  icon: String_comparison_exp
+  id: Int_comparison_exp
+  install_guide: String_comparison_exp
+  latest_version: String_comparison_exp
+  license: String_comparison_exp
+  name: String_comparison_exp
+  tagline: String_comparison_exp
+  thefederation_nodes: thefederation_node_bool_exp
+  thefederation_stats: thefederation_stat_bool_exp
+  updated: timestamptz_comparison_exp
+  uuid: uuid_comparison_exp
+  version_clean_style: String_comparison_exp
+  website: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_platform"
+"""
+enum thefederation_platform_constraint {
+  """
+  unique or primary key constraint on columns "name"
+  """
+  thefederation_platform_name_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_platform_pkey
+
+  """
+  unique or primary key constraint on columns "uuid"
+  """
+  thefederation_platform_uuid_key
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_platform"
+"""
+input thefederation_platform_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "thefederation_platform"
+"""
+input thefederation_platform_insert_input {
+  code: String
+  created: timestamptz
+  description: String
+  display_name: String
+  icon: String
+  id: Int
+  install_guide: String
+  latest_version: String
+  license: String
+  name: String
+  tagline: String
+  thefederation_nodes: thefederation_node_arr_rel_insert_input
+  thefederation_stats: thefederation_stat_arr_rel_insert_input
+  updated: timestamptz
+  uuid: uuid
+  version_clean_style: String
+  website: String
+}
+
+"""aggregate max on columns"""
+type thefederation_platform_max_fields {
+  code: String
+  created: timestamptz
+  description: String
+  display_name: String
+  icon: String
+  id: Int
+  install_guide: String
+  latest_version: String
+  license: String
+  name: String
+  tagline: String
+  updated: timestamptz
+  uuid: uuid
+  version_clean_style: String
+  website: String
+}
+
+"""aggregate min on columns"""
+type thefederation_platform_min_fields {
+  code: String
+  created: timestamptz
+  description: String
+  display_name: String
+  icon: String
+  id: Int
+  install_guide: String
+  latest_version: String
+  license: String
+  name: String
+  tagline: String
+  updated: timestamptz
+  uuid: uuid
+  version_clean_style: String
+  website: String
+}
+
+"""
+response of any mutation on the table "thefederation_platform"
+"""
+type thefederation_platform_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_platform!]!
+}
+
+"""
+input type for inserting object relation for remote table "thefederation_platform"
+"""
+input thefederation_platform_obj_rel_insert_input {
+  data: thefederation_platform_insert_input!
+
+  """upsert condition"""
+  on_conflict: thefederation_platform_on_conflict
+}
+
+"""
+on_conflict condition type for table "thefederation_platform"
+"""
+input thefederation_platform_on_conflict {
+  constraint: thefederation_platform_constraint!
+  update_columns: [thefederation_platform_update_column!]! = []
+  where: thefederation_platform_bool_exp
+}
+
+"""Ordering options when selecting data from "thefederation_platform"."""
+input thefederation_platform_order_by {
+  code: order_by
+  created: order_by
+  description: order_by
+  display_name: order_by
+  icon: order_by
+  id: order_by
+  install_guide: order_by
+  latest_version: order_by
+  license: order_by
+  name: order_by
+  tagline: order_by
+  thefederation_nodes_aggregate: thefederation_node_aggregate_order_by
+  thefederation_stats_aggregate: thefederation_stat_aggregate_order_by
+  updated: order_by
+  uuid: order_by
+  version_clean_style: order_by
+  website: order_by
+}
+
+"""primary key columns input for table: thefederation_platform"""
+input thefederation_platform_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "thefederation_platform"
+"""
+enum thefederation_platform_select_column {
+  """column name"""
+  code
+
+  """column name"""
+  created
+
+  """column name"""
+  description
+
+  """column name"""
+  display_name
+
+  """column name"""
+  icon
+
+  """column name"""
+  id
+
+  """column name"""
+  install_guide
+
+  """column name"""
+  latest_version
+
+  """column name"""
+  license
+
+  """column name"""
+  name
+
+  """column name"""
+  tagline
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+
+  """column name"""
+  version_clean_style
+
+  """column name"""
+  website
+}
+
+"""
+input type for updating data in table "thefederation_platform"
+"""
+input thefederation_platform_set_input {
+  code: String
+  created: timestamptz
+  description: String
+  display_name: String
+  icon: String
+  id: Int
+  install_guide: String
+  latest_version: String
+  license: String
+  name: String
+  tagline: String
+  updated: timestamptz
+  uuid: uuid
+  version_clean_style: String
+  website: String
+}
+
+"""aggregate stddev on columns"""
+type thefederation_platform_stddev_fields {
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_platform_stddev_pop_fields {
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_platform_stddev_samp_fields {
+  id: Float
+}
+
+"""
+Streaming cursor of the table "thefederation_platform"
+"""
+input thefederation_platform_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_platform_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_platform_stream_cursor_value_input {
+  code: String
+  created: timestamptz
+  description: String
+  display_name: String
+  icon: String
+  id: Int
+  install_guide: String
+  latest_version: String
+  license: String
+  name: String
+  tagline: String
+  updated: timestamptz
+  uuid: uuid
+  version_clean_style: String
+  website: String
+}
+
+"""aggregate sum on columns"""
+type thefederation_platform_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "thefederation_platform"
+"""
+enum thefederation_platform_update_column {
+  """column name"""
+  code
+
+  """column name"""
+  created
+
+  """column name"""
+  description
+
+  """column name"""
+  display_name
+
+  """column name"""
+  icon
+
+  """column name"""
+  id
+
+  """column name"""
+  install_guide
+
+  """column name"""
+  latest_version
+
+  """column name"""
+  license
+
+  """column name"""
+  name
+
+  """column name"""
+  tagline
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+
+  """column name"""
+  version_clean_style
+
+  """column name"""
+  website
+}
+
+input thefederation_platform_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_platform_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_platform_set_input
+  where: thefederation_platform_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_platform_var_pop_fields {
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_platform_var_samp_fields {
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type thefederation_platform_variance_fields {
+  id: Float
+}
+
+"""
+columns and relationships of "thefederation_protocol"
+"""
+type thefederation_protocol {
+  created: timestamptz!
+  description: String!
+  display_name: String!
+  id: Int!
+  name: String!
+
+  """An array relationship"""
+  thefederation_node_protocols(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_protocols_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_protocols_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): [thefederation_node_protocols!]!
+
+  """An aggregate relationship"""
+  thefederation_node_protocols_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_protocols_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_protocols_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_protocols_bool_exp
+  ): thefederation_node_protocols_aggregate!
+
+  """An array relationship"""
+  thefederation_stats(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): [thefederation_stat!]!
+
+  """An aggregate relationship"""
+  thefederation_stats_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_stat_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_stat_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_stat_bool_exp
+  ): thefederation_stat_aggregate!
+  updated: timestamptz!
+  uuid: uuid!
+  website: String!
+}
+
+"""
+aggregated selection of "thefederation_protocol"
+"""
+type thefederation_protocol_aggregate {
+  aggregate: thefederation_protocol_aggregate_fields
+  nodes: [thefederation_protocol!]!
+}
+
+"""
+aggregate fields of "thefederation_protocol"
+"""
+type thefederation_protocol_aggregate_fields {
+  avg: thefederation_protocol_avg_fields
+  count(columns: [thefederation_protocol_select_column!], distinct: Boolean): Int!
+  max: thefederation_protocol_max_fields
+  min: thefederation_protocol_min_fields
+  stddev: thefederation_protocol_stddev_fields
+  stddev_pop: thefederation_protocol_stddev_pop_fields
+  stddev_samp: thefederation_protocol_stddev_samp_fields
+  sum: thefederation_protocol_sum_fields
+  var_pop: thefederation_protocol_var_pop_fields
+  var_samp: thefederation_protocol_var_samp_fields
+  variance: thefederation_protocol_variance_fields
+}
+
+"""aggregate avg on columns"""
+type thefederation_protocol_avg_fields {
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_protocol". All fields are combined with a logical 'AND'.
+"""
+input thefederation_protocol_bool_exp {
+  _and: [thefederation_protocol_bool_exp!]
+  _not: thefederation_protocol_bool_exp
+  _or: [thefederation_protocol_bool_exp!]
+  created: timestamptz_comparison_exp
+  description: String_comparison_exp
+  display_name: String_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  thefederation_node_protocols: thefederation_node_protocols_bool_exp
+  thefederation_stats: thefederation_stat_bool_exp
+  updated: timestamptz_comparison_exp
+  uuid: uuid_comparison_exp
+  website: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_protocol"
+"""
+enum thefederation_protocol_constraint {
+  """
+  unique or primary key constraint on columns "name"
+  """
+  thefederation_protocol_name_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_protocol_pkey
+
+  """
+  unique or primary key constraint on columns "uuid"
+  """
+  thefederation_protocol_uuid_key
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_protocol"
+"""
+input thefederation_protocol_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "thefederation_protocol"
+"""
+input thefederation_protocol_insert_input {
+  created: timestamptz
+  description: String
+  display_name: String
+  id: Int
+  name: String
+  thefederation_node_protocols: thefederation_node_protocols_arr_rel_insert_input
+  thefederation_stats: thefederation_stat_arr_rel_insert_input
+  updated: timestamptz
+  uuid: uuid
+  website: String
+}
+
+"""aggregate max on columns"""
+type thefederation_protocol_max_fields {
+  created: timestamptz
+  description: String
+  display_name: String
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+  website: String
+}
+
+"""aggregate min on columns"""
+type thefederation_protocol_min_fields {
+  created: timestamptz
+  description: String
+  display_name: String
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+  website: String
+}
+
+"""
+response of any mutation on the table "thefederation_protocol"
+"""
+type thefederation_protocol_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_protocol!]!
+}
+
+"""
+input type for inserting object relation for remote table "thefederation_protocol"
+"""
+input thefederation_protocol_obj_rel_insert_input {
+  data: thefederation_protocol_insert_input!
+
+  """upsert condition"""
+  on_conflict: thefederation_protocol_on_conflict
+}
+
+"""
+on_conflict condition type for table "thefederation_protocol"
+"""
+input thefederation_protocol_on_conflict {
+  constraint: thefederation_protocol_constraint!
+  update_columns: [thefederation_protocol_update_column!]! = []
+  where: thefederation_protocol_bool_exp
+}
+
+"""Ordering options when selecting data from "thefederation_protocol"."""
+input thefederation_protocol_order_by {
+  created: order_by
+  description: order_by
+  display_name: order_by
+  id: order_by
+  name: order_by
+  thefederation_node_protocols_aggregate: thefederation_node_protocols_aggregate_order_by
+  thefederation_stats_aggregate: thefederation_stat_aggregate_order_by
+  updated: order_by
+  uuid: order_by
+  website: order_by
+}
+
+"""primary key columns input for table: thefederation_protocol"""
+input thefederation_protocol_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "thefederation_protocol"
+"""
+enum thefederation_protocol_select_column {
+  """column name"""
+  created
+
+  """column name"""
+  description
+
+  """column name"""
+  display_name
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+
+  """column name"""
+  website
+}
+
+"""
+input type for updating data in table "thefederation_protocol"
+"""
+input thefederation_protocol_set_input {
+  created: timestamptz
+  description: String
+  display_name: String
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+  website: String
+}
+
+"""aggregate stddev on columns"""
+type thefederation_protocol_stddev_fields {
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_protocol_stddev_pop_fields {
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_protocol_stddev_samp_fields {
+  id: Float
+}
+
+"""
+Streaming cursor of the table "thefederation_protocol"
+"""
+input thefederation_protocol_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_protocol_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_protocol_stream_cursor_value_input {
+  created: timestamptz
+  description: String
+  display_name: String
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+  website: String
+}
+
+"""aggregate sum on columns"""
+type thefederation_protocol_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "thefederation_protocol"
+"""
+enum thefederation_protocol_update_column {
+  """column name"""
+  created
+
+  """column name"""
+  description
+
+  """column name"""
+  display_name
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+
+  """column name"""
+  website
+}
+
+input thefederation_protocol_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_protocol_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_protocol_set_input
+  where: thefederation_protocol_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_protocol_var_pop_fields {
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_protocol_var_samp_fields {
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type thefederation_protocol_variance_fields {
+  id: Float
+}
+
+"""
+columns and relationships of "thefederation_service"
+"""
+type thefederation_service {
+  created: timestamptz!
+  id: Int!
+  name: String!
+
+  """An array relationship"""
+  thefederation_node_services(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): [thefederation_node_services!]!
+
+  """An aggregate relationship"""
+  thefederation_node_services_aggregate(
+    """distinct select on columns"""
+    distinct_on: [thefederation_node_services_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [thefederation_node_services_order_by!]
+
+    """filter the rows returned"""
+    where: thefederation_node_services_bool_exp
+  ): thefederation_node_services_aggregate!
+  updated: timestamptz!
+  uuid: uuid!
+}
+
+"""
+aggregated selection of "thefederation_service"
+"""
+type thefederation_service_aggregate {
+  aggregate: thefederation_service_aggregate_fields
+  nodes: [thefederation_service!]!
+}
+
+"""
+aggregate fields of "thefederation_service"
+"""
+type thefederation_service_aggregate_fields {
+  avg: thefederation_service_avg_fields
+  count(columns: [thefederation_service_select_column!], distinct: Boolean): Int!
+  max: thefederation_service_max_fields
+  min: thefederation_service_min_fields
+  stddev: thefederation_service_stddev_fields
+  stddev_pop: thefederation_service_stddev_pop_fields
+  stddev_samp: thefederation_service_stddev_samp_fields
+  sum: thefederation_service_sum_fields
+  var_pop: thefederation_service_var_pop_fields
+  var_samp: thefederation_service_var_samp_fields
+  variance: thefederation_service_variance_fields
+}
+
+"""aggregate avg on columns"""
+type thefederation_service_avg_fields {
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_service". All fields are combined with a logical 'AND'.
+"""
+input thefederation_service_bool_exp {
+  _and: [thefederation_service_bool_exp!]
+  _not: thefederation_service_bool_exp
+  _or: [thefederation_service_bool_exp!]
+  created: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  thefederation_node_services: thefederation_node_services_bool_exp
+  updated: timestamptz_comparison_exp
+  uuid: uuid_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_service"
+"""
+enum thefederation_service_constraint {
+  """
+  unique or primary key constraint on columns "name"
+  """
+  thefederation_service_name_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_service_pkey
+
+  """
+  unique or primary key constraint on columns "uuid"
+  """
+  thefederation_service_uuid_key
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_service"
+"""
+input thefederation_service_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "thefederation_service"
+"""
+input thefederation_service_insert_input {
+  created: timestamptz
+  id: Int
+  name: String
+  thefederation_node_services: thefederation_node_services_arr_rel_insert_input
+  updated: timestamptz
+  uuid: uuid
+}
+
+"""aggregate max on columns"""
+type thefederation_service_max_fields {
+  created: timestamptz
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+}
+
+"""aggregate min on columns"""
+type thefederation_service_min_fields {
+  created: timestamptz
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+}
+
+"""
+response of any mutation on the table "thefederation_service"
+"""
+type thefederation_service_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_service!]!
+}
+
+"""
+input type for inserting object relation for remote table "thefederation_service"
+"""
+input thefederation_service_obj_rel_insert_input {
+  data: thefederation_service_insert_input!
+
+  """upsert condition"""
+  on_conflict: thefederation_service_on_conflict
+}
+
+"""
+on_conflict condition type for table "thefederation_service"
+"""
+input thefederation_service_on_conflict {
+  constraint: thefederation_service_constraint!
+  update_columns: [thefederation_service_update_column!]! = []
+  where: thefederation_service_bool_exp
+}
+
+"""Ordering options when selecting data from "thefederation_service"."""
+input thefederation_service_order_by {
+  created: order_by
+  id: order_by
+  name: order_by
+  thefederation_node_services_aggregate: thefederation_node_services_aggregate_order_by
+  updated: order_by
+  uuid: order_by
+}
+
+"""primary key columns input for table: thefederation_service"""
+input thefederation_service_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "thefederation_service"
+"""
+enum thefederation_service_select_column {
+  """column name"""
+  created
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+}
+
+"""
+input type for updating data in table "thefederation_service"
+"""
+input thefederation_service_set_input {
+  created: timestamptz
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+}
+
+"""aggregate stddev on columns"""
+type thefederation_service_stddev_fields {
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_service_stddev_pop_fields {
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_service_stddev_samp_fields {
+  id: Float
+}
+
+"""
+Streaming cursor of the table "thefederation_service"
+"""
+input thefederation_service_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_service_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_service_stream_cursor_value_input {
+  created: timestamptz
+  id: Int
+  name: String
+  updated: timestamptz
+  uuid: uuid
+}
+
+"""aggregate sum on columns"""
+type thefederation_service_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "thefederation_service"
+"""
+enum thefederation_service_update_column {
+  """column name"""
+  created
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  updated
+
+  """column name"""
+  uuid
+}
+
+input thefederation_service_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_service_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_service_set_input
+  where: thefederation_service_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_service_var_pop_fields {
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_service_var_samp_fields {
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type thefederation_service_variance_fields {
+  id: Float
+}
+
+"""
+columns and relationships of "thefederation_stat"
+"""
+type thefederation_stat {
+  date: date!
+  id: Int!
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+
+  """An object relationship"""
+  thefederation_node: thefederation_node
+
+  """An object relationship"""
+  thefederation_platform: thefederation_platform
+
+  """An object relationship"""
+  thefederation_protocol: thefederation_protocol
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""
+aggregated selection of "thefederation_stat"
+"""
+type thefederation_stat_aggregate {
+  aggregate: thefederation_stat_aggregate_fields
+  nodes: [thefederation_stat!]!
+}
+
+"""
+aggregate fields of "thefederation_stat"
+"""
+type thefederation_stat_aggregate_fields {
+  avg: thefederation_stat_avg_fields
+  count(columns: [thefederation_stat_select_column!], distinct: Boolean): Int!
+  max: thefederation_stat_max_fields
+  min: thefederation_stat_min_fields
+  stddev: thefederation_stat_stddev_fields
+  stddev_pop: thefederation_stat_stddev_pop_fields
+  stddev_samp: thefederation_stat_stddev_samp_fields
+  sum: thefederation_stat_sum_fields
+  var_pop: thefederation_stat_var_pop_fields
+  var_samp: thefederation_stat_var_samp_fields
+  variance: thefederation_stat_variance_fields
+}
+
+"""
+order by aggregate values of table "thefederation_stat"
+"""
+input thefederation_stat_aggregate_order_by {
+  avg: thefederation_stat_avg_order_by
+  count: order_by
+  max: thefederation_stat_max_order_by
+  min: thefederation_stat_min_order_by
+  stddev: thefederation_stat_stddev_order_by
+  stddev_pop: thefederation_stat_stddev_pop_order_by
+  stddev_samp: thefederation_stat_stddev_samp_order_by
+  sum: thefederation_stat_sum_order_by
+  var_pop: thefederation_stat_var_pop_order_by
+  var_samp: thefederation_stat_var_samp_order_by
+  variance: thefederation_stat_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "thefederation_stat"
+"""
+input thefederation_stat_arr_rel_insert_input {
+  data: [thefederation_stat_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: thefederation_stat_on_conflict
+}
+
+"""aggregate avg on columns"""
+type thefederation_stat_avg_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by avg() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_avg_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "thefederation_stat". All fields are combined with a logical 'AND'.
+"""
+input thefederation_stat_bool_exp {
+  _and: [thefederation_stat_bool_exp!]
+  _not: thefederation_stat_bool_exp
+  _or: [thefederation_stat_bool_exp!]
+  date: date_comparison_exp
+  id: Int_comparison_exp
+  local_comments: Int_comparison_exp
+  local_posts: Int_comparison_exp
+  node_id: Int_comparison_exp
+  platform_id: Int_comparison_exp
+  protocol_id: Int_comparison_exp
+  thefederation_node: thefederation_node_bool_exp
+  thefederation_platform: thefederation_platform_bool_exp
+  thefederation_protocol: thefederation_protocol_bool_exp
+  users_half_year: Int_comparison_exp
+  users_monthly: Int_comparison_exp
+  users_total: Int_comparison_exp
+  users_weekly: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "thefederation_stat"
+"""
+enum thefederation_stat_constraint {
+  """
+  unique or primary key constraint on columns "date", "node_id"
+  """
+  thefederation_stat_date_node_id_b82269f9_uniq
+
+  """
+  unique or primary key constraint on columns "date", "platform_id"
+  """
+  thefederation_stat_date_platform_id_8041fdd3_uniq
+
+  """
+  unique or primary key constraint on columns "date", "protocol_id"
+  """
+  thefederation_stat_date_protocol_id_d73e895d_uniq
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  thefederation_stat_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "thefederation_stat"
+"""
+input thefederation_stat_inc_input {
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""
+input type for inserting data into table "thefederation_stat"
+"""
+input thefederation_stat_insert_input {
+  date: date
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  thefederation_node: thefederation_node_obj_rel_insert_input
+  thefederation_platform: thefederation_platform_obj_rel_insert_input
+  thefederation_protocol: thefederation_protocol_obj_rel_insert_input
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""aggregate max on columns"""
+type thefederation_stat_max_fields {
+  date: date
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""
+order by max() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_max_order_by {
+  date: order_by
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""aggregate min on columns"""
+type thefederation_stat_min_fields {
+  date: date
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""
+order by min() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_min_order_by {
+  date: order_by
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""
+response of any mutation on the table "thefederation_stat"
+"""
+type thefederation_stat_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [thefederation_stat!]!
+}
+
+"""
+on_conflict condition type for table "thefederation_stat"
+"""
+input thefederation_stat_on_conflict {
+  constraint: thefederation_stat_constraint!
+  update_columns: [thefederation_stat_update_column!]! = []
+  where: thefederation_stat_bool_exp
+}
+
+"""Ordering options when selecting data from "thefederation_stat"."""
+input thefederation_stat_order_by {
+  date: order_by
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  thefederation_node: thefederation_node_order_by
+  thefederation_platform: thefederation_platform_order_by
+  thefederation_protocol: thefederation_protocol_order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""primary key columns input for table: thefederation_stat"""
+input thefederation_stat_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "thefederation_stat"
+"""
+enum thefederation_stat_select_column {
+  """column name"""
+  date
+
+  """column name"""
+  id
+
+  """column name"""
+  local_comments
+
+  """column name"""
+  local_posts
+
+  """column name"""
+  node_id
+
+  """column name"""
+  platform_id
+
+  """column name"""
+  protocol_id
+
+  """column name"""
+  users_half_year
+
+  """column name"""
+  users_monthly
+
+  """column name"""
+  users_total
+
+  """column name"""
+  users_weekly
+}
+
+"""
+input type for updating data in table "thefederation_stat"
+"""
+input thefederation_stat_set_input {
+  date: date
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""aggregate stddev on columns"""
+type thefederation_stat_stddev_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by stddev() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_stddev_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type thefederation_stat_stddev_pop_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by stddev_pop() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_stddev_pop_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type thefederation_stat_stddev_samp_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by stddev_samp() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_stddev_samp_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""
+Streaming cursor of the table "thefederation_stat"
+"""
+input thefederation_stat_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: thefederation_stat_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input thefederation_stat_stream_cursor_value_input {
+  date: date
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""aggregate sum on columns"""
+type thefederation_stat_sum_fields {
+  id: Int
+  local_comments: Int
+  local_posts: Int
+  node_id: Int
+  platform_id: Int
+  protocol_id: Int
+  users_half_year: Int
+  users_monthly: Int
+  users_total: Int
+  users_weekly: Int
+}
+
+"""
+order by sum() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_sum_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""
+update columns of table "thefederation_stat"
+"""
+enum thefederation_stat_update_column {
+  """column name"""
+  date
+
+  """column name"""
+  id
+
+  """column name"""
+  local_comments
+
+  """column name"""
+  local_posts
+
+  """column name"""
+  node_id
+
+  """column name"""
+  platform_id
+
+  """column name"""
+  protocol_id
+
+  """column name"""
+  users_half_year
+
+  """column name"""
+  users_monthly
+
+  """column name"""
+  users_total
+
+  """column name"""
+  users_weekly
+}
+
+input thefederation_stat_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: thefederation_stat_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: thefederation_stat_set_input
+  where: thefederation_stat_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type thefederation_stat_var_pop_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by var_pop() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_var_pop_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""aggregate var_samp on columns"""
+type thefederation_stat_var_samp_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by var_samp() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_var_samp_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+"""aggregate variance on columns"""
+type thefederation_stat_variance_fields {
+  id: Float
+  local_comments: Float
+  local_posts: Float
+  node_id: Float
+  platform_id: Float
+  protocol_id: Float
+  users_half_year: Float
+  users_monthly: Float
+  users_total: Float
+  users_weekly: Float
+}
+
+"""
+order by variance() on columns of table "thefederation_stat"
+"""
+input thefederation_stat_variance_order_by {
+  id: order_by
+  local_comments: order_by
+  local_posts: order_by
+  node_id: order_by
+  platform_id: order_by
+  protocol_id: order_by
+  users_half_year: order_by
+  users_monthly: order_by
+  users_total: order_by
+  users_weekly: order_by
+}
+
+scalar timestamptz
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+input users_per_node_by_platform_args {
+  platformid: Int
+}
+
+scalar uuid
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input uuid_comparison_exp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _is_null: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}

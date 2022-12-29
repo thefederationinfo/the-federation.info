@@ -12,3 +12,4 @@ test
 /utils/maxmind/GeoLite2-Country.mmdb
 .env
 venv
+dbdata

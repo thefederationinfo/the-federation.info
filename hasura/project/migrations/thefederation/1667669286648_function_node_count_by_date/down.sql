@@ -1,0 +1,6 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE OR REPLACE FUNCTION node_count_by_date()
+-- RETURNS SETOF count_by_date AS $$
+--     SELECT date, COUNT(node_id) as count from thefederation_stat WHERE node_id IS NOT NULL GROUP BY date
+-- $$ LANGUAGE sql STABLE;

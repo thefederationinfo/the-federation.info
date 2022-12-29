@@ -1,0 +1,13 @@
+table:
+  name: hosting_report_t
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - country
+        - actives
+        - count
+        - total
+      filter: {}
+      allow_aggregations: true

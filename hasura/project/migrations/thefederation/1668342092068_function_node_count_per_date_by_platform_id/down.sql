@@ -1,0 +1,6 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE OR REPLACE FUNCTION node_count_per_date_by_platform_id(platformId integer)
+-- RETURNS SETOF count_by_date AS $$
+--     SELECT stat.date, COUNT(stat.id) as count FROM thefederation_stat as stat WHERE stat.date > NOW() - INTERVAL '1 year' AND stat.platform_id = platformId GROUP BY stat.date
+-- $$ LANGUAGE sql STABLE;

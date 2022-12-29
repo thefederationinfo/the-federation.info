@@ -13,10 +13,10 @@ import App from './App'
 import router from './router'
 
 const httpLink = new HttpLink({
-    uri: '/graphql',
-    useGETForQueries: true,
+    uri: '/v1/graphql',
     headers: {
-        'Content-Type': 'application/graphql',
+        'Content-Type': 'application/json',
+        'x-hasura-role': 'guest',
     },
 })
 

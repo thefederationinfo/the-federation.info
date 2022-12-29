@@ -1,0 +1,3 @@
+function:
+  name: node_count_per_date_by_platform_id
+  schema: public

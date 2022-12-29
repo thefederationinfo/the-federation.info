@@ -2,45 +2,29 @@
     <tr>
         <th>
             <router-link
-                :to="{name: 'protocol', params: {protocol: protocol.name}}"
+                :to="{name: 'protocol', params: {protocol: protocol.id}}"
             >
                 {{ protocol.name }}
             </router-link>
         </th>
         <td class="nodes">
-            <Number :number="protocol.activeNodes" />
+            <Number :number="protocol.thefederation_node_protocols_aggregate.aggregate.count" />
         </td>
         <td class="users">
-            <div v-if="statsProtocolToday">
-                <Number :number="statsProtocolToday.usersTotal" />
+            <div v-if="protocol.thefederation_stats[0].users_total">
+                <Number
+                    :number="protocol.thefederation_stats[0].users_total
+                    "
+                />
             </div>
         </td>
     </tr>
 </template>
 
 <script>
-import gql from 'graphql-tag'
 import Number from './common/Number'
 
-const statsQuery = gql`
-    query ProtocolStats($name: String!) {
-        statsProtocolToday(name: $name) {
-            usersTotal
-        }
-    }
-`
-
 export default {
-    apollo: {
-        statsProtocolToday: {
-            query: statsQuery,
-            variables() {
-                return {
-                    name: this.protocol.name,
-                }
-            },
-        },
-    },
     name: "ProtocolTableRow",
     components: {Number},
     props: {
@@ -48,11 +32,6 @@ export default {
             type: Object,
             default: null,
         },
-    },
-    data() {
-        return {
-            statsProtocolToday: {},
-        }
     },
 }
 </script>

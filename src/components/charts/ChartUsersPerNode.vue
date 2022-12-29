@@ -1,20 +1,49 @@
 <script>
+import gql from "graphql-tag"
 import ChartMixin from "./ChartMixin"
-import {getQuery} from "./utils"
+
+const query = gql`
+query UsersPerNode {
+    users_per_node(order_by: {date: desc}) {
+        count
+        date
+    }
+}
+`
+
+const platformQuery = gql`
+query UsersPerNodeByPlatform($platformId: Int!) {
+    users_per_node_by_platform(args: {platformid: $platformId}, order_by: {date: desc}) {
+        count
+        date
+    }
+}
+`
 
 export default {
     apollo: {
         stats: {
-            query: getQuery('statsUsersPerNode'),
+            query() {
+                if (this.platformId) {
+                    return platformQuery
+                }
+                return query
+            },
             manual: true,
             result({data}) {
-                this.stats = data.statsUsersPerNode
+                if (this.platformId) {
+                    this.stats = data.users_per_node_by_platform
+                } else {
+                    this.stats = data.users_per_node
+                }
             },
             variables() {
-                return {
-                    type: this.type,
-                    value: this.item,
+                if (this.platformId) {
+                    return {
+                        platformId: this.platformId,
+                    }
                 }
+                return {}
             },
         },
     },

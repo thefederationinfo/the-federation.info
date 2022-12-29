@@ -1,0 +1,3 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- ALTER FUNCTION node_count_by_date RENAME TO node_count_per_date;

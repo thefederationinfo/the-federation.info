@@ -11,28 +11,32 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ nodes.length || '' }} <strong>Nodes</strong>
+                                <Number :number="nodes.length" />
+                                <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ globalStats.usersTotal || '' }} <strong>Users</strong>
+                                <Number :number="globalStats.users_total" />
+                                <strong>Users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ globalStats.localPosts || '' }} <strong>Posts</strong>
+                                <Number :number="globalStats.local_posts" />
+                                <strong>Posts</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ globalStats.localComments || '' }} <strong>Comments</strong>
+                                <Number :number="globalStats.local_comments" />
+                                <strong>Comments</strong>
                             </ApolloLoader>
                         </div>
                     </div>
@@ -64,12 +68,12 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
-                                <li>Users: <strong>{{ globalStats.usersTotal || '' }}</strong></li>
-                                <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || '' }}</strong></li>
-                                <li>Last month users: <strong>{{ globalStats.usersMonthly || '' }}</strong></li>
-                                <li>Posts: <strong>{{ globalStats.localPosts || '' }}</strong></li>
-                                <li>Comments: <strong>{{ globalStats.localComments || '' }}</strong></li>
+                                <li>Nodes: <strong><Number :number="nodes.length" /></strong></li>
+                                <li>Users: <strong><Number :number="globalStats.users_total" /></strong></li>
+                                <li>Last 6 months users: <strong><Number :number="globalStats.users_half_year" /></strong></li>
+                                <li>Last month users: <strong><Number :number="globalStats.users_monthly" /></strong></li>
+                                <li>Posts: <strong><Number :number="globalStats.local_posts" /></strong></li>
+                                <li>Comments: <strong><Number :number="globalStats.local_comments" /></strong></li>
                             </ul>
                         </div>
                     </div>
@@ -93,8 +97,7 @@
                 </header>
                 <div class="overflow-x">
                     <NodesTable
-                        :nodes="nodes"
-                        :stats="stats"
+                        :nodes="tableNodes"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
@@ -111,51 +114,60 @@ import gql from 'graphql-tag'
 import ApolloLoader from "../common/ApolloLoader"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
+import Number from "../common/Number"
 import NodesTable from "../NodesTable"
 
 const query = gql`
-    query Protocol($name: String!) {
-        protocols(name: $name) {
-            name
-        }
-
-        nodes(protocol: $name) {
-            id
-            name
-            version
-            openSignups
-            host
-            platform {
-              name
-              icon
+query MyQuery($id: Int!, $yesterday: date!) {
+    thefederation_protocol_by_pk(id: $id) {
+        name
+        description
+        website
+        display_name
+        thefederation_node_protocols {
+            thefederation_node {
+                id
+                version
+                open_signups
+                host
+                country
+                thefederation_platform {
+                    name
+                    icon
+                }
+                thefederation_node_services {
+                    thefederation_service {
+                        name
+                    }
+                }
+                thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
+                    aggregate {
+                        avg {
+                            users_total
+                            users_half_year
+                            users_monthly
+                            users_weekly
+                            local_posts
+                            local_comments
+                        }
+                    }
+                }
             }
-            countryCode
-            countryFlag
-            countryName
-            services {
-                name
-            }
         }
-
-        statsGlobalToday(protocol: $name) {
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
-        }
-
-        statsNodes(protocol: $name) {
-            node {
-              id
+        thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
+            aggregate {
+                avg {
+                    users_total
+                    users_half_year
+                    users_monthly
+                    users_weekly
+                    local_posts
+                    local_comments
+                }
             }
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
         }
     }
+}
 `
 
 export default {
@@ -164,37 +176,35 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.nodes = data.nodes
-                this.protocol = data.protocols[0] || {}
-                const stats = {}
-                for (const o of data.statsNodes) {
-                    stats[o.node.id] = o
-                }
-                this.stats = stats
-                this.globalStats = data.statsGlobalToday || {}
+                this.protocol = data.thefederation_protocol_by_pk
+                this.nodes = data.thefederation_protocol_by_pk.thefederation_node_protocols
+                this.tableNodes = data.thefederation_protocol_by_pk.thefederation_node_protocols.map((n) => n.thefederation_node)
+                this.globalStats = data.thefederation_protocol_by_pk.thefederation_stats_aggregate.aggregate.avg || {}
             },
             variables() {
+                const date = new Date()
                 return {
-                    name: this.$route.params.protocol,
+                    id: this.$route.params.protocol,
+                    yesterday: new Date(new Date().setDate(date.getDate() - 1)),
                 }
             },
         },
     },
     name: "ProtocolPage",
     components: {
-        ApolloLoader, NodesTable, Footer, Drawer,
+        ApolloLoader, NodesTable, Footer, Drawer, Number,
     },
     data() {
         return {
             globalStats: {},
             nodes: [],
             protocol: {},
-            stats: {},
+            tableNodes: [],
         }
     },
     computed: {
         title() {
-            return this.protocol.displayName ? this.protocol.displayName : this.protocol.name || ''
+            return this.protocol.display_name ? this.protocol.display_name : this.protocol.name || ''
         },
     },
 }

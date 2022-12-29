@@ -50,9 +50,11 @@ Harmful content can be, but not limited to, malware, graphical material of minor
 * PostgreSQL
 * Vue 2
 * Webpack
-* GraphQL
+* Hasura (GraphQL)
 
 ## Development
+
+> Note the Graphql Django Backend is deprecated, use the Hasura Service instead!
 
 ### Dependencies
 
@@ -70,6 +72,29 @@ createdb -O thefederation thefederation
 exit
 python manage.py migrate
 ```
+
+### Hasura
+
+Hasura-Console: http://localhost:8090/console
+Password: myadminsecretkey <- this is the default password for development
+
+If you want to create migrations you have to use the hasura cli:
+
+```bash
+cd hasura/project
+hasura console --admin-secret "myadminsecretkey" --endpoint "http://localhost:8090"
+```
+
+The second command opens your default browser with the hasura console.
+Every change you made with the database it creates automatically migrations for you.
+
+To create a fresh schema.graphql:
+
+```bash
+yarn gq http://localhost:8090/v1/graphql -H "X-Hasura-Admin-Secret: myadminsecretkey" --introspect > schema.graphql
+```
+
+and delete non wanted information.
 
 ## Frontend
 

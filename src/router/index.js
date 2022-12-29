@@ -4,8 +4,10 @@ import Router from 'vue-router'
 import IndexPage from '@/components/IndexPage'
 import InfoPage from '@/components/InfoPage'
 import NodePage from '@/components/nodes/NodePage'
+import NodeRedirector from '@/components/nodes/NodeRedirector'
 import NodesPage from '@/components/NodesPage'
 import PlatformPage from '@/components/platform/PlatformPage'
+import PlatformRedirector from '@/components/platform/PlatformRedirector'
 import ProtocolPage from '@/components/protocols/ProtocolPage'
 import HostingReport from "../components/HostingReportPage"
 
@@ -32,6 +34,11 @@ export default new Router({
         },
         {
             path: '/node/:host',
+            component: NodeRedirector,
+            name: 'nodeRedirector',
+        },
+        {
+            path: '/node/details/:id',
             component: NodePage,
             name: 'node',
         },
@@ -46,9 +53,14 @@ export default new Router({
             name: 'info',
         },
         {
-            path: '/:platform',
+            path: '/platform/:platform',
             component: PlatformPage,
             name: 'platform',
+        },
+        {
+            path: '/:platformName',
+            component: PlatformRedirector,
+            name: 'platformRedirector',
         },
     ],
     scrollBehavior(to, from, savedPosition) {

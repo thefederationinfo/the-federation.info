@@ -1,0 +1,3 @@
+function:
+  name: active_users_ratio_by_platform
+  schema: public

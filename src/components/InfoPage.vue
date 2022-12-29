@@ -38,7 +38,12 @@
                         know if you depend on some JSON feed and we'll make sure not to break it.
                     </p>
                     <p>
-                        All the data is available via a <a href="/graphql">GraphQL</a> endpoint.
+                        All the data is available via a <a href="/graphql">GraphQL</a> endpoint. (deprecated)
+                        <br><br>
+                        A new, more stable and faster endpoint is now available!<br>
+                        To work with GraphiQL visit the <a href="https://cloud.hasura.io/public/graphiql">
+                            GraphiQL App</a> from Hasura and paste
+                        following url: <code>https://the-federation.info/v1/graphql</code>
                     </p>
 
                     <h3>How do I get my node listed?</h3>

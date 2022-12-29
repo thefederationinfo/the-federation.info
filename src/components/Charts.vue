@@ -48,6 +48,7 @@
                 Local comments
             </div>
             <div
+                v-if="type !== 'node'"
                 :class="{selected: isSelected('users_per_node')}"
                 class="btn-medium"
                 @click="selectChart('users_per_node')"
@@ -75,54 +76,69 @@
                 v-if="isSelected('nodes')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
                 label="Nodes"
             />
             <ChartUsersTotal
                 v-if="isSelected('users_total')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
+                :node-id="nodeId"
                 label="Total users"
             />
             <ChartUsersHalfYear
                 v-if="isSelected('users_half_year')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
+                :node-id="nodeId"
                 label="Active users 6 months"
             />
             <ChartUsersMonthly
                 v-if="isSelected('users_monthly')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
+                :node-id="nodeId"
                 label="Active users last month"
             />
             <ChartLocalPosts
                 v-if="isSelected('local_posts')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
+                :node-id="nodeId"
                 label="Total local posts"
             />
             <ChartLocalComments
                 v-if="isSelected('local_comments')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
+                :node-id="nodeId"
                 label="Total local comments"
             />
             <ChartUsersPerNode
                 v-if="isSelected('users_per_node')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
                 label="Users per node"
             />
             <ChartUsersActiveRatio
                 v-if="isSelected('users_active_ratio')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
+                :node-id="nodeId"
                 label="Active users ratio"
             />
             <ChartScatterUsers
                 v-if="isSelected('users_scatter')"
                 :item="item"
                 :type="type"
+                :platform-id="platformId"
                 label="User total vs monthly"
             />
         </div>
@@ -161,6 +177,14 @@ export default {
         type: {
             type: String,
             default: '',
+        },
+        platformId: {
+            type: Number,
+            default: undefined,
+        },
+        nodeId: {
+            type: Number,
+            default: undefined,
         },
     },
     data() {

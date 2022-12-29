@@ -11,28 +11,32 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ nodes.length || '' }} <strong>Nodes</strong>
+                                <Number :number="nodes.length" />
+                                <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ globalStats.usersTotal || 0 }} <strong>Users</strong>
+                                <Number :number="globalStats.users_total || 0" />
+                                <strong>Users</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ globalStats.localPosts || 0 }} <strong>Posts</strong>
+                                <Number :number="globalStats.local_posts || 0" />
+                                <strong>Posts</strong>
                             </ApolloLoader>
                         </div>
                     </div>
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                {{ globalStats.localComments || 0 }} <strong>Comments</strong>
+                                <Number :number="globalStats.local_comments || 0" />
+                                <strong>Comments</strong>
                             </ApolloLoader>
                         </div>
                     </div>
@@ -78,11 +82,11 @@
                         <div class="col2">
                             <ul>
                                 <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
-                                <li>Users: <strong>{{ globalStats.usersTotal || '' }}</strong></li>
-                                <li>Last 6 months users: <strong>{{ globalStats.usersHalfYear || '' }}</strong></li>
-                                <li>Last month users: <strong>{{ globalStats.usersMonthly || '' }}</strong></li>
-                                <li>Posts: <strong>{{ globalStats.localPosts || '' }}</strong></li>
-                                <li>Comments: <strong>{{ globalStats.localComments || '' }}</strong></li>
+                                <li>Users: <strong>{{ globalStats.users_total || '' }}</strong></li>
+                                <li>Last 6 months users: <strong>{{ globalStats.users_half_year || '' }}</strong></li>
+                                <li>Last month users: <strong>{{ globalStats.users_monthly || '' }}</strong></li>
+                                <li>Posts: <strong>{{ globalStats.local_posts || '' }}</strong></li>
+                                <li>Comments: <strong>{{ globalStats.local_comments || '' }}</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -92,6 +96,7 @@
             <Charts
                 v-if="platform.name"
                 :item="platform.name"
+                :platform-id="platform.id"
                 type="platform"
             />
 
@@ -102,7 +107,6 @@
                 <div class="overflow-x">
                     <NodesTable
                         :nodes="nodes"
-                        :stats="stats"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
@@ -120,56 +124,62 @@ import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
 import NodesTable from "../NodesTable"
+import Number from "../common/Number"
 
 const query = gql`
-    query Platform($name: String!) {
-        platforms(name: $name) {
-            name
-            code
-            displayName
-            description
-            tagline
-            website
-            icon
-        }
-
-        nodes(platform: $name) {
+query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!) {
+    thefederation_platform_by_pk(id: $id) {
+        id
+        name
+        code
+        display_name
+        description
+        tagline
+        website
+        icon
+        thefederation_nodes(where: {blocked: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
             id
             name
-            version
-            openSignups
+            open_signups
             host
-            platform {
-              name
-              icon
+            country
+            version
+            thefederation_node_services {
+                thefederation_service {
+                    name
+                }
             }
-            countryCode
-            countryFlag
-            countryName
-            services {
+            thefederation_platform {
                 name
+                icon
             }
-        }
-
-        statsGlobalToday(platform: $name) {
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
-        }
-
-        statsNodes(platform: $name) {
-            node {
-              id
+            thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
+                aggregate {
+                    avg {
+                        users_total
+                        users_half_year
+                        users_monthly
+                        users_weekly
+                        local_posts
+                        local_comments
+                    }
+                }
             }
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
         }
     }
+    thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
+        aggregate {
+            avg {
+                users_total
+                users_half_year
+                users_monthly
+                users_weekly
+                local_posts
+                local_comments
+            }
+        }
+    }
+}
 `
 
 export default {
@@ -178,25 +188,25 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.nodes = data.nodes
-                this.platform = data.platforms[0] || {}
-                const stats = {}
-                for (const o of data.statsNodes) {
-                    stats[o.node.id] = o
-                }
-                this.stats = stats
-                this.globalStats = data.statsGlobalToday || {}
+                this.icon = data.thefederation_platform_by_pk.icon
+                this.nodes = data.thefederation_platform_by_pk.thefederation_nodes
+                this.platform = data.thefederation_platform_by_pk || {}
+                this.globalStats = data.thefederation_stat_aggregate.aggregate.avg || {}
             },
             variables() {
+                const date = new Date()
+                const yesterday = new Date(new Date().setDate(date.getDate() - 1))
                 return {
-                    name: this.$route.params.platform,
+                    id: this.$route.params.platform,
+                    last_success: new Date(new Date().setDate(-30)),
+                    yesterday,
                 }
             },
         },
     },
     name: 'PlatformPage',
     components: {
-        ApolloLoader, Charts, NodesTable, Footer, Drawer,
+        ApolloLoader, Charts, NodesTable, Footer, Drawer, Number,
     },
     data() {
         return {
@@ -208,7 +218,7 @@ export default {
     },
     computed: {
         title() {
-            return this.platform.displayName ? this.platform.displayName : this.platform.name || ''
+            return this.platform.display_name ? this.platform.display_name : this.platform.name || ''
         },
     },
 }

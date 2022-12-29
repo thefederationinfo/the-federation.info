@@ -1,0 +1,10 @@
+table:
+  name: count_by_date
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - date
+        - count
+      filter: {}

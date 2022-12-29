@@ -30,7 +30,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="nodes.length" />
+                                <Number :number="nodeCount" />
                                 <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
@@ -38,7 +38,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="statsGlobalToday ? statsGlobalToday.usersTotal : null" />
+                                <Number :number="statsGlobalToday.users_total ? statsGlobalToday.users_total : null" />
                                 <strong>Users</strong>
                             </ApolloLoader>
                         </div>
@@ -76,39 +76,41 @@
                                 <ul>
                                     <li>
                                         Nodes:
-                                        <strong><Number :number="nodes.length" /></strong>
+                                        <strong><Number :number="nodeCount" /></strong>
                                     </li>
                                     <li>
                                         Users:
                                         <strong>
-                                            <Number :number="statsGlobalToday ? statsGlobalToday.usersTotal : null" />
+                                            <Number :number="statsGlobalToday.users_total ? statsGlobalToday.users_total : null" />
                                         </strong>
                                     </li>
                                     <li>
                                         Last 6 months active users:
                                         <strong>
                                             <Number
-                                                :number="statsGlobalToday ? statsGlobalToday.usersHalfYear : null"
+                                                :number="statsGlobalToday.users_half_year ? statsGlobalToday.users_half_year : null"
                                             />
                                         </strong>
                                     </li>
                                     <li>
                                         Last month active users:
                                         <strong>
-                                            <Number :number="statsGlobalToday ? statsGlobalToday.usersMonthly : null" />
+                                            <Number
+                                                :number="statsGlobalToday.users_monthly ? statsGlobalToday.users_monthly : null"
+                                            />
                                         </strong>
                                     </li>
                                     <li>
                                         Posts:
                                         <strong>
-                                            <Number :number="statsGlobalToday ? statsGlobalToday.localPosts : null" />
+                                            <Number :number="statsGlobalToday.local_posts ? statsGlobalToday.local_posts : null" />
                                         </strong>
                                     </li>
                                     <li>
                                         Comments:
                                         <strong>
                                             <Number
-                                                :number="statsGlobalToday ? statsGlobalToday.localComments : null"
+                                                :number="statsGlobalToday.local_comments ? statsGlobalToday.local_comments : null"
                                             />
                                         </strong>
                                     </li>
@@ -145,12 +147,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <PlatformTableRow
-                                v-for="platform in platforms"
-                                :key="platform.id"
-                                :platform="platform"
-                                :nodes="nodes"
-                            />
+                            <template v-for="platform in platforms">
+                                <PlatformTableRow
+                                    v-if="platform.id"
+                                    :key="platform.id"
+                                    :platform="platform"
+                                />
+                            </template>
                         </tbody>
                     </table>
                     <ApolloLoader :loading="$apollo.loading" />
@@ -172,11 +175,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ProtocolTableRow
-                                v-for="protocol in protocols"
-                                :key="protocol.id"
-                                :protocol="protocol"
-                            />
+                            <template v-for="protocol in protocols">
+                                <ProtocolTableRow
+                                    v-if="protocol.id"
+                                    :key="protocol.id"
+                                    :protocol="protocol"
+                                />
+                            </template>
                         </tbody>
                     </table>
                     <ApolloLoader :loading="$apollo.loading" />
@@ -234,49 +239,73 @@ import Number from "./common/Number"
 import PlatformTableRow from "./PlatformTableRow"
 import ProtocolTableRow from "./ProtocolTableRow"
 
+// TODO add failsafe if new day
 const query = gql`
-    query {
-        nodes {
-            id
-            platform {
-                name
-                icon
-            }
-        }
-        platforms {
-            id
-            code
-            name
-            icon
-            displayName
-            installGuide
-            license
-            website
-        }
-        protocols {
-            id
-            name
-            activeNodes
-        }
-        statsGlobalToday {
-            usersTotal
-            usersHalfYear
-            usersMonthly
-            localPosts
-            localComments
+query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz!) {
+    thefederation_node_aggregate(where: {last_success: {_gte: $last_success}, blocked: {_eq: false}}) {
+        aggregate {
+            count
         }
     }
+    thefederation_platform(where: {thefederation_nodes: {last_success: {_gte: $last_success}, blocked: {_eq: false}}}, order_by: {thefederation_nodes_aggregate: {count: desc}}) {
+        id
+        code
+        name
+        icon
+        display_name
+        install_guide
+        license
+        website
+        thefederation_nodes_aggregate(where: {thefederation_stats: {date: {_eq: $today}}}) {
+            aggregate {
+                count
+            }
+        }
+        thefederation_stats(where: {date: {_eq: $today}}) {
+            users_total
+        }
+    }
+    thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {blocked: {_eq: false}, last_success: {_gte: $last_success}}}}) {
+        id
+        name
+        thefederation_stats(where: {date: {_eq: $today}}) {
+            users_total
+        }
+        thefederation_node_protocols_aggregate {
+            aggregate {
+                count
+            }
+        }
+    }
+    thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_gte: $yesterday}}) {
+        aggregate {
+            avg {
+                users_total
+                users_half_year
+                users_monthly
+                users_weekly
+                local_posts
+                local_comments
+            }
+        }
+    }
+}
 `
 
 export default {
     apollo: {
         allQueries: {
             query,
+            variables: {
+                today: new Date(),
+                yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
+                last_success: new Date(new Date().setDate(-30)),
+            },
             result({data}) {
-                this.nodes = data.nodes
-                this.platforms = data.platforms
-                this.protocols = data.protocols
-                this.statsGlobalToday = data.statsGlobalToday
+                this.nodeCount = data.thefederation_node_aggregate.aggregate.count
+                this.platforms = data.thefederation_platform
+                this.protocols = data.thefederation_protocol
+                this.statsGlobalToday = data.thefederation_stat_aggregate.aggregate.avg
             },
             manual: true,
         },
@@ -287,7 +316,7 @@ export default {
     },
     data() {
         return {
-            nodes: [],
+            nodeCount: 0,
             platforms: [],
             protocols: [],
             statsGlobalToday: [],

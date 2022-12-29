@@ -16,6 +16,14 @@ export default {
             type: String,
             default: '',
         },
+        platformId: {
+            type: Number,
+            default: 0,
+        },
+        nodeId: {
+            type: Number,
+            default: 0,
+        },
     },
     components: {ApolloLoader},
     data() {

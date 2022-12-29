@@ -48,19 +48,19 @@
                         >
                             <tr
                                 v-for="value in sort.values"
-                                :key="value.name"
+                                :key="value.id"
                             >
                                 <td>
-                                    {{ value.countryName }} {{ value.countryFlag }}
+                                    {{ resolveCountryName(value.country) }} {{ resolveCountryFlag(value.country) }}
                                 </td>
                                 <td>
-                                    {{ value.count }}
+                                    <Number :number="value.count" />
                                 </td>
                                 <td>
-                                    {{ value.total }}
+                                    <Number :number="value.total" />
                                 </td>
                                 <td>
-                                    {{ value.actives }}
+                                    <Number :number="value.actives" />
                                 </td>
                             </tr>
                         </tbody>
@@ -75,19 +75,20 @@
 <script>
 import gql from "graphql-tag"
 
+import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import ApolloLoader from "./common/ApolloLoader"
 import Drawer from "./common/Drawer"
+import Number from './common/Number'
 
 const query = gql`
-    query {
-        countryStats {
-            actives
-            total
-            count
-            countryFlag
-            countryName
-        }
+query HostingReport {
+    hosting_report {
+        country
+        count
+        total
+        actives
     }
+}
 `
 
 export default {
@@ -95,15 +96,29 @@ export default {
         allQueries: {
             query,
             result({data}) {
-                this.values = data.countryStats
+                this.values = data.hosting_report
             },
             manual: true,
         },
     },
     name: "HostingReportPage",
-    components: {ApolloLoader, Drawer},
-
+    components: {ApolloLoader, Drawer, Number},
     data: () => ({values: []}),
+    methods: {
+        resolveCountryFlag(country) {
+            if (country) {
+                return getUnicodeFlagIcon(country)
+            }
+            return ''
+        },
+        resolveCountryName(country) {
+            if (country) {
+                const names = new Intl.DisplayNames(['en'], {type: 'region'})
+                return names.of(country)
+            }
+            return ''
+        },
+    },
 }
 </script>
 

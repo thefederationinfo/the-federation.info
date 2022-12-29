@@ -1,0 +1,48 @@
+table:
+  name: thefederation_node
+  schema: public
+object_relationships:
+  - name: thefederation_platform
+    using:
+      foreign_key_constraint_on: platform_id
+array_relationships:
+  - name: thefederation_node_services
+    using:
+      foreign_key_constraint_on:
+        column: node_id
+        table:
+          name: thefederation_node_services
+          schema: public
+  - name: thefederation_stats
+    using:
+      foreign_key_constraint_on:
+        column: node_id
+        table:
+          name: thefederation_stat
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - blocked
+        - country
+        - created
+        - features
+        - hide_from_list
+        - host
+        - id
+        - ip
+        - last_success
+        - name
+        - open_signups
+        - organization_account
+        - organization_contact
+        - organization_name
+        - platform_id
+        - relay
+        - server_meta
+        - updated
+        - uuid
+        - version
+      filter: {}
+      allow_aggregations: true

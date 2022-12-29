@@ -1,0 +1,1 @@
+CREATE TABLE "public"."hosting_report_t" ("country" varchar NOT NULL, "total" integer NOT NULL, "count" integer NOT NULL, "actives" integer NOT NULL, PRIMARY KEY ("country") );COMMENT ON TABLE "public"."hosting_report_t" IS E'just a placeholder table for the hosting report function';

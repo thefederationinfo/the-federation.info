@@ -1,0 +1,30 @@
+table:
+  name: thefederation_stat
+  schema: public
+object_relationships:
+  - name: thefederation_node
+    using:
+      foreign_key_constraint_on: node_id
+  - name: thefederation_platform
+    using:
+      foreign_key_constraint_on: platform_id
+  - name: thefederation_protocol
+    using:
+      foreign_key_constraint_on: protocol_id
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - date
+        - id
+        - local_comments
+        - local_posts
+        - node_id
+        - platform_id
+        - protocol_id
+        - users_half_year
+        - users_monthly
+        - users_total
+        - users_weekly
+      filter: {}
+      allow_aggregations: true
