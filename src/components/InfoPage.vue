@@ -35,7 +35,7 @@
                     <p>
                         It's all available as JSON, feel free to use any data you want! We cannot guarantee the
                         JSON will not change over time, though it should stay mostly stable. You can always let us
-                        know if you depend on some JSON feed and we'll make sure not to break it.
+                        know if you depend on some JSON feed and we'll try our best not to break it.
                     </p>
                     <p>
                         All the data is available via a <a href="/graphql">GraphQL</a> endpoint. (deprecated)
@@ -51,7 +51,23 @@
                         For registering your node with this site, go to
                         <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>. After some seconds,
                         you will be redirected to the created node page. If this doesn't happen, something went
-                        wrong when checking the node for data. Please contact us using the GitHub issue tracker.
+                        wrong when checking the node for data. Please contact us using the
+                        <a
+                            href="https://codeberg.org/thefederationinfo/the-federation.info"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Codeberg
+                        </a>
+                        issue tracker or in our
+                        <a
+                            href="https://matrix.to/#/#the-federation:matrix.org"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Matrix
+                        </a>
+                        channel.
                     </p>
 
                     <h3>Code of Conduct</h3>
