@@ -155,6 +155,7 @@ import ChartUsersHalfYear from "./charts/ChartUsersHalfYear"
 import ChartUsersMonthly from "./charts/ChartUsersMonthly"
 import ChartUsersPerNode from "./charts/ChartUsersPerNode"
 import ChartUsersTotal from "./charts/ChartUsersTotal"
+import {trackEvent} from "../tracker"
 
 export default {
     name: "Charts",
@@ -198,6 +199,7 @@ export default {
         },
         selectChart(chart) {
             this.activeChart = chart
+            trackEvent(chart)
         },
     },
 }

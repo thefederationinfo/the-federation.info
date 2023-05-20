@@ -13,4 +13,13 @@ const track = path => {
     }
 }
 
+const trackEvent = name => {
+    try {
+        window.umami.track(name)
+    } catch (e) {
+        console.warn("could not find umami, ignoring telemetry")
+    }
+}
+
 export default track
+export {trackEvent}
