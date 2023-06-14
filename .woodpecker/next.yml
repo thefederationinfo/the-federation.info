@@ -30,3 +30,36 @@ pipeline:
         from_secret: docker_password
     when:
       event: ["push", "tag"]
+
+  backend-dryrun:
+    group: docker
+    image: woodpeckerci/plugin-docker-buildx
+    secrets:
+      - MAXMIND_LICENSE_KEY
+    settings:
+      dockerfile: docker/app/Dockerfile
+      platforms: *platforms
+      dry_run: true
+      repo: a6543/the-federation_backend
+      tags: test
+      build_args_from_env: MAXMIND_LICENSE_KEY
+    when:
+      event: pull_request
+
+  backend-publish:
+    group: docker
+    image: woodpeckerci/plugin-docker-buildx
+    secrets:
+      - MAXMIND_LICENSE_KEY
+    settings:
+      dockerfile: docker/app/Dockerfile
+      platforms: *platforms
+      repo: a6543/the-federation_backend
+      tags: next,v1-${CI_COMMIT_SHA:0:8}
+      build_args_from_env: MAXMIND_LICENSE_KEY
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      event: ["push", "tag"]
