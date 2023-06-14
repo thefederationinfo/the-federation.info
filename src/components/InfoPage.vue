@@ -204,7 +204,7 @@
                         to get a very anonymized view of how you use this page.
                         You can see all data we have collected
                         <a
-                            href="https://umami.crapstone.xyz/share/2o4N1wEEAQbsxPKH/The-Federation%20Next"
+                            href="https://umami.crapstone.xyz/share/JqltAQUexefik4oT/The-Federation"
                             rel="noopener noreferrer"
                             @click="trackEvent('umami_info')"
                         >
