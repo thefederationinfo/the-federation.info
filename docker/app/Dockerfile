@@ -5,8 +5,8 @@ ARG MAXMIND_LICENSE_KEY
 
 COPY requirements/requirements.txt /requirements.txt
 
-RUN apt-get update -qq && apt-get install python-dev python3-dev -qqy \
-    && pip install --no-cache-dir -U pip setuptools pip-tools \
+RUN apt-get update -qq && apt-get install python-dev-is-python3 python3-dev -qqy \
+    && pip install --no-cache-dir -U pip==21.2 setuptools pip-tools \
     && pip-sync requirements.txt
 
 RUN curl "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${MAXMIND_LICENSE_KEY}&suffix=tar.gz" -o /tmp/geoip.tar.gz
