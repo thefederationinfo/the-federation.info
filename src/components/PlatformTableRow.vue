@@ -6,6 +6,7 @@
                 :alt="platform.name"
                 :title="platform.name"
                 :src="imageSource"
+                :width="1em"
             >
             <div v-else>
 &nbsp;
