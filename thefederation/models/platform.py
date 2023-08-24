@@ -60,16 +60,16 @@ class Platform(ModelBase):
         if self.name.startswith('matrix'):
             return 'matrix'
         return {
-            'diaspora': 'nodeinfo' if version >= (0, 5, 3, 0) else "statisticsjson",
-            'friendica': 'nodeinfo' if version >= (3, 4, 2) else "statisticsjson",
+            'diaspora': 'nodeinfo',
+            'friendica': 'nodeinfo',
             'funkwhale': 'nodeinfo',
             'ganggo': 'nodeinfo',
-            'gitea': 'nodeinfo2',
+            'gitea': 'nodeinfo',
             'gnusocial': 'nodeinfo',
             'fedimint': 'misskey',
-            'hubzilla': 'nodeinfo' if version >= (1, 6) else "statisticsjson",
+            'hubzilla': 'nodeinfo',
             'mastodon': 'mastodon',
-            'misskey': 'misskey',
+            'misskey': 'nodeinfo',
             'osada': 'nodeinfo',
             'peertube': 'nodeinfo',
             'pixelfed': 'nodeinfo',
