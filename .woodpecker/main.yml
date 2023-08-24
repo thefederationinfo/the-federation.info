@@ -1,4 +1,5 @@
-branches: main
+when:
+  branch: main
 
 variables:
   - &platforms 'linux/amd64'

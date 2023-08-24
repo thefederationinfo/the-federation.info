@@ -1,9 +1,10 @@
-branches: next
+when:
+  branch: next
 
 variables:
   - &platforms 'linux/amd64'
 
-pipeline:
+steps:
   frontend-dryrun:
     group: docker
     image: plugins/kaniko
