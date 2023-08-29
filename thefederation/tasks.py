@@ -33,6 +33,7 @@ def aggregate_daily_stats(date=None):
     for platform in Platform.objects.all():
         stats = Stat.objects.exclude(
             node__blocked=False,
+            node__hide_from_list=False,
             node__last_success__lt=now() - datetime.timedelta(days=30)
         ).filter(
             node__platform=platform,
@@ -55,6 +56,7 @@ def aggregate_daily_stats(date=None):
         stats = Stat.objects.exclude(
             node__last_success__lt=now() - datetime.timedelta(days=30)
         ).filter(
+            node__hide_from_list=False,
             node__blocked=False,
             node__protocols=protocol,
             date=date,
