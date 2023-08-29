@@ -14,7 +14,6 @@ class TheFederationConfig(AppConfig):
         if "rqscheduler" not in sys.argv:
             return
 
-        from thefederation.social import make_daily_post
         from thefederation.tasks import aggregate_daily_stats
         from thefederation.tasks import clean_duplicate_nodes
         from thefederation.tasks import fill_country_information
