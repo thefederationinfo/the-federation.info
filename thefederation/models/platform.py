@@ -66,7 +66,6 @@ class Platform(ModelBase):
             'ganggo': 'nodeinfo',
             'gitea': 'nodeinfo',
             'gnusocial': 'nodeinfo',
-            'fedimint': 'misskey',
             'hubzilla': 'nodeinfo',
             'mastodon': 'mastodon',
             'misskey': 'nodeinfo',
