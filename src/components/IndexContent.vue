@@ -247,7 +247,7 @@ query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz
             count
         }
     }
-    thefederation_platform(where: {thefederation_nodes: {last_success: {_gte: $last_success}, blocked: {_eq: false}}}, order_by: {thefederation_nodes_aggregate: {count: desc}}) {
+    thefederation_platform(where: {thefederation_nodes: {last_success: {_gte: $last_success}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}, order_by: {thefederation_nodes_aggregate: {count: desc}}) {
         id
         code
         name

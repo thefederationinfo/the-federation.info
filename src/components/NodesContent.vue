@@ -25,7 +25,7 @@ import gql from 'graphql-tag'
 // The Node Table is just too big to create a query without pagination
 const query = gql`
     query NodeContent {
-        thefederation_node {
+        thefederation_node(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}}) {
             id
             name
             version
