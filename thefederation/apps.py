@@ -32,11 +32,6 @@ class TheFederationConfig(AppConfig):
             queue_name='high',
         )
         scheduler.cron(
-            '0 10 * * *',
-            func=make_daily_post,
-            queue_name='high',
-        )
-        scheduler.cron(
             '18 4 * * *',
             func=clean_duplicate_nodes,
             queue_name='medium',

@@ -6,7 +6,7 @@ from freezegun import freeze_time
 from test_plus import TestCase
 
 from thefederation.models import Stat
-from thefederation.stats import daily_stats, daily_stats_data, get_last_stat
+from thefederation.stats import daily_stats_data, get_last_stat
 from thefederation.tasks import aggregate_daily_stats
 from thefederation.tests.factories import NodeFactory, StatFactory
 
@@ -64,8 +64,6 @@ class DailyStatsDataSingleNodeTest(TestCase):
             'local_comments': 200,
         },
     })
-    def test_renders(self, mock_daily_stats_data):
-        daily_stats()
 
     def test_results(self):
         with freeze_time('2018-03-12'):

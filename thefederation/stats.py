@@ -2,28 +2,9 @@ import datetime
 import random
 from typing import Dict, List
 
-from django.template.loader import render_to_string
 from django.utils.timezone import now
 
 from thefederation.models import Stat, Platform
-
-
-def daily_stats() -> str:
-    """
-    Compile a daily stats post.
-
-    :return: str
-    """
-    context = daily_stats_data()
-
-    posts = {
-        1: "global_counts",
-        2: "platform_nodes",
-        3: "platform_users",
-    }
-    post = random.randint(1, 3)
-
-    return render_to_string(f'thefederation/social/{posts[post]}.md', context)
 
 
 def daily_stats_data() -> Dict:
