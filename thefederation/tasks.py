@@ -21,6 +21,7 @@ METHODS = ['nodeinfo2', 'nodeinfo', 'matrix']
 def aggregate_daily_stats(date=None):
     if not date:
         date = now().date()
+
     # Do all platforms, protocols and then global
     totals = {
         'users_total': 0,
@@ -30,14 +31,15 @@ def aggregate_daily_stats(date=None):
         'local_posts': 0,
         'local_comments': 0,
     }
+
     for platform in Platform.objects.all():
         stats = Stat.objects.exclude(
-            node__blocked=False,
-            node__hide_from_list=False,
             node__last_success__lt=now() - datetime.timedelta(days=30)
         ).filter(
             node__platform=platform,
             date=date,
+            node__blocked=False,
+            node__hide_from_list=False,
         ).aggregate(
             users_total=Sum('users_total'),
             users_half_year=Sum('users_half_year'),
@@ -46,20 +48,23 @@ def aggregate_daily_stats(date=None):
             local_posts=Sum('local_posts'),
             local_comments=Sum('local_comments'),
         )
+
         Stat.objects.update_or_create(
             date=date, protocol=None, platform=platform, node=None, defaults=stats,
         )
+
         # Increment globals
         for key in totals:
             totals[key] += stats[key] if stats[key] else 0
+
     for protocol in Protocol.objects.all():
         stats = Stat.objects.exclude(
             node__last_success__lt=now() - datetime.timedelta(days=30)
         ).filter(
-            node__hide_from_list=False,
-            node__blocked=False,
             node__protocols=protocol,
             date=date,
+            node__hide_from_list=False,
+            node__blocked=False,
         ).aggregate(
             users_total=Sum('users_total'),
             users_half_year=Sum('users_half_year'),
@@ -68,9 +73,11 @@ def aggregate_daily_stats(date=None):
             local_posts=Sum('local_posts'),
             local_comments=Sum('local_comments'),
         )
+
         Stat.objects.update_or_create(
             date=date, protocol=protocol, platform=None, node=None, defaults=stats,
         )
+
     # Add global stat
     Stat.objects.update_or_create(date=date, protocol=None, platform=None, node=None, defaults=totals)
 

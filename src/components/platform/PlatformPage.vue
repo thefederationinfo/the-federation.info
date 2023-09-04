@@ -137,7 +137,7 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!)
         tagline
         website
         icon
-        thefederation_nodes(where: {blocked: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
+        thefederation_nodes(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
             id
             name
             open_signups
