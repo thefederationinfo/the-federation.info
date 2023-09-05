@@ -261,14 +261,14 @@ query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz
                 count
             }
         }
-        thefederation_stats(where: {date: {_eq: $today}}) {
+        thefederation_stats(where: {date: {_eq: $today}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
             users_total
         }
     }
-    thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {last_success: {_gte: $last_success}}}}) {
+    thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {last_success: {_gte: $last_success}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}}) {
         id
         name
-        thefederation_stats(where: {date: {_eq: $today}}) {
+        thefederation_stats(where: {date: {_eq: $today}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
             users_total
         }
         thefederation_node_protocols_aggregate(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
@@ -277,7 +277,7 @@ query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz
             }
         }
     }
-    thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_gte: $yesterday}, blocked: {_eq: false}, hide_from_list: {_eq: false}}) {
+    thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_gte: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
         aggregate {
             avg {
                 users_total
