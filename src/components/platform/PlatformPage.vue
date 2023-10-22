@@ -155,37 +155,8 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!,
       thefederation_platform {
         name
         icon
-        thefederation_nodes(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
-            id
-            name
-            open_signups
-            host
-            country
-            version
-            thefederation_node_services {
-                thefederation_service {
-                    name
-                }
-            }
-            thefederation_platform {
-                name
-                icon
-            }
-            thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
-                aggregate {
-                    avg {
-                        users_total
-                        users_half_year
-                        users_monthly
-                        users_weekly
-                        local_posts
-                        local_comments
-                    }
-                }
-            }
-        }
-    }
-    thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
+      }
+      thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
         aggregate {
           avg {
             users_total

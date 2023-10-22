@@ -242,52 +242,34 @@ import ProtocolTableRow from "./ProtocolTableRow"
 // TODO add failsafe if new day
 const query = gql`
 query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz!) {
-    thefederation_node_aggregate(where: {last_success: {_gte: $last_success}, blocked: {_eq: false}, hide_from_list: {_eq: false}}) {
-        aggregate {
-            count
-        }
+  thefederation_node_aggregate(where: {last_success: {_gte: $last_success}}) {
+    aggregate {
+      count
     }
-    thefederation_platform(where: {thefederation_nodes: {last_success: {_gte: $last_success}}}, order_by: {thefederation_nodes_aggregate: {count: desc}}) {
-        id
-        code
-        name
-        icon
-        display_name
-        install_guide
-        license
-        website
-        thefederation_nodes_aggregate(where: {thefederation_stats: {date: {_eq: $today}}, blocked: {_eq: false}, hide_from_list: {_eq: false}}) {
-            aggregate {
-                count
-            }
-        }
-        thefederation_stats(where: {date: {_eq: $today}}) {
-            users_total
-        }
+  }
+  thefederation_platform(where: {thefederation_nodes: {last_success: {_gte: $last_success}}}, order_by: {thefederation_nodes_aggregate: {count: desc}}) {
+    id
+    code
+    name
+    icon
+    display_name
+    install_guide
+    license
+    website
+    thefederation_nodes_aggregate(where: {thefederation_stats: {date: {_eq: $today}}}) {
+      aggregate {
+        count
+      }
     }
-    thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {last_success: {_gte: $last_success}}}}) {
-        id
-        name
-        thefederation_stats(where: {date: {_eq: $today}}) {
-            users_total
-        }
-        thefederation_node_protocols_aggregate(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
-            aggregate {
-                count
-            }
-        }
+    thefederation_stats(where: {date: {_eq: $today}}) {
+      users_total
     }
-    thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_gte: $yesterday}, blocked: {_eq: false}, hide_from_list: {_eq: false}}) {
-        aggregate {
-            avg {
-                users_total
-                users_half_year
-                users_monthly
-                users_weekly
-                local_posts
-                local_comments
-            }
-        }
+  }
+  thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {last_success: {_gte: $last_success}}}}) {
+    id
+    name
+    thefederation_stats(where: {date: {_eq: $today}}) {
+      users_total
     }
     thefederation_node_protocols_aggregate {
       aggregate {
