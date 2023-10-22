@@ -11,7 +11,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="nodes.length" />
+                                <Number :number="nodeCount" />
                                 <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
+                                <li>Nodes: <strong>{{ nodeCount || '' }}</strong></li>
                                 <li>Users: <strong>{{ globalStats.users_total || '' }}</strong></li>
                                 <li>Last 6 months users: <strong>{{ globalStats.users_half_year || '' }}</strong></li>
                                 <li>Last month users: <strong>{{ globalStats.users_monthly || '' }}</strong></li>
@@ -109,6 +109,9 @@
                         :nodes="nodes"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
+                    <div class="center">
+                        <button class="center" v-if="loadMoreEnabled" @click="loadMore">Load More</button>
+                    </div>
                 </div>
             </section>
         </main>
@@ -127,64 +130,71 @@ import NodesTable from "../NodesTable"
 import Number from "../common/Number"
 
 const query = gql`
-query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!) {
-    thefederation_platform_by_pk(id: $id) {
-        id
+query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!, $today: date!, $pageSize: Int!, $pageOffset: Int!) {
+  thefederation_platform_by_pk(id: $id) {
+    id
+    name
+    code
+    display_name
+    description
+    tagline
+    website
+    icon
+    thefederation_nodes(limit: $pageSize, offset: $pageOffset, where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
+      id
+      name
+      open_signups
+      host
+      country
+      version
+      thefederation_node_services {
+        thefederation_service {
+          name
+        }
+      }
+      thefederation_platform {
         name
-        code
-        display_name
-        description
-        tagline
-        website
         icon
-        thefederation_nodes(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
-            id
-            name
-            open_signups
-            host
-            country
-            version
-            thefederation_node_services {
-                thefederation_service {
-                    name
-                }
-            }
-            thefederation_platform {
-                name
-                icon
-            }
-            thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
-                aggregate {
-                    avg {
-                        users_total
-                        users_half_year
-                        users_monthly
-                        users_weekly
-                        local_posts
-                        local_comments
-                    }
-                }
-            }
-        }
-    }
-    thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
+      }
+      thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
         aggregate {
-            avg {
-                users_total
-                users_half_year
-                users_monthly
-                users_weekly
-                local_posts
-                local_comments
-            }
+          avg {
+            users_total
+            users_half_year
+            users_monthly
+            users_weekly
+            local_posts
+            local_comments
+          }
         }
+      }
     }
+    thefederation_nodes_aggregate(where: {thefederation_stats: {date: {_eq: $today}}}) {
+      aggregate {
+        count
+      }
+    }
+  }
+  thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
+    aggregate {
+      avg {
+        users_total
+        users_half_year
+        users_monthly
+        users_weekly
+        local_posts
+        local_comments
+      }
+    }
+  }
 }
 `
 
+const pageSize = 50
+
 export default {
     apollo: {
-        queries: {
+        platforms: {
             query,
             manual: true,
             result({data}) {
@@ -192,6 +202,7 @@ export default {
                 this.nodes = data.thefederation_platform_by_pk.thefederation_nodes
                 this.platform = data.thefederation_platform_by_pk || {}
                 this.globalStats = data.thefederation_stat_aggregate.aggregate.avg || {}
+                this.nodeCount = data.thefederation_platform_by_pk.thefederation_nodes_aggregate.aggregate.count
             },
             variables() {
                 const date = new Date()
@@ -200,6 +211,9 @@ export default {
                     id: this.$route.params.platform,
                     last_success: new Date(new Date().setDate(-30)),
                     yesterday,
+                    today: date,
+                    pageSize,
+                    pageOffset: 0,
                 }
             },
         },
@@ -214,11 +228,41 @@ export default {
             nodes: [],
             platform: {},
             stats: {},
+            nodeCount: 0,
+
+            pageSize,
+            currentPage: 0,
+            loadMoreEnabled: true,
         }
     },
     computed: {
         title() {
             return this.platform.display_name ? this.platform.display_name : this.platform.name || ''
+        },
+    },
+    methods: {
+        loadMore() {
+            this.currentPage += 1
+
+            // Fetch more data and transform the original result
+            this.$apollo.queries.platforms.fetchMore({
+                // New variables
+                variables: {
+                    pageOffset: this.pageSize * this.currentPage,
+                    pageSize,
+                },
+                // Transform the previous result with new data
+                updateQuery: (data, {fetchMoreResult: newData}) => {
+                    const oldItems = data.thefederation_platform_by_pk.thefederation_nodes
+                    const newItems = newData.thefederation_platform_by_pk.thefederation_nodes
+
+                    this.loadMoreEnabled = newItems.length === 50
+
+                    data.thefederation_platform_by_pk.thefederation_nodes = [...oldItems, ...newItems]
+
+                    return data
+                },
+            })
         },
     },
 }
