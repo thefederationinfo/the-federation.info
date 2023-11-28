@@ -15,11 +15,9 @@ Site found at: https://the-federation.info
 
 ## How to get your platform listed
 
-The recommended metadata to implement is [NodeInfo2](https://git.feneas.org/jaywink/nodeinfo2).
+Just implement the .well-known [NodeInfo](http://nodeinfo.diaspora.software/) endpoint to your project.
 
-Failing that, [NodeInfo](http://nodeinfo.diaspora.software/) works too.
-
-Mastodon and Matrix instances are scraped with a dedicated scraper since they don't (yet) provide generic metadata.
+Matrix instances are scraped with a dedicated scraper since they don't (yet) provide generic metadata.
 
 ### OK, I've done that, what now?
 
