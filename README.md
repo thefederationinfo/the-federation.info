@@ -13,6 +13,10 @@ Tracking various projects using the ActivityPub, Matrix, Diaspora, OStatus and o
 
 Site found at: https://the-federation.info
 
+## ⚠️⚠️⚠️ WE DO A REWRITE ⚠️⚠️⚠️
+
+Go visit [https://codeberg.org/thefederationinfo/next](https://codeberg.org/thefederationinfo/next) to track the progress.
+
 ## How to get your platform listed
 
 Just implement the .well-known [NodeInfo](http://nodeinfo.diaspora.software/) endpoint to your project.
@@ -40,74 +44,13 @@ While interactions on our site is not possible, we expect sites we list to have 
 
 Harmful content can be, but not limited to, malware, graphical material of minorities, abusive images, hateful content, racist content and climate denialism. The admins of this site reserve the right to decide case by case on blocking of nodes. Please report any nodes violating our terms to the admins.
 
-## Tech stack
-
-* Node 16
-* Python 3.6
-* Django 2.0
-* PostgreSQL
-* Vue 2
-* Webpack
-* Hasura (GraphQL)
-
 ## Development
 
-> Note the Graphql Django Backend is deprecated, use the Hasura Service instead!
+⚠️⚠️⚠️ WE DO A REWRITE ⚠️⚠️⚠️
 
-### Dependencies
+Just visit the [milestone](https://codeberg.org/thefederationinfo/next/projects/6543) to see open issues you can do.
 
-``` bash
-pip install -U pip setuptools pip-tools
-pip-sync dev-requirements.txt
-```
-
-### DB
-
-``` bash
-sudo su - postgres
-createuser -s -P thefederation  # give password 'thefederation'
-createdb -O thefederation thefederation
-exit
-python manage.py migrate
-```
-
-### Hasura
-
-Hasura-Console: http://localhost:8090/console
-Password: myadminsecretkey <- this is the default password for development
-
-If you want to create migrations you have to use the hasura cli:
-
-```bash
-cd hasura/project
-hasura console --admin-secret "myadminsecretkey" --endpoint "http://localhost:8090"
-```
-
-The second command opens your default browser with the hasura console.
-Every change you made with the database it creates automatically migrations for you.
-
-To create a fresh schema.graphql:
-
-```bash
-yarn gq http://localhost:8090/v1/graphql -H "X-Hasura-Admin-Secret: myadminsecretkey" --introspect > schema.graphql
-```
-
-and delete non wanted information.
-
-## Frontend
-
-### Build Setup
-
-``` bash
-# install dependencies
-yarn
-
-# serve with hot reload at localhost:8080
-yarn dev
-
-# build for production with minification
-yarn build
-```
+⚠️⚠️⚠️ WE DO A REWRITE ⚠️⚠️⚠️
 
 ## Authors
 
