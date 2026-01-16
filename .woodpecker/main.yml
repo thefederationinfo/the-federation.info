@@ -6,8 +6,7 @@ variables:
 
 steps:
   frontend-dryrun:
-    group: docker
-    image: plugins/kaniko
+    image: woodpeckerci/plugin-kaniko
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
@@ -16,10 +15,10 @@ steps:
       tags: test
     when:
       event: pull_request
+    depends_on: []
 
   frontend-publish:
-    group: docker
-    image: plugins/kaniko
+    image: woodpeckerci/plugin-kaniko
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
@@ -33,31 +32,29 @@ steps:
       event: ["push", "tag"]
 
   backend-dryrun:
-    group: docker
-    image: woodpeckerci/plugin-docker-buildx
-    secrets:
-      - MAXMIND_LICENSE_KEY
+    image: woodpeckerci/plugin-docker-buildx:6
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
       dry_run: true
       repo: a6543/the-federation_backend
       tags: test
-      build_args_from_env: MAXMIND_LICENSE_KEY
+      build_args:
+        MAXMIND_LICENSE_KEY:
+          from_secret: MAXMIND_LICENSE_KEY
     when:
       event: pull_request
 
   backend-publish:
-    group: docker
-    image: woodpeckerci/plugin-docker-buildx
-    secrets:
-      - MAXMIND_LICENSE_KEY
+    image: woodpeckerci/plugin-docker-buildx:6
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
       repo: a6543/the-federation_backend
       tags: latest,v1-${CI_COMMIT_SHA:0:8}
-      build_args_from_env: MAXMIND_LICENSE_KEY
+      build_args:
+        MAXMIND_LICENSE_KEY:
+          from_secret: MAXMIND_LICENSE_KEY
       username:
         from_secret: docker_username
       password:
