@@ -3,7 +3,7 @@ services:
     image: docker.io/valkey/valkey:9
 
   app:
-    image: a6543/the-federation_backend:latest
+    image: codeberg.org/thefederationinfo/backend:latest
     depends_on:
       - redis
       - db
@@ -18,7 +18,7 @@ services:
       RQWORKER_NUM: ${RQWORKER_NUM:-1}
 
   web:
-    image: a6543/the-federation_frontend:latest
+    image: codeberg.org/thefederationinfo/frontend:latest
     depends_on:
       - app
     ports:

@@ -6,23 +6,25 @@ variables:
 
 steps:
   frontend-dryrun:
-    image: woodpeckerci/plugin-kaniko
+    image: docker.io/woodpeckerci/plugin-kaniko
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
       no_push: true
-      repo: a6543/the-federation_frontend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/frontend
       tags: test
     when:
       event: pull_request
     depends_on: []
 
   frontend-publish:
-    image: woodpeckerci/plugin-kaniko
+    image: docker.io/woodpeckerci/plugin-kaniko
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
-      repo: a6543/the-federation_frontend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/frontend
       tags: latest,v1-${CI_COMMIT_SHA:0:8}
       username:
         from_secret: docker_username
@@ -32,12 +34,13 @@ steps:
       event: ["push", "tag"]
 
   backend-dryrun:
-    image: woodpeckerci/plugin-docker-buildx:6
+    image: docker.io/woodpeckerci/plugin-docker-buildx:6
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
       dry_run: true
-      repo: a6543/the-federation_backend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/backend
       tags: test
       build_args:
         MAXMIND_LICENSE_KEY:
@@ -46,11 +49,12 @@ steps:
       event: pull_request
 
   backend-publish:
-    image: woodpeckerci/plugin-docker-buildx:6
+    image: docker.io/woodpeckerci/plugin-docker-buildx:6
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
-      repo: a6543/the-federation_backend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/backend
       tags: latest,v1-${CI_COMMIT_SHA:0:8}
       build_args:
         MAXMIND_LICENSE_KEY:

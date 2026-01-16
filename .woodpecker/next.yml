@@ -11,7 +11,8 @@ steps:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
       no_push: true
-      repo: a6543/the-federation_frontend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/frontend
       tags: test
     when:
       event: pull_request
@@ -22,7 +23,8 @@ steps:
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
-      repo: a6543/the-federation_frontend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/frontend
       tags: next,v1-${CI_COMMIT_SHA:0:8}
       username:
         from_secret: docker_username
@@ -37,7 +39,8 @@ steps:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
       dry_run: true
-      repo: a6543/the-federation_backend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/backend
       tags: test
       build_args:
         MAXMIND_LICENSE_KEY:
@@ -50,7 +53,8 @@ steps:
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
-      repo: a6543/the-federation_backend
+      registry: codeberg.org
+      repo: codeberg.org/thefederationinfo/backend
       tags: next,v1-${CI_COMMIT_SHA:0:8}
       build_args:
         MAXMIND_LICENSE_KEY:
