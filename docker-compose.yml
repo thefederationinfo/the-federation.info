@@ -1,6 +1,6 @@
 services:
   redis:
-    image: redis
+    image: docker.io/valkey/valkey:9
 
   app:
     image: a6543/the-federation_backend:latest
