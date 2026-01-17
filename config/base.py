@@ -219,6 +219,24 @@ THEFEDERATION_SOCIALHOME_HOST = env("THEFEDERATION_SOCIALHOME_HOST", default="so
 THEFEDERATION_SOCIALHOME_KEY = env("THEFEDERATION_SOCIALHOME_KEY", default="")
 THEFEDERATION_SOCIALHOME_VISIBILITY = env("THEFEDERATION_SOCIALHOME_VISIBILITY", default="self")
 
+# Federation library configuration
+# ------------------------------------------------------------------------------
+FEDERATION = {
+    # Base URL of the server
+    'base_url': THEFEDERATION_URL,
+
+    # Required federation ID
+    'federation_id': 'https://thefederation.info/u/dummy',
+
+    # Functions that the federation library might call
+    # The-federation.info doesn't need these since it only reads data,
+    # so we provide lambda functions that return None
+    'get_object_function': None,
+    'get_private_key_function': None,
+    'get_profile_function': None,
+    'process_payload_function': None,
+}
+
 # Graphene
 # --------
 GRAPHENE = {
