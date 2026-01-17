@@ -1,5 +1,5 @@
 # Build bundle
-FROM node:16 as build-stage
+FROM docker.io/library/node:24 AS build-stage
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN yarn build
 WORKDIR /app
 
 # Nginx container
-FROM nginx
+FROM docker.io/library/nginx:1.29 AS webserver
 
 COPY --from=build-stage /app/dist /srv/frontend
 

@@ -25,7 +25,7 @@ services:
       - "0.0.0.0:8123:80"
 
   db:
-    image: postgres:14
+    image: docker.io/library/postgres:14
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-thefederation}
       POSTGRES_USER: thefederation
@@ -34,7 +34,7 @@ services:
       - ./dbdata:/var/lib/postgresql/data
 
   graphql-engine:
-    image: hasura/graphql-engine:v2.16.1.cli-migrations-v3
+    image: docker.io/hasura/graphql-engine:v2.48.10.cli-migrations-v3
     ports:
     - "8090:8080"
     depends_on:

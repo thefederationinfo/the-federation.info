@@ -20,3 +20,4 @@ pytest-django
 pytest-env
 pytest-sugar
 Werkzeug
+federation
