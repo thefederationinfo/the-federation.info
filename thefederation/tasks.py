@@ -119,7 +119,7 @@ def fetch_node(host):
         if result:
             return result
         methods = METHODS[:]
-        if node.preferred_method:
+        if node.preferred_method and node.preferred_method in methods:
             methods.remove(node.preferred_method)
 
     # Use remaining methods
