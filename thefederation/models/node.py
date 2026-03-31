@@ -26,7 +26,7 @@ class NodeQuerySet(models.QuerySet):
 class Node(ModelBase):
     blocked = models.BooleanField(default=False)
     country = CountryField(blank=True)
-    features = JSONField(default={}, blank=True)
+    features = JSONField(default=dict, blank=True)
     hide_from_list = models.BooleanField(default=False)
     host = models.CharField(max_length=128, unique=True)
     ip = models.GenericIPAddressField(blank=True, null=True)
@@ -38,7 +38,7 @@ class Node(ModelBase):
     organization_name = models.CharField(max_length=128, blank=True, default="")
     protocols = models.ManyToManyField('thefederation.Protocol', related_name='nodes', blank=True)
     relay = EnumField(Relay, default=Relay.NONE)
-    server_meta = JSONField(default={}, blank=True)
+    server_meta = JSONField(default=dict, blank=True)
     services = models.ManyToManyField('thefederation.Service', related_name='nodes', blank=True)
     platform = models.ForeignKey('thefederation.Platform', on_delete=models.PROTECT, related_name='nodes')
     version = models.CharField(max_length=128, blank=True)
