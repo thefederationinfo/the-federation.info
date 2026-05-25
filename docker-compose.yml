@@ -17,6 +17,7 @@ services:
       THEFEDERATION_DOMAIN: ${THEFEDERATION_DOMAIN:-localhost}
       RQWORKER_NUM: ${RQWORKER_NUM:-1}
       REDIS_URL: redis://redis:6379
+    mem_limit: 2G
 
   web:
     image: codeberg.org/thefederationinfo/frontend:latest
@@ -24,6 +25,7 @@ services:
       - app
     ports:
       - "0.0.0.0:8123:80"
+    mem_limit: 100M
 
   db:
     image: docker.io/library/postgres:14
@@ -33,6 +35,7 @@ services:
       POSTGRES_DB: thefederation
     volumes:
       - ./dbdata:/var/lib/postgresql/data
+    mem_limit: 4G
 
   graphql-engine:
     image: docker.io/hasura/graphql-engine:v2.48.10.cli-migrations-v3
@@ -60,3 +63,4 @@ services:
       # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET:-myadminsecretkey}
+    mem_limit: 6G
