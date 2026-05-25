@@ -1,6 +1,7 @@
 services:
   redis:
     image: docker.io/valkey/valkey:9
+    mem_limit: 1G
 
   app:
     image: codeberg.org/thefederationinfo/backend:latest
