@@ -1,13 +1,20 @@
 services:
   redis:
     image: docker.io/valkey/valkey:9
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
     mem_limit: 1G
 
   app:
     image: codeberg.org/thefederationinfo/backend:latest
     depends_on:
-      - redis
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgres://thefederation:${POSTGRES_PASSWORD:-thefederation}@db:5432/thefederation
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-topsecret}
@@ -30,6 +37,12 @@ services:
 
   db:
     image: docker.io/library/postgres:14
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U thefederation -d thefederation"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+      start_period: 5s
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-thefederation}
       POSTGRES_USER: thefederation
