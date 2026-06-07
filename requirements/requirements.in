@@ -17,7 +17,7 @@ raven
 redis<4  # rq<1.0 (0.13) requires redis-py 3.x
 # Django-RQ needs bumping to 2.0 for rq 1.0 support
 rq<1.0
-rq-scheduler
+rq-scheduler<0.13  # 0.13+ passes on_success to Job.create, needs rq>=1.9
 shcli
 gunicorn
 whitenoise<6  # 6.x requires Django 3.2+

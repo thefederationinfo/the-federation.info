@@ -28,7 +28,7 @@ attrs==26.1.0
     #   requests-cache
 autopep8==2.3.2
     # via django-silk
-beautifulsoup4==4.14.3
+beautifulsoup4==4.15.0
     # via
     #   federation
     #   markdownify
@@ -54,7 +54,7 @@ click==8.1.8
     #   shcli
 commonmark-socialhome==0.9.1.post2
     # via federation
-crontab==1.0.5
+croniter==6.2.2
     # via rq-scheduler
 cryptography==48.0.0
     # via federation
@@ -99,8 +99,6 @@ executing==2.2.1
     # via stack-data
 federation==0.27.0
     # via -r requirements/requirements.in
-freezegun==1.5.5
-    # via rq-scheduler
 frozendict==2.4.7
     # via pyld
 frozenlist==1.8.0
@@ -212,9 +210,9 @@ pyparsing==3.3.2
     # via rdflib
 python-dateutil==2.9.0.post0
     # via
+    #   croniter
     #   django-silk
     #   federation
-    #   freezegun
     #   rq-scheduler
 python-httpsig-socialhome==1.6.0
     # via federation
@@ -266,7 +264,7 @@ rq==0.13.0
     #   -r requirements/requirements.in
     #   django-rq
     #   rq-scheduler
-rq-scheduler==0.13.1
+rq-scheduler==0.11.0
     # via -r requirements/requirements.in
 rx==1.6.3
     # via graphql-core
