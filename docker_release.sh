@@ -7,8 +7,13 @@ if [[ -z "${MAXMIND_LICENSE_KEY}" ]]; then
   exit 1
 fi
 
-docker build -f docker/app/Dockerfile -t codeberg.org/thefederationinfo/backend:latest --build-arg "MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}" .
-docker push codeberg.org/thefederationinfo/backend:latest
+SHA=$(git rev-parse --short=8 HEAD)
+TAG="v1-${SHA}"
 
-docker build -f docker/nginx/Dockerfile -t codeberg.org/thefederationinfo/frontend:latest .
+docker build -f docker/app/Dockerfile -t codeberg.org/thefederationinfo/backend:latest -t "codeberg.org/thefederationinfo/backend:${TAG}" --build-arg "MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}" .
+docker push codeberg.org/thefederationinfo/backend:latest
+docker push "codeberg.org/thefederationinfo/backend:${TAG}"
+
+docker build -f docker/nginx/Dockerfile -t codeberg.org/thefederationinfo/frontend:latest -t "codeberg.org/thefederationinfo/frontend:${TAG}" .
 docker push codeberg.org/thefederationinfo/frontend:latest
+docker push "codeberg.org/thefederationinfo/frontend:${TAG}"
