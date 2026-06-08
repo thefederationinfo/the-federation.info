@@ -11,12 +11,18 @@ from thefederation.utils import is_valid_hostname, clean_hostname
 def register_view(request, host):
     json = True if request.content_type == "application/json" else False
     # TODO rate limit this view per caller ip?
-    if is_valid_hostname and poll_node(host):
+    host = clean_hostname(host)
+    # Validate cheaply, then queue the poll instead of fetching the remote
+    # node inline. Polling synchronously blocked the gunicorn worker for the
+    # whole remote fetch, so a slow node would exceed the worker timeout and
+    # get killed (WORKER TIMEOUT). Queue it like mass_register_view does.
+    if is_valid_hostname(host):
+        poll_node.delay(host)
         if json:
             return JsonResponse({'error': None})
         return redirect(f"/node/{host}")
     if json:
-        return JsonResponse({'error': 'Invalid hostname or broken nodeinfo!'})
+        return JsonResponse({'error': 'Invalid hostname!'})
     # TODO show an error or something
     return redirect("/")
 
