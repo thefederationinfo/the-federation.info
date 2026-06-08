@@ -80,8 +80,9 @@ class Node(ModelBase):
         if not cleaned_str:
             return None
 
-        # Split into tuple
-        return tuple([int(i) for i in cleaned_str.split(".")])
+        # Split into tuple, skipping empty segments left by consecutive or
+        # trailing dots (e.g. "1..2" or "2.0.") so int() can't get "".
+        return tuple(int(i) for i in cleaned_str.split(".") if i)
 
     @cached_property
     def preferred_method(self):
