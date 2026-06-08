@@ -97,7 +97,17 @@ def fetch_using_method(host, method):
         return
     logger.debug(f'Fetching {host} using method {method}')
     func = getattr(fetchers, f"fetch_{method}_document")
-    return func(host)
+    try:
+        return func(host)
+    except Exception as ex:
+        # A single method failing must not abort the whole fetch. Network
+        # errors, malformed remote documents, or the federation library's
+        # own validation (e.g. the NodeInfo2 "baseUrl is outside called
+        # host" check) should be treated like an empty result so fetch_node
+        # falls through to the next method. Many live nodes serve a broken
+        # NodeInfo2 document but a perfectly valid NodeInfo one.
+        logger.info("Method %s failed for %s: %s", method, host, ex)
+        return None
 
 
 def fetch_node(host):
