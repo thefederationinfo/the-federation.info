@@ -55,6 +55,15 @@ class Node(ModelBase):
             if self.platform.name == clean_name[0].lower():
                 self.name = self.host
         self.version = self.platform.clean_version(self.version)
+        # Node data comes from untrusted remote documents, which can carry
+        # values longer than our column limits (e.g. a name over 300 chars).
+        # Truncate to max_length so a misbehaving node can't abort the save
+        # with a DataError ("value too long for type character varying").
+        for field in self._meta.get_fields():
+            if isinstance(field, models.CharField) and field.max_length:
+                value = getattr(self, field.attname, None)
+                if isinstance(value, str) and len(value) > field.max_length:
+                    setattr(self, field.attname, value[:field.max_length])
         super().save(*args, **kwargs)
 
     @property
