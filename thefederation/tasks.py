@@ -10,8 +10,12 @@ from django_rq import job
 from federation.hostmeta import fetchers
 from federation.utils.network import fetch_host_ip
 
+from thefederation import nodeinfo_compat
 from thefederation.enums import Relay
 from thefederation.models import Node, Platform, Protocol, Service, Stat
+
+# Work around a federation-library crash on PeerTube's nodeinfo links.
+nodeinfo_compat.apply()
 
 logger = logging.getLogger(__name__)
 
