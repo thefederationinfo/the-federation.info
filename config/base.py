@@ -292,39 +292,31 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
-        "file": {
-            "filename": env("THEFEDERATION_LOGFILE", default="/tmp/thefederation.log"),
-            "level": "DEBUG",
-            "class": "logging.handlers.RotatingFileHandler",
-            "formatter": "verbose",
-            "maxBytes": 10485760,  # 10mb
-            "backupCount": 10,
-        },
     },
     "loggers": {
         "django.request": {
-            "handlers": ["file"],
+            "handlers": ["console"],
             "level": "ERROR",
             "propagate": True,
         },
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "propagate": True
         },
         "thefederation": {
             "level": "DEBUG",
-            "handlers": ["file"],
+            "handlers": ["console"],
             "propagate": False,
         },
         "federation": {
             "level": "DEBUG",
-            "handlers": ["file"],
+            "handlers": ["console"],
             "propagate": False,
         },
         "rq_scheduler.scheduler": {
             "level": "ERROR",
-            "handlers": ["file"],
+            "handlers": ["console"],
             "propagate": False,
         },
     }
