@@ -231,18 +231,24 @@ def _store_poll_result(host, result):
             logger.info(f'Updated {host} failed out of range value for {metric}')
             return False
 
-    Stat.objects.update_or_create(
-        node=node,
-        date=now().date(),
-        defaults={
-            'users_total': users.get('total'),
-            'users_half_year': users.get('half_year'),
-            'users_monthly': users.get('monthly'),
-            'users_weekly': users.get('weekly'),
-            'local_posts': activity.get('local_posts'),
-            'local_comments': activity.get('local_comments'),
-        },
+    stat_values = {
+        'users_total': users.get('total'),
+        'users_half_year': users.get('half_year'),
+        'users_monthly': users.get('monthly'),
+        'users_weekly': users.get('weekly'),
+        'local_posts': activity.get('local_posts'),
+        'local_comments': activity.get('local_comments'),
+    }
+    stat, created = Stat.objects.get_or_create(
+        node=node, date=now().date(), defaults=stat_values,
     )
+    if not created and any(getattr(stat, key) != value for key, value in stat_values.items()):
+        # update_or_create would UPDATE unconditionally, turning every
+        # repeat poll of the day into a disk write even when nothing
+        # changed. Only write when a value actually differs.
+        for key, value in stat_values.items():
+            setattr(stat, key, value)
+        stat.save(update_fields=list(stat_values))
 
     logger.info(f'Updated {host} successfully.')
     return True

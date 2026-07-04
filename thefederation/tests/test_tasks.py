@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.utils.timezone import now
 from test_plus import TestCase
 
@@ -41,6 +43,17 @@ class PollNodeTestCase(TestCase):
         self.assertIsNone(stat.users_weekly)
         self.assertIsNone(stat.local_posts)
         self.assertIsNone(stat.local_comments)
+
+    @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
+    def test_stat__no_write_on_unchanged_repeat_poll(self, mock_fetch):
+        poll_node('example.com')
+        with CaptureQueriesContext(connection) as ctx:
+            poll_node('example.com')
+        stat_writes = [
+            query['sql'] for query in ctx.captured_queries
+            if query['sql'].startswith(('UPDATE', 'INSERT')) and 'thefederation_stat' in query['sql']
+        ]
+        self.assertEqual(stat_writes, [])
 
     @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
     def test_stat__updates_on_successful_poll(self, mock_fetch):
