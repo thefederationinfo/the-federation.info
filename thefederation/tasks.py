@@ -187,6 +187,26 @@ def poll_node(host):
 
 
 def _store_poll_result(host, result):
+    activity = result.get('activity', {})
+    users = activity.get('users', {})
+
+    # check bounds for Django's PositiveIntegerField before touching the
+    # database, so a node with broken stats costs zero writes per poll
+    # instead of a node update that gets thrown away anyway
+    metrics = [
+        ('total', users),
+        ('half_year', users),
+        ('monthly', users),
+        ('weekly', users),
+        ('local_posts', activity),
+        ('local_comments', activity),
+    ]
+    for metric, source in metrics:
+        value = source.get(metric)
+        if value and (value > 2147483647 or value < 0):
+            logger.info(f'Updated {host} failed out of range value for {metric}')
+            return False
+
     platform, _created = Platform.objects.get_or_create(name=result['platform'])
     node, _created = Node.objects.update_or_create(
         host=host,
@@ -221,24 +241,6 @@ def _store_poll_result(host, result):
         serv, _created = Service.objects.get_or_create(name=service)
         services.add(serv)
     node.services.set(services)
-
-    activity = result.get('activity', {})
-    users = activity.get('users', {})
-
-    # check bounds for Django's PositiveIntegerField
-    metrics = [
-        ('total', users),
-        ('half_year', users),
-        ('monthly', users),
-        ('weekly', users),
-        ('local_posts', activity),
-        ('local_comments', activity),
-    ]
-    for metric, source in metrics:
-        value = source.get(metric)
-        if value and (value > 2147483647 or value < 0):
-            logger.info(f'Updated {host} failed out of range value for {metric}')
-            return False
 
     stat_values = {
         'users_total': users.get('total'),
