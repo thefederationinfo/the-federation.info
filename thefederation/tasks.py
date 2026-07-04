@@ -172,7 +172,7 @@ def fill_country_information():
     logger.info(f'Update of country and IP information done, updated {updates} nodes.')
 
 
-@job('medium')
+@job('medium', result_ttl=0)
 def poll_node(host):
     logger.info(f'Start processing {host}')
     result = fetch_node(host)
