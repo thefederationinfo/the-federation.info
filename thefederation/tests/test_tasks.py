@@ -44,6 +44,15 @@ class PollNodeTestCase(TestCase):
         self.assertIsNone(stat.local_posts)
         self.assertIsNone(stat.local_comments)
 
+    @patch('thefederation.tasks.fetch_node')
+    def test_stat__rejects_out_of_range_local_posts(self, mock_fetch):
+        import copy
+        response = copy.deepcopy(FETCH_NODE_RESPONSE)
+        response['activity']['local_posts'] = 2147483648
+        mock_fetch.return_value = response
+        self.assertFalse(poll_node('example.com'))
+        self.assertFalse(Stat.objects.filter(node__host='example.com').exists())
+
     @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
     def test_stat__no_write_on_unchanged_repeat_poll(self, mock_fetch):
         poll_node('example.com')

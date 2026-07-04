@@ -226,8 +226,17 @@ def _store_poll_result(host, result):
     users = activity.get('users', {})
 
     # check bounds for Django's PositiveIntegerField
-    for metric in ['total', 'half_year', 'monthly', 'weekly', 'local_posts', 'local_comments']:
-        if users.get(metric) and (users.get(metric) > 2147483647 or users.get(metric) < 0):
+    metrics = [
+        ('total', users),
+        ('half_year', users),
+        ('monthly', users),
+        ('weekly', users),
+        ('local_posts', activity),
+        ('local_comments', activity),
+    ]
+    for metric, source in metrics:
+        value = source.get(metric)
+        if value and (value > 2147483647 or value < 0):
             logger.info(f'Updated {host} failed out of range value for {metric}')
             return False
 
