@@ -268,13 +268,15 @@ def _store_poll_result(host, result):
 
 def poll_nodes(skip = 0):
     logger.info(f'Queueing polling all nodes (skipping {skip}).')
-    nodes_qs = Node.objects.only('host').active()
-    total = count = len(nodes_qs)
-    for node in nodes_qs:
+    # values_list + iterator: only host strings, no Node instances, and
+    # len() would have materialized the whole queryset in memory
+    hosts = Node.objects.active().values_list('host', flat=True)
+    total = count = hosts.count()
+    for host in hosts.iterator():
         if total - count < skip:
             count -= 1
             continue
-        poll_node.delay(node.host)
+        poll_node.delay(host)
         count -= 1
         logger.debug(f'{count} nodes left')
     logger.info(f'Queued {total - skip if total > skip else 0} nodes for polling.')
