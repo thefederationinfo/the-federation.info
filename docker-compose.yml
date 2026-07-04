@@ -1,6 +1,9 @@
 services:
   redis:
     image: docker.io/valkey/valkey:9
+    # Pure in-memory: this only holds the rq job queue, which cron refills.
+    # Default RDB snapshots wrote gigabytes of throwaway queue state to disk.
+    command: ["valkey-server", "--save", "", "--appendonly", "no"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 3s
