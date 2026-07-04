@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 METHODS = ['nodeinfo2', 'nodeinfo', 'matrix']
 
 
+@transaction.atomic
 def aggregate_daily_stats(date=None):
     if not date:
         date = now().date()
