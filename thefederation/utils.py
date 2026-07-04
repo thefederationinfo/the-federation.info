@@ -17,7 +17,7 @@ def is_valid_hostname(hostname: str) -> bool:
 
     Thanks to https://stackoverflow.com/a/2532344/1489738
     """
-    if len(hostname) > 255:
+    if not hostname or len(hostname) > 255:
         return False
     if hostname[-1] == ".":
         hostname = hostname[:-1] # strip exactly one dot from the right, if present
