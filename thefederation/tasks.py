@@ -4,6 +4,7 @@ import logging
 import geoip2.database
 from django.conf import settings
 from django.core.management import call_command
+from django.db import transaction
 from django.db.models import Sum
 from django.utils.timezone import now
 from django_rq import job
@@ -176,6 +177,16 @@ def poll_node(host):
         return False
 
     assert host == result.get('host')
+    # A poll causes several small writes (node, m2m links, stat). Without an
+    # explicit transaction each one autocommits separately, forcing Postgres
+    # to fsync its WAL per statement. One atomic block per poll collapses
+    # that to a single commit, which matters a lot with many concurrent
+    # rqworkers hammering the same disk.
+    with transaction.atomic():
+        return _store_poll_result(host, result)
+
+
+def _store_poll_result(host, result):
     platform, _created = Platform.objects.get_or_create(name=result['platform'])
     node, _created = Node.objects.update_or_create(
         host=host,
