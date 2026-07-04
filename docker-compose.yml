@@ -9,7 +9,7 @@ services:
       interval: 3s
       timeout: 3s
       retries: 10
-    mem_limit: 1G
+    mem_limit: 4G
 
   app:
     image: codeberg.org/thefederationinfo/backend:latest
@@ -28,7 +28,7 @@ services:
       THEFEDERATION_DOMAIN: ${THEFEDERATION_DOMAIN:-localhost}
       RQWORKER_NUM: ${RQWORKER_NUM:-1}
       REDIS_URL: redis://redis:6379
-    mem_limit: 2G
+    mem_limit: 5G
 
   web:
     image: codeberg.org/thefederationinfo/frontend:latest
