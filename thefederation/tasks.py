@@ -149,7 +149,10 @@ def fill_country_information():
     logger.info('Updating country and IP information for all nodes.')
     ipdb = geoip2.database.Reader(settings.MAXMIND_DB_PATH)
     updates = 0
-    for node in Node.objects.only('host', 'ip', 'country').active():
+    # Node.save() reads name, version and platform.name; with only() those
+    # were deferred, costing three extra SELECTs per saved node. Fetch the
+    # full row plus platform in the single initial query instead.
+    for node in Node.objects.select_related('platform').active().iterator():
         try:
             save = False
             ip = fetch_host_ip(node.host)
