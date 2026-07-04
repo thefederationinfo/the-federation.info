@@ -273,4 +273,5 @@ def poll_nodes(skip = 0):
             continue
         poll_node.delay(node.host)
         count -= 1
-        logger.info(f'{count} nodes left')
+        logger.debug(f'{count} nodes left')
+    logger.info(f'Queued {total - skip if total > skip else 0} nodes for polling.')
