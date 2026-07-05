@@ -8,6 +8,15 @@ def clean_hostname(hostname: str) -> str:
     hostname = hostname.strip().lower()
     # Strip protocol
     hostname = re.sub(r"https?://", "", hostname)
+    # Internationalized hostnames must be punycoded, remote nodes serve
+    # nodeinfo under the ASCII form. Mirrors sanitize() in the
+    # next-generation Registrar.
+    if hostname and not hostname.isascii():
+        try:
+            hostname = hostname.encode("idna").decode("ascii")
+        except UnicodeError:
+            # Leave it as is, is_valid_hostname will reject it.
+            pass
     return hostname
 
 
