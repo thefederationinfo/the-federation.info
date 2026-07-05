@@ -4,13 +4,55 @@ when:
 variables:
   - &platforms 'linux/amd64'
 
+services:
+  database:
+    image: docker.io/library/postgres:14
+    environment:
+      POSTGRES_USER: thefederation
+      POSTGRES_PASSWORD: thefederation
+      POSTGRES_DB: thefederation
+    when:
+      event: pull_request
+
+  valkey:
+    image: docker.io/valkey/valkey:9
+    when:
+      event: pull_request
+
 steps:
+  backend-lint:
+    image: docker.io/library/python:3.9
+    commands:
+      # keep in sync with the ruff pin in requirements/requirements-dev.txt
+      - pip install --no-cache-dir --quiet ruff==0.15.20
+      - ruff check .
+      - ruff format --check .
+    when:
+      event: pull_request
+    depends_on: []
+
+  backend-test:
+    image: docker.io/library/python:3.9
+    environment:
+      DATABASE_URL: postgres://thefederation:thefederation@database:5432/thefederation
+      REDIS_HOST: valkey
+    commands:
+      # setuptools >= 81 removed pkg_resources, which django-silk imports
+      - pip install --no-cache-dir --quiet "setuptools<81"
+      - pip install --no-cache-dir --quiet -r requirements/requirements-dev.txt
+      - pytest
+      # integration tests against live fediverse instances
+      - pytest -m live
+    when:
+      event: pull_request
+    depends_on: []
+
   frontend-dryrun:
     image: docker.io/woodpeckerci/plugin-kaniko
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
-      no_push: true
+      dry-run: true
       registry: codeberg.org
       repo: codeberg.org/thefederationinfo/frontend
       tags: test
@@ -34,11 +76,11 @@ steps:
       event: ["push", "tag"]
 
   backend-dryrun:
-    image: docker.io/woodpeckerci/plugin-docker-buildx:6
+    image: docker.io/woodpeckerci/plugin-docker-buildx:6.0.3
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
-      dry_run: true
+      dry-run: true
       registry: codeberg.org
       repo: codeberg.org/thefederationinfo/backend
       tags: test
@@ -49,7 +91,7 @@ steps:
       event: pull_request
 
   backend-publish:
-    image: docker.io/woodpeckerci/plugin-docker-buildx:6
+    image: docker.io/woodpeckerci/plugin-docker-buildx:6.0.3
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms

@@ -1,4 +1,4 @@
-"""Compatibility shim for the ``federation`` library's nodeinfo fetcher.
+"""Compatibility shims for the ``federation`` library's fetchers.
 
 federation.hostmeta.fetchers.fetch_nodeinfo_document iterates over every link
 in /.well-known/nodeinfo and does ``float(link['rel'].split('/')[-1])`` to find
@@ -14,6 +14,7 @@ which aborts the whole fetch, so those nodes can never be polled.
 This shim reinstalls the same logic but skips rels that do not parse as a
 version number. It should be removed once the upstream fix is released.
 """
+
 import json
 
 from federation.hostmeta import fetchers
@@ -22,10 +23,41 @@ from federation.hostmeta.fetchers import (
     fetch_document,
     parse_nodeinfo_document,
 )
+from federation.hostmeta.parsers import parse_matrix_document
+
+
+def fetch_matrix_document(host):
+    """Matrix fetcher that honours .well-known server delegation.
+
+    The library queries ``https://{host}/_matrix/federation/v1/version``
+    directly, but per the Matrix server discovery spec a domain may
+    delegate federation to another host:port via
+    ``/.well-known/matrix/server`` (e.g. rocket.chat delegates to
+    open.rocket.chat:443). Follow the delegation for the version query
+    while still attributing the node to the original host.
+    """
+    delegated = host
+    doc, _status_code, _error = fetch_document(host=host, path="/.well-known/matrix/server")
+    if doc:
+        try:
+            m_server = json.loads(doc).get("m.server")
+        except json.JSONDecodeError:
+            m_server = None
+        if m_server and isinstance(m_server, str):
+            delegated = m_server.strip()
+
+    doc, _status_code, _error = fetch_document(host=delegated, path="/_matrix/federation/v1/version")
+    if not doc:
+        return
+    try:
+        doc = json.loads(doc)
+    except json.JSONDecodeError:
+        return
+    return parse_matrix_document(doc, host)
 
 
 def fetch_nodeinfo_document(host):
-    doc, status_code, error = fetch_document(host=host, path='/.well-known/nodeinfo')
+    doc, status_code, error = fetch_document(host=host, path="/.well-known/nodeinfo")
     if not doc:
         return
     try:
@@ -33,25 +65,25 @@ def fetch_nodeinfo_document(host):
     except json.JSONDecodeError:
         return
 
-    url, highest_version = '', 0.0
+    url, highest_version = "", 0.0
 
-    if doc.get('0'):
+    if doc.get("0"):
         # Buggy NodeInfo from certain old Hubzilla versions
-        url = doc.get('0', {}).get('href')
-    elif isinstance(doc.get('links'), dict):
+        url = doc.get("0", {}).get("href")
+    elif isinstance(doc.get("links"), dict):
         # Another buggy NodeInfo from certain old Hubzilla versions
-        url = doc.get('links').get('href')
+        url = doc.get("links").get("href")
     else:
-        for link in doc.get('links') or []:
-            rel = link.get('rel') or ''
+        for link in doc.get("links") or []:
+            rel = link.get("rel") or ""
             try:
-                version = float(rel.split('/')[-1])
+                version = float(rel.split("/")[-1])
             except (TypeError, ValueError):
                 # Not a versioned nodeinfo schema rel (e.g. PeerTube's
                 # activitystreams#Application link); skip instead of crashing.
                 continue
             if highest_version < version <= HIGHEST_SUPPORTED_NODEINFO_VERSION:
-                url, highest_version = link.get('href'), version
+                url, highest_version = link.get("href"), version
 
     if not url:
         return
@@ -67,5 +99,6 @@ def fetch_nodeinfo_document(host):
 
 
 def apply():
-    """Monkeypatch the federation library's nodeinfo fetcher in place."""
+    """Monkeypatch the federation library's fetchers in place."""
     fetchers.fetch_nodeinfo_document = fetch_nodeinfo_document
+    fetchers.fetch_matrix_document = fetch_matrix_document

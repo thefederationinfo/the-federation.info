@@ -24,12 +24,9 @@ THIRD_PARTY_APPS = (
     "corsheaders",
     "django_extensions",
     "django_rq",
-    "graphene_django",
     "silk",
 )
-LOCAL_APPS = (
-    "thefederation",
-)
+LOCAL_APPS = ("thefederation",)
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -42,7 +39,6 @@ MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
@@ -52,17 +48,6 @@ MIDDLEWARE = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
 DEBUG_TOOLBAR_ENABLED = False
-
-# MANAGER CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    (env("DJANGO_ADMIN_NAME", default="The Federation Admin"),
-     env("DJANGO_ADMIN_MAIL", default="info@thefederation.local")),
-)
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
-MANAGERS = ADMINS
 
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -146,26 +131,12 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-# MEDIA CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(ROOT_DIR("media"))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = "/media/"
-
 # URL Configuration
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = "config.urls"
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
-
-# AUTHENTICATION CONFIGURATION
-# ------------------------------------------------------------------------------
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-)
 
 # REDIS
 # -----
@@ -199,48 +170,30 @@ ADMIN_URL = r"^admin/"
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
-CSRF_TRUSTED_ORIGINS = env.list("THEFEDERATION_DOMAIN", default=['localhost'])
+CSRF_TRUSTED_ORIGINS = env.list("THEFEDERATION_DOMAIN", default=["localhost"])
 
 # The Federation
 # ------------------------------------------------------------------------------
 THEFEDERATION_DOMAIN = env("THEFEDERATION_DOMAIN", default="127.0.0.1")
 THEFEDERATION_HTTPS = env.bool("THEFEDERATION_HTTPS", True)
 THEFEDERATION_URL = "{protocol}://{domain}".format(
-    protocol="https" if THEFEDERATION_HTTPS else "http",
-    domain=THEFEDERATION_DOMAIN
+    protocol="https" if THEFEDERATION_HTTPS else "http", domain=THEFEDERATION_DOMAIN
 )
-THEFEDERATION_LEGACY_HOST = env("THEFEDERATION_LEGACY_HOST", default='localhost')
-THEFEDERATION_LEGACY_USER = env("THEFEDERATION_LEGACY_USER", default='thefederation')
-THEFEDERATION_LEGACY_PASSWORD = env("THEFEDERATION_LEGACY_PASSWORD", default=None)
-THEFEDERATION_LEGACY_DB = env("THEFEDERATION_LEGACY_DB", default='thefederation')
-
-# For posting on Socialhome
-THEFEDERATION_SOCIALHOME_HOST = env("THEFEDERATION_SOCIALHOME_HOST", default="socialhome.network")
-THEFEDERATION_SOCIALHOME_KEY = env("THEFEDERATION_SOCIALHOME_KEY", default="")
-THEFEDERATION_SOCIALHOME_VISIBILITY = env("THEFEDERATION_SOCIALHOME_VISIBILITY", default="self")
 
 # Federation library configuration
 # ------------------------------------------------------------------------------
 FEDERATION = {
     # Base URL of the server
-    'base_url': THEFEDERATION_URL,
-
+    "base_url": THEFEDERATION_URL,
     # Required federation ID
-    'federation_id': 'https://thefederation.info/u/dummy',
-
+    "federation_id": "https://thefederation.info/u/dummy",
     # Functions that the federation library might call
     # The-federation.info doesn't need these since it only reads data,
     # so we provide lambda functions that return None
-    'get_object_function': None,
-    'get_private_key_function': None,
-    'get_profile_function': None,
-    'process_payload_function': None,
-}
-
-# Graphene
-# --------
-GRAPHENE = {
-    'SCHEMA': 'config.schema.schema'
+    "get_object_function": None,
+    "get_private_key_function": None,
+    "get_profile_function": None,
+    "process_payload_function": None,
 }
 
 # CORS
@@ -252,13 +205,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 # --------------
 MAXMIND_DB_PATH = os.path.join(str(ROOT_DIR("utils")), "maxmind", "GeoLite2-Country.mmdb")
 
+
 # SILK
 # ----
 def is_silky_request(request):
-    path = request.path.strip('/')
-    if path.startswith('_') or path.startswith('admin') or path.startswith('static'):
+    path = request.path.strip("/")
+    if path.startswith("_") or path.startswith("admin") or path.startswith("static"):
         return False
     return True
+
 
 SILKY_AUTHENTICATION = True
 SILKY_AUTHORISATION = True
@@ -270,23 +225,10 @@ SILKY_INTERCEPT_FUNC = is_silky_request
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse"
-        }
-    },
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
-        },
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
     },
     "handlers": {
-        "mail_admins": {
-            "level": "ERROR",
-            "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler"
-        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
@@ -299,11 +241,7 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
-        "django.security.DisallowedHost": {
-            "level": "ERROR",
-            "handlers": ["console"],
-            "propagate": True
-        },
+        "django.security.DisallowedHost": {"level": "ERROR", "handlers": ["console"], "propagate": True},
         "thefederation": {
             "level": "DEBUG",
             "handlers": ["console"],
@@ -319,5 +257,5 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
-    }
+    },
 }

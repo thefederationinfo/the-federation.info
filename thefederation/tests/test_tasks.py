@@ -16,10 +16,10 @@ class FetchUsingMethodTestCase(TestCase):
 
 
 class PollNodeTestCase(TestCase):
-    @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
+    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE)
     def test_stat__creates_on_successful_poll(self, mock_fetch):
-        poll_node('example.com')
-        stat = Stat.objects.get(node__host='example.com')
+        poll_node("example.com")
+        stat = Stat.objects.get(node__host="example.com")
         self.assertEqual(stat.date, now().date())
         self.assertIsNone(stat.platform)
         self.assertIsNone(stat.protocol)
@@ -30,10 +30,10 @@ class PollNodeTestCase(TestCase):
         self.assertEqual(stat.local_posts, 5)
         self.assertEqual(stat.local_comments, 6)
 
-    @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE__NO_STATS)
+    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE__NO_STATS)
     def test_stat__creates_on_successful_poll__no_stats_exposed(self, mock_fetch):
-        poll_node('example.com')
-        stat = Stat.objects.get(node__host='example.com')
+        poll_node("example.com")
+        stat = Stat.objects.get(node__host="example.com")
         self.assertEqual(stat.date, now().date())
         self.assertIsNone(stat.platform)
         self.assertIsNone(stat.protocol)
@@ -44,34 +44,36 @@ class PollNodeTestCase(TestCase):
         self.assertIsNone(stat.local_posts)
         self.assertIsNone(stat.local_comments)
 
-    @patch('thefederation.tasks.fetch_node')
+    @patch("thefederation.tasks.fetch_node")
     def test_stat__rejects_out_of_range_local_posts(self, mock_fetch):
         import copy
-        response = copy.deepcopy(FETCH_NODE_RESPONSE)
-        response['activity']['local_posts'] = 2147483648
-        mock_fetch.return_value = response
-        self.assertFalse(poll_node('example.com'))
-        self.assertFalse(Stat.objects.filter(node__host='example.com').exists())
 
-    @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
+        response = copy.deepcopy(FETCH_NODE_RESPONSE)
+        response["activity"]["local_posts"] = 2147483648
+        mock_fetch.return_value = response
+        self.assertFalse(poll_node("example.com"))
+        self.assertFalse(Stat.objects.filter(node__host="example.com").exists())
+
+    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE)
     def test_stat__no_write_on_unchanged_repeat_poll(self, mock_fetch):
-        poll_node('example.com')
+        poll_node("example.com")
         with CaptureQueriesContext(connection) as ctx:
-            poll_node('example.com')
+            poll_node("example.com")
         stat_writes = [
-            query['sql'] for query in ctx.captured_queries
-            if query['sql'].startswith(('UPDATE', 'INSERT')) and 'thefederation_stat' in query['sql']
+            query["sql"]
+            for query in ctx.captured_queries
+            if query["sql"].startswith(("UPDATE", "INSERT")) and "thefederation_stat" in query["sql"]
         ]
         self.assertEqual(stat_writes, [])
 
-    @patch('thefederation.tasks.fetch_node', return_value=FETCH_NODE_RESPONSE)
+    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE)
     def test_stat__updates_on_successful_poll(self, mock_fetch):
-        poll_node('example.com')
-        assert Stat.objects.filter(node__host='example.com').exists()
+        poll_node("example.com")
+        assert Stat.objects.filter(node__host="example.com").exists()
         response = FETCH_NODE_RESPONSE
-        response['activity']['users']['total'] = 10
+        response["activity"]["users"]["total"] = 10
         mock_fetch.return_value = response
-        poll_node('example.com')
-        stat = Stat.objects.get(node__host='example.com')
+        poll_node("example.com")
+        stat = Stat.objects.get(node__host="example.com")
         self.assertEqual(stat.date, now().date())
         self.assertEqual(stat.users_total, 10)

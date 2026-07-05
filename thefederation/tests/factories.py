@@ -1,27 +1,27 @@
 import factory
-from django.utils.timezone import utc, now
+from django.utils.timezone import utc
 
-from thefederation.models import Node, Platform, Protocol, Stat
+from thefederation.models import Node, Platform, Protocol
 
 
-class PlatformFactory(factory.DjangoModelFactory):
-    name = factory.Faker('pystr')
+class PlatformFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker("pystr")
 
     class Meta:
         model = Platform
 
 
-class ProtocolFactory(factory.DjangoModelFactory):
-    name = factory.Faker('pystr')
+class ProtocolFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker("pystr")
 
     class Meta:
         model = Protocol
 
 
-class NodeFactory(factory.DjangoModelFactory):
-    host = factory.Sequence(lambda n: 'node%s.local' % n)
-    name = factory.Faker('company')
-    open_signups = factory.Faker('pybool')
+class NodeFactory(factory.django.DjangoModelFactory):
+    host = factory.Sequence(lambda n: "node%s.local" % n)
+    name = factory.Faker("company")
+    open_signups = factory.Faker("pybool")
     platform = factory.SubFactory(PlatformFactory)
 
     class Meta:
@@ -29,7 +29,7 @@ class NodeFactory(factory.DjangoModelFactory):
 
     class Params:
         active = factory.Trait(
-            last_success = factory.Faker('past_datetime', start_date='-1d', tzinfo=utc),
+            last_success=factory.Faker("past_datetime", start_date="-1d", tzinfo=utc),
         )
 
     @factory.post_generation
@@ -42,15 +42,3 @@ class NodeFactory(factory.DjangoModelFactory):
             return
 
         self.protocols.add(ProtocolFactory())
-
-
-class StatFactory(factory.DjangoModelFactory):
-    date = now().date()
-    node = factory.SubFactory(NodeFactory)
-    users_total = factory.Faker('pyint')
-    users_half_year = factory.Faker('pyint')
-    users_monthly = factory.Faker('pyint')
-    users_weekly = factory.Faker('pyint')
-
-    class Meta:
-        model = Stat

@@ -10,7 +10,7 @@ steps:
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
-      no_push: true
+      dry-run: true
       registry: codeberg.org
       repo: codeberg.org/thefederationinfo/frontend
       tags: test
@@ -34,11 +34,11 @@ steps:
       event: ["push", "tag"]
 
   backend-dryrun:
-    image: woodpeckerci/plugin-docker-buildx:6
+    image: woodpeckerci/plugin-docker-buildx:6.0.3
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
-      dry_run: true
+      dry-run: true
       registry: codeberg.org
       repo: codeberg.org/thefederationinfo/backend
       tags: test
@@ -49,7 +49,7 @@ steps:
       event: pull_request
 
   backend-publish:
-    image: woodpeckerci/plugin-docker-buildx:6
+    image: woodpeckerci/plugin-docker-buildx:6.0.3
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms

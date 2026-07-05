@@ -3,11 +3,11 @@ from enumfields import Enum
 
 
 class Relay(Enum):
-    ALL = 'all'
-    NONE = 'none'
-    TAGS = 'tags'
+    ALL = "all"
+    NONE = "none"
+    TAGS = "tags"
 
     class Labels:
-        ALL = _('All')
-        NONE = _('None')
-        TAGS = _('Tags')
+        ALL = _("All")
+        NONE = _("None")
+        TAGS = _("Tags")

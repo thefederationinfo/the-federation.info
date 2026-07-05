@@ -19,25 +19,25 @@ def register_view(request, host):
     if is_valid_hostname(host):
         poll_node.delay(host)
         if json:
-            return JsonResponse({'error': None})
+            return JsonResponse({"error": None})
         return redirect(f"/node/{host}")
     if json:
-        return JsonResponse({'error': 'Invalid hostname!'})
+        return JsonResponse({"error": "Invalid hostname!"})
     # TODO show an error or something
     return redirect("/")
 
 
 @staff_member_required
 def mass_register_view(request):
-    input = request.POST.get('domain-list')
+    input = request.POST.get("domain-list")
     if not input:
-        return redirect('admin:app_list', app_label="thefederation")
+        return redirect("admin:app_list", app_label="thefederation")
 
-    lines = input.split('\n')
+    lines = input.split("\n")
     lines = [line for line in lines if len(line.strip())]
     domains = []
     for line in lines:
-        domains += line.split(',')
+        domains += line.split(",")
 
     domains = {clean_hostname(domain) for domain in domains}
     domains = {domain for domain in domains if is_valid_hostname(domain)}
@@ -47,7 +47,7 @@ def mass_register_view(request):
 
     messages.info(request, f"Triggered job to register {len(domains)} domains!")
 
-    return redirect('admin:app_list', app_label='thefederation')
+    return redirect("admin:app_list", app_label="thefederation")
 
 
 def legacy_pods_json_view(request):
@@ -56,5 +56,5 @@ def legacy_pods_json_view(request):
 
     Turns out someone did use it - the Social-Relay. Bring it back until that is rewritten.
     """
-    nodes = list(Node.objects.active().values('host'))
-    return JsonResponse({'pods': nodes})
+    nodes = list(Node.objects.active().values("host"))
+    return JsonResponse({"pods": nodes})

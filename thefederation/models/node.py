@@ -12,7 +12,7 @@ from thefederation.enums import Relay
 from thefederation.models.base import ModelBase
 from thefederation.utils import clean_hostname
 
-__all__ = ('Node',)
+__all__ = ("Node",)
 
 
 class NodeQuerySet(models.QuerySet):
@@ -36,11 +36,11 @@ class Node(ModelBase):
     organization_account = models.CharField(max_length=256, blank=True, default="")
     organization_contact = models.CharField(max_length=256, blank=True, default="")
     organization_name = models.CharField(max_length=128, blank=True, default="")
-    protocols = models.ManyToManyField('thefederation.Protocol', related_name='nodes', blank=True)
+    protocols = models.ManyToManyField("thefederation.Protocol", related_name="nodes", blank=True)
     relay = EnumField(Relay, default=Relay.NONE)
     server_meta = JSONField(default=dict, blank=True)
-    services = models.ManyToManyField('thefederation.Service', related_name='nodes', blank=True)
-    platform = models.ForeignKey('thefederation.Platform', on_delete=models.PROTECT, related_name='nodes')
+    services = models.ManyToManyField("thefederation.Service", related_name="nodes", blank=True)
+    platform = models.ForeignKey("thefederation.Platform", on_delete=models.PROTECT, related_name="nodes")
     version = models.CharField(max_length=128, blank=True)
 
     objects = NodeQuerySet.as_manager()
@@ -50,7 +50,7 @@ class Node(ModelBase):
 
     def save(self, *args, **kwargs):
         self.host = clean_hostname(self.host)
-        clean_name = re.match(r'[a-zA-Z]*', self.name)
+        clean_name = re.match(r"[a-zA-Z]*", self.name)
         if clean_name:
             if self.platform.name == clean_name[0].lower():
                 self.name = self.host
@@ -63,7 +63,7 @@ class Node(ModelBase):
             if isinstance(field, models.CharField) and field.max_length:
                 value = getattr(self, field.attname, None)
                 if isinstance(value, str) and len(value) > field.max_length:
-                    setattr(self, field.attname, value[:field.max_length])
+                    setattr(self, field.attname, value[: field.max_length])
         super().save(*args, **kwargs)
 
     @property
@@ -74,7 +74,7 @@ class Node(ModelBase):
         if not self.version:
             return
         # Strip all non-numbers
-        cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."]).strip('.')
+        cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."]).strip(".")
 
         # Handle completely non-numeric version
         if not cleaned_str:
