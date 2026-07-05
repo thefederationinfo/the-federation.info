@@ -11,7 +11,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="nodes.length" />
+                                <Number :number="nodeCount" />
                                 <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
+                                <li>Nodes: <strong>{{ nodeCount || '' }}</strong></li>
                                 <li>Users: <strong>{{ globalStats.users_total || '' }}</strong></li>
                                 <li>Last 6 months users: <strong>{{ globalStats.users_half_year || '' }}</strong></li>
                                 <li>Last month users: <strong>{{ globalStats.users_monthly || '' }}</strong></li>
@@ -109,6 +109,9 @@
                         :nodes="nodes"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
+                    <div class="center">
+                        <button v-if="loadMoreEnabled" class="center" @click="loadMore">Load More</button>
+                    </div>
                 </div>
             </section>
         </main>
@@ -127,7 +130,7 @@ import NodesTable from "../NodesTable"
 import Number from "../common/Number"
 
 const query = gql`
-query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!) {
+query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
     thefederation_platform_by_pk(id: $id) {
         id
         name
@@ -137,7 +140,15 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!)
         tagline
         website
         icon
-        thefederation_nodes(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
+    }
+    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
+        users_total
+        users_half_year
+        users_monthly
+        users_weekly
+        local_posts
+        local_comments
+        thefederation_node {
             id
             name
             open_signups
@@ -153,18 +164,11 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!)
                 name
                 icon
             }
-            thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
-                aggregate {
-                    avg {
-                        users_total
-                        users_half_year
-                        users_monthly
-                        users_weekly
-                        local_posts
-                        local_comments
-                    }
-                }
-            }
+        }
+    }
+    nodeCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}}) {
+        aggregate {
+            count
         }
     }
     thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
@@ -182,15 +186,23 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!)
 }
 `
 
+const pageSize = 50
+
 export default {
     apollo: {
-        queries: {
+        platforms: {
             query,
             manual: true,
             result({data}) {
                 this.icon = data.thefederation_platform_by_pk.icon
-                this.nodes = data.thefederation_platform_by_pk.thefederation_nodes
                 this.platform = data.thefederation_platform_by_pk || {}
+                // NodesTableRow expects node objects carrying their stats
+                // under thefederation_stats_aggregate, keep that shape
+                this.nodes = data.nodeStats.map(({thefederation_node: node, ...avg}) => ({
+                    ...node,
+                    thefederation_stats_aggregate: {aggregate: {avg}},
+                }))
+                this.nodeCount = data.nodeCount.aggregate.count
                 this.globalStats = data.thefederation_stat_aggregate.aggregate.avg || {}
             },
             variables() {
@@ -200,6 +212,8 @@ export default {
                     id: this.$route.params.platform,
                     last_success: new Date(new Date().setDate(-30)),
                     yesterday,
+                    pageSize,
+                    pageOffset: 0,
                 }
             },
         },
@@ -214,11 +228,34 @@ export default {
             nodes: [],
             platform: {},
             stats: {},
+            nodeCount: 0,
+            currentPage: 0,
         }
     },
     computed: {
         title() {
             return this.platform.display_name ? this.platform.display_name : this.platform.name || ''
+        },
+        loadMoreEnabled() {
+            return this.nodes.length < this.nodeCount
+        },
+    },
+    methods: {
+        loadMore() {
+            this.currentPage += 1
+
+            // Fetch the next page and append it to the already loaded rows
+            this.$apollo.queries.platforms.fetchMore({
+                variables: {
+                    pageOffset: pageSize * this.currentPage,
+                    pageSize,
+                },
+                updateQuery: (data, {fetchMoreResult: newData}) => {
+                    newData.nodeStats = [...data.nodeStats, ...newData.nodeStats]
+
+                    return newData
+                },
+            })
         },
     },
 }
