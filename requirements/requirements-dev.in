@@ -7,8 +7,8 @@ django-test-plus
 django_coverage_plugin
 factory_boy
 Faker
-# older flake8 conflicts with the pycodestyle pin from requirements.txt
-flake8>=7
+# lint + format, configured in ruff.toml
+ruff
 freezegun
 # https://github.com/gotcha/ipdb/blob/master/HISTORY.txt#L24
 ipdb<0.13.5

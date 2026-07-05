@@ -1,4 +1,3 @@
-import logging
 import datetime
 
 from django.core.management.base import BaseCommand

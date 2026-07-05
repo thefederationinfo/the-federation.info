@@ -167,8 +167,6 @@ federation==0.27.0
     # via
     #   -r requirements/requirements-dev.in
     #   -r requirements/requirements.txt
-flake8==7.3.0
-    # via -r requirements/requirements-dev.in
 freezegun==1.5.5
     # via -r requirements/requirements-dev.in
 frozendict==2.4.7
@@ -261,8 +259,6 @@ maxminddb==2.8.2
     # via
     #   -r requirements/requirements.txt
     #   geoip2
-mccabe==0.7.0
-    # via flake8
 multidict==6.7.1
     # via
     #   -r requirements/requirements.txt
@@ -317,7 +313,6 @@ pycodestyle==2.14.0
     # via
     #   -r requirements/requirements.txt
     #   autopep8
-    #   flake8
 pycparser==2.23
     # via
     #   -r requirements/requirements.txt
@@ -327,8 +322,6 @@ pycryptodome==3.23.0
     #   -r requirements/requirements.txt
     #   federation
     #   python-httpsig-socialhome
-pyflakes==3.4.0
-    # via flake8
 pygments==2.20.0
     # via
     #   -r requirements/requirements.txt
@@ -437,6 +430,8 @@ rq==0.13.0
     #   rq-scheduler
 rq-scheduler==0.11.0
     # via -r requirements/requirements.txt
+ruff==0.15.20
+    # via -r requirements/requirements-dev.in
 shcli==0.2.0
     # via -r requirements/requirements.txt
 six==1.17.0
