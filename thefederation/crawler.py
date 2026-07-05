@@ -52,28 +52,15 @@ def fetch_using_method(host, method):
 
 def fetch_node(host):
     """
-    Fetch different documents in order
+    Try each fetch method in order, first hit wins.
 
-    If host exists, use preferred document, falling back to all.
+    Always works the same for every node; per-platform preferred methods
+    were dropped for simplicity, matching the next-generation crawler.
 
     :param host: str
     :return: dict
     """
-    # Use preferred method if known
-    try:
-        node = Node.objects.only("platform", "version").get(host=host)
-    except Node.DoesNotExist:
-        methods = METHODS[:]
-    else:
-        result = fetch_using_method(host, node.preferred_method)
-        if result:
-            return result
-        methods = METHODS[:]
-        if node.preferred_method and node.preferred_method in methods:
-            methods.remove(node.preferred_method)
-
-    # Use remaining methods
-    for method in methods:
+    for method in METHODS:
         result = fetch_using_method(host, method)
         if result:
             return result

@@ -45,38 +45,3 @@ class Platform(ModelBase):
         elif self.version_clean_style == Platform.VERSION_CLEAN_REMOVE_COMMIT_HASH:
             return re.sub(r"[a-z0-9]{40}", "", version).strip()
         return version
-
-    def get_method(self, version):
-        """
-        Calls a function to get the preferred method.
-
-        Tries to compare with a version.
-
-        :param version: tuple of version, numeric only
-        :return:
-        """
-        if self.name == "unknown" or not version:
-            return
-        if self.name.startswith("matrix"):
-            return "matrix"
-        return {
-            "diaspora": "nodeinfo",
-            "friendica": "nodeinfo",
-            "funkwhale": "nodeinfo",
-            "ganggo": "nodeinfo",
-            "gitea": "nodeinfo",
-            "gnusocial": "nodeinfo",
-            "hubzilla": "nodeinfo",
-            "mastodon": "mastodon",
-            "misskey": "nodeinfo",
-            "osada": "nodeinfo",
-            "peertube": "nodeinfo",
-            "pixelfed": "nodeinfo",
-            "pleroma": "nodeinfo",
-            "plume": "nodeinfo",
-            "prismo": "nodeinfo2",
-            "prosody": "nodeinfo2",
-            "socialhome": "nodeinfo2" if version > (0, 8) else "nodeinfo",
-            "writefreely": "nodeinfo",
-            "zap": "nodeinfo",
-        }.get(self.name)

@@ -3,7 +3,6 @@ import re
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_countries.fields import CountryField
 from enumfields import EnumField
@@ -66,34 +65,3 @@ class Node(ModelBase):
                 if isinstance(value, str) and len(value) > field.max_length:
                     setattr(self, field.attname, value[: field.max_length])
         super().save(*args, **kwargs)
-
-    @property
-    def version_tuple(self):
-        """
-        Get the version as a numeric tuple.
-
-        Named to not shadow Platform.clean_version(), which is a string
-        cleaner and gets applied to self.version in save().
-        """
-        if not self.version:
-            return
-        # Strip all non-numbers
-        cleaned_str = "".join([c for c in self.version if c.isnumeric() or c == "."]).strip(".")
-
-        # Handle completely non-numeric version
-        if not cleaned_str:
-            return None
-
-        # Split into tuple, skipping empty segments left by consecutive or
-        # trailing dots (e.g. "1..2" or "2.0.") so int() can't get "".
-        return tuple(int(i) for i in cleaned_str.split(".") if i)
-
-    @cached_property
-    def preferred_method(self):
-        """
-        Calls a function to get the preferred method.
-
-        Function is passed in the version.
-        :return:
-        """
-        return self.platform.get_method(self.version_tuple)
