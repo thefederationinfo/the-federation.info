@@ -5,7 +5,7 @@ from django.test.utils import CaptureQueriesContext
 from django.utils.timezone import now
 from test_plus import TestCase
 
-from thefederation.models import Stat
+from thefederation.models import Node, Stat
 from thefederation.crawler import poll_node, fetch_using_method
 from thefederation.tests.fixtures import FETCH_NODE_RESPONSE, FETCH_NODE_RESPONSE__NO_STATS
 
@@ -77,3 +77,33 @@ class PollNodeTestCase(TestCase):
         stat = Stat.objects.get(node__host="example.com")
         self.assertEqual(stat.date, now().date())
         self.assertEqual(stat.users_total, 10)
+
+
+class FetchUsingMethodMissingFetcherTestCase(TestCase):
+    def test_unknown_method_returns_none(self):
+        self.assertIsNone(fetch_using_method("foo.bar", "doesnotexist"))
+
+
+class PollNodeRobustnessTestCase(TestCase):
+    @patch("thefederation.crawler.fetch_node")
+    def test_host_mismatch_is_discarded(self, mock_fetch):
+        import copy
+
+        result = copy.deepcopy(FETCH_NODE_RESPONSE)
+        result["host"] = "other.example.com"
+        mock_fetch.return_value = result
+        self.assertFalse(poll_node("example.com"))
+        self.assertFalse(Node.objects.filter(host__contains="example.com").exists())
+
+    @patch("thefederation.crawler.fetch_node")
+    def test_empty_protocol_and_service_entries_are_skipped(self, mock_fetch):
+        import copy
+
+        result = copy.deepcopy(FETCH_NODE_RESPONSE)
+        result["protocols"] = ["", "activitypub"]
+        result["services"] = ["", "gnusocial"]
+        mock_fetch.return_value = result
+        self.assertTrue(poll_node("example.com"))
+        node = Node.objects.get(host="example.com")
+        self.assertEqual([p.name for p in node.protocols.all()], ["activitypub"])
+        self.assertEqual([s.name for s in node.services.all()], ["gnusocial"])

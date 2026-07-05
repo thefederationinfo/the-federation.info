@@ -30,7 +30,13 @@ def fetch_using_method(host, method):
     if method is None:
         return
     logger.debug(f"Fetching {host} using method {method}")
-    func = getattr(fetchers, f"fetch_{method}_document")
+    func = getattr(fetchers, f"fetch_{method}_document", None)
+    if func is None:
+        # Platform.get_method can name methods (e.g. "mastodon") that a
+        # given federation library version may not ship a fetcher for.
+        # Treat that like a failed method instead of crashing the job.
+        logger.warning("No fetcher for method %s (host %s)", method, host)
+        return None
     try:
         return func(host)
     except Exception as ex:
@@ -108,7 +114,12 @@ def poll_node(host):
         logger.info(f"No result for {host}.")
         return False
 
-    assert host == result.get("host")
+    if host != result.get("host"):
+        # A parser attributing the result to a different host (redirects,
+        # aliases) must not crash the job, and storing it under the wrong
+        # host would create duplicate nodes.
+        logger.warning("Fetch for %s returned data for %s, discarding.", host, result.get("host"))
+        return False
     # A poll causes several small writes (node, m2m links, stat). Without an
     # explicit transaction each one autocommits separately, forcing Postgres
     # to fsync its WAL per statement. One atomic block per poll collapses
@@ -159,7 +170,10 @@ def _store_poll_result(host, result):
 
     protocols = set()
     for protocol in result.get("protocols", []):
-        assert protocol != ""
+        if not protocol:
+            # An empty entry in a remote document must not abort the poll,
+            # and asserts vanish under python -O anyway.
+            continue
         if protocol == "friendica":
             protocol = "dfrn"
         elif protocol == "gnusocial":
@@ -169,7 +183,8 @@ def _store_poll_result(host, result):
     node.protocols.set(protocols)
     services = set()
     for service in result.get("services", []):
-        assert service != ""
+        if not service:
+            continue
         serv, _created = Service.objects.get_or_create(name=service)
         services.add(serv)
     node.services.set(services)
