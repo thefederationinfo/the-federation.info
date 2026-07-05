@@ -41,7 +41,6 @@ MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
@@ -145,14 +144,6 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
-# MEDIA CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(ROOT_DIR("media"))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = "/media/"
-
 # URL Configuration
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = "config.urls"
@@ -208,15 +199,6 @@ THEFEDERATION_URL = "{protocol}://{domain}".format(
     protocol="https" if THEFEDERATION_HTTPS else "http",
     domain=THEFEDERATION_DOMAIN
 )
-THEFEDERATION_LEGACY_HOST = env("THEFEDERATION_LEGACY_HOST", default='localhost')
-THEFEDERATION_LEGACY_USER = env("THEFEDERATION_LEGACY_USER", default='thefederation')
-THEFEDERATION_LEGACY_PASSWORD = env("THEFEDERATION_LEGACY_PASSWORD", default=None)
-THEFEDERATION_LEGACY_DB = env("THEFEDERATION_LEGACY_DB", default='thefederation')
-
-# For posting on Socialhome
-THEFEDERATION_SOCIALHOME_HOST = env("THEFEDERATION_SOCIALHOME_HOST", default="socialhome.network")
-THEFEDERATION_SOCIALHOME_KEY = env("THEFEDERATION_SOCIALHOME_KEY", default="")
-THEFEDERATION_SOCIALHOME_VISIBILITY = env("THEFEDERATION_SOCIALHOME_VISIBILITY", default="self")
 
 # Federation library configuration
 # ------------------------------------------------------------------------------

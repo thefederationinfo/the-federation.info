@@ -1,24 +1,18 @@
 from django.conf import settings
 from django.conf.urls import url
-from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include
 from django.views import defaults as default_views
-from django.views.i18n import JavaScriptCatalog
 
 urlpatterns = [
     url(r"", include("thefederation.urls")),
-
-    # JavaScript translations
-    path("jsi18n/", JavaScriptCatalog.as_view(packages=['thefederation']), name="javascript-catalog"),
 
     # Admin pages
     url(settings.ADMIN_URL, admin.site.urls),
     url(r"^django-rq/", include("django_rq.urls")),
 
     url(r'^_silk/', include('silk.urls', namespace='silk')),
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
