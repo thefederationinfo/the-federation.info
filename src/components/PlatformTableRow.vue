@@ -2,8 +2,7 @@
     <tr>
         <td style="width: 20px;">
             <PlatformIcon
-                v-if="platform.name !== 'unknown' && platform.icon !== 'unknown'"
-                :icon="platform.icon"
+                v-if="platform.name !== 'unknown'"
                 :name="platform.name"
             />
             <div v-else>

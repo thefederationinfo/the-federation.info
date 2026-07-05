@@ -134,7 +134,6 @@ query MyQuery($id: Int!, $yesterday: date!) {
                 country
                 thefederation_platform {
                     name
-                    icon
                 }
                 thefederation_node_services {
                     thefederation_service {

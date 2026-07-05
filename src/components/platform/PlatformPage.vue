@@ -136,7 +136,6 @@ query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset
         description
         tagline
         website
-        icon
     }
     nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
         users_total
@@ -159,7 +158,6 @@ query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset
             }
             thefederation_platform {
                 name
-                icon
             }
         }
     }
@@ -191,7 +189,6 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.icon = data.thefederation_platform_by_pk.icon
                 this.platform = data.thefederation_platform_by_pk || {}
                 // NodesTableRow expects node objects carrying their stats
                 // under thefederation_stats_aggregate, keep that shape

@@ -2,8 +2,7 @@
     <tr>
         <td>
             <PlatformIcon
-                v-if="node.thefederation_platform.name !== 'unknown' && node.thefederation_platform.icon !== 'unknown'"
-                :icon="node.thefederation_platform.icon"
+                v-if="node.thefederation_platform.name !== 'unknown'"
                 :name="node.thefederation_platform.name"
             />
             <div v-else>

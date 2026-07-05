@@ -254,7 +254,6 @@ query IndextContent($yesterday: date!) {
     id
     code
     name
-    icon
     display_name
     install_guide
     license

@@ -139,7 +139,6 @@ query Node($id: Int!, $yesterday: date!) {
         thefederation_platform {
             id
             name
-            icon
             display_name
         }
         thefederation_node_services {

@@ -10,15 +10,13 @@
 </template>
 
 <script>
-// Platform icons live in /static/images. Preferred lookup order: <icon>.svg, then <icon>.png
-// If none of them exists the image is not rendered at all.
+// Platform icons live in /static/images. The DB icon field is ignored;
+// the file is derived from the platform name, lowercased with spaces
+// replaced by dashes. Preferred lookup order: <slug>.svg, then <slug>.png.
+// If neither exists the image is not rendered at all.
 export default {
     name: "PlatformIcon",
     props: {
-        icon: {
-            type: String,
-            default: "",
-        },
         name: {
             type: String,
             default: "",
@@ -30,10 +28,13 @@ export default {
         }
     },
     computed: {
+        slug() {
+            return this.name.toLowerCase().split(' ').join('-')
+        },
         candidates() {
             return [
-                `/static/images/${this.icon}.svg`,
-                `/static/images/${this.icon}.png`,
+                `/static/images/${this.slug}.svg`,
+                `/static/images/${this.slug}.png`,
             ]
         },
         exhausted() {
@@ -41,7 +42,7 @@ export default {
         },
     },
     watch: {
-        icon() {
+        name() {
             this.current = 0
         },
     },

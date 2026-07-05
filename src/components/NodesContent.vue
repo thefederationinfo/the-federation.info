@@ -54,7 +54,6 @@ query NodesContent($yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
             }
             thefederation_platform {
                 name
-                icon
             }
         }
     }
