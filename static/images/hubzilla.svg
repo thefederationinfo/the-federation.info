@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64.0px"
+   height="64.0px"
+   viewBox="0 0 64.0 64.0"
+   version="1.1"
+   id="SVGRoot"
+   sodipodi:docname="hz.svg"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview61"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="true"
+     inkscape:zoom="6.0069951"
+     inkscape:cx="16.980204"
+     inkscape:cy="24.970888"
+     inkscape:window-width="1440"
+     inkscape:window-height="831"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g141">
+    <inkscape:grid
+       type="xygrid"
+       id="grid67" />
+  </sodipodi:namedview>
+  <defs
+     id="defs56" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g141"
+       transform="matrix(3.7795276,0,0,3.7795276,22.748366,-1063.1931)">
+      <circle
+         style="fill:#43488a;stroke-width:0.264583;stop-color:#000000;fill-opacity:1"
+         id="path3823"
+         cx="2.4478281"
+         cy="289.76984"
+         r="8.4666662"
+         inkscape:export-filename="/run/user/1000/gvfs/sftp:host=10.3.0.14,user=root/srv/http/hub.somaton.com/www/images/app/hz-180.png"
+         inkscape:export-xdpi="270.00003"
+         inkscape:export-ydpi="270.00003" />
+      <g
+         id="g141-7"
+         transform="matrix(2.1038824,0,0,2.1655785,0.49257199,-333.55376)"
+         style="fill:#ffffff;stroke-width:0.468493;fill-opacity:1"
+         inkscape:export-filename="/run/user/1000/gvfs/sftp:host=10.3.0.14,user=root/srv/http/hub.somaton.com/www/images/app/hz-144.png"
+         inkscape:export-xdpi="276.47998"
+         inkscape:export-ydpi="276.47998">
+        <g
+           id="g2037"
+           inkscape:export-filename="/home/mario/Downloads/hz-icons/hz-512.png"
+           inkscape:export-xdpi="983.03998"
+           inkscape:export-ydpi="983.03998"
+           style="fill:#ffffff;stroke-width:0.468493;fill-opacity:1"
+           transform="translate(-4.3232614,-4.7489871)">
+          <ellipse
+             ry="1.0883039"
+             rx="1.0802424"
+             cy="292.92801"
+             cx="3.5032701"
+             id="path828-53"
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0235165" />
+          <ellipse
+             ry="1.5397485"
+             rx="1.4994409"
+             cy="291.37213"
+             cx="6.5827665"
+             id="path828-5"
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0329556" />
+          <ellipse
+             ry="0.78196651"
+             rx="0.79002792"
+             cy="294.54837"
+             cx="5.9217243"
+             id="path828-5-6"
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0170471" />
+          <path
+             sodipodi:nodetypes="ccccc"
+             inkscape:connector-curvature="0"
+             id="path871"
+             d="m 4.0465627,292.41576 1.3137706,-0.7355 0.1162183,0.24151 -1.2935591,0.74648 z"
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0276335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path873"
+             d="m 4.2605136,293.26434 1.2691295,0.89108 -0.141557,0.20603 -1.2642478,-0.86532 z"
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.02631px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path875"
+             d="m 5.8411078,293.86314 0.361292,-1.12861 0.2956026,0.0605 -0.3886627,1.11652 z"
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0246474px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
