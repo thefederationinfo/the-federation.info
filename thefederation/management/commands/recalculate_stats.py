@@ -24,10 +24,14 @@ class Command(BaseCommand):
         stop_date = options["until"] or datetime.datetime.now().date()
         current_date = options["start"]
 
-        self.stdout.write(f"recalculating stats from {current_date.isoformat()} to {stop_date.isoformat()}, days: {(stop_date - current_date).days}")
+        self.stdout.write(
+            f"recalculating stats from {current_date.isoformat()} to {stop_date.isoformat()}, days: {(stop_date - current_date).days}"
+        )
 
         while current_date <= stop_date:
-            self.stdout.write(f"recalculating stats for {current_date.isoformat()}, remaining days: {(stop_date - current_date).days}")
+            self.stdout.write(
+                f"recalculating stats for {current_date.isoformat()}, remaining days: {(stop_date - current_date).days}"
+            )
 
             aggregate_daily_stats(current_date)
 

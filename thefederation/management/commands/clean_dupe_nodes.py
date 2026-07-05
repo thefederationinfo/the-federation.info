@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = "Clean duplicate nodes."
 
     def handle(self, *args, **options):
-        for node in Node.objects.only('id', 'host').order_by('id').iterator():
+        for node in Node.objects.only("id", "host").order_by("id").iterator():
             # clean_hostname is idempotent, so a node whose host is already in
             # canonical form cannot become a duplicate when re-saved. Skipping
             # these avoids re-saving (and committing) the entire Node table on

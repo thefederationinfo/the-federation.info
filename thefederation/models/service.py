@@ -2,7 +2,7 @@ from django.db import models
 
 from thefederation.models.base import ModelBase
 
-__all__ = ('Service',)
+__all__ = ("Service",)
 
 
 class Service(ModelBase):

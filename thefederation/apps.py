@@ -28,23 +28,23 @@ class TheFederationConfig(AppConfig):
             scheduled_time=datetime.datetime.utcnow(),
             func=aggregate_daily_stats,
             interval=5500,
-            queue_name='high',
+            queue_name="high",
         )
         scheduler.cron(
-            '18 4 * * *',
+            "18 4 * * *",
             func=clean_duplicate_nodes,
-            queue_name='medium',
+            queue_name="medium",
             timeout=3600,
         )
         scheduler.cron(
-            '23 6 * * *',
+            "23 6 * * *",
             func=fill_country_information,
-            queue_name='low',
+            queue_name="low",
             timeout=3600,
         )
         scheduler.schedule(
             scheduled_time=datetime.datetime.utcnow(),
             func=poll_nodes,
             interval=10800,
-            queue_name='medium',
+            queue_name="medium",
         )

@@ -6,12 +6,10 @@ from django.views import defaults as default_views
 
 urlpatterns = [
     url(r"", include("thefederation.urls")),
-
     # Admin pages
     url(settings.ADMIN_URL, admin.site.urls),
     url(r"^django-rq/", include("django_rq.urls")),
-
-    url(r'^_silk/', include('silk.urls', namespace='silk')),
+    url(r"^_silk/", include("silk.urls", namespace="silk")),
 ]
 
 if settings.DEBUG:
@@ -25,6 +23,7 @@ if settings.DEBUG:
     ]
     if settings.DEBUG_TOOLBAR_ENABLED:
         import debug_toolbar
+
         urlpatterns += [
             url(r"^__debug__/", include(debug_toolbar.urls)),
         ]

@@ -2,7 +2,7 @@ from django.db import models
 
 from thefederation.models.base import ModelBase
 
-__all__ = ('Protocol',)
+__all__ = ("Protocol",)
 
 
 class Protocol(ModelBase):

@@ -2,7 +2,7 @@ from django.db import models
 
 from thefederation.utils import single_true
 
-__all__ = ('Stat',)
+__all__ = ("Stat",)
 
 
 class Stat(models.Model):
@@ -11,11 +11,14 @@ class Stat(models.Model):
     # NOTE! only one or the other node or platform or protocol can be filled
     # If none filled -> global stats
     node = models.ForeignKey(
-        'thefederation.Node', on_delete=models.CASCADE, null=True, blank=True,
-        related_name='stats',
+        "thefederation.Node",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="stats",
     )
-    platform = models.ForeignKey('thefederation.Platform', on_delete=models.CASCADE, null=True, blank=True)
-    protocol = models.ForeignKey('thefederation.Protocol', on_delete=models.CASCADE, null=True, blank=True)
+    platform = models.ForeignKey("thefederation.Platform", on_delete=models.CASCADE, null=True, blank=True)
+    protocol = models.ForeignKey("thefederation.Protocol", on_delete=models.CASCADE, null=True, blank=True)
 
     users_total = models.PositiveIntegerField(null=True)
     users_half_year = models.PositiveIntegerField(null=True)
@@ -26,9 +29,9 @@ class Stat(models.Model):
 
     class Meta:
         unique_together = (
-            ('date', 'node'),
-            ('date', 'platform'),
-            ('date', 'protocol'),
+            ("date", "node"),
+            ("date", "platform"),
+            ("date", "protocol"),
         )
 
     def __str__(self):

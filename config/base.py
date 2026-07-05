@@ -26,9 +26,7 @@ THIRD_PARTY_APPS = (
     "django_rq",
     "silk",
 )
-LOCAL_APPS = (
-    "thefederation",
-)
+LOCAL_APPS = ("thefederation",)
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -172,33 +170,30 @@ ADMIN_URL = r"^admin/"
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
-CSRF_TRUSTED_ORIGINS = env.list("THEFEDERATION_DOMAIN", default=['localhost'])
+CSRF_TRUSTED_ORIGINS = env.list("THEFEDERATION_DOMAIN", default=["localhost"])
 
 # The Federation
 # ------------------------------------------------------------------------------
 THEFEDERATION_DOMAIN = env("THEFEDERATION_DOMAIN", default="127.0.0.1")
 THEFEDERATION_HTTPS = env.bool("THEFEDERATION_HTTPS", True)
 THEFEDERATION_URL = "{protocol}://{domain}".format(
-    protocol="https" if THEFEDERATION_HTTPS else "http",
-    domain=THEFEDERATION_DOMAIN
+    protocol="https" if THEFEDERATION_HTTPS else "http", domain=THEFEDERATION_DOMAIN
 )
 
 # Federation library configuration
 # ------------------------------------------------------------------------------
 FEDERATION = {
     # Base URL of the server
-    'base_url': THEFEDERATION_URL,
-
+    "base_url": THEFEDERATION_URL,
     # Required federation ID
-    'federation_id': 'https://thefederation.info/u/dummy',
-
+    "federation_id": "https://thefederation.info/u/dummy",
     # Functions that the federation library might call
     # The-federation.info doesn't need these since it only reads data,
     # so we provide lambda functions that return None
-    'get_object_function': None,
-    'get_private_key_function': None,
-    'get_profile_function': None,
-    'process_payload_function': None,
+    "get_object_function": None,
+    "get_private_key_function": None,
+    "get_profile_function": None,
+    "process_payload_function": None,
 }
 
 # CORS
@@ -210,13 +205,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 # --------------
 MAXMIND_DB_PATH = os.path.join(str(ROOT_DIR("utils")), "maxmind", "GeoLite2-Country.mmdb")
 
+
 # SILK
 # ----
 def is_silky_request(request):
-    path = request.path.strip('/')
-    if path.startswith('_') or path.startswith('admin') or path.startswith('static'):
+    path = request.path.strip("/")
+    if path.startswith("_") or path.startswith("admin") or path.startswith("static"):
         return False
     return True
+
 
 SILKY_AUTHENTICATION = True
 SILKY_AUTHORISATION = True
@@ -229,10 +226,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
-        },
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
     },
     "handlers": {
         "console": {
@@ -247,11 +241,7 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
-        "django.security.DisallowedHost": {
-            "level": "ERROR",
-            "handlers": ["console"],
-            "propagate": True
-        },
+        "django.security.DisallowedHost": {"level": "ERROR", "handlers": ["console"], "propagate": True},
         "thefederation": {
             "level": "DEBUG",
             "handlers": ["console"],
@@ -267,5 +257,5 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
-    }
+    },
 }

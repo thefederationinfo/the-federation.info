@@ -2,6 +2,7 @@
 """
 Local settings for development environments
 """
+
 import sys
 
 from .base import *  # noqa
@@ -25,12 +26,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY", default="((5)iob@s%#(3=@le*xd^hu^)4_btrz7z
 
 # CACHING
 # ------------------------------------------------------------------------------
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": ""
-    }
-}
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache", "LOCATION": ""}}
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------

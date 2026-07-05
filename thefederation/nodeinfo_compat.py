@@ -14,6 +14,7 @@ which aborts the whole fetch, so those nodes can never be polled.
 This shim reinstalls the same logic but skips rels that do not parse as a
 version number. It should be removed once the upstream fix is released.
 """
+
 import json
 
 from federation.hostmeta import fetchers
@@ -25,7 +26,7 @@ from federation.hostmeta.fetchers import (
 
 
 def fetch_nodeinfo_document(host):
-    doc, status_code, error = fetch_document(host=host, path='/.well-known/nodeinfo')
+    doc, status_code, error = fetch_document(host=host, path="/.well-known/nodeinfo")
     if not doc:
         return
     try:
@@ -33,25 +34,25 @@ def fetch_nodeinfo_document(host):
     except json.JSONDecodeError:
         return
 
-    url, highest_version = '', 0.0
+    url, highest_version = "", 0.0
 
-    if doc.get('0'):
+    if doc.get("0"):
         # Buggy NodeInfo from certain old Hubzilla versions
-        url = doc.get('0', {}).get('href')
-    elif isinstance(doc.get('links'), dict):
+        url = doc.get("0", {}).get("href")
+    elif isinstance(doc.get("links"), dict):
         # Another buggy NodeInfo from certain old Hubzilla versions
-        url = doc.get('links').get('href')
+        url = doc.get("links").get("href")
     else:
-        for link in doc.get('links') or []:
-            rel = link.get('rel') or ''
+        for link in doc.get("links") or []:
+            rel = link.get("rel") or ""
             try:
-                version = float(rel.split('/')[-1])
+                version = float(rel.split("/")[-1])
             except (TypeError, ValueError):
                 # Not a versioned nodeinfo schema rel (e.g. PeerTube's
                 # activitystreams#Application link); skip instead of crashing.
                 continue
             if highest_version < version <= HIGHEST_SUPPORTED_NODEINFO_VERSION:
-                url, highest_version = link.get('href'), version
+                url, highest_version = link.get("href"), version
 
     if not url:
         return

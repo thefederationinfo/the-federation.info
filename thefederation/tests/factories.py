@@ -5,23 +5,23 @@ from thefederation.models import Node, Platform, Protocol
 
 
 class PlatformFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker('pystr')
+    name = factory.Faker("pystr")
 
     class Meta:
         model = Platform
 
 
 class ProtocolFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker('pystr')
+    name = factory.Faker("pystr")
 
     class Meta:
         model = Protocol
 
 
 class NodeFactory(factory.django.DjangoModelFactory):
-    host = factory.Sequence(lambda n: 'node%s.local' % n)
-    name = factory.Faker('company')
-    open_signups = factory.Faker('pybool')
+    host = factory.Sequence(lambda n: "node%s.local" % n)
+    name = factory.Faker("company")
+    open_signups = factory.Faker("pybool")
     platform = factory.SubFactory(PlatformFactory)
 
     class Meta:
@@ -29,7 +29,7 @@ class NodeFactory(factory.django.DjangoModelFactory):
 
     class Params:
         active = factory.Trait(
-            last_success = factory.Faker('past_datetime', start_date='-1d', tzinfo=utc),
+            last_success=factory.Faker("past_datetime", start_date="-1d", tzinfo=utc),
         )
 
     @factory.post_generation
@@ -42,4 +42,3 @@ class NodeFactory(factory.django.DjangoModelFactory):
             return
 
         self.protocols.add(ProtocolFactory())
-

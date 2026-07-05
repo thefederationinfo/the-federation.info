@@ -13,9 +13,9 @@ class LegacyPodsJsonViewTest(TestCase):
         cls.active_node = NodeFactory(active=True)
 
     def test_renders(self):
-        self.get('/pods.json')
+        self.get("/pods.json")
         self.response_200()
         self.assertEqual(
             json.loads(self.last_response.content),
-            {'pods': [{'host': self.active_node.host}]},
+            {"pods": [{"host": self.active_node.host}]},
         )
