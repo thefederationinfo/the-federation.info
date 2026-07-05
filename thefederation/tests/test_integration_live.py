@@ -21,7 +21,7 @@ from thefederation.tasks import poll_node
 LIVE_HOSTS = [
     "chaos.social",  # Mastodon, nodeinfo 2.0
     "mobilizon.us",  # Mobilizon, nodeinfo 2.1
-    # "rocket.chat",  # 404 on all nodeinfo endpoints this backend probes
+    "rocket.chat",  # Matrix, federation delegated via .well-known
     "media.zat.im",  # PeerTube, exercises nodeinfo_compat
 ]
 

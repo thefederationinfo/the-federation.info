@@ -1,4 +1,4 @@
-"""Compatibility shim for the ``federation`` library's nodeinfo fetcher.
+"""Compatibility shims for the ``federation`` library's fetchers.
 
 federation.hostmeta.fetchers.fetch_nodeinfo_document iterates over every link
 in /.well-known/nodeinfo and does ``float(link['rel'].split('/')[-1])`` to find
@@ -23,6 +23,37 @@ from federation.hostmeta.fetchers import (
     fetch_document,
     parse_nodeinfo_document,
 )
+from federation.hostmeta.parsers import parse_matrix_document
+
+
+def fetch_matrix_document(host):
+    """Matrix fetcher that honours .well-known server delegation.
+
+    The library queries ``https://{host}/_matrix/federation/v1/version``
+    directly, but per the Matrix server discovery spec a domain may
+    delegate federation to another host:port via
+    ``/.well-known/matrix/server`` (e.g. rocket.chat delegates to
+    open.rocket.chat:443). Follow the delegation for the version query
+    while still attributing the node to the original host.
+    """
+    delegated = host
+    doc, _status_code, _error = fetch_document(host=host, path="/.well-known/matrix/server")
+    if doc:
+        try:
+            m_server = json.loads(doc).get("m.server")
+        except json.JSONDecodeError:
+            m_server = None
+        if m_server and isinstance(m_server, str):
+            delegated = m_server.strip()
+
+    doc, _status_code, _error = fetch_document(host=delegated, path="/_matrix/federation/v1/version")
+    if not doc:
+        return
+    try:
+        doc = json.loads(doc)
+    except json.JSONDecodeError:
+        return
+    return parse_matrix_document(doc, host)
 
 
 def fetch_nodeinfo_document(host):
@@ -68,5 +99,6 @@ def fetch_nodeinfo_document(host):
 
 
 def apply():
-    """Monkeypatch the federation library's nodeinfo fetcher in place."""
+    """Monkeypatch the federation library's fetchers in place."""
     fetchers.fetch_nodeinfo_document = fetch_nodeinfo_document
+    fetchers.fetch_matrix_document = fetch_matrix_document
