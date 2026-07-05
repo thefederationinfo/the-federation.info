@@ -1,10 +1,6 @@
 line-length = 120
 target-version = "py39"
 
-extend-exclude = [
-    "thefederation/migrations",
-]
-
 [lint.per-file-ignores]
 # Django settings and model packages use star imports by convention
 "config/*.py" = ["F403", "F405"]
