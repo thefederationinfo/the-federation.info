@@ -1,55 +1,8 @@
-import datetime
-
 from django.db import models
-from django.db.models import Count
-from django.utils.timezone import now
 
 from thefederation.utils import single_true
 
 __all__ = ('Stat',)
-
-
-class StatQuerySet(models.QuerySet):
-    def for_days(self, from_date=None, platform=None, protocol=None, node=None):
-        assert not all([platform, protocol, node])
-        if not from_date:
-            from_date = now().date() - datetime.timedelta(days=1)
-        if platform:
-            qs = Stat.objects.filter(platform__name=platform)
-        elif protocol:
-            qs = Stat.objects.filter(protocol__name=protocol)
-        elif node:
-            qs = Stat.objects.filter(node__host=node)
-        else:
-            qs = Stat.objects.filter(platform__isnull=True, protocol__isnull=True, node__isnull=True)
-
-        qs = qs.filter(date__gte=from_date)
-
-        return qs.order_by('-date')
-
-    def for_global(self):
-        return self.filter(node__isnull=True, protocol__isnull=True, platform__isnull=True)
-
-    def node_counts(self, from_date=None, item_type=None, value=None):
-        if not from_date:
-            from_date = now().date() - datetime.timedelta(days=1)
-        if value and item_type:
-            if item_type == 'platform':
-                qs = self.filter(node__platform__name=value)
-            elif item_type == 'protocol':
-                qs = self.filter(node__protocols__name=value)
-            elif item_type == 'node':
-                qs = self.filter(node__host=value)
-            else:
-                raise ValueError('item_type should be "platform", "node" or "protocol')
-        else:
-            qs = self.filter(node__isnull=False)
-
-        qs = qs.filter(date__gte=from_date)
-
-        return qs.values('date').annotate(
-            count=Count('id')
-        ).values('date', 'count').order_by('date')
 
 
 class Stat(models.Model):
@@ -70,8 +23,6 @@ class Stat(models.Model):
     users_weekly = models.PositiveIntegerField(null=True)
     local_posts = models.PositiveIntegerField(null=True)
     local_comments = models.PositiveIntegerField(null=True)
-
-    objects = StatQuerySet.as_manager()
 
     class Meta:
         unique_together = (
