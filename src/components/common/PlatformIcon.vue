@@ -10,8 +10,7 @@
 </template>
 
 <script>
-// Platform icons live in /static/images. Preferred lookup order:
-// <icon>.svg, then <icon>.png, then the legacy <icon>-16.png naming.
+// Platform icons live in /static/images. Preferred lookup order: <icon>.svg, then <icon>.png
 // If none of them exists the image is not rendered at all.
 export default {
     name: "PlatformIcon",
@@ -35,7 +34,6 @@ export default {
             return [
                 `/static/images/${this.icon}.svg`,
                 `/static/images/${this.icon}.png`,
-                `/static/images/${this.icon}-16.png`,
             ]
         },
         exhausted() {
