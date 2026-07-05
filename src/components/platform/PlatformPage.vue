@@ -11,7 +11,7 @@
                     <div class="col4">
                         <div class="tile valign-wrapper">
                             <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="nodeCount" />
+                                <Number :number="nodes.length" />
                                 <strong>Nodes</strong>
                             </ApolloLoader>
                         </div>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="col2">
                             <ul>
-                                <li>Nodes: <strong>{{ nodeCount || '' }}</strong></li>
+                                <li>Nodes: <strong>{{ nodes.length || '' }}</strong></li>
                                 <li>Users: <strong>{{ globalStats.users_total || '' }}</strong></li>
                                 <li>Last 6 months users: <strong>{{ globalStats.users_half_year || '' }}</strong></li>
                                 <li>Last month users: <strong>{{ globalStats.users_monthly || '' }}</strong></li>
@@ -109,9 +109,6 @@
                         :nodes="nodes"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
-                    <div class="center">
-                        <button v-if="loadMoreEnabled" class="center" @click="loadMore">Load More</button>
-                    </div>
                 </div>
             </section>
         </main>
@@ -130,7 +127,7 @@ import NodesTable from "../NodesTable"
 import Number from "../common/Number"
 
 const query = gql`
-query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
+query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!) {
     thefederation_platform_by_pk(id: $id) {
         id
         name
@@ -140,7 +137,7 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!,
         tagline
         website
         icon
-        thefederation_nodes(limit: $pageSize, offset: $pageOffset, where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
+        thefederation_nodes(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}, order_by: {thefederation_stats_aggregate: {max: {users_monthly: desc_nulls_last}}}) {
             id
             name
             open_signups
@@ -169,11 +166,6 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!,
                 }
             }
         }
-        thefederation_nodes_aggregate(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}) {
-            aggregate {
-                count
-            }
-        }
     }
     thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
         aggregate {
@@ -190,11 +182,9 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!,
 }
 `
 
-const pageSize = 50
-
 export default {
     apollo: {
-        platforms: {
+        queries: {
             query,
             manual: true,
             result({data}) {
@@ -202,8 +192,6 @@ export default {
                 this.nodes = data.thefederation_platform_by_pk.thefederation_nodes
                 this.platform = data.thefederation_platform_by_pk || {}
                 this.globalStats = data.thefederation_stat_aggregate.aggregate.avg || {}
-                this.nodeCount = data.thefederation_platform_by_pk
-                    .thefederation_nodes_aggregate.aggregate.count
             },
             variables() {
                 const date = new Date()
@@ -212,8 +200,6 @@ export default {
                     id: this.$route.params.platform,
                     last_success: new Date(new Date().setDate(-30)),
                     yesterday,
-                    pageSize,
-                    pageOffset: 0,
                 }
             },
         },
@@ -228,37 +214,11 @@ export default {
             nodes: [],
             platform: {},
             stats: {},
-            nodeCount: 0,
-            currentPage: 0,
         }
     },
     computed: {
         title() {
             return this.platform.display_name ? this.platform.display_name : this.platform.name || ''
-        },
-        loadMoreEnabled() {
-            return this.nodes.length < this.nodeCount
-        },
-    },
-    methods: {
-        loadMore() {
-            this.currentPage += 1
-
-            // Fetch the next page and append it to the already loaded nodes
-            this.$apollo.queries.platforms.fetchMore({
-                variables: {
-                    pageOffset: pageSize * this.currentPage,
-                    pageSize,
-                },
-                updateQuery: (data, {fetchMoreResult: newData}) => {
-                    const oldItems = data.thefederation_platform_by_pk.thefederation_nodes
-                    const newItems = newData.thefederation_platform_by_pk.thefederation_nodes
-
-                    newData.thefederation_platform_by_pk.thefederation_nodes = [...oldItems, ...newItems]
-
-                    return newData
-                },
-            })
         },
     },
 }
