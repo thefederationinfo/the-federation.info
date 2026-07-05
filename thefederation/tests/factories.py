@@ -4,21 +4,21 @@ from django.utils.timezone import utc, now
 from thefederation.models import Node, Platform, Protocol, Stat
 
 
-class PlatformFactory(factory.DjangoModelFactory):
+class PlatformFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('pystr')
 
     class Meta:
         model = Platform
 
 
-class ProtocolFactory(factory.DjangoModelFactory):
+class ProtocolFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('pystr')
 
     class Meta:
         model = Protocol
 
 
-class NodeFactory(factory.DjangoModelFactory):
+class NodeFactory(factory.django.DjangoModelFactory):
     host = factory.Sequence(lambda n: 'node%s.local' % n)
     name = factory.Faker('company')
     open_signups = factory.Faker('pybool')
@@ -44,7 +44,7 @@ class NodeFactory(factory.DjangoModelFactory):
         self.protocols.add(ProtocolFactory())
 
 
-class StatFactory(factory.DjangoModelFactory):
+class StatFactory(factory.django.DjangoModelFactory):
     date = now().date()
     node = factory.SubFactory(NodeFactory)
     users_total = factory.Faker('pyint')
