@@ -40,26 +40,6 @@ MIDDLEWARE = PRODUCTION_MIDDLEWARE + MIDDLEWARE
 # ------------------------
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# EMAIL
-# ------------------------------------------------------------------------------
-DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
-                         default='The Federation <noreply@thefederation.local>')
-# Set this to "django.core.mail.backends.smtp.EmailBackend" for SMTP email sending
-EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
-# Define these as necessary if using the SMTP backend
-# See https://docs.djangoproject.com/en/1.10/topics/email/#smtp-backend
-EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="localhost")
-EMAIL_PORT = env("DJANGO_EMAIL_PORT", default=587)
-EMAIL_HOST_USER = env("DJANGO_EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = env("DJANGO_EMAIL_HOST_PASSWORD", default="")
-EMAIL_USE_TLS = env.bool("DJANGO_EMAIL_USE_TLS", default=True)
-EMAIL_USE_SSL = env.bool("DJANGO_EMAIL_USE_SSL", default=False)
-EMAIL_TIMEOUT = env("DJANGO_EMAIL_TIMEOUT", default=None)
-EMAIL_SSL_KEYFILE = env("DJANGO_EMAIL_SSL_KEYFILE", default=None)
-EMAIL_SSL_CERTFILE = env("DJANGO_EMAIL_SSL_CERTFILE", default=None)
-EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default='')
-SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
-
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------

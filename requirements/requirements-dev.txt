@@ -81,8 +81,6 @@ click==8.1.8
     #   -r requirements/requirements.txt
     #   rq
     #   shcli
-codecov==2.1.13
-    # via -r requirements/requirements-dev.in
 commonmark-socialhome==0.9.1.post2
     # via
     #   -r requirements/requirements.txt
@@ -90,7 +88,6 @@ commonmark-socialhome==0.9.1.post2
 coverage[toml]==7.10.7
     # via
     #   -r requirements/requirements-dev.in
-    #   codecov
     #   django-coverage-plugin
     #   pytest-cov
 croniter==6.2.2
@@ -128,9 +125,7 @@ django-countries==7.6.1
     # via -r requirements/requirements.txt
 django-coverage-plugin==3.1.1
     # via -r requirements/requirements-dev.in
-django-debug-toolbar==1.11.1
-    # via -r requirements/requirements-dev.in
-django-debug-toolbar-user-panel==2.0.0
+django-debug-toolbar==3.2.4
     # via -r requirements/requirements-dev.in
 django-enumfields==2.1.1
     # via -r requirements/requirements.txt
@@ -421,7 +416,6 @@ referencing==0.36.2
 requests==2.32.5
     # via
     #   -r requirements/requirements.txt
-    #   codecov
     #   django-silk
     #   federation
     #   geoip2

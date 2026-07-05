@@ -51,17 +51,6 @@ MIDDLEWARE = (
 DEBUG = env.bool("DJANGO_DEBUG", False)
 DEBUG_TOOLBAR_ENABLED = False
 
-# MANAGER CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    (env("DJANGO_ADMIN_NAME", default="The Federation Admin"),
-     env("DJANGO_ADMIN_MAIL", default="info@thefederation.local")),
-)
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
-MANAGERS = ADMINS
-
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -151,12 +140,6 @@ ROOT_URLCONF = "config.urls"
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
 
-# AUTHENTICATION CONFIGURATION
-# ------------------------------------------------------------------------------
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-)
-
 # REDIS
 # -----
 REDIS_HOST = env("REDIS_HOST", default="localhost")
@@ -245,11 +228,6 @@ SILKY_INTERCEPT_FUNC = is_silky_request
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse"
-        }
-    },
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
@@ -257,11 +235,6 @@ LOGGING = {
         },
     },
     "handlers": {
-        "mail_admins": {
-            "level": "ERROR",
-            "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler"
-        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",

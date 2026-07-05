@@ -23,13 +23,6 @@ else:
 # Note: This key only used for development and testing.
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="((5)iob@s%#(3=@le*xd^hu^)4_btrz7zpq-e1=@wruddsl9+h")
 
-# Mail settings
-# ------------------------------------------------------------------------------
-EMAIL_HOST = "localhost"
-EMAIL_PORT = 1025
-EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND",
-                    default="django.core.mail.backends.console.EmailBackend")
-
 # CACHING
 # ------------------------------------------------------------------------------
 CACHES = {
@@ -44,7 +37,7 @@ CACHES = {
 if env.bool("DJANGO_DEBUG_TOOLBAR", default=True):
     DEBUG_TOOLBAR_ENABLED = True
     MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
-    INSTALLED_APPS += ("debug_toolbar", "debug_toolbar_user_panel")
+    INSTALLED_APPS += ("debug_toolbar",)
 
     INTERNAL_IPS = ("127.0.0.1", "localhost")
 
@@ -52,7 +45,6 @@ if env.bool("DJANGO_DEBUG_TOOLBAR", default=True):
         "SHOW_TEMPLATE_CONTEXT": True,
     }
     DEBUG_TOOLBAR_PANELS = [
-        "debug_toolbar_user_panel.panels.UserPanel",
         "debug_toolbar.panels.versions.VersionsPanel",
         "debug_toolbar.panels.timer.TimerPanel",
         "debug_toolbar.panels.settings.SettingsPanel",
