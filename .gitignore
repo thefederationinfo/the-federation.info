@@ -79,3 +79,4 @@ playbook.yml
 test/unit/coverage
 
 dbdata/
+http_cache.sqlite

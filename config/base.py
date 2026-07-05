@@ -24,7 +24,6 @@ THIRD_PARTY_APPS = (
     "corsheaders",
     "django_extensions",
     "django_rq",
-    "graphene_django",
     "silk",
 )
 LOCAL_APPS = (
@@ -235,12 +234,6 @@ FEDERATION = {
     'get_private_key_function': None,
     'get_profile_function': None,
     'process_payload_function': None,
-}
-
-# Graphene
-# --------
-GRAPHENE = {
-    'SCHEMA': 'config.schema.schema'
 }
 
 # CORS
