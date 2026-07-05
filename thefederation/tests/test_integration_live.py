@@ -16,7 +16,7 @@ nodeinfo_compat workaround.
 import pytest
 
 from thefederation.models import Node
-from thefederation.tasks import poll_node
+from thefederation.crawler import poll_node
 
 LIVE_HOSTS = [
     "chaos.social",  # Mastodon, nodeinfo 2.0

@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 
 from thefederation.models import Node
-from thefederation.tasks import poll_node
+from thefederation.crawler import poll_node
 from thefederation.utils import is_valid_hostname, clean_hostname
 
 

@@ -2,7 +2,7 @@ import datetime
 
 from django.core.management.base import BaseCommand
 
-from thefederation.tasks import aggregate_daily_stats
+from thefederation.aggregation import aggregate_daily_stats
 
 
 class Command(BaseCommand):

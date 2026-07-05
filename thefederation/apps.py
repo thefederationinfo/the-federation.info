@@ -14,10 +14,10 @@ class TheFederationConfig(AppConfig):
         if "rqscheduler" not in sys.argv:
             return
 
-        from thefederation.tasks import aggregate_daily_stats
-        from thefederation.tasks import clean_duplicate_nodes
-        from thefederation.tasks import fill_country_information
-        from thefederation.tasks import poll_nodes
+        from thefederation.aggregation import aggregate_daily_stats
+        from thefederation.aggregation import clean_duplicate_nodes
+        from thefederation.crawler import fill_country_information
+        from thefederation.crawler import poll_nodes
 
         scheduler = django_rq.get_scheduler()
         # Delete any existing jobs in the scheduler when the app starts up

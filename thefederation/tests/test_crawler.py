@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from test_plus import TestCase
 
 from thefederation.models import Stat
-from thefederation.tasks import poll_node, fetch_using_method
+from thefederation.crawler import poll_node, fetch_using_method
 from thefederation.tests.fixtures import FETCH_NODE_RESPONSE, FETCH_NODE_RESPONSE__NO_STATS
 
 
@@ -16,7 +16,7 @@ class FetchUsingMethodTestCase(TestCase):
 
 
 class PollNodeTestCase(TestCase):
-    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE)
+    @patch("thefederation.crawler.fetch_node", return_value=FETCH_NODE_RESPONSE)
     def test_stat__creates_on_successful_poll(self, mock_fetch):
         poll_node("example.com")
         stat = Stat.objects.get(node__host="example.com")
@@ -30,7 +30,7 @@ class PollNodeTestCase(TestCase):
         self.assertEqual(stat.local_posts, 5)
         self.assertEqual(stat.local_comments, 6)
 
-    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE__NO_STATS)
+    @patch("thefederation.crawler.fetch_node", return_value=FETCH_NODE_RESPONSE__NO_STATS)
     def test_stat__creates_on_successful_poll__no_stats_exposed(self, mock_fetch):
         poll_node("example.com")
         stat = Stat.objects.get(node__host="example.com")
@@ -44,7 +44,7 @@ class PollNodeTestCase(TestCase):
         self.assertIsNone(stat.local_posts)
         self.assertIsNone(stat.local_comments)
 
-    @patch("thefederation.tasks.fetch_node")
+    @patch("thefederation.crawler.fetch_node")
     def test_stat__rejects_out_of_range_local_posts(self, mock_fetch):
         import copy
 
@@ -54,7 +54,7 @@ class PollNodeTestCase(TestCase):
         self.assertFalse(poll_node("example.com"))
         self.assertFalse(Stat.objects.filter(node__host="example.com").exists())
 
-    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE)
+    @patch("thefederation.crawler.fetch_node", return_value=FETCH_NODE_RESPONSE)
     def test_stat__no_write_on_unchanged_repeat_poll(self, mock_fetch):
         poll_node("example.com")
         with CaptureQueriesContext(connection) as ctx:
@@ -66,7 +66,7 @@ class PollNodeTestCase(TestCase):
         ]
         self.assertEqual(stat_writes, [])
 
-    @patch("thefederation.tasks.fetch_node", return_value=FETCH_NODE_RESPONSE)
+    @patch("thefederation.crawler.fetch_node", return_value=FETCH_NODE_RESPONSE)
     def test_stat__updates_on_successful_poll(self, mock_fetch):
         poll_node("example.com")
         assert Stat.objects.filter(node__host="example.com").exists()
