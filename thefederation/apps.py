@@ -1,8 +1,8 @@
-import datetime
 import sys
 
 import django_rq
 from django.apps import AppConfig
+from django.utils.timezone import now
 
 
 class TheFederationConfig(AppConfig):
@@ -25,7 +25,7 @@ class TheFederationConfig(AppConfig):
             job.delete()
 
         scheduler.schedule(
-            scheduled_time=datetime.datetime.utcnow(),
+            scheduled_time=now(),
             func=aggregate_daily_stats,
             interval=5500,
             queue_name="high",
@@ -43,7 +43,7 @@ class TheFederationConfig(AppConfig):
             timeout=3600,
         )
         scheduler.schedule(
-            scheduled_time=datetime.datetime.utcnow(),
+            scheduled_time=now(),
             func=poll_nodes,
             interval=10800,
             queue_name="medium",
