@@ -244,7 +244,7 @@ import ProtocolTableRow from "./ProtocolTableRow"
 // The same predicate is used on the /nodes and platform pages, so all
 // counts across the site agree with each other.
 const query = gql`
-query IndextContent($today: date!, $yesterday: date!) {
+query IndextContent($yesterday: date!) {
   thefederation_node_aggregate(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}) {
     aggregate {
       count
@@ -264,14 +264,14 @@ query IndextContent($today: date!, $yesterday: date!) {
         count
       }
     }
-    thefederation_stats(where: {date: {_eq: $today}}) {
+    thefederation_stats(where: {date: {_eq: $yesterday}}) {
       users_total
     }
   }
   thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}}) {
     id
     name
-    thefederation_stats(where: {date: {_eq: $today}}) {
+    thefederation_stats(where: {date: {_eq: $yesterday}}) {
       users_total
     }
     thefederation_node_protocols_aggregate(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}) {
@@ -280,7 +280,7 @@ query IndextContent($today: date!, $yesterday: date!) {
       }
     }
   }
-  thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_gte: $yesterday}}) {
+  thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_eq: $yesterday}}) {
     aggregate {
       avg {
         users_total
@@ -300,7 +300,6 @@ export default {
         allQueries: {
             query,
             variables: {
-                today: new Date(),
                 yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
             },
             result({data}) {

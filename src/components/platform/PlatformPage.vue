@@ -168,7 +168,7 @@ query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset
             count
         }
     }
-    thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_gte: $yesterday}}) {
+    thefederation_stat_aggregate(where: {thefederation_platform: {id: {_eq: $id}}, date: {_eq: $yesterday}}) {
         aggregate {
             avg {
                 users_total

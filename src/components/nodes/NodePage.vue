@@ -128,7 +128,7 @@ import Footer from "../common/Footer"
 import Number from "../common/Number"
 
 const query = gql`
-query Node($id: Int!, $today: date!) {
+query Node($id: Int!, $yesterday: date!) {
     thefederation_node_by_pk(id: $id) {
         id
         name
@@ -147,7 +147,7 @@ query Node($id: Int!, $today: date!) {
                 name
             }
         }
-        thefederation_stats(where: {date: {_eq: $today}}) {
+        thefederation_stats(where: {date: {_eq: $yesterday}}) {
             users_total
             users_half_year
             users_monthly
@@ -171,7 +171,7 @@ export default {
             variables() {
                 return {
                     id: this.$route.params.id,
-                    today: new Date(),
+                    yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
                 }
             },
         },

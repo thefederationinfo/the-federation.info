@@ -141,7 +141,7 @@ query MyQuery($id: Int!, $yesterday: date!) {
                         name
                     }
                 }
-                thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
+                thefederation_stats_aggregate(where: {date: {_eq: $yesterday}}) {
                     aggregate {
                         avg {
                             users_total
@@ -155,7 +155,7 @@ query MyQuery($id: Int!, $yesterday: date!) {
                 }
             }
         }
-        thefederation_stats_aggregate(where: {date: {_gte: $yesterday}}) {
+        thefederation_stats_aggregate(where: {date: {_eq: $yesterday}}) {
             aggregate {
                 avg {
                     users_total

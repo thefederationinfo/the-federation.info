@@ -12,8 +12,8 @@ import gql from 'graphql-tag'
 import ChartMixin from "./ChartMixin"
 
 const query = gql`
-query ScatterStats($today: date!) {
-    thefederation_stat(where: {date: {_eq: $today}, node_id: {_is_null: false}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}}) {
+query ScatterStats($yesterday: date!) {
+    thefederation_stat(where: {date: {_eq: $yesterday}, node_id: {_is_null: false}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}}) {
         users_monthly
         users_total
     }
@@ -21,9 +21,9 @@ query ScatterStats($today: date!) {
 `
 
 const platformQuery = gql`
-query ScatterStatsByPlatform($today: date!, $platformid: Int!) {
+query ScatterStatsByPlatform($yesterday: date!, $platformid: Int!) {
     thefederation_node(where: {platform_id: {_eq: $platformid}}) {
-        thefederation_stats(where: {date: {_eq: $today}, protocol_id: {_is_null: true}, users_monthly: {_is_null: false}, users_total: {_is_null: false}}) {
+        thefederation_stats(where: {date: {_eq: $yesterday}, protocol_id: {_is_null: true}, users_monthly: {_is_null: false}, users_total: {_is_null: false}}) {
             users_monthly
             users_total
         }
@@ -58,11 +58,11 @@ export default {
                 this.stats = stats
             },
             variables() {
-                const today = {today: new Date()}
+                const vars = {yesterday: new Date(new Date().setDate(new Date().getDate() - 1))}
                 if (this.platformId) {
-                    return {...today, platformid: this.platformId}
+                    return {...vars, platformid: this.platformId}
                 }
-                return today
+                return vars
             },
         },
     },
