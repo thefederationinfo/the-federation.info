@@ -50,10 +50,11 @@ class Node(ModelBase):
 
     def save(self, *args, **kwargs):
         self.host = clean_hostname(self.host)
-        clean_name = re.match(r"[a-zA-Z]*", self.name)
-        if clean_name:
-            if self.platform.name == clean_name[0].lower():
-                self.name = self.host
+        # Nodes that report just the platform name as their name (like
+        # "Mastodon") carry no information, use the host instead.
+        name_letters = re.match(r"[a-zA-Z]*", self.name)[0]
+        if name_letters.lower() == self.platform.name:
+            self.name = self.host
         self.version = self.platform.clean_version(self.version)
         # Node data comes from untrusted remote documents, which can carry
         # values longer than our column limits (e.g. a name over 300 chars).
@@ -67,9 +68,12 @@ class Node(ModelBase):
         super().save(*args, **kwargs)
 
     @property
-    def clean_version(self):
+    def version_tuple(self):
         """
-        Get the version number cleaned as a number.
+        Get the version as a numeric tuple.
+
+        Named to not shadow Platform.clean_version(), which is a string
+        cleaner and gets applied to self.version in save().
         """
         if not self.version:
             return
@@ -92,4 +96,4 @@ class Node(ModelBase):
         Function is passed in the version.
         :return:
         """
-        return self.platform.get_method(self.clean_version)
+        return self.platform.get_method(self.version_tuple)

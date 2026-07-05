@@ -10,8 +10,8 @@ class NodeTestCase(TestCase):
         cls.node = NodeFactory(version="0.9.0")
         cls.x_version_node = NodeFactory(version="2.x")
 
-    def test_clean_version__returns_version(self):
-        self.assertEqual(self.node.clean_version, (0, 9, 0))
+    def test_version_tuple__returns_version(self):
+        self.assertEqual(self.node.version_tuple, (0, 9, 0))
 
-    def test_clean_version__survices_x_version(self):
-        self.assertEqual(self.x_version_node.clean_version, (2,))
+    def test_version_tuple__survices_x_version(self):
+        self.assertEqual(self.x_version_node.version_tuple, (2,))

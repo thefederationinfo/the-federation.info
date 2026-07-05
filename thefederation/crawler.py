@@ -216,15 +216,11 @@ def _store_poll_result(host, result):
 
 def poll_nodes(skip=0):
     logger.info(f"Queueing polling all nodes (skipping {skip}).")
-    # values_list + iterator: only host strings, no Node instances, and
-    # len() would have materialized the whole queryset in memory
+    # values_list + iterator: only host strings, no Node instances. The
+    # slice becomes a SQL OFFSET instead of counting rows down by hand.
     hosts = Node.objects.active().values_list("host", flat=True)
-    total = count = hosts.count()
-    for host in hosts.iterator():
-        if total - count < skip:
-            count -= 1
-            continue
+    queued = 0
+    for host in hosts[skip:].iterator():
         poll_node.delay(host)
-        count -= 1
-        logger.debug(f"{count} nodes left")
-    logger.info(f"Queued {total - skip if total > skip else 0} nodes for polling.")
+        queued += 1
+    logger.info(f"Queued {queued} nodes for polling.")
