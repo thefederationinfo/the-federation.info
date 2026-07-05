@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
@@ -6,8 +6,9 @@ from django.utils.timezone import now
 from test_plus import TestCase
 
 from thefederation.models import Node, Stat
-from thefederation.crawler import poll_node, fetch_using_method
+from thefederation.crawler import fetch_using_method, fill_country_information, poll_node
 from thefederation.tests.fixtures import FETCH_NODE_RESPONSE, FETCH_NODE_RESPONSE__NO_STATS
+from thefederation.tests.factories import NodeFactory
 
 
 class FetchUsingMethodTestCase(TestCase):
@@ -107,3 +108,30 @@ class PollNodeRobustnessTestCase(TestCase):
         node = Node.objects.get(host="example.com")
         self.assertEqual([p.name for p in node.protocols.all()], ["activitypub"])
         self.assertEqual([s.name for s in node.services.all()], ["gnusocial"])
+
+
+class FillCountryInformationTestCase(TestCase):
+    def _run(self, node, ip, iso_code):
+        country_record = MagicMock()
+        country_record.iso_code = iso_code
+        response = MagicMock()
+        response.country = country_record
+        reader = MagicMock()
+        reader.country.return_value = response
+        with (
+            patch("thefederation.crawler.geoip2.database.Reader", return_value=reader),
+            patch("thefederation.crawler.fetch_host_ip", return_value=ip),
+        ):
+            fill_country_information()
+
+    def test_sets_resolved_country(self):
+        node = NodeFactory(active=True, ip="10.0.0.1")
+        self._run(node, "10.0.0.1", "DE")
+        node.refresh_from_db()
+        assert node.country.code == "DE"
+
+    def test_unresolved_country_does_not_rewrite_node(self):
+        node = NodeFactory(active=True, ip="10.0.0.1")
+        updated_before = Node.objects.get(pk=node.pk).updated
+        self._run(node, "10.0.0.1", None)
+        assert Node.objects.get(pk=node.pk).updated == updated_before

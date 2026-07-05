@@ -95,8 +95,12 @@ def fill_country_information():
                 save = True
             if ip:
                 response = ipdb.country(ip)
-                if response.country and (not node.country or node.country.code != response.country.iso_code):
-                    node.country = response.country.iso_code or ""
+                new_country = (response.country.iso_code or "") if response.country else ""
+                # Compare before assigning: the old code marked nodes whose
+                # country stayed unresolved ('' -> '') as changed, rewriting
+                # every such node on every run.
+                if response.country and (node.country.code or "") != new_country:
+                    node.country = new_country
                     save = True
             if save:
                 node.save()
