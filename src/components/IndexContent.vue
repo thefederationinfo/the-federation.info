@@ -239,15 +239,18 @@ import Number from "./common/Number"
 import PlatformTableRow from "./PlatformTableRow"
 import ProtocolTableRow from "./ProtocolTableRow"
 
-// TODO add failsafe if new day
+// A node is "active" when it is not blocked, not hidden and was
+// successfully crawled yesterday (= has a stat row for yesterday).
+// The same predicate is used on the /nodes and platform pages, so all
+// counts across the site agree with each other.
 const query = gql`
-query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz!) {
-  thefederation_node_aggregate(where: {last_success: {_gte: $last_success}}) {
+query IndextContent($today: date!, $yesterday: date!) {
+  thefederation_node_aggregate(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}) {
     aggregate {
       count
     }
   }
-  thefederation_platform(where: {thefederation_nodes: {last_success: {_gte: $last_success}}}, order_by: {thefederation_nodes_aggregate: {count: desc}}) {
+  thefederation_platform(where: {thefederation_nodes: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}) {
     id
     code
     name
@@ -256,7 +259,7 @@ query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz
     install_guide
     license
     website
-    thefederation_nodes_aggregate(where: {thefederation_stats: {date: {_eq: $today}}}) {
+    thefederation_nodes_aggregate(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}) {
       aggregate {
         count
       }
@@ -265,13 +268,13 @@ query IndextContent($today: date!, $yesterday: date!, $last_success: timestamptz
       users_total
     }
   }
-  thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {last_success: {_gte: $last_success}}}}) {
+  thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}}) {
     id
     name
     thefederation_stats(where: {date: {_eq: $today}}) {
       users_total
     }
-    thefederation_node_protocols_aggregate {
+    thefederation_node_protocols_aggregate(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}) {
       aggregate {
         count
       }
@@ -299,11 +302,13 @@ export default {
             variables: {
                 today: new Date(),
                 yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
-                last_success: new Date(new Date().setDate(-30)),
             },
             result({data}) {
                 this.nodeCount = data.thefederation_node_aggregate.aggregate.count
-                this.platforms = data.thefederation_platform
+                // Hasura cannot order by a filtered aggregate, so sort by the
+                // displayed active node count here instead of in the query.
+                const count = (p) => p.thefederation_nodes_aggregate.aggregate.count
+                this.platforms = [...data.thefederation_platform].sort((a, b) => count(b) - count(a))
                 this.protocols = data.thefederation_protocol
                 this.statsGlobalToday = data.thefederation_stat_aggregate.aggregate.avg
             },

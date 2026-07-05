@@ -127,7 +127,7 @@ import NodesTable from "../NodesTable"
 import Number from "../common/Number"
 
 const query = gql`
-query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
+query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
     thefederation_platform_by_pk(id: $id) {
         id
         name
@@ -138,7 +138,7 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!,
         website
         icon
     }
-    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
+    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
         users_total
         users_half_year
         users_monthly
@@ -163,7 +163,7 @@ query PlatformDetails($id: Int!, $last_success: timestamptz!, $yesterday: date!,
             }
         }
     }
-    nodeCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}}) {
+    nodeCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
         aggregate {
             count
         }
@@ -207,7 +207,6 @@ export default {
                 const yesterday = new Date(new Date().setDate(date.getDate() - 1))
                 return {
                     id: this.$route.params.platform,
-                    last_success: new Date(new Date().setDate(-30)),
                     yesterday,
                     pageSize,
                     pageOffset: 0,

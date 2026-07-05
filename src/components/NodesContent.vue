@@ -32,8 +32,8 @@ import NodesTable from "./NodesTable"
 // per node, cheap to order by size, and limit/offset actually limit the
 // work. The unpaginated node query is why this page was disabled before.
 const query = gql`
-query NodesContent($last_success: timestamptz!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
-    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
+query NodesContent($yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
+    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
         users_total
         users_half_year
         users_monthly
@@ -58,7 +58,7 @@ query NodesContent($last_success: timestamptz!, $yesterday: date!, $pageSize: In
             }
         }
     }
-    nodeCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, last_success: {_gte: $last_success}}}) {
+    nodeCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
         aggregate {
             count
         }
@@ -86,7 +86,6 @@ export default {
                 const date = new Date()
                 const yesterday = new Date(new Date().setDate(date.getDate() - 1))
                 return {
-                    last_success: new Date(new Date().setDate(-30)),
                     yesterday,
                     pageSize,
                     pageOffset: 0,
