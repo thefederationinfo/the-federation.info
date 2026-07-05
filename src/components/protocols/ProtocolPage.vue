@@ -124,7 +124,7 @@ query MyQuery($id: Int!, $yesterday: date!) {
         description
         website
         display_name
-        thefederation_node_protocols(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
+        thefederation_node_protocols(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}) {
             thefederation_node {
                 id
                 name
