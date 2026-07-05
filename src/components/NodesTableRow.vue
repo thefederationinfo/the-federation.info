@@ -1,12 +1,11 @@
 <template>
     <tr>
         <td>
-            <img
+            <PlatformIcon
                 v-if="node.thefederation_platform.name !== 'unknown' && node.thefederation_platform.icon !== 'unknown'"
-                :alt="node.thefederation_platform.name"
-                :title="node.thefederation_platform.name"
-                :src="imageSource"
-            >
+                :icon="node.thefederation_platform.icon"
+                :name="node.thefederation_platform.name"
+            />
             <div v-else>
 &nbsp;
             </div>
@@ -55,8 +54,11 @@
 import _ from "lodash/collection"
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 
+import PlatformIcon from './common/PlatformIcon'
+
 export default {
     name: "NodesTableRow",
+    components: {PlatformIcon},
     props: {
         node: {
             type: Object,
@@ -69,9 +71,6 @@ export default {
         }
     },
     computed: {
-        imageSource() {
-            return `/static/images/${this.node.thefederation_platform.icon}-16.png`
-        },
         openSignups() {
             return this.node.open_signups ? "Yes" : "No"
         },

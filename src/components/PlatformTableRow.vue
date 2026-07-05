@@ -1,13 +1,11 @@
 <template>
     <tr>
         <td style="width: 20px;">
-            <img
+            <PlatformIcon
                 v-if="platform.name !== 'unknown' && platform.icon !== 'unknown'"
-                :alt="platform.name"
-                :title="platform.name"
-                :src="imageSource"
-                style="max-width: 1em;"
-            >
+                :icon="platform.icon"
+                :name="platform.name"
+            />
             <div v-else>
 &nbsp;
             </div>
@@ -52,10 +50,11 @@
 
 <script>
 import Number from './common/Number'
+import PlatformIcon from './common/PlatformIcon'
 
 export default {
     name: "PlatformTableRow",
-    components: {Number},
+    components: {Number, PlatformIcon},
     props: {
         platform: {
             type: Object,
@@ -68,9 +67,6 @@ export default {
         }
     },
     computed: {
-        imageSource() {
-            return `/static/images/${this.platform.icon}-16.png`
-        },
         websiteWithoutProtocol() {
             return this.platform.website.replace('https://', '').replace('http://', '')
         },
