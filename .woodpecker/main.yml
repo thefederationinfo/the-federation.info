@@ -76,7 +76,7 @@ steps:
       event: ["push", "tag"]
 
   backend-dryrun:
-    image: docker.io/woodpeckerci/plugin-docker-buildx:6
+    image: docker.io/woodpeckerci/plugin-docker-buildx:6.0.3
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
@@ -91,7 +91,7 @@ steps:
       event: pull_request
 
   backend-publish:
-    image: docker.io/woodpeckerci/plugin-docker-buildx:6
+    image: docker.io/woodpeckerci/plugin-docker-buildx:6.0.3
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
