@@ -1,4 +1,6 @@
+import ipaddress
 import re
+from contextlib import suppress
 
 
 def clean_hostname(hostname: str) -> str:
@@ -30,8 +32,17 @@ def is_valid_hostname(hostname: str) -> bool:
         return False
     if hostname[-1] == ".":
         hostname = hostname[:-1]  # strip exactly one dot from the right, if present
+    labels = hostname.split(".")
+    # Fediverse nodes live on real domains. Single-label names like
+    # "localhost" and bare IP addresses would point the crawler at
+    # internal hosts.
+    if len(labels) < 2:
+        return False
+    with suppress(ValueError):
+        ipaddress.ip_address(hostname)
+        return False
     allowed = re.compile(r"(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
-    return all(allowed.match(x) for x in hostname.split("."))
+    return all(allowed.match(x) for x in labels)
 
 
 def single_true(iterable):

@@ -24,3 +24,11 @@ class IsValidHostnameTestCase(TestCase):
         self.assertFalse(is_valid_hostname("a" * 256))
         self.assertFalse(is_valid_hostname("-bad.example.com"))
         self.assertFalse(is_valid_hostname("exa mple.com"))
+
+    def test_single_label_hosts_are_invalid(self):
+        self.assertFalse(is_valid_hostname("localhost"))
+        self.assertFalse(is_valid_hostname("intranet"))
+
+    def test_bare_ip_addresses_are_invalid(self):
+        self.assertFalse(is_valid_hostname("10.0.0.1"))
+        self.assertFalse(is_valid_hostname("2001:db8::1"))
