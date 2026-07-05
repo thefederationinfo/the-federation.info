@@ -108,10 +108,7 @@
                     <NodesTable
                         :nodes="nodes"
                     />
-                    <ApolloLoader :loading="$apollo.loading" />
-                    <div class="center">
-                        <button v-if="loadMoreEnabled" class="center" @click="loadMore">Load More</button>
-                    </div>
+                    <ApolloLoader :loading="$apollo.loading || loadingMore" />
                 </div>
             </section>
         </main>
@@ -230,6 +227,7 @@ export default {
             stats: {},
             nodeCount: 0,
             currentPage: 0,
+            loadingMore: false,
         }
     },
     computed: {
@@ -240,11 +238,33 @@ export default {
             return this.nodes.length < this.nodeCount
         },
     },
+    mounted() {
+        window.addEventListener('scroll', this.onScroll, {passive: true})
+    },
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.onScroll)
+    },
     methods: {
+        onScroll() {
+            if (!this.loadMoreEnabled || this.loadingMore) {
+                return
+            }
+            const nearBottom = window.innerHeight + window.pageYOffset
+                >= document.documentElement.scrollHeight - 600
+            if (nearBottom) {
+                this.loadMore()
+            }
+        },
         loadMore() {
+            if (this.loadingMore || !this.loadMoreEnabled) {
+                return
+            }
+            this.loadingMore = true
             this.currentPage += 1
 
-            // Fetch the next page and append it to the already loaded rows
+            // Fetch the next page and append it to the already loaded rows.
+            // result() runs again after the merge; if the viewport is still
+            // near the bottom the scroll handler chains the next page.
             this.$apollo.queries.platforms.fetchMore({
                 variables: {
                     pageOffset: pageSize * this.currentPage,
@@ -255,6 +275,9 @@ export default {
 
                     return newData
                 },
+            }).finally(() => {
+                this.loadingMore = false
+                this.onScroll()
             })
         },
     },
