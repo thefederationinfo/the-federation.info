@@ -52,7 +52,7 @@ steps:
     settings:
       dockerfile: docker/nginx/Dockerfile
       platforms: *platforms
-      no_push: true
+      dry-run: true
       registry: codeberg.org
       repo: codeberg.org/thefederationinfo/frontend
       tags: test
@@ -80,7 +80,7 @@ steps:
     settings:
       dockerfile: docker/app/Dockerfile
       platforms: *platforms
-      dry_run: true
+      dry-run: true
       registry: codeberg.org
       repo: codeberg.org/thefederationinfo/backend
       tags: test
