@@ -34,5 +34,9 @@ export default function enrichPlatform(platform) {
       enriched[key] = meta[fields[key]];
     }
   });
+  // Optional boolean flag, only present in the metadata when true.
+  if (meta.abandoned) {
+    enriched.abandoned = true;
+  }
   return enriched;
 }

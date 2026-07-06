@@ -4,7 +4,17 @@
     <main>
       <header class="main-header">
         <div class="main-title">
-          <h1>{{ title }}</h1>
+          <h1>
+            {{ title }}
+            <span
+              v-if="platform.abandoned"
+              v-tooltip="'This platform is no longer maintained'"
+              class="abandoned-warning"
+              role="img"
+              aria-label="Abandoned platform warning"
+              >⚠️ Abandoned</span
+            >
+          </h1>
           <h2>{{ platform.tagline }}</h2>
         </div>
         <div class="flex">
@@ -371,3 +381,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.abandoned-warning {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.1em 0.5em;
+  border-radius: 0.25em;
+  background-color: #b23c17;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: bold;
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: help;
+}
+</style>
