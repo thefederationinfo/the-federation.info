@@ -26,7 +26,8 @@
 
             # backend
             python3
-            libpq # pg_config for psycopg2 source build
+            libpq # runtime lib for psycopg2
+            libpq.pg_config # pg_config for psycopg2 source build
             gcc
 
             # tooling
