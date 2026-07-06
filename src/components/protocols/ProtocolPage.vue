@@ -95,9 +95,10 @@
                 <header>
                     <h2>All {{ title }} nodes</h2>
                 </header>
+                <NodeSearchBox @search="onSearch" />
                 <div class="overflow-x">
                     <NodesTable
-                        :nodes="tableNodes"
+                        :nodes="filteredTableNodes"
                     />
                     <ApolloLoader :loading="$apollo.loading" />
                 </div>
@@ -115,6 +116,7 @@ import ApolloLoader from "../common/ApolloLoader"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
 import Number from "../common/Number"
+import NodeSearchBox from "../common/NodeSearchBox"
 import NodesTable from "../NodesTable"
 
 const query = gql`
@@ -192,19 +194,37 @@ export default {
     },
     name: "ProtocolPage",
     components: {
-        ApolloLoader, NodesTable, Footer, Drawer, Number,
+        ApolloLoader, NodeSearchBox, NodesTable, Footer, Drawer, Number,
     },
     data() {
         return {
             globalStats: {},
             nodes: [],
             protocol: {},
+            search: '',
             tableNodes: [],
         }
     },
     computed: {
+        // This page loads all nodes in a single query, so the search
+        // filters client side. Stat counts above keep using the full
+        // list, only the table reacts to the search.
+        filteredTableNodes() {
+            if (!this.search) {
+                return this.tableNodes
+            }
+            const term = this.search.toLowerCase()
+            return this.tableNodes.filter(
+                (node) => (node.name || '').toLowerCase().includes(term),
+            )
+        },
         title() {
             return this.protocol.display_name ? this.protocol.display_name : this.protocol.name || ''
+        },
+    },
+    methods: {
+        onSearch(term) {
+            this.search = term
         },
     },
 }

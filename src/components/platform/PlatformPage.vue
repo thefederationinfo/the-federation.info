@@ -104,6 +104,7 @@
                 <header>
                     <h2>All {{ title }} nodes</h2>
                 </header>
+                <NodeSearchBox @search="onSearch" />
                 <div class="overflow-x">
                     <NodesTable
                         :nodes="nodes"
@@ -123,11 +124,12 @@ import ApolloLoader from "../common/ApolloLoader"
 import Charts from "../Charts"
 import Drawer from "../common/Drawer"
 import Footer from "../common/Footer"
+import NodeSearchBox from "../common/NodeSearchBox"
 import NodesTable from "../NodesTable"
 import Number from "../common/Number"
 
 const query = gql`
-query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
+query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset: Int!, $search: String!) {
     thefederation_platform_by_pk(id: $id) {
         id
         name
@@ -137,7 +139,7 @@ query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset
         tagline
         website
     }
-    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
+    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}, name: {_ilike: $search}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
         users_total
         users_half_year
         users_monthly
@@ -162,6 +164,11 @@ query PlatformDetails($id: Int!, $yesterday: date!, $pageSize: Int!, $pageOffset
         }
     }
     nodeCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}}}) {
+        aggregate {
+            count
+        }
+    }
+    filteredCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {platform_id: {_eq: $id}, blocked: {_eq: false}, hide_from_list: {_eq: false}, name: {_ilike: $search}}}) {
         aggregate {
             count
         }
@@ -197,6 +204,7 @@ export default {
                     thefederation_stats_aggregate: {aggregate: {avg}},
                 }))
                 this.nodeCount = data.nodeCount.aggregate.count
+                this.filteredCount = data.filteredCount.aggregate.count
                 this.globalStats = data.thefederation_stat_aggregate.aggregate.avg || {}
             },
             variables() {
@@ -207,13 +215,14 @@ export default {
                     yesterday,
                     pageSize,
                     pageOffset: 0,
+                    search: this.searchPattern,
                 }
             },
         },
     },
     name: 'PlatformPage',
     components: {
-        ApolloLoader, Charts, NodesTable, Footer, Drawer, Number,
+        ApolloLoader, Charts, NodeSearchBox, NodesTable, Footer, Drawer, Number,
     },
     data() {
         return {
@@ -222,6 +231,8 @@ export default {
             platform: {},
             stats: {},
             nodeCount: 0,
+            filteredCount: 0,
+            search: '',
             currentPage: 0,
             loadingMore: false,
         }
@@ -231,7 +242,12 @@ export default {
             return this.platform.display_name ? this.platform.display_name : this.platform.name || ''
         },
         loadMoreEnabled() {
-            return this.nodes.length < this.nodeCount
+            return this.nodes.length < this.filteredCount
+        },
+        searchPattern() {
+            // Escape ilike wildcards typed by the user, then wrap in %
+            // so an empty search ("%%") matches every node
+            return `%${this.search.replace(/[\\%_]/g, '\\$&')}%`
         },
     },
     mounted() {
@@ -241,6 +257,16 @@ export default {
         window.removeEventListener('scroll', this.onScroll)
     },
     methods: {
+        onSearch(term) {
+            if (term === this.search) {
+                return
+            }
+            // New search: back to page 0. Changing this.search changes
+            // searchPattern, the reactive variables() re-run the query
+            // and result() replaces the node list.
+            this.currentPage = 0
+            this.search = term
+        },
         onScroll() {
             if (!this.loadMoreEnabled || this.loadingMore) {
                 return

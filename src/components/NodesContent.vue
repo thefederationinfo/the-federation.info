@@ -11,6 +11,7 @@
             </header>
             <div>
                 <p>You can also access a list of nodes for each project using the global menu on the left.</p>
+                <NodeSearchBox @search="onSearch" />
                 <div class="overflow-x">
                     <NodesTable
                         :nodes="nodes"
@@ -26,14 +27,19 @@
 import gql from 'graphql-tag'
 
 import ApolloLoader from "./common/ApolloLoader"
+import NodeSearchBox from "./common/NodeSearchBox"
 import NodesTable from "./NodesTable"
 
 // Paginate over yesterday's stat rows instead of the node table: one row
 // per node, cheap to order by size, and limit/offset actually limit the
 // work. The unpaginated node query is why this page was disabled before.
+// $search filters by node name (ilike pattern), "%%" matches everything.
+// nodeCount stays unfiltered on purpose: it feeds the summary count in
+// the header, only the list below reacts to the search. filteredCount
+// drives the pagination.
 const query = gql`
-query NodesContent($yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
-    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
+query NodesContent($yesterday: date!, $pageSize: Int!, $pageOffset: Int!, $search: String!) {
+    nodeStats: thefederation_stat(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, name: {_ilike: $search}}}, order_by: {users_monthly: desc_nulls_last}, limit: $pageSize, offset: $pageOffset) {
         users_total
         users_half_year
         users_monthly
@@ -62,6 +68,11 @@ query NodesContent($yesterday: date!, $pageSize: Int!, $pageOffset: Int!) {
             count
         }
     }
+    filteredCount: thefederation_stat_aggregate(where: {date: {_eq: $yesterday}, thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, name: {_ilike: $search}}}) {
+        aggregate {
+            count
+        }
+    }
 }
 `
 
@@ -80,6 +91,7 @@ export default {
                     thefederation_stats_aggregate: {aggregate: {avg}},
                 }))
                 this.nodeCount = data.nodeCount.aggregate.count
+                this.filteredCount = data.filteredCount.aggregate.count
             },
             variables() {
                 const date = new Date()
@@ -88,25 +100,33 @@ export default {
                     yesterday,
                     pageSize,
                     pageOffset: 0,
+                    search: this.searchPattern,
                 }
             },
         },
     },
     name: "NodesContent",
     components: {
-        ApolloLoader, NodesTable,
+        ApolloLoader, NodeSearchBox, NodesTable,
     },
     data() {
         return {
             nodes: [],
             nodeCount: 0,
+            filteredCount: 0,
+            search: '',
             currentPage: 0,
             loadingMore: false,
         }
     },
     computed: {
         loadMoreEnabled() {
-            return this.nodes.length < this.nodeCount
+            return this.nodes.length < this.filteredCount
+        },
+        searchPattern() {
+            // Escape ilike wildcards typed by the user, then wrap in %
+            // so an empty search ("%%") matches every node
+            return `%${this.search.replace(/[\\%_]/g, '\\$&')}%`
         },
     },
     mounted() {
@@ -116,6 +136,16 @@ export default {
         window.removeEventListener('scroll', this.onScroll)
     },
     methods: {
+        onSearch(term) {
+            if (term === this.search) {
+                return
+            }
+            // New search: back to page 0. Changing this.search changes
+            // searchPattern, the reactive variables() re-run the query
+            // and result() replaces the node list.
+            this.currentPage = 0
+            this.search = term
+        },
         onScroll() {
             if (!this.loadMoreEnabled || this.loadingMore) {
                 return
