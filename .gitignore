@@ -71,6 +71,7 @@ mailhog
 
 
 dist/
+/venv
 
 playbook.yml
 
