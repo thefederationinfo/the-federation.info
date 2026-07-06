@@ -23,7 +23,7 @@ nodeinfo_compat.apply()
 
 logger = logging.getLogger(__name__)
 
-METHODS = ["nodeinfo2", "nodeinfo", "matrix"]
+METHODS = ["nodeinfo", "nodeinfo2", "matrix"]
 
 
 def fetch_using_method(host, method):
