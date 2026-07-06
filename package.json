@@ -7,9 +7,9 @@
   "scripts": {
     "predev": "node build/fetch-platform-metadata.js",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "yarn run dev",
+    "start": "pnpm run dev",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "test": "yarn run unit",
+    "test": "pnpm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
     "prebuild": "node build/fetch-platform-metadata.js",
     "build": "node build/build.js"
@@ -36,6 +36,7 @@
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
     "chalk": "^3.0.0",
     "chart.js": "^2.9.4",
@@ -96,8 +97,9 @@
     "webpack-merge": "^4.2.2"
   },
   "engines": {
-    "node": ">= 14.0.0"
+    "node": ">= 26.0.0"
   },
+  "packageManager": "pnpm@11.10.0",
   "browserslist": [
     "> 1%",
     "last 2 versions",

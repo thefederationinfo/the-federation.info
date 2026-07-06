@@ -1,15 +1,17 @@
 # Build bundle
-FROM docker.io/library/node:24 AS build-stage
+FROM docker.io/library/node:26 AS build-stage
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+RUN npm install --global pnpm
 
-RUN yarn install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN yarn build
+RUN pnpm build
 
 WORKDIR /app
 

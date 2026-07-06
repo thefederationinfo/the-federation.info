@@ -1,0 +1,8 @@
+allowBuilds:
+  # downloads the phantomjs binary used by karma unit tests
+  phantomjs-prebuilt: true
+  # postinstall scripts are only funding/notice messages, no build needed
+  core-js: false
+  ejs: false
+  es5-ext: false
+  uglifyjs-webpack-plugin: false
