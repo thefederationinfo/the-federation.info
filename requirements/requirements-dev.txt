@@ -299,7 +299,7 @@ psutil==7.2.2
     # via
     #   -r requirements/requirements.txt
     #   circus
-psycopg2-binary==2.9.12
+psycopg2-binary==2.8.6
     # via -r requirements/requirements.txt
 ptyprocess==0.7.0
     # via
