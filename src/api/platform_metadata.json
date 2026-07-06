@@ -157,15 +157,15 @@
   },
   {
     "name": "firefish",
-    "sourcecode_url": "https://git.pleroma.social/pleroma/relay",
+    "sourcecode_url": "https://codeberg.org/firefish/firefish",
     "display_name": "Firefish",
     "license": "AGPLv3",
-    "website_url": "https://joinfirefish.org/",
-    "install_guide_url": "https://git.joinfirefish.org/firefish/firefish",
+    "website_url": "https://web.archive.org/web/20240704111942/https://joinfirefish.org/",
     "description": "Firefish is based off of Misskey, a powerful microblogging server on ActivityPub with features such as emoji reactions, a customizable web UI, rich chatting, and much more!",
     "latest_version": "1.0.3",
-    "icon_url": "https://git.joinfirefish.org/firefish/firefish/-/raw/develop/animated.svg",
-    "proprietary": false
+    "icon_url": "https://codeberg.org/firefish/firefish/media/branch/develop/animated.svg",
+    "proprietary": false,
+    "abandoned": true
   },
   {
     "name": "friendica",
