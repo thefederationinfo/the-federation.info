@@ -5,11 +5,13 @@
   "author": "Jason Robinson <mail@jasonrobinson.me>",
   "private": true,
   "scripts": {
+    "predev": "node build/fetch-platform-metadata.js",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "yarn run dev",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
+    "prebuild": "node build/fetch-platform-metadata.js",
     "build": "node build/build.js"
   },
   "dependencies": {
