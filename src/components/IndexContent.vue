@@ -233,6 +233,8 @@
 <script>
 import gql from 'graphql-tag'
 
+import enrichPlatform from "../api/platformMetadata"
+
 import ApolloLoader from "./common/ApolloLoader"
 import Charts from "./Charts"
 import Number from "./common/Number"
@@ -306,7 +308,8 @@ export default {
                 // Hasura cannot order by a filtered aggregate, so sort by the
                 // displayed active node count here instead of in the query.
                 const count = (p) => p.thefederation_nodes_aggregate.aggregate.count
-                this.platforms = [...data.thefederation_platform].sort((a, b) => count(b) - count(a))
+                this.platforms = data.thefederation_platform.map(enrichPlatform)
+                    .sort((a, b) => count(b) - count(a))
                 this.protocols = data.thefederation_protocol
                 this.statsGlobalToday = data.thefederation_stat_aggregate.aggregate.avg
             },

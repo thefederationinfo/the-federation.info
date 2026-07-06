@@ -120,6 +120,8 @@
 <script>
 import gql from 'graphql-tag'
 
+import enrichPlatform from "../../api/platformMetadata"
+
 import ApolloLoader from "../common/ApolloLoader"
 import Charts from "../Charts"
 import Drawer from "../common/Drawer"
@@ -196,7 +198,7 @@ export default {
             query,
             manual: true,
             result({data}) {
-                this.platform = data.thefederation_platform_by_pk || {}
+                this.platform = enrichPlatform(data.thefederation_platform_by_pk || {})
                 // NodesTableRow expects node objects carrying their stats
                 // under thefederation_stats_aggregate, keep that shape
                 this.nodes = data.nodeStats.map(({thefederation_node: node, ...avg}) => ({
