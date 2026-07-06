@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.core.cache import cache
+from django.test import override_settings
 from test_plus import TestCase
 
 from thefederation import registration
@@ -39,6 +40,19 @@ class RegisterNodeTestCase(TestCase):
         # another caller is unaffected
         result, _host = registration.register_node("other-caller.example.com", client_ip="10.0.0.2")
         assert result == registration.OK
+
+    @override_settings(REGISTRATION_IP_ALLOWLIST=frozenset({"10.0.0.1"}))
+    def test_allow_listed_ip_bypasses_rate_limit(self, mock_poll):
+        # Way past both the per-IP and per-host limits, yet every call is acked.
+        for i in range(registration.IP_LIMIT + 5):
+            result, _host = registration.register_node("same-host.example.com", client_ip="10.0.0.1")
+            assert result == registration.OK
+        assert mock_poll.delay.call_count == registration.IP_LIMIT + 5
+        # a non-listed caller is still rate limited as usual
+        for _ in range(registration.IP_LIMIT):
+            registration.register_node("elsewhere.example.com", client_ip="10.0.0.2")
+        result, _host = registration.register_node("blocked.example.com", client_ip="10.0.0.2")
+        assert result == registration.RATE_LIMITED
 
 
 class CleanHostnamePunycodeTestCase(TestCase):

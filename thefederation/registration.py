@@ -13,6 +13,7 @@ registrar only validates cheaply and queues.
 
 import logging
 
+from django.conf import settings
 from django.core.cache import cache
 
 from thefederation.crawler import poll_node
@@ -58,6 +59,11 @@ def register_node(host, client_ip=None):
     host = clean_hostname(host)
     if not is_valid_hostname(host):
         return INVALID, host
+
+    if client_ip and client_ip in settings.REGISTRATION_IP_ALLOWLIST:
+        logger.info("Allow-listed registration from %s for %s", client_ip, host)
+        poll_node.delay(host)
+        return OK, host
 
     if client_ip and _over_limit(f"registrar:ip:{client_ip}", IP_LIMIT, IP_WINDOW):
         logger.info("Rate limited registration from %s for %s", client_ip, host)

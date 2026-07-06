@@ -176,6 +176,13 @@ THEFEDERATION_URL = "{protocol}://{domain}".format(
     protocol="https" if THEFEDERATION_HTTPS else "http", domain=THEFEDERATION_DOMAIN
 )
 
+# IPs allowed to skip the registration rate limit, comma-separated with
+# surrounding whitespace trimmed (e.g. "127.0.0.1, 10.0.0.5"). Meant for
+# trusted infrastructure that re-registers nodes in bulk.
+REGISTRATION_IP_ALLOWLIST = frozenset(
+    ip.strip() for ip in env("REGISTRATION_IP_ALLOWLIST", default="").split(",") if ip.strip()
+)
+
 # Federation library configuration
 # ------------------------------------------------------------------------------
 FEDERATION = {

@@ -28,6 +28,7 @@ services:
       THEFEDERATION_DOMAIN: ${THEFEDERATION_DOMAIN:-localhost}
       RQWORKER_NUM: ${RQWORKER_NUM:-1}
       REDIS_URL: redis://redis:6379
+      REGISTRATION_IP_ALLOWLIST: ${REGISTRATION_IP_ALLOWLIST:-}
     mem_limit: 5G
 
   web:
