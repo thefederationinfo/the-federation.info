@@ -204,13 +204,13 @@
                                 v-for="platform in platforms"
                                 :key="platform.id"
                             >
-                                <div v-if="platform.installGuide">
+                                <div v-if="platform.install_guide">
                                     <a
-                                        :href="platform.installGuide"
+                                        :href="platform.install_guide"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        {{ platform.displayName ? platform.displayName : platform.name }}
+                                        {{ platform.display_name ? platform.display_name : platform.name }}
                                     </a>
                                 </div>
                             </div>
