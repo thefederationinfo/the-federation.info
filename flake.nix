@@ -35,6 +35,11 @@
             ruff
           ];
 
+          # gcc 15 defaults to C23, where implicit function declarations
+          # are hard errors; legacy C extensions like psycopg2 2.8.6 rely
+          # on them (gettimeofday via transitive includes). Build in C17.
+          CFLAGS = "-std=gnu17";
+
           shellHook = ''
             if [ ! -d venv ]; then
               python3 -m venv venv
