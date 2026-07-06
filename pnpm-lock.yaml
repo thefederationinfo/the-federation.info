@@ -88,7 +88,7 @@ importers:
         specifier: ^3.2.0
         version: 3.6.0(webpack@3.12.0)
       eslint:
-        specifier: ^6.7.0
+        specifier: ^6.8.0
         version: 6.8.0(supports-color@5.5.0)
       eslint-config-airbnb-base:
         specifier: ^14.0.0
@@ -186,6 +186,9 @@ importers:
       postcss-url:
         specifier: ^8.0.0
         version: 8.0.0
+      prettier:
+        specifier: ^3.9.4
+        version: 3.9.4
       rimraf:
         specifier: ^3.0.0
         version: 3.0.2
@@ -4519,6 +4522,11 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
+  prettier@3.9.4:
+    resolution: {integrity: sha512-yWG/o/4oJfo036EKAfK6ACAoDOfHeRHx4tuxkfBZiauURiaSmYwlpOr5LQqKtIkRD2z1PLteme2WoxEnj4tHTg==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   pretty-error@2.1.2:
     resolution: {integrity: sha512-EY5oDzmsX5wvuynAByrmY0P0hcp+QpnAKbJng2A2MPjVKXCxrDSUkzghVJ4ZGPIv+JC4gX8fPUWscC0RtjsWGw==}
 
@@ -6055,7 +6063,7 @@ snapshots:
       '@ampproject/remapping': 2.2.0
       '@babel/code-frame': 7.16.7
       '@babel/generator': 7.17.10
-      '@babel/helper-compilation-targets': 7.17.10(@babel/core@7.17.10)
+      '@babel/helper-compilation-targets': 7.17.10(@babel/core@7.17.10(supports-color@5.5.0))
       '@babel/helper-module-transforms': 7.17.7
       '@babel/helpers': 7.17.9
       '@babel/parser': 7.17.10
@@ -6076,7 +6084,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.1.1
       jsesc: 2.5.2
 
-  '@babel/helper-compilation-targets@7.17.10(@babel/core@7.17.10)':
+  '@babel/helper-compilation-targets@7.17.10(@babel/core@7.17.10(supports-color@5.5.0))':
     dependencies:
       '@babel/compat-data': 7.17.10
       '@babel/core': 7.17.10(supports-color@5.5.0)
@@ -11601,6 +11609,8 @@ snapshots:
   prelude-ls@1.1.2: {}
 
   prettier@1.19.1: {}
+
+  prettier@3.9.4: {}
 
   pretty-error@2.1.2:
     dependencies:
