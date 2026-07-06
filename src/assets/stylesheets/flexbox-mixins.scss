@@ -51,7 +51,11 @@
   flex-wrap: $value;
 }
 
-@mixin flex-flow($values: (row nowrap)) {
+@mixin flex-flow(
+  $values: (
+    row nowrap,
+  )
+) {
   // No Webkit Box fallback.
   -webkit-flex-flow: $values;
   -moz-flex-flow: $values;
@@ -90,13 +94,12 @@
 }
 
 @mixin flex($fg: 1, $fs: null, $fb: null) {
-
   // Set a variable to be used by box-flex properties
   $fg-boxflex: $fg;
 
   // Box-Flex only supports a flex-grow value so lets grab the
   // first item in the list and just return that.
-  @if type-of($fg) == 'list' {
+  @if type-of($fg) == "list" {
     $fg-boxflex: nth($fg, 1);
   }
 

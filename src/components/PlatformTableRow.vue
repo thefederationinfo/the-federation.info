@@ -1,81 +1,80 @@
 <template>
-    <tr>
-        <td style="width: 20px;">
-            <PlatformIcon
-                v-if="platform.name !== 'unknown'"
-                :name="platform.name"
-            />
-            <div v-else>
-&nbsp;
-            </div>
-        </td>
-        <th style="text-align: left;">
-            <router-link
-                :to="{name: 'platform', params: {platform: platform.id}}"
-            >
-                {{ platform.display_name ? platform.display_name : platform.name }}
-            </router-link>
-        </th>
-        <td class="nodes">
-            <Number :number="platform.thefederation_nodes_aggregate.aggregate.count" />
-        </td>
-        <td class="users">
-            <div v-if="statsPlatformToday">
-                <Number :number="platform.thefederation_stats[0].users_total" />
-            </div>
-        </td>
-        <td>
-            <a
-                v-if="platform.website"
-                :href="platform.website"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                {{ websiteWithoutProtocol }}
-            </a>
-        </td>
-        <td>
-            <a
-                v-if="platform.code && platform.license"
-                :href="platform.code"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                {{ platform.license }}
-            </a>
-        </td>
-    </tr>
+  <tr>
+    <td style="width: 20px">
+      <PlatformIcon v-if="platform.name !== 'unknown'" :name="platform.name" />
+      <div v-else>&nbsp;</div>
+    </td>
+    <th style="text-align: left">
+      <router-link
+        :to="{ name: 'platform', params: { platform: platform.id } }"
+      >
+        {{ platform.display_name ? platform.display_name : platform.name }}
+      </router-link>
+    </th>
+    <td class="nodes">
+      <Number
+        :number="platform.thefederation_nodes_aggregate.aggregate.count"
+      />
+    </td>
+    <td class="users">
+      <div v-if="statsPlatformToday">
+        <Number :number="platform.thefederation_stats[0].users_total" />
+      </div>
+    </td>
+    <td>
+      <a
+        v-if="platform.website"
+        :href="platform.website"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ websiteWithoutProtocol }}
+      </a>
+    </td>
+    <td>
+      <a
+        v-if="platform.code && platform.license"
+        :href="platform.code"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ platform.license }}
+      </a>
+    </td>
+  </tr>
 </template>
 
 <script>
-import Number from './common/Number'
-import PlatformIcon from './common/PlatformIcon'
+import Number from "./common/Number";
+import PlatformIcon from "./common/PlatformIcon";
 
 export default {
-    name: "PlatformTableRow",
-    components: {Number, PlatformIcon},
-    props: {
-        platform: {
-            type: Object,
-            default: null,
-        },
+  name: "PlatformTableRow",
+  components: { Number, PlatformIcon },
+  props: {
+    platform: {
+      type: Object,
+      default: null,
     },
-    data() {
-        return {
-            statsPlatformToday: {},
-        }
+  },
+  data() {
+    return {
+      statsPlatformToday: {},
+    };
+  },
+  computed: {
+    websiteWithoutProtocol() {
+      return this.platform.website
+        .replace("https://", "")
+        .replace("http://", "");
     },
-    computed: {
-        websiteWithoutProtocol() {
-            return this.platform.website.replace('https://', '').replace('http://', '')
-        },
-    },
-}
+  },
+};
 </script>
 
 <style scoped>
-    .nodes,
-    .users {
-        text-align: right;
-    }
+.nodes,
+.users {
+  text-align: right;
+}
 </style>

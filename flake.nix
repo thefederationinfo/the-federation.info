@@ -46,6 +46,7 @@
               python3 -m venv venv
             fi
             . venv/bin/activate
+            export PATH=${pkgs.ruff}/bin:$PATH
             echo "devenv ready: node $(node -v), pnpm $(pnpm -v), $(python3 --version)"
             echo "python deps: pip install -r dev-requirements.txt"
             echo "frontend deps: pnpm install"

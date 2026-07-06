@@ -5,16 +5,16 @@
     "author": "Jason Robinson <mail@jasonrobinson.me>",
     "private": true,
     "scripts": {
-        "predev": "node build/fetch-platform-metadata.js",
+        "predev": "node build/fetch-platform-metadata.js; prettier --write src/api/platform_metadata.json",
         "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
         "start": "pnpm run dev",
         "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
         "test": "pnpm run unit",
         "lint": "eslint --ext .js,.vue src test/unit",
-        "prebuild": "node build/fetch-platform-metadata.js",
+        "prebuild": "node build/fetch-platform-metadata.js; prettier --write src/api/platform_metadata.json",
         "build": "node build/build.js",
-        "format": "prettier --write .",
-        "format:check": "prettier -c ."
+        "format": "prettier --write  --ignore-path api/platform_metadata.json ./src",
+        "format:check": "prettier -c --ignore-path api/platform_metadata.json ./src"
     },
     "dependencies": {
         "country-flag-icons": "^1.5.5",

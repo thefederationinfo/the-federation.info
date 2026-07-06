@@ -1,49 +1,48 @@
-@import 'flexbox-mixins.scss';
+@import "flexbox-mixins.scss";
 
 $breakview: 642px;
 $btn-bg: #ddd;
 $btn-text: black;
-$primary: #83886C;
+$primary: #83886c;
 $primary-text: black;
-$secondary: #43372E;
+$secondary: #43372e;
 $secondary-text: white;
 $selected: steelblue;
 $selected-text: white;
 
-
 .center {
-	text-align: center;
+  text-align: center;
 }
 
 .btn {
-	display: inline-block;
-	padding: 12px 25px;
-	background-color: $btn-bg;
-	border: solid darken($btn-bg, 10%) 1px;
-	color: $btn-text;
-	text-decoration: none;
-	font-size: 1.2rem;
-	border-radius: 5px;
-	white-space: nowrap;
-	cursor: pointer;
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: $btn-bg;
+  border: solid darken($btn-bg, 10%) 1px;
+  color: $btn-text;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  cursor: pointer;
 
-	&:hover {
-		background-color: lighten($btn-bg, 5%);
-	}
+  &:hover {
+    background-color: lighten($btn-bg, 5%);
+  }
 }
 
 .btn-medium {
-	@extend .btn;
+  @extend .btn;
 
-	padding: 6px 12px;
-	font-size: 1rem;
+  padding: 6px 12px;
+  font-size: 1rem;
 }
 
 .btn-big {
-	@extend .btn;
+  @extend .btn;
 
-	text-transform: uppercase;
-	font-size: 1.4rem;
+  text-transform: uppercase;
+  font-size: 1.4rem;
 }
 
 @mixin btn-color($bg-color, $text-color) {
@@ -105,19 +104,18 @@ $selected-text: white;
   @include flex-wrap(wrap);
 
   > * {
-	  margin: 5px;
+    margin: 5px;
   }
 }
 
 .overflow-x {
-	overflow-x: auto;
+  overflow-x: auto;
 }
 
 @media screen and (max-width: $breakview) {
-
-	main > header {
-		margin: 1%;
-	}
+  main > header {
+    margin: 1%;
+  }
 
   .flex {
     @include flex-direction(column);
@@ -127,7 +125,7 @@ $selected-text: white;
     > .col4 {
       width: 98%;
       padding: 1%;
-			margin-bottom: 12px;
+      margin-bottom: 12px;
     }
   }
 }

@@ -7,7 +7,7 @@ const lineChartTemplate = `
             />
         </ApolloLoader>
     </div>
-`
+`;
 
 // eslint-disable-next-line import/prefer-default-export
-export {lineChartTemplate}
+export { lineChartTemplate };

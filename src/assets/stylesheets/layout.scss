@@ -1,4 +1,4 @@
-@import 'utils.scss';
+@import "utils.scss";
 
 $max-width: 1200px;
 
@@ -33,7 +33,7 @@ $max-width: 1200px;
   left: 3%;
   width: 25px;
   height: 25px;
-  background: url('../images/toggle_menu.png') no-repeat center center;
+  background: url("../images/toggle_menu.png") no-repeat center center;
 }
 
 @media screen and (max-width: $max-width + 160) {

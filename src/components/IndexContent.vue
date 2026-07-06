@@ -1,338 +1,416 @@
 <template>
-    <div>
-        <main>
-            <header class="main-header">
-                <div class="main-title">
-                    <h1>
-                        <router-link to="/">
-                            The Federation
-                        </router-link>
-                    </h1>
-                    <h2>Welcome to the new social web</h2>
-                </div>
-                <div class="flex">
-                    <div class="col4">
-                        <div class="tile valign-wrapper">
-                            <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="protocols.length" />
-                                <strong>Protocols</strong>
-                            </ApolloLoader>
-                        </div>
-                    </div>
-                    <div class="col4">
-                        <div class="tile valign-wrapper">
-                            <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="platforms.length" />
-                                <strong>Projects</strong>
-                            </ApolloLoader>
-                        </div>
-                    </div>
-                    <div class="col4">
-                        <div class="tile valign-wrapper">
-                            <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="nodeCount" />
-                                <strong>Nodes</strong>
-                            </ApolloLoader>
-                        </div>
-                    </div>
-                    <div class="col4">
-                        <div class="tile valign-wrapper">
-                            <ApolloLoader :loading="$apollo.loading">
-                                <Number :number="statsGlobalToday.users_total ? statsGlobalToday.users_total : null" />
-                                <strong>Users</strong>
-                            </ApolloLoader>
-                        </div>
-                    </div>
-                </div>
-            </header>
+  <div>
+    <main>
+      <header class="main-header">
+        <div class="main-title">
+          <h1>
+            <router-link to="/"> The Federation </router-link>
+          </h1>
+          <h2>Welcome to the new social web</h2>
+        </div>
+        <div class="flex">
+          <div class="col4">
+            <div class="tile valign-wrapper">
+              <ApolloLoader :loading="$apollo.loading">
+                <Number :number="protocols.length" />
+                <strong>Protocols</strong>
+              </ApolloLoader>
+            </div>
+          </div>
+          <div class="col4">
+            <div class="tile valign-wrapper">
+              <ApolloLoader :loading="$apollo.loading">
+                <Number :number="platforms.length" />
+                <strong>Projects</strong>
+              </ApolloLoader>
+            </div>
+          </div>
+          <div class="col4">
+            <div class="tile valign-wrapper">
+              <ApolloLoader :loading="$apollo.loading">
+                <Number :number="nodeCount" />
+                <strong>Nodes</strong>
+              </ApolloLoader>
+            </div>
+          </div>
+          <div class="col4">
+            <div class="tile valign-wrapper">
+              <ApolloLoader :loading="$apollo.loading">
+                <Number
+                  :number="
+                    statsGlobalToday.users_total
+                      ? statsGlobalToday.users_total
+                      : null
+                  "
+                />
+                <strong>Users</strong>
+              </ApolloLoader>
+            </div>
+          </div>
+        </div>
+      </header>
 
-            <section class="tile">
-                <header>
-                    <h2>What is The Federation?</h2>
-                </header>
-                <div>
-                    <div class="flex">
-                        <div class="col2">
-                            <p>
-                                The Federation, or as often called the "Fediverse", refers to a global social network
-                                composed of nodes that talk to each other. Each of them is an installation of software
-                                which supports one of the federated social web protocols.
-                            </p>
-                            <p>
-                                These social hubs create a decentralized and federated social network of millions
-                                of users all around the globe. This is how the internet was supposed to be.
-                            </p>
-                            <div class="center">
-                                <router-link
-                                    to="/nodes"
-                                    class="btn btn-primary"
-                                >
-                                    Nodes list
-                                </router-link>
-                            </div>
-                        </div>
-                        <div class="col2">
-                            <ApolloLoader :loading="$apollo.loading">
-                                <ul>
-                                    <li>
-                                        Nodes:
-                                        <strong><Number :number="nodeCount" /></strong>
-                                    </li>
-                                    <li>
-                                        Users:
-                                        <strong>
-                                            <Number :number="statsGlobalToday.users_total ? statsGlobalToday.users_total : null" />
-                                        </strong>
-                                    </li>
-                                    <li>
-                                        Last 6 months active users:
-                                        <strong>
-                                            <Number
-                                                :number="statsGlobalToday.users_half_year ? statsGlobalToday.users_half_year : null"
-                                            />
-                                        </strong>
-                                    </li>
-                                    <li>
-                                        Last month active users:
-                                        <strong>
-                                            <Number
-                                                :number="statsGlobalToday.users_monthly ? statsGlobalToday.users_monthly : null"
-                                            />
-                                        </strong>
-                                    </li>
-                                    <li>
-                                        Posts:
-                                        <strong>
-                                            <Number :number="statsGlobalToday.local_posts ? statsGlobalToday.local_posts : null" />
-                                        </strong>
-                                    </li>
-                                    <li>
-                                        Comments:
-                                        <strong>
-                                            <Number
-                                                :number="statsGlobalToday.local_comments ? statsGlobalToday.local_comments : null"
-                                            />
-                                        </strong>
-                                    </li>
-                                </ul>
-                            </ApolloLoader>
-                            <div>
-                                <strong>Disclaimer:</strong> These counts do not reflect the whole network due to the
-                                opt-in nature of the statistics.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      <section class="tile">
+        <header>
+          <h2>What is The Federation?</h2>
+        </header>
+        <div>
+          <div class="flex">
+            <div class="col2">
+              <p>
+                The Federation, or as often called the "Fediverse", refers to a
+                global social network composed of nodes that talk to each other.
+                Each of them is an installation of software which supports one
+                of the federated social web protocols.
+              </p>
+              <p>
+                These social hubs create a decentralized and federated social
+                network of millions of users all around the globe. This is how
+                the internet was supposed to be.
+              </p>
+              <div class="center">
+                <router-link to="/nodes" class="btn btn-primary">
+                  Nodes list
+                </router-link>
+              </div>
+            </div>
+            <div class="col2">
+              <ApolloLoader :loading="$apollo.loading">
+                <ul>
+                  <li>
+                    Nodes:
+                    <strong><Number :number="nodeCount" /></strong>
+                  </li>
+                  <li>
+                    Users:
+                    <strong>
+                      <Number
+                        :number="
+                          statsGlobalToday.users_total
+                            ? statsGlobalToday.users_total
+                            : null
+                        "
+                      />
+                    </strong>
+                  </li>
+                  <li>
+                    Last 6 months active users:
+                    <strong>
+                      <Number
+                        :number="
+                          statsGlobalToday.users_half_year
+                            ? statsGlobalToday.users_half_year
+                            : null
+                        "
+                      />
+                    </strong>
+                  </li>
+                  <li>
+                    Last month active users:
+                    <strong>
+                      <Number
+                        :number="
+                          statsGlobalToday.users_monthly
+                            ? statsGlobalToday.users_monthly
+                            : null
+                        "
+                      />
+                    </strong>
+                  </li>
+                  <li>
+                    Posts:
+                    <strong>
+                      <Number
+                        :number="
+                          statsGlobalToday.local_posts
+                            ? statsGlobalToday.local_posts
+                            : null
+                        "
+                      />
+                    </strong>
+                  </li>
+                  <li>
+                    Comments:
+                    <strong>
+                      <Number
+                        :number="
+                          statsGlobalToday.local_comments
+                            ? statsGlobalToday.local_comments
+                            : null
+                        "
+                      />
+                    </strong>
+                  </li>
+                </ul>
+              </ApolloLoader>
+              <div>
+                <strong>Disclaimer:</strong> These counts do not reflect the
+                whole network due to the opt-in nature of the statistics.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <Charts />
+      <Charts />
 
-            <div id="projects" />
-            <section class="tile">
-                <header>
-                    <h2>Projects</h2>
-                </header>
-                <div class="overflow-x">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 20px;" />
-                                <th style="text-align: left;">
-                                    Project
-                                </th>
-                                <th>Nodes</th>
-                                <th>Users</th>
-                                <th>Website</th>
-                                <th>Code</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-for="platform in platforms">
-                                <PlatformTableRow
-                                    v-if="platform.id"
-                                    :key="platform.id"
-                                    :platform="platform"
-                                />
-                            </template>
-                        </tbody>
-                    </table>
-                    <ApolloLoader :loading="$apollo.loading" />
-                </div>
-            </section>
+      <div id="projects" />
+      <section class="tile">
+        <header>
+          <h2>Projects</h2>
+        </header>
+        <div class="overflow-x">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 20px" />
+                <th style="text-align: left">Project</th>
+                <th>Nodes</th>
+                <th>Users</th>
+                <th>Website</th>
+                <th>Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="platform in platforms">
+                <PlatformTableRow
+                  v-if="platform.id"
+                  :key="platform.id"
+                  :platform="platform"
+                />
+              </template>
+            </tbody>
+          </table>
+          <ApolloLoader :loading="$apollo.loading" />
+        </div>
+      </section>
 
-            <div id="protocols" />
-            <section class="tile">
-                <header>
-                    <h2>Protocols</h2>
-                </header>
-                <div class="overflow-x">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Protocol</th>
-                                <th>Nodes</th>
-                                <th>Users</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-for="protocol in protocols">
-                                <ProtocolTableRow
-                                    v-if="protocol.id"
-                                    :key="protocol.id"
-                                    :protocol="protocol"
-                                />
-                            </template>
-                        </tbody>
-                    </table>
-                    <ApolloLoader :loading="$apollo.loading" />
-                </div>
-            </section>
+      <div id="protocols" />
+      <section class="tile">
+        <header>
+          <h2>Protocols</h2>
+        </header>
+        <div class="overflow-x">
+          <table>
+            <thead>
+              <tr>
+                <th>Protocol</th>
+                <th>Nodes</th>
+                <th>Users</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="protocol in protocols">
+                <ProtocolTableRow
+                  v-if="protocol.id"
+                  :key="protocol.id"
+                  :protocol="protocol"
+                />
+              </template>
+            </tbody>
+          </table>
+          <ApolloLoader :loading="$apollo.loading" />
+        </div>
+      </section>
 
-            <section class="tile">
-                <header>
-                    <h2>Be part of our world</h2>
-                </header>
-                <div class="flex">
-                    <div class="col2">
-                        <h3>Host yourself</h3>
-                        <p>
-                            You want to install your own node?
-                            Awesome! Choose a project and follow an installation guide.
-                        </p>
-                        <div id="install-guides-list">
-                            <div
-                                v-for="platform in platforms"
-                                :key="platform.id"
-                            >
-                                <div v-if="platform.install_guide">
-                                    <a
-                                        :href="platform.install_guide"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {{ platform.display_name ? platform.display_name : platform.name }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col2">
-                        <h3>I already have my node!</h3>
-                        <p>
-                            Yay! Welcome to the crew! To include your node on this website, please go to
-                            <code>https://the-federation.info/register/&lt;yournode.tld&gt;</code>.
-                            After some seconds, you should see your node added..
-                        </p>
-                    </div>
+      <section class="tile">
+        <header>
+          <h2>Be part of our world</h2>
+        </header>
+        <div class="flex">
+          <div class="col2">
+            <h3>Host yourself</h3>
+            <p>
+              You want to install your own node? Awesome! Choose a project and
+              follow an installation guide.
+            </p>
+            <div id="install-guides-list">
+              <div v-for="platform in platforms" :key="platform.id">
+                <div v-if="platform.install_guide">
+                  <a
+                    :href="platform.install_guide"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{
+                      platform.display_name
+                        ? platform.display_name
+                        : platform.name
+                    }}
+                  </a>
                 </div>
-            </section>
-        </main>
-    </div>
+              </div>
+            </div>
+          </div>
+          <div class="col2">
+            <h3>I already have my node!</h3>
+            <p>
+              Yay! Welcome to the crew! To include your node on this website,
+              please go to
+              <code
+                >https://the-federation.info/register/&lt;yournode.tld&gt;</code
+              >. After some seconds, you should see your node added..
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 
-import enrichPlatform from "../api/platformMetadata"
+import enrichPlatform from "../api/platformMetadata";
 
-import ApolloLoader from "./common/ApolloLoader"
-import Charts from "./Charts"
-import Number from "./common/Number"
-import PlatformTableRow from "./PlatformTableRow"
-import ProtocolTableRow from "./ProtocolTableRow"
+import ApolloLoader from "./common/ApolloLoader";
+import Charts from "./Charts";
+import Number from "./common/Number";
+import PlatformTableRow from "./PlatformTableRow";
+import ProtocolTableRow from "./ProtocolTableRow";
 
 // A node is "active" when it is not blocked, not hidden and was
 // successfully crawled yesterday (= has a stat row for yesterday).
 // The same predicate is used on the /nodes and platform pages, so all
 // counts across the site agree with each other.
 const query = gql`
-query IndextContent($yesterday: date!) {
-  thefederation_node_aggregate(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}) {
-    aggregate {
-      count
-    }
-  }
-  thefederation_platform(where: {thefederation_nodes: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}) {
-    id
-    code
-    name
-    display_name
-    install_guide
-    license
-    website
-    thefederation_nodes_aggregate(where: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}) {
+  query IndextContent($yesterday: date!) {
+    thefederation_node_aggregate(
+      where: {
+        blocked: { _eq: false }
+        hide_from_list: { _eq: false }
+        thefederation_stats: { date: { _eq: $yesterday } }
+      }
+    ) {
       aggregate {
         count
       }
     }
-    thefederation_stats(where: {date: {_eq: $yesterday}}) {
-      users_total
-    }
-  }
-  thefederation_protocol(where: {thefederation_node_protocols: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}}) {
-    id
-    name
-    thefederation_stats(where: {date: {_eq: $yesterday}}) {
-      users_total
-    }
-    thefederation_node_protocols_aggregate(where: {thefederation_node: {blocked: {_eq: false}, hide_from_list: {_eq: false}, thefederation_stats: {date: {_eq: $yesterday}}}}) {
-      aggregate {
-        count
+    thefederation_platform(
+      where: {
+        thefederation_nodes: {
+          blocked: { _eq: false }
+          hide_from_list: { _eq: false }
+          thefederation_stats: { date: { _eq: $yesterday } }
+        }
       }
-    }
-  }
-  thefederation_stat_aggregate(where: {node_id: {_is_null: true}, platform_id: {_is_null: true}, protocol_id: {_is_null: true}, date: {_eq: $yesterday}}) {
-    aggregate {
-      avg {
+    ) {
+      id
+      code
+      name
+      display_name
+      install_guide
+      license
+      website
+      thefederation_nodes_aggregate(
+        where: {
+          blocked: { _eq: false }
+          hide_from_list: { _eq: false }
+          thefederation_stats: { date: { _eq: $yesterday } }
+        }
+      ) {
+        aggregate {
+          count
+        }
+      }
+      thefederation_stats(where: { date: { _eq: $yesterday } }) {
         users_total
-        users_half_year
-        users_monthly
-        users_weekly
-        local_posts
-        local_comments
+      }
+    }
+    thefederation_protocol(
+      where: {
+        thefederation_node_protocols: {
+          thefederation_node: {
+            blocked: { _eq: false }
+            hide_from_list: { _eq: false }
+            thefederation_stats: { date: { _eq: $yesterday } }
+          }
+        }
+      }
+    ) {
+      id
+      name
+      thefederation_stats(where: { date: { _eq: $yesterday } }) {
+        users_total
+      }
+      thefederation_node_protocols_aggregate(
+        where: {
+          thefederation_node: {
+            blocked: { _eq: false }
+            hide_from_list: { _eq: false }
+            thefederation_stats: { date: { _eq: $yesterday } }
+          }
+        }
+      ) {
+        aggregate {
+          count
+        }
+      }
+    }
+    thefederation_stat_aggregate(
+      where: {
+        node_id: { _is_null: true }
+        platform_id: { _is_null: true }
+        protocol_id: { _is_null: true }
+        date: { _eq: $yesterday }
+      }
+    ) {
+      aggregate {
+        avg {
+          users_total
+          users_half_year
+          users_monthly
+          users_weekly
+          local_posts
+          local_comments
+        }
       }
     }
   }
-}
-`
+`;
 
 export default {
-    apollo: {
-        allQueries: {
-            query,
-            variables: {
-                yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
-            },
-            result({data}) {
-                this.nodeCount = data.thefederation_node_aggregate.aggregate.count
-                // Hasura cannot order by a filtered aggregate, so sort by the
-                // displayed active node count here instead of in the query.
-                const count = (p) => p.thefederation_nodes_aggregate.aggregate.count
-                this.platforms = data.thefederation_platform.map(enrichPlatform)
-                    .sort((a, b) => count(b) - count(a))
-                this.protocols = data.thefederation_protocol
-                this.statsGlobalToday = data.thefederation_stat_aggregate.aggregate.avg
-            },
-            manual: true,
-        },
+  apollo: {
+    allQueries: {
+      query,
+      variables: {
+        yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
+      },
+      result({ data }) {
+        this.nodeCount = data.thefederation_node_aggregate.aggregate.count;
+        // Hasura cannot order by a filtered aggregate, so sort by the
+        // displayed active node count here instead of in the query.
+        const count = (p) => p.thefederation_nodes_aggregate.aggregate.count;
+        this.platforms = data.thefederation_platform
+          .map(enrichPlatform)
+          .sort((a, b) => count(b) - count(a));
+        this.protocols = data.thefederation_protocol;
+        this.statsGlobalToday = data.thefederation_stat_aggregate.aggregate.avg;
+      },
+      manual: true,
     },
-    name: "IndexContent",
-    components: {
-        ApolloLoader, Charts, PlatformTableRow, ProtocolTableRow, Number,
-    },
-    data() {
-        return {
-            nodeCount: 0,
-            platforms: [],
-            protocols: [],
-            statsGlobalToday: [],
-        }
-    },
-}
+  },
+  name: "IndexContent",
+  components: {
+    ApolloLoader,
+    Charts,
+    PlatformTableRow,
+    ProtocolTableRow,
+    Number,
+  },
+  data() {
+    return {
+      nodeCount: 0,
+      platforms: [],
+      protocols: [],
+      statsGlobalToday: [],
+    };
+  },
+};
 </script>
 
 <style scoped>
-    #install-guides-list {
-        text-align: center;
-    }
+#install-guides-list {
+  text-align: center;
+}
 </style>
