@@ -108,9 +108,29 @@ $selected-text: white;
   }
 }
 
+.flex-column {
+  @include flexbox;
+  @include flex-direction(column);
+
+  height: 80vh;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.min-h-0 {
+  min-height: 0;
+}
+
 .overflow-x {
   overflow-x: auto;
 }
+
+.overflow-y {
+  overflow-y: auto;
+}
+
 
 @media screen and (max-width: $breakview) {
   main > header {

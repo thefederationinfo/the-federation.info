@@ -124,9 +124,11 @@
           <h2>All {{ title }} nodes</h2>
         </header>
         <NodeSearchBox @search="onSearch" />
-        <div class="overflow-x">
-          <NodesTable :nodes="nodes" />
-          <ApolloLoader :loading="$apollo.loading || loadingMore" />
+        <div class="flex-column">
+          <div class="overflow-y flex-grow-1 min-h-0">
+            <NodesTable :nodes="nodes" />
+            <ApolloLoader :loading="$apollo.loading || loadingMore" />
+          </div>
         </div>
       </section>
     </main>

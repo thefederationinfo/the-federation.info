@@ -69,6 +69,9 @@ mailhog
 /docs/_build/
 /staticfiles/
 
+# direnv
+.direnv/
+
 
 dist/
 /venv
