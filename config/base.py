@@ -18,7 +18,6 @@ DJANGO_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.admin",
 )
 THIRD_PARTY_APPS = (
     "corsheaders",
@@ -161,9 +160,6 @@ RQ_QUEUES = {
     "default": _rq_redis_params,
 }
 RQ_SHOW_ADMIN_LINK = True
-
-# Location of root django.contrib.admin URL, use {% url "admin:index" %}
-ADMIN_URL = r"^admin/"
 
 # SITE CONFIGURATION
 # ------------------------------------------------------------------------------

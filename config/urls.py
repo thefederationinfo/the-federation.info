@@ -1,13 +1,10 @@
 from django.conf import settings
 from django.conf.urls import url
-from django.contrib import admin
 from django.urls import include
 from django.views import defaults as default_views
 
 urlpatterns = [
     url(r"", include("thefederation.urls")),
-    # Admin pages
-    url(settings.ADMIN_URL, admin.site.urls),
     url(r"^django-rq/", include("django_rq.urls")),
     url(r"^_silk/", include("silk.urls", namespace="silk")),
 ]
