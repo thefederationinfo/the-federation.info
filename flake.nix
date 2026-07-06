@@ -33,6 +33,7 @@
             # tooling
             git
             ruff
+            prettier
           ];
 
           # gcc 15 defaults to C23, where implicit function declarations
