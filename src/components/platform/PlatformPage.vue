@@ -367,11 +367,10 @@ export default {
             pageOffset: pageSize * this.currentPage,
             pageSize,
           },
-          updateQuery: (data, { fetchMoreResult: newData }) => {
-            newData.nodeStats = [...data.nodeStats, ...newData.nodeStats];
-
-            return newData;
-          },
+          updateQuery: (data, { fetchMoreResult: newData }) => ({
+            ...newData,
+            nodeStats: [...data.nodeStats, ...newData.nodeStats],
+          }),
         })
         .finally(() => {
           this.loadingMore = false;

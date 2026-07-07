@@ -10,6 +10,7 @@ const track = (path) => {
       referrer: document.referrer,
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn("could not find umami, ignoring telemetry");
   }
 };
@@ -18,6 +19,7 @@ const trackEvent = (name) => {
   try {
     window.umami.track(name);
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn("could not find umami, ignoring telemetry");
   }
 };
