@@ -86,6 +86,14 @@ class FetchUsingMethodMissingFetcherTestCase(TestCase):
 
 
 class PollNodeRobustnessTestCase(TestCase):
+    @patch("thefederation.crawler.fetch_node", return_value=None)
+    def test_failed_fetch_creates_no_node(self, mock_fetch):
+        # Registration gate: register_node only queues poll_node, the node
+        # row is written after a successful fetch. A failing crawl must
+        # therefore leave no trace in the database.
+        self.assertFalse(poll_node("example.com"))
+        self.assertFalse(Node.objects.filter(host="example.com").exists())
+
     @patch("thefederation.crawler.fetch_node")
     def test_host_mismatch_is_discarded(self, mock_fetch):
         import copy

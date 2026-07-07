@@ -21,6 +21,16 @@ class NodeQuerySet(models.QuerySet):
             last_success__gte=now() - datetime.timedelta(days=30),
         )
 
+    def pollable(self):
+        # active() plus nodes that never had a successful crawl
+        # (last_success IS NULL). Such rows only come from legacy data:
+        # registration gates on a successful crawl and never writes a
+        # node row itself, so they would otherwise stay unpolled forever.
+        return self.filter(blocked=False).filter(
+            models.Q(last_success__isnull=True)
+            | models.Q(last_success__gte=now() - datetime.timedelta(days=30)),
+        )
+
 
 class Node(ModelBase):
     blocked = models.BooleanField(default=False)

@@ -209,7 +209,7 @@ def poll_nodes(skip=0):
     logger.info(f"Queueing polling all nodes (skipping {skip}).")
     # values_list + iterator: only host strings, no Node instances. The
     # slice becomes a SQL OFFSET instead of counting rows down by hand.
-    hosts = Node.objects.active().values_list("host", flat=True)
+    hosts = Node.objects.pollable().values_list("host", flat=True)
     queued = 0
     for host in hosts[skip:].iterator():
         poll_node.delay(host)
