@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    // LIVE_GRAPHQL=1 (or `just dev-live`) proxies GraphQL to the live
+    // instance, so no local hasura + database is needed for frontend work.
+    proxyTable: process.env.LIVE_GRAPHQL
+      ? {
+          '/v1/graphql': {
+            target: 'https://the-federation.info',
+            changeOrigin: true,
+          },
+        }
+      : {},
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

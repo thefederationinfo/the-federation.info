@@ -32,6 +32,7 @@
 
             # tooling
             git
+            just
             ruff
             prettier
           ];

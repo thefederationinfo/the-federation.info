@@ -27,8 +27,7 @@ class NodeQuerySet(models.QuerySet):
         # registration gates on a successful crawl and never writes a
         # node row itself, so they would otherwise stay unpolled forever.
         return self.filter(blocked=False).filter(
-            models.Q(last_success__isnull=True)
-            | models.Q(last_success__gte=now() - datetime.timedelta(days=30)),
+            models.Q(last_success__isnull=True) | models.Q(last_success__gte=now() - datetime.timedelta(days=30)),
         )
 
 

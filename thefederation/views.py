@@ -2,9 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 
 from thefederation import registration
-from thefederation.crawler import poll_node
 from thefederation.models import Node
-from thefederation.utils import is_valid_hostname, clean_hostname
 
 
 def _client_ip(request):
