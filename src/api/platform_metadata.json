@@ -922,13 +922,13 @@
   },
   {
     "name": "wordpress",
-    "sourcecode_url": "https://wordpress.org/download/source/",
+    "sourcecode_url": "https://github.com/Automattic/wordpress-activitypub",
     "display_name": "WordPress",
     "license": "GPLv2",
-    "website_url": "https://wordpress.org",
-    "install_guide_url": "https://wordpress.org/download/",
+    "website_url": "https://wordpress.org/plugins/activitypub/",
+    "install_guide_url": "https://wordpress.org/plugins/activitypub/",
     "description": "WordPress is open source software you can use to create a website, blog, or app. There are several ActivityPub plugins available for it to make the site federate.",
-    "latest_version": "",
+    "latest_version": "9.0.2",
     "icon_url": "",
     "proprietary": false
   },
