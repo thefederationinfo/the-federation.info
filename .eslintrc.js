@@ -10,7 +10,9 @@ module.exports = {
   },
   // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
   // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-  extends: ['plugin:vue/recommended', 'airbnb-base'],
+  // 'prettier' and 'prettier/vue' come last: they turn off every stylistic
+  // rule that conflicts with `pnpm format`, so lint and format agree.
+  extends: ['plugin:vue/recommended', 'airbnb-base', 'prettier', 'prettier/vue'],
   // required to lint *.vue files
   plugins: [
     'vue'
@@ -46,13 +48,6 @@ module.exports = {
     }],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "indent": ["error", 4, {"SwitchCase": 1}],
-      "max-len": ["error", 120],
-      "object-curly-spacing": ["error", "never"],
-      "semi": ["error", "never"],
-      "quotes": "off",
-      "vue/html-indent": ["error", 4],
-      "arrow-parens": "off",
-      "no-restricted-syntax": "off",
+    'no-restricted-syntax': 'off',
   }
 }

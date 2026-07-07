@@ -93,6 +93,9 @@ importers:
       eslint-config-airbnb-base:
         specifier: ^14.0.0
         version: 14.2.1(eslint-plugin-import@2.26.0)(eslint@6.8.0(supports-color@5.5.0))
+      eslint-config-prettier:
+        specifier: 6.15.0
+        version: 6.15.0(eslint@6.8.0(supports-color@5.5.0))
       eslint-friendly-formatter:
         specifier: ^4.0.1
         version: 4.0.1
@@ -2280,6 +2283,12 @@ packages:
       eslint: ^5.16.0 || ^6.8.0 || ^7.2.0
       eslint-plugin-import: ^2.22.1
 
+  eslint-config-prettier@6.15.0:
+    resolution: {integrity: sha512-a1+kOYLR8wMGustcgAjdydMsQ2A/2ipRPwRKUmfYaSxc9ZPcrku080Ctl6zrZzZNs/U82MjSv+qKREkoq3bJaw==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=3.14.1'
+
   eslint-friendly-formatter@4.0.1:
     resolution: {integrity: sha512-+EhkPwkl/nf/fxT60yXPLAMQ+thUzfJV5rCGdUDdyM+exO3NB+07dwWiZTuyuOtTo/Ckh7W/3LJvWsB214c7ag==}
     engines: {node: '>=0.10.0'}
@@ -2701,6 +2710,10 @@ packages:
   get-stdin@4.0.1:
     resolution: {integrity: sha512-F5aQMywwJ2n85s4hJPTT9RPxGmubonuB10MNYo17/xph174n2MIR33HRguhzVag10O/npM7SPk73LMZNP+FaWw==}
     engines: {node: '>=0.10.0'}
+
+  get-stdin@6.0.0:
+    resolution: {integrity: sha512-jp4tHawyV7+fkkSKyvjuLZswblUtz+SQKzSWnBbii16BuZksJlU1wuBYXY75r+duh/llF1ur6oNwi+2ZzjKZ7g==}
+    engines: {node: '>=4'}
 
   get-stream@3.0.0:
     resolution: {integrity: sha512-GlhdIUuVakc8SJ6kK0zAFbiGzRFzNnY4jUuEbV9UROo4Y+0Ny4fjvcZFVTeDA4odpFyOQzaw6hXukJSq/f28sQ==}
@@ -8765,6 +8778,11 @@ snapshots:
       object.assign: 4.1.2
       object.entries: 1.1.5
 
+  eslint-config-prettier@6.15.0(eslint@6.8.0(supports-color@5.5.0)):
+    dependencies:
+      eslint: 6.8.0(supports-color@5.5.0)
+      get-stdin: 6.0.0
+
   eslint-friendly-formatter@4.0.1:
     dependencies:
       chalk: 2.4.2
@@ -9454,6 +9472,8 @@ snapshots:
       has-symbols: 1.0.3
 
   get-stdin@4.0.1: {}
+
+  get-stdin@6.0.0: {}
 
   get-stream@3.0.0: {}
 
