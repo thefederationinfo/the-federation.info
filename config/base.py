@@ -55,6 +55,10 @@ DATABASES = {
     "default": env.db("DATABASE_URL", default="postgres://thefederation:thefederation@127.0.0.1:5432/thefederation"),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# env.db() derives django.db.backends.postgresql from the URL scheme.
+# Swap in our thin wrapper that fixes the psycopg2 >= 2.9 tzinfo_factory
+# incompatibility of Django 2.2, see thefederation/db/base.py.
+DATABASES["default"]["ENGINE"] = "thefederation.db"
 
 
 # GENERAL CONFIGURATION
