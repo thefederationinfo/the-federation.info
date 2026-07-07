@@ -21,7 +21,7 @@
         default = pkgs.mkShell {
           packages = with pkgs; [
             # frontend
-            nodejs_26
+            nodejs_22
             pnpm
 
             # backend

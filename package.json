@@ -90,6 +90,7 @@
         "vue-apollo": "^3.1.0",
         "vue-chartkick": "^0.6.0",
         "vue-directive-tooltip": "^1.6.3",
+        "vue-hot-reload-api": "^2.3.4",
         "vue-loader": "<14",
         "vue-spinner-component": "^1.0.5",
         "vue-style-loader": "^4.1.2",
